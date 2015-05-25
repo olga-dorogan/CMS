@@ -6,16 +6,16 @@ module.exports = function(grunt) {
         concat: {
             main: {
                 src: [
-                    '../angular/app.js',
-                    '../angular/*/*.js'
+                    'webapp/angular/app.js',
+                    'webapp/angular/*/*.js'
                 ],
-                dest: '../build/app.js'
+                dest: 'webapp/build/app.js'
             }
         },
         //Подключаем все файлы которые скачал bower
         bower_concat: {
             all: {
-                dest: '../build/_bower.js'  // Склеенный файл
+                dest: 'webapp/build/_bower.js'  // Склеенный файл
             }
         },
         // Сжимаем
@@ -26,12 +26,12 @@ module.exports = function(grunt) {
             main: {
                 files: {
                     // Результат задачи concat
-                    '../build/app.min.js': '<%= concat.main.dest %>'
+                    'webapp/build/app.min.js': '<%= concat.main.dest %>'
                 }
             },
             bower: {
                 files: {
-                    '../build/_bower.min.js': '<%= bower_concat.all.dest %>'
+                    'webapp/build/_bower.min.js': '<%= bower_concat.all.dest %>'
                 }
             }
         },
