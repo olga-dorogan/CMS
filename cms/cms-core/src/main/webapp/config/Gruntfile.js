@@ -1,0 +1,58 @@
+module.exports = function(grunt) {
+
+    // Задачи
+    grunt.initConfig({
+        // Склеиваем
+        concat: {
+            main: {
+                src: [
+                    '../angular/app.js',
+                    '../angular/*/*.js'
+                ],
+                dest: '../build/app.js'
+            }
+        },
+        //Подключаем все файлы которые скачал bower
+        bower_concat: {
+            all: {
+                dest: '../build/_bower.js'  // Склеенный файл
+            }
+        },
+        // Сжимаем
+        uglify: {
+            options: {
+                separator: ':'
+            },
+            main: {
+                files: {
+                    // Результат задачи concat
+                    '../build/app.min.js': '<%= concat.main.dest %>'
+                }
+            },
+            bower: {
+                files: {
+                    '../build/_bower.min.js': '<%= bower_concat.all.dest %>'
+                }
+            }
+        },
+        //Склеивание в реальном времени
+        watch: {
+            scripts: {
+                files: '<%= concat.main.src %>',
+                tasks: ['concat','uglify:main'],
+                options: {
+                    spawn: false
+                }
+            }
+        }
+    });
+
+    // Загрузка плагинов, установленных с помощью npm install
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-bower-concat');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+
+    // Задача по умолчанию
+    grunt.registerTask('default', ['concat','bower_concat','uglify']);
+};

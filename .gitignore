@@ -4,3 +4,12 @@
 
 #Maven
 target/
+
+#Client-side
+logs/*
+!.gitkeep
+node_modules/
+bower_components/
+build/
+tmp
+.DS_Store
