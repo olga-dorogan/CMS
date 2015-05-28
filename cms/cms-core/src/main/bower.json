@@ -10,6 +10,9 @@
     "angular-route": "1.2.x",
     "angular-loader": "1.2.x",
     "bootstrap": "3.3.4",
-    "jquery": "~2.1.4"
+    "jquery": "~2.1.4",
+    "angular-ui-router": "~0.2.15",
+    "angular-google-gapi": "~0.1.2"
   }
 }
+

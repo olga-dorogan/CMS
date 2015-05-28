@@ -13,14 +13,18 @@ body{
     font-size:16px;
     margin:10px 0;
 }
-.course-list{
+.info-list{
     font-size: 20px;
     list-style: none;
 }
-.course-list>.description{
+.info-list .description{
     margin-left:25px;
-    font-size: 14px;
+    font-size: 16px;
 }
 .content{
     margin:50px;
+}
+.avatar{
+    width: 35px;
+    height: 35px;
 }
