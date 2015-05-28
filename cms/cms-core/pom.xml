@@ -42,5 +42,19 @@
             </build>
         </profile>
     </profiles>
-    
+
+    <dependencies>
+        <!--Google API Client dependencies-->
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-oauth2</artifactId>
+            <version>${google.api.oauth2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-calendar</artifactId>
+            <version>${google.api.calendar.version}</version>
+        </dependency>
+    </dependencies>
+
 </project>

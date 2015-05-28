@@ -15,6 +15,8 @@
     <properties>
         <java.version>1.8</java.version>
         <javaee.version>7.0</javaee.version>
+        <google.api.oauth2.version>v2-rev91-1.20.0</google.api.oauth2.version>
+        <google.api.calendar.version>v3-rev126-1.20.0</google.api.calendar.version>
         <plugin.compiler.version>3.3</plugin.compiler.version>
         <plugin.war.version>2.6</plugin.war.version>
     </properties>
