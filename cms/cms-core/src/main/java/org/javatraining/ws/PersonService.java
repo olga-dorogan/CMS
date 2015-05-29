@@ -1,17 +1,19 @@
 package org.javatraining.ws;
 
+import flexjson.JSONException;
+import org.javatraining.stubs.Person;
+
+import javax.enterprise.context.Dependent;
 import javax.validation.constraints.Pattern;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import flexjson.JSONException;
-import org.javatraining.stubs.Person;
-
 /**
  * Created by asudak on 5/29/15.
  */
+@Dependent
 @Path("person")
 public class PersonService<T> extends AbstractService<Person> {
     public PersonService() {

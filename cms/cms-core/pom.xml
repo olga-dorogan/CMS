@@ -79,6 +79,13 @@
             <version>${org.mockito.version}</version>
             <scope>test</scope>
         </dependency>
+        <!--Logging dependencies-->
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+            <version>${jboss.logging.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 </project>
