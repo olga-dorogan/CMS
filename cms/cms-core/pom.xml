@@ -55,6 +55,30 @@
             <artifactId>google-api-services-calendar</artifactId>
             <version>${google.api.calendar.version}</version>
         </dependency>
+        <dependency>
+            <groupId>net.sf.flexjson</groupId>
+            <artifactId>flexjson</artifactId>
+            <version>${net.sf.flexjson.version}</version>
+        </dependency>
+        <!--Test dependencies-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-common</artifactId>
+            <version>${org.glassfish.jersey.core.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${org.mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>
