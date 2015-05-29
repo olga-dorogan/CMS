@@ -1,3 +1,5 @@
 function HomeCtrl(GAuth, GApi,$scope,CourseService) {
-    $scope.courses = CourseService.getCourses();
+    CourseService.getCourses().success(function(data){
+        $scope.courses=data;
+    });
 }
