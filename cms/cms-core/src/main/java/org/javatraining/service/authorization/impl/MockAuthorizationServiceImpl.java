@@ -1,7 +1,7 @@
 package org.javatraining.service.authorization.impl;
 
-import org.javatraining.integration.google.oauth.impl.GoogleUserinfoServiceImpl;
 import org.javatraining.service.authorization.AuthorizationService;
+import org.javatraining.integration.google.oauth.impl.GoogleUserinfoServiceImpl;
 
 import javax.ejb.Stateless;
 
