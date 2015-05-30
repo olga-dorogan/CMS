@@ -1,18 +1,27 @@
 // Declare app level module which depends on views, and components
 var myApp = angular.module('myApp', [
     'ui.router',
+    'restangular',
+    'angular-google-gapi',
     'myApp.home',
     'myApp.news',
     'myApp.about',
-    'angular-google-gapi'
+    'myApp.studentProfile'
 ]);
 myApp.service('sessionService', ['$window', SessionService]);
 myApp.factory('sessionInjector', ['$rootScope', 'sessionService', SessionInjector]);
+
+myApp.config(function(RestangularProvider) {
+    //Изменяем базовый Url для REST
+    RestangularProvider.setBaseUrl('http://localhost:8080/cms-core-1.0/');
+});
+
 myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider',
     function ($stateProvider, $urlRouterProvider, $httpProvider) {
         $urlRouterProvider.otherwise('/home');
         $httpProvider.interceptors.push('sessionInjector');
     }]);
+
 myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope',
     function (GAuth, GApi, GData, $state, $rootScope) {
 
@@ -36,6 +45,10 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope',
                 $state.go('home');
             }
         );
+
+        //Заглушка для определения роли
+        $rootScope.role="student";
+
 
         $rootScope.doLogin = function () {
             GAuth.login().then(function () {
@@ -61,6 +74,7 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope',
         // обработчик оповещения об изменении страницы пользователя в соответствии с его ролью
         $rootScope.$on('app.changeLocation', function (event, args) {
             //$state.go(args.location);
+            $rootScope.role=args.location;
             console.log("location change to " + args.location);
         });
     }]);
