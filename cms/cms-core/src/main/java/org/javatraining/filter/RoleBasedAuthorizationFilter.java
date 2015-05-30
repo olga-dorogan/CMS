@@ -1,8 +1,8 @@
 package org.javatraining.filter;
 
+import org.javatraining.service.authorization.AuthorizationService;
 import org.javatraining.integration.google.oauth.GoogleUserinfoService;
 import org.javatraining.integration.google.oauth.exception.AuthException;
-import org.javatraining.service.authorization.AuthorizationService;
 import org.jboss.logging.Logger;
 
 import javax.ejb.EJB;

@@ -14,14 +14,14 @@ import java.util.List;
 @Stateless
 @ApplicationPath("rest")
 @Path("/courses")
-public class CourseService  extends Application {
+public class CourseService extends Application {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Course> listPersons() {
-        List<Course> list=new ArrayList<>();
-        list.add(new Course("Java EE","Description for Java EE"));
-        list.add(new Course("Java SE","Description for Java SE"));
-        list.add(new Course("Android","Description for Android"));
+        List<Course> list = new ArrayList<>();
+        list.add(new Course("Java EE", "Description for Java EE"));
+        list.add(new Course("Java SE", "Description for Java SE"));
+        list.add(new Course("Android", "Description for Android"));
         return list;
     }
 }
