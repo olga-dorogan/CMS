@@ -1,5 +1,6 @@
 package org.javatraining.ws;
 
+import javax.enterprise.context.Dependent;
 import javax.validation.constraints.Pattern;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -13,6 +14,7 @@ import org.javatraining.stubs.Person;
  * Created by asudak on 5/29/15.
  */
 @Path("person")
+@Dependent
 public class PersonService<T> extends AbstractService<Person> {
     public PersonService() {
         super(Person.class);

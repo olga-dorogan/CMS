@@ -17,8 +17,12 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope',
     function (GAuth, GApi, GData, $state, $rootScope) {
 
         var CLIENT = '895405022160-pi238d0pi57fsmsov8khtpr4415hj5j5.apps.googleusercontent.com';
-        var BASE = 'https://myGoogleAppEngine.appspot.com/_ah/api';
-
+        var BASE;
+        if(window.location.hostname == 'localhost') {
+            BASE = '//localhost:8080/_ah/api';
+        } else {
+            BASE = 'https://cloud-endpoints-gae.appspot.com/_ah/api';
+        }
         GApi.load('AIzaSyDEVCJp5Hz_fSrHYeS24EcMM3FQV0GF8Do', 'v1', BASE);
         GAuth.setClient(CLIENT);
         GAuth.setScope('https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar.readonly');
