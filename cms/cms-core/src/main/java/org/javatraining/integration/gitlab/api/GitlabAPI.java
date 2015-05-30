@@ -5,8 +5,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.javatraining.integration.gitlab.api.http.GitlabHTTPRequestor;
 import org.javatraining.integration.gitlab.api.http.Query;
 import org.javatraining.integration.gitlab.api.models.*;
-import org.javatraining.integration.gitlab.api.models.GitlabSession;
-import org.javatraining.integration.gitlab.api.models.GitlabUser;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -216,8 +214,8 @@ public class GitlabAPI {
      * Create a new ssh key for the user
      *
      * @param targetUserId The id of the Gitlab user
-     * @param title The title of the ssh key
-     * @param key The public key
+     * @param title        The title of the ssh key
+     * @param key          The public key
      * @return The new GitlabSSHKey
      * @throws IOException
      */
@@ -236,7 +234,7 @@ public class GitlabAPI {
      * Delete user's ssh key
      *
      * @param targetUserId The id of the Gitlab user
-     * @param targetKeyId The id of the Gitlab ssh key
+     * @param targetKeyId  The id of the Gitlab ssh key
      * @throws IOException
      */
     public void deleteSSHKey(Integer targetUserId, Integer targetKeyId) throws IOException {
@@ -555,7 +553,6 @@ public class GitlabAPI {
     }
 
     /**
-     *
      * @param project
      * @param mergeRequestId
      * @param mergeCommitMessage optional merge commit message. Null if not set

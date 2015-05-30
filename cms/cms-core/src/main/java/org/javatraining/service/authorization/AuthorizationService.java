@@ -8,7 +8,8 @@ import org.javatraining.integration.google.oauth.impl.GoogleUserinfoServiceImpl;
 // TODO: реализовать методы AuthorizationService
 public interface AuthorizationService {
     enum Role {UNAUTHORIZED, TEACHER, STUDENT}
-//        обратиться к БД для определения роли;
+
+    //        обратиться к БД для определения роли;
 //        если clientId не зарегистрирован в системе,
 //        вернуть Role.UNAUTHORIZED
     Role getRoleByClientId(String clientId);
