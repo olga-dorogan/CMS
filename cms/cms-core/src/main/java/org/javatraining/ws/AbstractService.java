@@ -2,7 +2,6 @@ package org.javatraining.ws;
 
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
-import org.javatraining.stubs.Person;
 
 /**
  * Created by asudak on 5/29/15.

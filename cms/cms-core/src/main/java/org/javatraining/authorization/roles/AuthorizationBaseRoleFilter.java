@@ -1,9 +1,12 @@
 package org.javatraining.authorization.roles;
 
+<<<<<<< HEAD:cms/cms-core/src/main/java/org/javatraining/authorization/roles/AuthorizationBaseRoleFilter.java
 import org.javatraining.authorization.BaseFilter;
+=======
+import org.javatraining.service.authorization.AuthorizationService;
+>>>>>>> 0de4b8e84b15f61b0789b3b4301ceb25fcd5cb30:cms/cms-core/src/main/java/org/javatraining/filter/RoleBasedAuthorizationFilter.java
 import org.javatraining.integration.google.oauth.GoogleUserinfoService;
 import org.javatraining.integration.google.oauth.exception.AuthException;
-import org.javatraining.service.authorization.AuthorizationService;
 import org.jboss.logging.Logger;
 
 import javax.ejb.EJB;

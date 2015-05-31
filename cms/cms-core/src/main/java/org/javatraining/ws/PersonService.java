@@ -1,9 +1,10 @@
 package org.javatraining.ws;
 
+import javax.enterprise.context.Dependent;
 import flexjson.JSONException;
 import org.javatraining.stubs.Person;
 
-import javax.enterprise.context.Dependent;
+import javax.ejb.Stateless;
 import javax.validation.constraints.Pattern;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -13,8 +14,9 @@ import javax.ws.rs.core.UriInfo;
 /**
  * Created by asudak on 5/29/15.
  */
-@Dependent
+@Stateless
 @Path("person")
+@Dependent
 public class PersonService<T> extends AbstractService<Person> {
     public PersonService() {
         super(Person.class);

@@ -1,6 +1,7 @@
 package org.javatraining.authorization.roles;
 
 import org.javatraining.service.authorization.AuthorizationService;
+import org.javatraining.filter.RoleBasedAuthorizationFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
