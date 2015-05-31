@@ -1,5 +1,6 @@
-package org.javatraining.filter;
+package org.javatraining.authorization.roles;
 
+import org.javatraining.authorization.BaseFilter;
 import org.javatraining.integration.google.oauth.GoogleUserinfoService;
 import org.javatraining.integration.google.oauth.exception.AuthException;
 import org.javatraining.service.authorization.AuthorizationService;
@@ -16,8 +17,8 @@ import java.io.IOException;
 /**
  * Created by olga on 29.05.15.
  */
-public abstract class RoleBasedAuthorizationFilter extends BaseFilter {
-    private static final Logger log = Logger.getLogger(RoleBasedAuthorizationFilter.class);
+public abstract class AuthorizationBaseRoleFilter extends BaseFilter {
+    private static final Logger log = Logger.getLogger(AuthorizationBaseRoleFilter.class);
     @EJB
     private AuthorizationService authorizationService;
     @EJB
@@ -29,7 +30,6 @@ public abstract class RoleBasedAuthorizationFilter extends BaseFilter {
     }
 
     public void doFilterOnRole(AuthorizationService.Role role, ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        super.doFilter(request, response, chain);
         log.debugv("token: {0}, role: {1}", token, role);
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         try {

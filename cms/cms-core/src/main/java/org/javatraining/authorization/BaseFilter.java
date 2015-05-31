@@ -1,4 +1,4 @@
-package org.javatraining.filter;
+package org.javatraining.authorization;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

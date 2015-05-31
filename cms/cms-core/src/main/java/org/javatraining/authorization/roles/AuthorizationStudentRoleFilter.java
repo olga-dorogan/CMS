@@ -1,6 +1,5 @@
-package org.javatraining.filter.role;
+package org.javatraining.authorization.roles;
 
-import org.javatraining.filter.RoleBasedAuthorizationFilter;
 import org.javatraining.service.authorization.AuthorizationService;
 
 import javax.servlet.FilterChain;
@@ -13,11 +12,11 @@ import java.io.IOException;
 /**
  * Created by olga on 29.05.15.
  */
-@WebFilter("/resources/teacher/*")
-public class TeacherAuthorizationFilter extends RoleBasedAuthorizationFilter {
-
+@WebFilter("/resources/student/*")
+public class AuthorizationStudentRoleFilter extends AuthorizationBaseRoleFilter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        super.doFilterOnRole(AuthorizationService.Role.TEACHER, request, response, chain);
+        super.doFilter(request, response, chain);
+        super.doFilterOnRole(AuthorizationService.Role.STUDENT, request, response, chain);
     }
 }

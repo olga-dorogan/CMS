@@ -1,4 +1,4 @@
-package org.javatraining.filter;
+package org.javatraining.authorization;
 
 import org.javatraining.integration.google.oauth.TokenVerifierService;
 import org.javatraining.integration.google.oauth.exception.AuthException;
