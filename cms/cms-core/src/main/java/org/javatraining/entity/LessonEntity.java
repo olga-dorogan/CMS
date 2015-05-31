@@ -9,7 +9,7 @@ import java.util.Set;
  * Created by vika on 24.05.15.
  */
 @Entity
-@Table(name = "lessons", schema = "", catalog = "cms")
+@Table(name = "lessons", schema = "")
 public class LessonEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +40,7 @@ public class LessonEntity implements Serializable {
     @JoinColumn(name = "type", nullable = false, insertable = false, updatable = false)
     private LessonTypeEntity lessonTypes;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessonLinks")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lesson")
     private Set<LessonLinkEntity> lessonLinks;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessons")

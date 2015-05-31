@@ -8,11 +8,8 @@ import java.io.Serializable;
  * Created by vika on 24.05.15.
  */
 @Entity
-@Table(name = "lesson_links", schema = "", catalog = "cms")
+@Table(name = "lesson_links", schema = "")
 public class LessonLinkEntity implements Serializable {
-
-    public LessonLinkEntity() {
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +21,8 @@ public class LessonLinkEntity implements Serializable {
     private String description;
     @NotNull
     private String link;
+    public LessonLinkEntity() {
+    }
 
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})

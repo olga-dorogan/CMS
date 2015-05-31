@@ -23,9 +23,6 @@ public class NewsDAO extends GenericDAO<NewsEntity> {
     private EntityManager em;
 
     public NewsDAO() {
-    }
-
-    public NewsDAO(EntityManager entityClass) {
         setEntityClass(NewsEntity.class);
     }
 
@@ -37,7 +34,7 @@ public class NewsDAO extends GenericDAO<NewsEntity> {
     public NewsEntity save(@NotNull NewsEntity newsEntity, @NotNull CourseEntity courseEntity) {
 
         if (em.find(NewsEntity.class, newsEntity.getId()) != null) {
-            throw new EntityExistsException("This faculty is already exist is the database");
+            throw new EntityExistsException("This news is already exist is the database");
         }
         newsEntity.setCourses(courseEntity);
         em.persist(newsEntity);

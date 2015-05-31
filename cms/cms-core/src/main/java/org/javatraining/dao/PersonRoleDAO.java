@@ -17,13 +17,10 @@ import javax.validation.constraints.NotNull;
 @Stateless
 public class PersonRoleDAO extends GenericDAO<PersonRoleEntity> {
 
-    public PersonRoleDAO() {
-    }
-
     @PersistenceContext
     private EntityManager em;
 
-    public PersonRoleDAO(EntityManager entityClass) {
+    public PersonRoleDAO() {
         setEntityClass(PersonRoleEntity.class);
     }
 
@@ -35,9 +32,9 @@ public class PersonRoleDAO extends GenericDAO<PersonRoleEntity> {
     public PersonRoleEntity save(@NotNull PersonRoleEntity personRoleEntity, @NotNull PersonEntity personEntity) {
 
         if (em.find(LessonLinkEntity.class, personRoleEntity.getId()) != null) {
-            throw new EntityExistsException("This faculty is already exist is the database");
+            throw new EntityExistsException("This personRole is already exist is the database");
         }
-        personRoleEntity.setPerson(personEntity);
+//        personRoleEntity.setPerson(personEntity);
         em.persist(personRoleEntity);
         return personRoleEntity;
     }

@@ -21,9 +21,6 @@ public class MarkDAO extends GenericDAO<MarkEntity> {
     private EntityManager em;
 
     public MarkDAO() {
-    }
-
-    public MarkDAO(EntityManager entityClass) {
         setEntityClass(MarkEntity.class);
     }
 

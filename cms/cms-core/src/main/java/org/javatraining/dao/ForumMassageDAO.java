@@ -23,7 +23,7 @@ public class ForumMassageDAO extends GenericDAO<ForumMassagesEntity> {
 
     public ForumMassagesEntity save(@NotNull ForumMassagesEntity forumMessagesEntity, @NotNull PersonEntity personEntity, @NotNull LessonEntity lesson) {
         if (getEntityManager().find(LessonLinkEntity.class, forumMessagesEntity.getId()) != null) {
-            throw new EntityExistsException("This faculty is already exist is the database");
+            throw new EntityExistsException("This forumMassage is already exist is the database");
         }
         forumMessagesEntity.setPersons(personEntity);
         forumMessagesEntity.setLessons(lesson);

@@ -9,7 +9,7 @@ import java.sql.Timestamp;
  * Created by vika on 24.05.15.
  */
 @Entity
-@Table(name = "news", schema = "", catalog = "cms")
+@Table(name = "news", schema = "")
 public class NewsEntity implements Serializable {
 
     @Id
@@ -17,7 +17,7 @@ public class NewsEntity implements Serializable {
     @NotNull
     private int id;
     @NotNull
-    private Integer courseId;
+    private Long courseId;
     @NotNull
     private String title;
     @NotNull
@@ -50,11 +50,11 @@ public class NewsEntity implements Serializable {
 
     @Basic
     @Column(name = "course_id", nullable = true, insertable = true, updatable = true)
-    public Integer getCourseId() {
+    public Long getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(Integer courseId) {
+    public void setCourseId(Long courseId) {
         this.courseId = courseId;
     }
 

@@ -9,7 +9,7 @@ import java.util.Set;
  * Created by vika on 24.05.15.
  */
 @Entity
-@Table(name = "persons", schema = "", catalog = "cms")
+@Table(name = "persons", schema = "")
 public class PersonEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,13 +27,6 @@ public class PersonEntity implements Serializable {
     public PersonEntity() {
     }
 
-    public PersonEntity(Set<PersonRoleEntity> personRole) {
-        this.personRole = personRole;
-    }
-
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "person")
-    private Set<PersonRoleEntity> personRole;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "persons")
     private Set<MarkEntity> marks;
@@ -49,15 +42,6 @@ public class PersonEntity implements Serializable {
     public void setMarks(Set<MarkEntity> marks) {
         this.marks = marks;
     }
-
-    public Set<PersonRoleEntity> getPersonRole() {
-        return personRole;
-    }
-
-    public void setPersonRole(Set<PersonRoleEntity> personRole) {
-        this.personRole = personRole;
-    }
-
 
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
     public Long getId() {
@@ -132,8 +116,6 @@ public class PersonEntity implements Serializable {
 
         return true;
     }
-
-
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));

@@ -9,7 +9,7 @@ import java.sql.Timestamp;
  * Created by vika on 24.05.15.
  */
 @Entity
-@Table(name = "forum_messages", schema = "", catalog = "cms")
+@Table(name = "forum_messages", schema = "")
 public class ForumMassagesEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

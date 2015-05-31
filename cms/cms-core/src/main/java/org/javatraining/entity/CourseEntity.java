@@ -10,7 +10,7 @@ import java.util.Set;
  * Created by vika on 24.05.15.
  */
 @Entity
-@Table(name = "courses", schema = "", catalog = "cms")
+@Table(name = "courses", schema = "")
 public class CourseEntity implements Serializable {
 
     @Id
@@ -34,8 +34,8 @@ public class CourseEntity implements Serializable {
 
     @ManyToMany
     @JoinTable(name = "person_course",
-            joinColumns = @JoinColumn(name = "Owner_id", referencedColumnName = "owner"),
-            inverseJoinColumns = @JoinColumn(name = "Person_id", referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "owner_id", referencedColumnName = "owner"),
+            inverseJoinColumns = @JoinColumn(name = "person_id", referencedColumnName = "id"))
     private Set<PersonEntity> person;
 
 

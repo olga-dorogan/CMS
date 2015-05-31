@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by vika on 24.05.15.
  */
 @Entity
-@Table(name = "person_role", schema = "", catalog = "cms")
+@Table(name = "person_role", schema = "")
 public class PersonRoleEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +16,8 @@ public class PersonRoleEntity implements Serializable {
     private Long id;
     @NotNull
     private String name;
+    @NotNull
+    private Long personId;
 
     @Id
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
@@ -37,17 +39,14 @@ public class PersonRoleEntity implements Serializable {
         return name;
     }
 
-
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "person_id", nullable = false)
-    private PersonEntity person;
-
-    public PersonEntity getPersonEntity() {
-        return person;
+    @Basic
+    @Column(name = "person_id", nullable = true, insertable = true, updatable = true)
+    public Long getPersonId() {
+        return personId;
     }
 
-    public void setPerson(PersonEntity person) {
-        this.person = person;
+    public void setPersonId(Long personId) {
+        this.personId = personId;
     }
 
     @Override
@@ -59,7 +58,7 @@ public class PersonRoleEntity implements Serializable {
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (person != null ? !person.equals(that.person) : that.person != null) return false;
+        if (personId != null ? !personId.equals(that.personId) : that.personId != null) return false;
 
         return true;
     }
@@ -68,7 +67,7 @@ public class PersonRoleEntity implements Serializable {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (person != null ? person.hashCode() : 0);
+        result = 31 * result + (personId != null ? personId.hashCode() : 0);
         return result;
     }
 }

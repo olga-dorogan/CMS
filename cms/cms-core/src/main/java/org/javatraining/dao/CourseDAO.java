@@ -18,6 +18,8 @@ public class CourseDAO extends GenericDAO<CourseEntity> {
     @PersistenceContext
     private EntityManager em;
 
+
+
     public CourseDAO() {
       setEntityClass(CourseEntity.class);
        }

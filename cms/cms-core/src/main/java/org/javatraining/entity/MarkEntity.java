@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by vika on 24.05.15.
  */
 @Entity
-@Table(name = "marks", schema = "", catalog = "cms")
+@Table(name = "marks", schema = "")
 public class MarkEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -18,7 +18,7 @@ public class LessonsTypesDAO extends GenericDAO<LessonTypeEntity> {
     private EntityManager em;
 
 
-    public LessonsTypesDAO(EntityManager entityClass)
+    public LessonsTypesDAO()
     {
         setEntityClass(LessonTypeEntity.class);
     }

@@ -9,7 +9,7 @@ import javax.ejb.Stateless;
  * Created by olga on 29.05.15.
  */
 @Stateless
-public class MockAuthorizationServiceImpl implements AuthorizationService {
+public class MockAuthorizationServiceImplem implements AuthorizationService {
 
     @Override
     public Role getRoleByClientId(String clientId) {

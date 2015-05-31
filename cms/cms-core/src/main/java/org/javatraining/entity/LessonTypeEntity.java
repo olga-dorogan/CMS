@@ -9,7 +9,7 @@ import java.util.Set;
  * Created by vika on 24.05.15.
  */
 @Entity
-@Table(name = "lesson_types", schema = "", catalog = "cms")
+@Table(name = "lesson_types", schema = "")
 public class LessonTypeEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

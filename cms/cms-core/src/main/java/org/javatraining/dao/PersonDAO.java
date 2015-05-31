@@ -13,13 +13,10 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class PersonDAO extends GenericDAO<PersonEntity> {
 
-    public PersonDAO() {
-    }
-
     @PersistenceContext
     private EntityManager em;
 
-    public PersonDAO(EntityManager entityClass) {
+    public PersonDAO() {
         setEntityClass(PersonEntity.class);
     }
 

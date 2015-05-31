@@ -22,7 +22,7 @@ public class LessonsLinksDAO extends GenericDAO<LessonLinkEntity> {
     @PersistenceContext
     private EntityManager em;
 
-    public LessonsLinksDAO(EntityManager entityClass) {
+    public LessonsLinksDAO() {
         setEntityClass(LessonLinkEntity.class);
     }
 
@@ -34,7 +34,7 @@ public class LessonsLinksDAO extends GenericDAO<LessonLinkEntity> {
 
     public LessonLinkEntity save(@NotNull LessonLinkEntity lessonLinks, @NotNull LessonEntity lesson) {
         if (em.find(LessonLinkEntity.class, lessonLinks.getId()) != null) {
-            throw new EntityExistsException("This faculty is already exist is the database");
+            throw new EntityExistsException("This LessonLinkEntity is already exist is the database");
         }
         lessonLinks.setLesson(lesson);
         em.persist(lessonLinks);
