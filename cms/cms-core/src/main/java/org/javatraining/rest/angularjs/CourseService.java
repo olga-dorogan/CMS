@@ -18,7 +18,6 @@ public class CourseService extends Application {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Course> listPersons() {
-        System.out.println("РАБОТАЮ");
         List<Course> list = new ArrayList<>();
         list.add(new Course("Java EE", "Description for Java EE"));
         list.add(new Course("Java SE", "Description for Java SE"));

@@ -1,4 +1,4 @@
-package org.javatraining.filter;
+package org.javatraining.authorization;
 
 /**
  * Created by olga on 29.05.15.

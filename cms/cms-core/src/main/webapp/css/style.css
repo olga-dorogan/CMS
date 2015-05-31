@@ -28,3 +28,9 @@ body{
     width: 35px;
     height: 35px;
 }
+#userinfo-wrapper{
+    float: none;
+    vertical-align: middle;
+    display: inline-block;
+    font-size:15px;
+}

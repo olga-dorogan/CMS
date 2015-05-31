@@ -1,9 +1,11 @@
-package org.javatraining.filter;
+package org.javatraining.authorization.roles;
 
-import org.javatraining.service.authorization.AuthorizationService;
+import org.javatraining.authorization.BaseFilter;
 import org.javatraining.integration.google.oauth.GoogleUserinfoService;
 import org.javatraining.integration.google.oauth.exception.AuthException;
-import org.jboss.logging.Logger;
+import org.javatraining.service.authorization.AuthorizationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.servlet.FilterChain;
@@ -16,8 +18,8 @@ import java.io.IOException;
 /**
  * Created by olga on 29.05.15.
  */
-public abstract class RoleBasedAuthorizationFilter extends BaseFilter {
-    private static final Logger log = Logger.getLogger(RoleBasedAuthorizationFilter.class);
+public abstract class AuthorizationBaseRoleFilter extends BaseFilter {
+    private static final Logger log = LoggerFactory.getLogger(AuthorizationBaseRoleFilter.class);
     @EJB
     private AuthorizationService authorizationService;
     @EJB
@@ -29,8 +31,7 @@ public abstract class RoleBasedAuthorizationFilter extends BaseFilter {
     }
 
     public void doFilterOnRole(AuthorizationService.Role role, ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        super.doFilter(request, response, chain);
-        log.debugv("token: {0}, role: {1}", token, role);
+        log.trace("token: {}, role: {}", token, role);
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         try {
             if (authorizationService.getRoleByClientId(googleUserinfoService.getClientIbByToken(token)) != role) {

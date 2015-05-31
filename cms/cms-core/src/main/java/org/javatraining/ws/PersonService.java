@@ -1,5 +1,6 @@
 package org.javatraining.ws;
 
+import javax.enterprise.context.Dependent;
 import flexjson.JSONException;
 import org.javatraining.stubs.Person;
 
@@ -15,6 +16,7 @@ import javax.ws.rs.core.UriInfo;
  */
 @Stateless
 @Path("person")
+@Dependent
 public class PersonService<T> extends AbstractService<Person> {
     public PersonService() {
         super(Person.class);

@@ -3,7 +3,8 @@ package org.javatraining.integration.google.oauth.impl;
 import org.javatraining.integration.google.oauth.GoogleUserinfoService;
 import org.javatraining.integration.google.oauth.exception.AuthException;
 import org.javatraining.integration.google.oauth.exception.GoogleConnectionAuthException;
-import org.jboss.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.Stateless;
 import javax.ws.rs.client.Client;
@@ -20,7 +21,7 @@ import java.net.URL;
  */
 @Stateless
 public class GoogleUserinfoServiceImpl implements GoogleUserinfoService {
-    private static final Logger log = Logger.getLogger(GoogleUserinfoServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(GoogleUserinfoServiceImpl.class);
     private static final String BASE = "https://www.googleapis.com/oauth2/v2/userinfo";
 
     @Override
@@ -39,7 +40,7 @@ public class GoogleUserinfoServiceImpl implements GoogleUserinfoService {
 
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
                 Userinfo userinfo = response.readEntity(Userinfo.class);
-                log.debugv("token: {0}; getClientById() returns {1} as clientId", token, userinfo.getId());
+                log.trace("token: {}; getClientById() returns {} as clientId", token, userinfo.getId());
                 return userinfo.getId();
             }
             throw new AuthException("Response from query to get client id (token = " + token + ") returns with status code" +
@@ -66,7 +67,7 @@ public class GoogleUserinfoServiceImpl implements GoogleUserinfoService {
 
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
                 Userinfo userinfo = response.readEntity(Userinfo.class);
-                log.debugv("token: {0}; getUserInfoByToken() returns {1}", token, userinfo);
+                log.trace("token: {}; getUserInfoByToken() returns {}", token, userinfo);
                 return userinfo;
             }
             throw new AuthException("Response from query to get user info (token = " + token + ") returns with status code" +

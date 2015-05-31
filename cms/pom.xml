@@ -17,7 +17,9 @@
         <javaee.version>7.0</javaee.version>
         <google.api.oauth2.version>v2-rev91-1.20.0</google.api.oauth2.version>
         <google.api.calendar.version>v3-rev126-1.20.0</google.api.calendar.version>
-        <jboss.logging.version>3.0.0.CR1</jboss.logging.version>
+        <slf4j.version>1.7.2</slf4j.version>
+        <log4j.version>2.3</log4j.version>
+        <h2.database.version>1.3.173</h2.database.version>
         <net.sf.flexjson.version>3.3</net.sf.flexjson.version>
         <junit.version>4.11</junit.version>
         <org.mockito.version>1.9.5</org.mockito.version>
