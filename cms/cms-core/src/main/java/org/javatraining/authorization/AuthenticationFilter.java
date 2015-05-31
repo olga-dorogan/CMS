@@ -2,7 +2,8 @@ package org.javatraining.authorization;
 
 import org.javatraining.integration.google.oauth.TokenVerifierService;
 import org.javatraining.integration.google.oauth.exception.AuthException;
-import org.jboss.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.servlet.FilterChain;
@@ -18,14 +19,14 @@ import java.io.IOException;
  */
 @WebFilter("/resources/*")
 public class AuthenticationFilter extends BaseFilter {
-    private static final Logger log = Logger.getLogger(AuthenticationFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthenticationFilter.class);
     @EJB
     private TokenVerifierService tokenVerifierService;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         super.doFilter(request, response, chain);
-        log.debugv("token: {0}", token);
+        log.trace("token: {}", token);
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         try {
             if (token == null || !tokenVerifierService.verifyToken(token)) {
