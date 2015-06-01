@@ -1,10 +1,5 @@
 package org.javatraining.model;
 
-
-import org.javatraining.entity.CourseEntity;
-import org.javatraining.entity.MarkEntity;
-import org.javatraining.entity.PersonRoleEntity;
-
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;
@@ -23,33 +18,30 @@ public class PersonVO implements Serializable {
     private String lastName;
     @NotNull
     private String email;
+    private Set<PersonRoleVO> personRole;
+    private Set<MarkVO> marks;
+    private Set<CourseVO> course;
 
     public PersonVO() {
     }
 
-    public PersonVO(Set<PersonRoleEntity> personRole) {
+    public PersonVO(Set<PersonRoleVO> personRole) {
         this.personRole = personRole;
     }
 
-    private Set<PersonRoleEntity> personRole;
-
-    private Set<MarkEntity> marks;
-
-    private Set<CourseEntity> course;
-
-    public Set<MarkEntity> getMarks() {
+    public Set<MarkVO> getMarks() {
         return marks;
     }
 
-    public void setMarks(Set<MarkEntity> marks) {
+    public void setMarks(Set<MarkVO> marks) {
         this.marks = marks;
     }
 
-    public Set<PersonRoleEntity> getPersonRole() {
+    public Set<PersonRoleVO> getPersonRole() {
         return personRole;
     }
 
-    public void setPersonRole(Set<PersonRoleEntity> personRole) {
+    public void setPersonRole(Set<PersonRoleVO> personRole) {
         this.personRole = personRole;
     }
 
@@ -85,11 +77,11 @@ public class PersonVO implements Serializable {
         this.lastName = lastName;
     }
 
-    public Set<CourseEntity> getCourse() {
+    public Set<CourseVO> getCourse() {
         return course;
     }
 
-    public void setCourse(Set<CourseEntity> course) {
+    public void setCourse(Set<CourseVO> course) {
         this.course = course;
     }
 
@@ -120,7 +112,7 @@ public class PersonVO implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
+        int result = (int) (name != null ? (id ^ (id >>> 32)) : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (secondName != null ? secondName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);

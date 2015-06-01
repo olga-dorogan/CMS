@@ -1,9 +1,5 @@
 package org.javatraining.model;
 
-
-import flexjson.JSON;
-import org.javatraining.entity.PersonEntity;
-
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -16,8 +12,6 @@ public class PersonRoleVO implements Serializable {
     private Long id;
     @NotNull
     private String name;
-    @JSON(include = false)
-    private PersonEntity person;
 
     public Long getId() {
         return id;
@@ -35,14 +29,6 @@ public class PersonRoleVO implements Serializable {
         this.name = name;
     }
 
-    public PersonEntity getPersonEntity() {
-        return person;
-    }
-
-    public void setPerson(PersonEntity person) {
-        this.person = person;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -52,7 +38,6 @@ public class PersonRoleVO implements Serializable {
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (person != null ? !person.equals(that.person) : that.person != null) return false;
 
         return true;
     }
@@ -61,7 +46,6 @@ public class PersonRoleVO implements Serializable {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (person != null ? person.hashCode() : 0);
         return result;
     }
 }
