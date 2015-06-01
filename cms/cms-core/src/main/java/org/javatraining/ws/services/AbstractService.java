@@ -1,4 +1,4 @@
-package org.javatraining.ws;
+package org.javatraining.ws.services;
 
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
@@ -14,7 +14,7 @@ public class AbstractService<T> {
     }
 
     String serialize(T object) {
-        return new JSONSerializer().serialize(object);
+        return new JSONSerializer().exclude("*.class").deepSerialize(object);
     }
 
     T deserialize(String json) {
