@@ -11,9 +11,11 @@ import com.google.api.services.calendar.model.CalendarListEntry;
 import org.javatraining.integration.google.calendar.exception.CalendarException;
 import org.javatraining.integration.google.calendar.exception.CalendarRoleAlreadyExistsException;
 import org.javatraining.integration.google.calendar.exception.CalendarRoleNotExistsException;
+import org.javatraining.model.PersonVO;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ import java.util.List;
  * Created by olga on 27.05.15.
  */
 @Stateless
-public class CalendarManagerImpl implements CalendarManager {
+public class CalendarServiceImpl implements CalendarService {
 
     private static final String CALENDAR_ROLE_TEACHER = "writer";
     private static final String CALENDAR_ROLE_STUDENT = "reader";
@@ -32,13 +34,15 @@ public class CalendarManagerImpl implements CalendarManager {
     private com.google.api.services.calendar.Calendar calendarService;
 
     @Override
-    public String addCalendar(@NotNull String title, @NotNull List<String> teachersEmails, @NotNull List<String> studentsEmails) {
+    public
+    @Valid
+    CalendarVO addCalendar(@Valid CalendarVO calendarVO) {
         try {
             Calendar calendar = new Calendar();
-            calendar.setSummary(title);
+            calendar.setSummary(calendarVO.getTitle());
             Calendar addedCalendar = calendarService.calendars().insert(calendar).execute();
             if (addedCalendar == null) {
-                throw new CalendarException("Calendar " + title + " can't be added.");
+                throw new CalendarException(String.format("Calendar %s can't be added.", calendarVO.getTitle()));
             }
 
             BatchRequest batch = calendarService.batch();
@@ -61,24 +65,27 @@ public class CalendarManagerImpl implements CalendarManager {
             rule.setScope(scope).setRole("reader");
             calendarService.acl().insert(addedCalendar.getId(), rule).queue(batch, callback);
 
-            for (String teacherEmail : teachersEmails) {
+            List<PersonVO> teachers = calendarVO.getTeachers();
+            for (PersonVO teacher : teachers) {
                 rule = new AclRule();
                 scope = new AclRule.Scope();
-                scope.setType("user").setValue(teacherEmail);
+                scope.setType("user").setValue(teacher.getEmail());
                 rule.setScope(scope).setRole(CALENDAR_ROLE_TEACHER);
                 calendarService.acl().insert(addedCalendar.getId(), rule).queue(batch, callback);
             }
 
-            for (String studentEmail : studentsEmails) {
+            List<PersonVO> students = calendarVO.getStudents();
+            for (PersonVO student : students) {
                 rule = new AclRule();
                 scope = new AclRule.Scope();
-                scope.setType("user").setValue(studentEmail);
+                scope.setType("user").setValue(student.getEmail());
                 rule.setScope(scope).setRole(CALENDAR_ROLE_STUDENT);
                 calendarService.acl().insert(addedCalendar.getId(), rule).queue(batch, callback);
             }
 
             batch.execute();
-            return addedCalendar.getId();
+            calendarVO.setId(addedCalendar.getId());
+            return calendarVO;
 
         } catch (IOException e) {
             throw new CalendarException(e);
@@ -86,36 +93,65 @@ public class CalendarManagerImpl implements CalendarManager {
     }
 
     @Override
-    public void removeCalendar(@NotNull String calendarId) {
+    public void removeCalendar(@Valid CalendarVO calendarVO) {
         try {
-            calendarService.calendars().delete(calendarId).execute();
+            calendarService.calendars().delete(calendarVO.getId()).execute();
         } catch (IOException e) {
             throw new CalendarException(e);
         }
     }
 
     @Override
-    public void addTeacherToCalendar(@NotNull String calendarId, @NotNull String teacherEmail) {
-        addPersonToCalendar(calendarId, teacherEmail, CALENDAR_ROLE_TEACHER);
+    public CalendarVO getCalendarById(@NotNull String calendarId) {
+        try {
+            CalendarListEntry calendarListEntry = calendarService.calendarList().get(calendarId).execute();
+            CalendarVO calendarVO = new CalendarVO();
+            calendarVO.setId(calendarId);
+            calendarVO.setTitle(calendarListEntry.getSummary());
+            List<PersonVO> teachersList = new ArrayList<>();
+            List<PersonVO> studentsList = new ArrayList<>();
+            List<AclRule> aclRules = calendarService.acl().list(calendarId).execute().getItems();
+             if (aclRules != null) {
+                for (AclRule aclRule : aclRules) {
+                    // TODO: add creating the teacher (student) from email
+                    /*
+                    if (aclRule.getRole() == CALENDAR_ROLE_TEACHER) {
+                        teachersList.add(aclRule.getScope().getValue());
+                    } else if (aclRule.getRole() == CALENDAR_ROLE_STUDENT) {
+                        studentsList.add(aclRule.getScope().getValue());
+                    }
+                    */
+                }
+            }
+            calendarVO.setTeachers(teachersList);
+            calendarVO.setStudents(studentsList);
+            return calendarVO;
+        } catch (IOException e) {
+            throw new CalendarException(e);
+        }
     }
 
     @Override
-    public void removeTeacherFromCalendar(@NotNull String calendarId, @NotNull String teacherEmail) {
-        removePersonFromCalendar(calendarId, teacherEmail, CALENDAR_ROLE_TEACHER);
+    public void addTeacherToCalendar(@Valid CalendarVO calendarVO, @Valid PersonVO teacher) {
+        addPersonToCalendar(calendarVO.getId(), teacher.getEmail(), CALENDAR_ROLE_TEACHER);
     }
 
     @Override
-    public void addStudentToCalendar(@NotNull String calendarId, @NotNull String studentEmail) {
-        addPersonToCalendar(calendarId, studentEmail, CALENDAR_ROLE_STUDENT);
+    public void removeTeacherFromCalendar(@Valid CalendarVO calendarVO, @Valid PersonVO teacher) {
+        removePersonFromCalendar(calendarVO.getId(), teacher.getEmail(), CALENDAR_ROLE_TEACHER);
     }
 
     @Override
-    public void removeStudentFromCalendar(@NotNull String calendarId, @NotNull String studentEmail) {
-        removePersonFromCalendar(calendarId, studentEmail, CALENDAR_ROLE_STUDENT);
+    public void addStudentToCalendar(@Valid CalendarVO calendarVO, @Valid PersonVO student) {
+        addPersonToCalendar(calendarVO.getId(), student.getEmail(), CALENDAR_ROLE_STUDENT);
+    }
+
+    @Override
+    public void removeStudentFromCalendar(@Valid CalendarVO calendarVO, @Valid PersonVO student) {
+        removePersonFromCalendar(calendarVO.getId(), student.getEmail(), CALENDAR_ROLE_STUDENT);
     }
 
 
-    @Override
     public List<String> getListOfCalendarsIds() {
         try {
             CalendarList feed = calendarService.calendarList().list().execute();
@@ -132,7 +168,6 @@ public class CalendarManagerImpl implements CalendarManager {
     }
 
 
-    @Override
     public List<String> getListOfCalendarsSummaries() {
         try {
             CalendarList feed = calendarService.calendarList().list().execute();
@@ -148,7 +183,6 @@ public class CalendarManagerImpl implements CalendarManager {
         }
     }
 
-    @Override
     public List<String> getListOfCalendarSubscribers(@NotNull String calendarId) {
         try {
             List<AclRule> aclRules = calendarService.acl().list(calendarId).execute().getItems();
@@ -164,12 +198,11 @@ public class CalendarManagerImpl implements CalendarManager {
         }
     }
 
-    //TODO: реализовать полное удаление подписки на календарь со стороны подписчика
     private void removePersonFromCalendar(String calendarId, String email, String role) {
         try {
             String deletedRuleId = getRuleIdForPerson(calendarId, email, role);
             if (deletedRuleId == null) {
-                throw new CalendarRoleNotExistsException(role + " with email " + email + " doesn't exist.");
+                throw new CalendarRoleNotExistsException(String.format("%s with email %s is not exist.", role, email));
             }
             calendarService.acl().delete(calendarId, deletedRuleId).execute();
         } catch (IOException e) {
@@ -181,8 +214,9 @@ public class CalendarManagerImpl implements CalendarManager {
         try {
             String ruleId = getRuleIdForPerson(calendarId, email, role);
             if (ruleId != null) {
-                throw new CalendarRoleAlreadyExistsException(role + " with email " + email + " is already exists.");
+                throw new CalendarRoleAlreadyExistsException(String.format("%s with email %s is already exist.", role, email));
             }
+
             AclRule rule = new AclRule();
             AclRule.Scope scope = new AclRule.Scope();
             scope.setType("user").setValue(email);
