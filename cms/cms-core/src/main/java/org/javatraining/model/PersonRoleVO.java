@@ -1,6 +1,7 @@
 package org.javatraining.model;
 
 
+import flexjson.JSON;
 import org.javatraining.entity.PersonEntity;
 
 import javax.validation.constraints.NotNull;
@@ -15,6 +16,8 @@ public class PersonRoleVO implements Serializable {
     private Long id;
     @NotNull
     private String name;
+    @JSON(include = false)
+    private PersonEntity person;
 
     public Long getId() {
         return id;
@@ -24,15 +27,13 @@ public class PersonRoleVO implements Serializable {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getName() {
         return name;
     }
 
-    private PersonEntity person;
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public PersonEntity getPersonEntity() {
         return person;
