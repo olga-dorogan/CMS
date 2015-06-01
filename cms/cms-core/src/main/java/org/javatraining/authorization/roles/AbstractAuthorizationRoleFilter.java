@@ -1,6 +1,6 @@
 package org.javatraining.authorization.roles;
 
-import org.javatraining.authorization.BaseFilter;
+import org.javatraining.authorization.AbstractFilter;
 import org.javatraining.integration.google.oauth.GoogleUserinfoService;
 import org.javatraining.integration.google.oauth.exception.AuthException;
 import org.javatraining.service.authorization.AuthorizationService;
@@ -18,23 +18,26 @@ import java.io.IOException;
 /**
  * Created by olga on 29.05.15.
  */
-public abstract class AuthorizationBaseRoleFilter extends BaseFilter {
-    private static final Logger log = LoggerFactory.getLogger(AuthorizationBaseRoleFilter.class);
+public abstract class AbstractAuthorizationRoleFilter extends AbstractFilter {
+    private static final Logger log = LoggerFactory.getLogger(AbstractAuthorizationRoleFilter.class);
     @EJB
     private AuthorizationService authorizationService;
     @EJB
     private GoogleUserinfoService googleUserinfoService;
 
+    private final AuthorizationService.Role expectedRole;
+
+    protected AbstractAuthorizationRoleFilter(AuthorizationService.Role expectedRole) {
+        this.expectedRole = expectedRole;
+    }
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         super.doFilter(request, response, chain);
-    }
-
-    public void doFilterOnRole(AuthorizationService.Role role, ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        log.trace("token: {}, role: {}", token, role);
+        log.trace("token: {}, role: {}", token, expectedRole);
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         try {
-            if (authorizationService.getRoleByClientId(googleUserinfoService.getClientIbByToken(token)) != role) {
+            if (authorizationService.getRoleByClientId(googleUserinfoService.getClientIdByToken(token)) != expectedRole) {
                 httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }

@@ -31,7 +31,7 @@ public class AuthorizationRoleController extends HttpServlet {
         String token = req.getHeader(Config.REQUEST_HEADER_TOKEN);
         log.trace("token: {}", token);
         try {
-            String clientId = googleUserinfoService.getClientIbByToken(token);
+            String clientId = googleUserinfoService.getClientIdByToken(token);
             AuthorizationService.Role role = authorizationService.getRoleByClientId(clientId);
             if (role == AuthorizationService.Role.UNAUTHORIZED) {
                 authorizationService.registerUser(googleUserinfoService.getUserInfoByToken(token));

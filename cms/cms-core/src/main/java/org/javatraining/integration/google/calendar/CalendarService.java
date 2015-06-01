@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
  * Created by olga on 27.05.15.
  */
 public interface CalendarService {
-    @Valid
+
     CalendarVO addCalendar(@Valid CalendarVO calendarVO);
 
     void removeCalendar(@Valid CalendarVO calendarVO);

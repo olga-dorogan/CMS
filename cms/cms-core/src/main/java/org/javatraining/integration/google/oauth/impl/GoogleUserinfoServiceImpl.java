@@ -25,7 +25,7 @@ public class GoogleUserinfoServiceImpl implements GoogleUserinfoService {
     private static final String BASE = "https://www.googleapis.com/oauth2/v2/userinfo";
 
     @Override
-    public String getClientIbByToken(String token) {
+    public String getClientIdByToken(String token) {
         final String PARAM_FIELDS_KEY = "fields";
         final String PARAM_FIELDS_VALUE = "id";
         try {
@@ -43,8 +43,8 @@ public class GoogleUserinfoServiceImpl implements GoogleUserinfoService {
                 log.trace("token: {}; getClientById() returns {} as clientId", token, userinfo.getId());
                 return userinfo.getId();
             }
-            throw new AuthException("Response from query to get client id (token = " + token + ") returns with status code" +
-                    response.getStatus());
+            throw new AuthException(String.format("Response from query to get client id (token = %s) returns with status code %s",
+                    token, response.getStatus()));
         } catch (MalformedURLException e) {
             throw new GoogleConnectionAuthException(e);
         }
@@ -70,8 +70,8 @@ public class GoogleUserinfoServiceImpl implements GoogleUserinfoService {
                 log.trace("token: {}; getUserInfoByToken() returns {}", token, userinfo);
                 return userinfo;
             }
-            throw new AuthException("Response from query to get user info (token = " + token + ") returns with status code" +
-                    response.getStatus());
+            throw new AuthException(String.format("Response from query to get user info (token = %s) returns with status code %s",
+                    token, response.getStatus()));
 
         } catch (MalformedURLException e) {
             throw new GoogleConnectionAuthException(e);

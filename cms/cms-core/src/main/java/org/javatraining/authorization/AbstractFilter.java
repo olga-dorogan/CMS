@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  * Created by olga on 29.05.15.
  */
-public abstract class BaseFilter implements Filter {
+public abstract class AbstractFilter implements Filter {
     protected String token;
 
     @Override

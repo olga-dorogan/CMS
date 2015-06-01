@@ -34,9 +34,7 @@ public class CalendarServiceImpl implements CalendarService {
     private com.google.api.services.calendar.Calendar calendarService;
 
     @Override
-    public
-    @Valid
-    CalendarVO addCalendar(@Valid CalendarVO calendarVO) {
+    public CalendarVO addCalendar(@Valid CalendarVO calendarVO) {
         try {
             Calendar calendar = new Calendar();
             calendar.setSummary(calendarVO.getTitle());
@@ -111,7 +109,7 @@ public class CalendarServiceImpl implements CalendarService {
             List<PersonVO> teachersList = new ArrayList<>();
             List<PersonVO> studentsList = new ArrayList<>();
             List<AclRule> aclRules = calendarService.acl().list(calendarId).execute().getItems();
-             if (aclRules != null) {
+            if (aclRules != null) {
                 for (AclRule aclRule : aclRules) {
                     // TODO: add creating the teacher (student) from email
                     /*
