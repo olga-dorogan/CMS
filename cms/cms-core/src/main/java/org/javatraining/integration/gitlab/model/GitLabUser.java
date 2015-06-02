@@ -1,13 +1,12 @@
 package org.javatraining.integration.gitlab.model;
 
-import java.net.URL;
-
 /**
  * The project name is cms.
  * Created by sergey on 02.06.15 at 14:33.
  * For more information you should send mail to codedealerb@gmail.com
  */
 public class GitLabUser {
+    private Long id;
     private String email;//required
     private String password;//required
     private String userName;//required
@@ -15,7 +14,7 @@ public class GitLabUser {
     private String skype;//required
     private String linkedIn;
     private String twitterAccount;
-    private URL websiteUrl;
+    private String websiteUrl;
     private int projectsLimit;
     private String externUID;
     private String provider;
@@ -23,6 +22,12 @@ public class GitLabUser {
     private boolean admin;
     private boolean canCreateGroup;
     private boolean confirm;
+    private boolean state;
+    private int themeId;
+    private String currentSignInAt;
+    private boolean canCreateProject;
+    private int colorSchemeId;
+    private String avatarUrl;
 
     public GitLabUser(){
 
@@ -85,11 +90,11 @@ public class GitLabUser {
         this.twitterAccount = twitterAccount;
     }
 
-    public URL getWebsiteUrl() {
+    public String getWebsiteUrl() {
         return websiteUrl;
     }
 
-    public void setWebsiteUrl(URL websiteUrl) {
+    public void setWebsiteUrl(String websiteUrl) {
         this.websiteUrl = websiteUrl;
     }
 
@@ -147,5 +152,61 @@ public class GitLabUser {
 
     public void setConfirm(boolean confirm) {
         this.confirm = confirm;
+    }
+
+    public boolean isState() {
+        return state;
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
+    }
+
+    public int getThemeId() {
+        return themeId;
+    }
+
+    public void setThemeId(int themeId) {
+        this.themeId = themeId;
+    }
+
+    public String getCurrentSignInAt() {
+        return currentSignInAt;
+    }
+
+    public void setCurrentSignInAt(String currentSignInAt) {
+        this.currentSignInAt = currentSignInAt;
+    }
+
+    public boolean isCanCreateProject() {
+        return canCreateProject;
+    }
+
+    public void setCanCreateProject(boolean canCreateProject) {
+        this.canCreateProject = canCreateProject;
+    }
+
+    public int getColorSchemeId() {
+        return colorSchemeId;
+    }
+
+    public void setColorSchemeId(int colorSchemeId) {
+        this.colorSchemeId = colorSchemeId;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
