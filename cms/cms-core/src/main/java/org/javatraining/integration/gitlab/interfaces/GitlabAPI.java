@@ -1,6 +1,7 @@
 package org.javatraining.integration.gitlab.interfaces;
 
 import org.javatraining.integration.gitlab.exception.UserNotFoundException;
+import org.javatraining.integration.gitlab.model.GitLabSession;
 import org.javatraining.integration.gitlab.model.GitLabUser;
 
 /**
@@ -34,5 +35,6 @@ public interface GitlabAPI {
     //http://localhost/api/v3/users/3?private_token=xTApBC_xvpkKEw7yHjDV&sudo=root - example
     public void removeUserByUserName(String userName);// throws UserNotFoundException;
 
-
+    //get session for manage user's account with special private token
+    public GitLabSession getGitlabSessionForSpecifiedUser(String userName, String email, String password) throws UserNotFoundException;
 }
