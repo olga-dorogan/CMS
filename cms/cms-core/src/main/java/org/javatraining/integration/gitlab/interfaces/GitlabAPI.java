@@ -1,4 +1,4 @@
-package org.javatraining.integration.gitlab;
+package org.javatraining.integration.gitlab.interfaces;
 
 import org.javatraining.integration.gitlab.exception.UserNotFoundException;
 import org.javatraining.integration.gitlab.model.GitLabUser;
@@ -19,19 +19,20 @@ public interface GitlabAPI {
 
     //user creation (only for admin)
     //post /users - rest method
-    public boolean createNewGitLabUser(GitLabUser userToPersis);
+    //http://localhost/api/v3/users?private_token=xTApBC_xvpkKEw7yHjDV&sudo=root - example without properties
+    //return status 201 if created
+    public boolean createNewGitLabUser(GitLabUser userProperties);
 
     //modification to existing user (only for admin)
     //put /users - rest method
+    //http://localhost/api/v3/users?private_token=xTApBC_xvpkKEw7yHjDV&sudo=root - example without properties
     public boolean updateUserByUserName(String userName) throws UserNotFoundException;
 
     //    Deletes a user.
     // Available only for administrators.
-    // This is an idempotent function, calling this function for
-    // a non-existent user id still returns a status code 200 OK.
-    // The JSON response differs if the user was actually deleted or not.
-    // In the former the user is returned and in the latter not.
-    public void removeUserByUserName(String userName) throws UserNotFoundException;
+    // return json with properties for deleted user and status 200 OK
+    //http://localhost/api/v3/users/3?private_token=xTApBC_xvpkKEw7yHjDV&sudo=root - example
+    public void removeUserByUserName(String userName);// throws UserNotFoundException;
 
 
 }

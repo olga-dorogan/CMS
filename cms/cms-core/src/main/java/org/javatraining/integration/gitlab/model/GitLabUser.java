@@ -1,35 +1,80 @@
 package org.javatraining.integration.gitlab.model;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 /**
  * The project name is cms.
  * Created by sergey on 02.06.15 at 14:33.
  * For more information you should send mail to codedealerb@gmail.com
  */
 public class GitLabUser {
+    @JsonProperty("id")
     private Long id;
+
+    @JsonProperty("email")
     private String email;//required
+
+    @JsonProperty("password")
     private String password;//required
+
+    @JsonProperty("username")
     private String userName;//required
+
+    @JsonProperty("name")
     private String name;//required
+
+    @JsonProperty("skype")
     private String skype;//required
+
+    @JsonProperty("linkedin")
     private String linkedIn;
+
+    @JsonProperty("twitter")
     private String twitterAccount;
+
+    @JsonProperty("website_url")
     private String websiteUrl;
+
+    @JsonProperty("project_limit")
     private int projectsLimit;
+
+    @JsonProperty("extern_uid")
     private String externUID;
+
+    @JsonProperty("provider")
     private String provider;
+
+    @JsonProperty("bio")
     private String bio;
+
+    @JsonProperty("admin")
     private boolean admin;
+
+    @JsonProperty("can_create_group")
     private boolean canCreateGroup;
+
+    @JsonProperty("confirm")
     private boolean confirm;
+
+    @JsonProperty("state")
     private boolean state;
+
+    @JsonProperty("theme_id")
     private int themeId;
+
+    @JsonProperty("current_sign_in_at")
     private String currentSignInAt;
+
+    @JsonProperty("can_create_project")
     private boolean canCreateProject;
+
+    @JsonProperty("color_scheme_id")
     private int colorSchemeId;
+
+    @JsonProperty("avatar_url")
     private String avatarUrl;
 
-    public GitLabUser(){
+    public GitLabUser() {
 
     }
 
