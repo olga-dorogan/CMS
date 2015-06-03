@@ -34,3 +34,41 @@ body{
     display: inline-block;
     font-size:15px;
 }
+
+.trench{
+    padding: 10px;
+    margin: 5px;
+}
+.trench_out{
+    margin: 5px;
+
+}
+
+.third_screen{
+    width: 30%;
+}
+.half_screen{
+    width: 50%;
+}
+.full_screen{
+    width: 100%;
+}
+
+.vcenter {
+    display: inline-block;
+    float: none;
+    vertical-align: middle;
+}
+#git-id{
+    padding-top:45px;
+}
+.btn-custom {
+    background-color: hsl(188, 83%, 75%) !important;
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#fafefe", endColorstr="#8ae6f4");
+    background-image: linear-gradient(#fafefe, #8ae6f4);
+    border-color: #8ae6f4 #8ae6f4 hsl(188, 83%, 69%);
+    color: #333 !important;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.39);
+    -webkit-font-smoothing: antialiased;
+}

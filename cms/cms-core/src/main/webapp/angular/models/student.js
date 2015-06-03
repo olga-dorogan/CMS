@@ -1,17 +1,18 @@
-angular.module('myApp.studentProfile', ['ui.router'])
+angular.module('myApp.student', ['ui.router'])
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
         $stateProvider
-            .state('studentProfile', {
-                url:'/profile',
+            .state('student', {
+                url:'/student',
                 //FIXME Сделать страницу профиля для студента
                 views: {
                     "":{
                         templateUrl: 'angular/views/home.html'
                     },
-                    "content@studentProfile": {
-                        template: '<h1>STUDENT</h1>'
+                    "content@student": {
+                        templateUrl: 'angular/views/studentIndex.html'
                     }
-                }
-
+                },
+                resolve: {studentAccess:studentAccess}
             })
     }]);
+

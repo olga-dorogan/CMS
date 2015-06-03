@@ -6,7 +6,8 @@ var myApp = angular.module('myApp', [
     'myApp.home',
     'myApp.news',
     'myApp.about',
-    'myApp.studentProfile'
+    'myApp.teacher',
+    'myApp.student'
 ]);
 myApp.service('sessionService', ['$window', SessionService]);
 myApp.factory('sessionInjector', ['$rootScope', 'sessionService', SessionInjector]);
@@ -38,6 +39,7 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope',
 
         GAuth.checkAuth().then(
             function () {
+                $rootScope.role="teacher";
                 //Если пользовательно не новый логиним его и отправляем куда нужно
             },
             function () {
@@ -47,8 +49,6 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope',
         );
 
         //Заглушка для определения роли
-        $rootScope.role="student";
-
 
         $rootScope.doLogin = function () {
             GAuth.login().then(function () {
@@ -59,6 +59,7 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope',
             });
         };
         $rootScope.doLogOut = function () {
+            $rootScope.role="";
             GAuth.logout().then(function () {
                 $state.go("home");
             });
