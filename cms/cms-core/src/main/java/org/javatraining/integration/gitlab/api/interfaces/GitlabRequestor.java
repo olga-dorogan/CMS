@@ -1,4 +1,4 @@
-package org.javatraining.integration.gitlab.interfaces;
+package org.javatraining.integration.gitlab.api.interfaces;
 
 import com.google.api.client.http.HttpResponse;
 

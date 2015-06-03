@@ -1,4 +1,4 @@
-package org.javatraining.integration.gitlab.interfaces;
+package org.javatraining.integration.gitlab.api.interfaces;
 
 /**
  * The project name is cms.

@@ -1,4 +1,4 @@
-package org.javatraining.integration.gitlab.exception;
+package org.javatraining.integration.gitlab.api.exception;
 
 import javax.ejb.ApplicationException;
 import javax.ejb.Stateless;

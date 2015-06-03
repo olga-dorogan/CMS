@@ -1,4 +1,4 @@
-package org.javatraining.integration.gitlab.model;
+package org.javatraining.integration.gitlab.api.model;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
@@ -7,6 +7,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
  * Created by sergey on 02.06.15 at 14:33.
  * For more information you should send mail to codedealerb@gmail.com
  */
+
 public class GitLabUser {
     @JsonProperty("id")
     private Long id;
