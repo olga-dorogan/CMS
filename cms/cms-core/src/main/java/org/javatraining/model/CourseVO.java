@@ -1,10 +1,6 @@
 package org.javatraining.model;
 
 
-import org.javatraining.entity.LessonEntity;
-import org.javatraining.entity.NewsEntity;
-import org.javatraining.entity.PersonEntity;
-
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.Date;
@@ -31,25 +27,25 @@ public class CourseVO implements Serializable {
     public CourseVO() {
     }
 
-    private Set<PersonEntity> person;
+    private Set<PersonVO> person;
 
-    private Set<NewsEntity> news;
+    private Set<NewsVO> news;
 
-    private Set<LessonEntity> lessons;
+    private Set<LessonVO> lessons;
 
-    public Set<LessonEntity> getLessons() {
+    public Set<LessonVO> getLessons() {
         return lessons;
     }
 
-    public void setLessons(Set<LessonEntity> lessons) {
+    public void setLessons(Set<LessonVO> lessons) {
         this.lessons = lessons;
     }
 
-    public Set<NewsEntity> getNews() {
+    public Set<NewsVO> getNews() {
         return news;
     }
 
-    public void setNews(Set<NewsEntity> news) {
+    public void setNews(Set<NewsVO> news) {
         this.news = news;
     }
 
@@ -102,11 +98,11 @@ public class CourseVO implements Serializable {
     }
 
 
-    public Set<PersonEntity> getPerson() {
+    public Set<PersonVO> getPerson() {
         return person;
     }
 
-    public void setPerson(Set<PersonEntity> person) {
+    public void setPerson(Set<PersonVO> person) {
         this.person = person;
     }
 

@@ -4,8 +4,8 @@ package org.javatraining.dao;
 import org.javatraining.entity.PersonEntity;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.util.List;
 
 /**
  * Created by vika on 26.05.15.
@@ -13,17 +13,15 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class PersonDAO extends GenericDAO<PersonEntity> {
 
-    @PersistenceContext
-    private EntityManager em;
-
     public PersonDAO() {
         setEntityClass(PersonEntity.class);
     }
 
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
+    public List<PersonEntity> getAllPersons() {
+        Query query = getEntityManager().createQuery("SELECT c FROM PersonEntity c");
+        return query.getResultList();
     }
+
 
 
 }

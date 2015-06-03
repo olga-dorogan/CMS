@@ -11,11 +11,9 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "news", schema = "")
 public class NewsEntity implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
-    private int id;
+    private Long id;
     @NotNull
     private Long courseId;
     @NotNull
@@ -25,26 +23,22 @@ public class NewsEntity implements Serializable {
     @NotNull
     private Timestamp date;
 
-
-    public CourseEntity getCourses() {
-        return courses;
+    public NewsEntity() {
     }
 
-    public void setCourses(CourseEntity courses) {
+    public NewsEntity(Long courseId, String title, String content, Timestamp date, CourseEntity courses) {
+        this.courseId = courseId;
+        this.title = title;
+        this.content = content;
+        this.date = date;
         this.courses = courses;
     }
-
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "course_id", nullable = false)
-    private CourseEntity courses;
-
-
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -88,17 +82,29 @@ public class NewsEntity implements Serializable {
         this.date = date;
     }
 
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "course_id", nullable = false)
+    private CourseEntity courses;
+    public CourseEntity getCourses() {
+        return courses;
+    }
+
+    public void setCourses(CourseEntity courses) {
+        this.courses = courses;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof NewsEntity)) return false;
 
         NewsEntity that = (NewsEntity) o;
 
-        if (id != that.id) return false;
         if (content != null ? !content.equals(that.content) : that.content != null) return false;
         if (courseId != null ? !courseId.equals(that.courseId) : that.courseId != null) return false;
+        if (courses != null ? !courses.equals(that.courses) : that.courses != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
 
         return true;
@@ -106,11 +112,12 @@ public class NewsEntity implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (courseId != null ? courseId.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (content != null ? content.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (courses != null ? courses.hashCode() : 0);
         return result;
     }
 }

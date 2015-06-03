@@ -3,6 +3,7 @@ package org.javatraining.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * Created by vika on 24.05.15.
@@ -12,14 +13,21 @@ import java.io.Serializable;
 public class PersonRoleEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     private Long id;
     @NotNull
     private String name;
     @NotNull
     private Long personId;
 
-    @Id
+    public PersonRoleEntity() {
+    }
+
+    public PersonRoleEntity(String name, Long personId, PersonEntity person) {
+        this.name = name;
+        this.personId = personId;
+        this.person = person;
+    }
+
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
     public Long getId() {
         return id;
@@ -48,6 +56,19 @@ public class PersonRoleEntity implements Serializable {
     public void setPersonId(Long personId) {
         this.personId = personId;
     }
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "person_id", nullable = false)
+    private PersonEntity person;
+
+    public PersonEntity getPerson() {
+        return person;
+    }
+
+    public void setPerson(PersonEntity person) {
+        this.person = person;
+    }
+
 
     @Override
     public boolean equals(Object o) {

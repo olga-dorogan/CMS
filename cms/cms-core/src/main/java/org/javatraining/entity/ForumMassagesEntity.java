@@ -13,31 +13,31 @@ import java.sql.Timestamp;
 public class ForumMassagesEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     private Long id;
     @NotNull
-    private Integer parentId;
+    private Long parentId;
     @NotNull
     private String title;
     @NotNull
     private String description;
     @NotNull
-    private Integer lessonId;
+    private Long lessonId;
     @NotNull
     private Timestamp date;
+    public ForumMassagesEntity() {
+    }
 
+    public ForumMassagesEntity(Long parentId, String title, String description, Long lessonId, Timestamp date) {
+        this.parentId = parentId;
+        this.title = title;
+        this.description = description;
+        this.lessonId = lessonId;
+        this.date = date;
+    }
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "lesson_id", nullable = false)
     private LessonEntity lessons;
-
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-
-    @JoinColumn(name = "author", nullable = false)
-    private PersonEntity persons;
-
-    public ForumMassagesEntity() {
-    }
 
     public LessonEntity getLessons() {
         return lessons;
@@ -46,6 +46,10 @@ public class ForumMassagesEntity implements Serializable {
     public void setLessons(LessonEntity lessons) {
         this.lessons = lessons;
     }
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "author", nullable = false)
+    private PersonEntity persons;
 
     public PersonEntity getPersons() {
         return persons;
@@ -66,11 +70,11 @@ public class ForumMassagesEntity implements Serializable {
 
     @Basic
     @Column(name = "parent_id", nullable = true, insertable = true, updatable = true)
-    public Integer getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(Integer parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 
@@ -96,11 +100,11 @@ public class ForumMassagesEntity implements Serializable {
 
     @Basic
     @Column(name = "lesson_id", nullable = true, insertable = true, updatable = true)
-    public Integer getLessonId() {
+    public Long getLessonId() {
         return lessonId;
     }
 
-    public void setLessonId(Integer lessonId) {
+    public void setLessonId(Long lessonId) {
         this.lessonId = lessonId;
     }
 
@@ -114,7 +118,6 @@ public class ForumMassagesEntity implements Serializable {
         this.date = date;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -122,8 +125,8 @@ public class ForumMassagesEntity implements Serializable {
 
         ForumMassagesEntity that = (ForumMassagesEntity) o;
 
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
+        if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (lessonId != null ? !lessonId.equals(that.lessonId) : that.lessonId != null) return false;
         if (lessons != null ? !lessons.equals(that.lessons) : that.lessons != null) return false;
@@ -146,6 +149,4 @@ public class ForumMassagesEntity implements Serializable {
         result = 31 * result + (persons != null ? persons.hashCode() : 0);
         return result;
     }
-
-
 }

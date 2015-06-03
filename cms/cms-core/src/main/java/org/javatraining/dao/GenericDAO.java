@@ -27,21 +27,30 @@ public abstract class GenericDAO<T extends Serializable> {
         this.entityClass = entityClass;
     }
 
-    public void remove(@NotNull T entity) {
+    public T remove(@NotNull T entity) {
         getEntityManager().remove(entity);
+    return entity;
     }
 
-    public void removeById(@NotNull Object id) {
+    public T findById(@NotNull Object id) {
         T entity = (T) getEntityManager().find(entityClass, id);
+    return entity;
     }
 
-    public void save(@NotNull T entity) {
+    public T removeById(@NotNull Object id) {
+        T entity = (T) getEntityManager().find(entityClass, id);
+        getEntityManager().remove(entity);
+        return entity;
+    }
+
+    public T save(@NotNull T entity) {
         getEntityManager().persist(entity);
+        return entity;
     }
 
-    public void update(@NotNull T entity) {
+    public T update(@NotNull T entity) {
         getEntityManager().merge(entity);
+        return entity;
     }
-
 
 }

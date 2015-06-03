@@ -29,7 +29,7 @@ public class LessonVO {
     }
 
     private CourseEntity courses;
-    private LessonTypeEntity lessonTypes;
+    private PracticeLessonEntity lessonTypes;
 
     private Set<LessonLinkEntity> lessonLinks;
 
@@ -45,11 +45,11 @@ public class LessonVO {
         this.courses = courses;
     }
 
-    public LessonTypeEntity getLessonTypes() {
+    public PracticeLessonEntity getLessonTypes() {
         return lessonTypes;
     }
 
-    public void setLessonTypes(LessonTypeEntity lessonTypes) {
+    public void setLessonTypes(PracticeLessonEntity lessonTypes) {
         this.lessonTypes = lessonTypes;
     }
 

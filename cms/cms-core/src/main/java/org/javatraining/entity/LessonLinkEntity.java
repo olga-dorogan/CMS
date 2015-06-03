@@ -10,10 +10,8 @@ import java.io.Serializable;
 @Entity
 @Table(name = "lesson_links", schema = "")
 public class LessonLinkEntity implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     private Long id;
     @NotNull
     private Long lessonId;
@@ -24,13 +22,14 @@ public class LessonLinkEntity implements Serializable {
     public LessonLinkEntity() {
     }
 
+    public LessonLinkEntity(Long lessonId, String description, String link, LessonEntity lesson) {
+        this.lessonId = lessonId;
+        this.description = description;
+        this.link = link;
+        this.lesson = lesson;
+    }
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "lesson_id", nullable = false)
-    private LessonEntity lesson;
-
-
-    @Column(name = "id", nullable = false, insertable = true, updatable = true)
+     @Column(name = "id", nullable = false, insertable = true, updatable = true)
     public Long getId() {
         return id;
     }
@@ -69,7 +68,9 @@ public class LessonLinkEntity implements Serializable {
         this.link = link;
     }
 
-
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "lesson_id", nullable = false)
+    private LessonEntity lesson;
     public LessonEntity getLesson() {
         return lesson;
     }

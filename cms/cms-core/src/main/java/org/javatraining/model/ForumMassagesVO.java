@@ -1,9 +1,6 @@
 package org.javatraining.model;
 
 
-import org.javatraining.entity.LessonEntity;
-import org.javatraining.entity.PersonEntity;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
@@ -27,25 +24,25 @@ public class ForumMassagesVO implements Serializable {
     @NotNull
     private Timestamp date;
 
-    private LessonEntity lessons;
-    private PersonEntity persons;
+    private LessonVO lessons;
+    private PersonVO persons;
 
     public ForumMassagesVO() {
     }
 
-    public LessonEntity getLessons() {
+    public LessonVO getLessons() {
         return lessons;
     }
 
-    public void setLessons(LessonEntity lessons) {
+    public void setLessons(LessonVO lessons) {
         this.lessons = lessons;
     }
 
-    public PersonEntity getPersons() {
+    public PersonVO getPersons() {
         return persons;
     }
 
-    public void setPersons(PersonEntity persons) {
+    public void setPersons(PersonVO persons) {
         this.persons = persons;
     }
 

@@ -1,6 +1,7 @@
 package org.javatraining.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Set;
@@ -13,14 +14,32 @@ import java.util.Set;
 public class LessonEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+   private Long id;
+   @NotNull
     private Long courseId;
+    @NotNull
     private Long type;
-    private Integer orderNum;
+    @NotNull
+    private Long orderNum;
+    @NotNull
     private String topic;
-    private String content;
+    @NotNull
+    private String description;
+    @NotNull
     private Date createDate;
 
+    public LessonEntity() {
+    }
+
+    public LessonEntity(Long courseId, Long type, Long orderNum, String topic, String description, Date createDate, CourseEntity courses) {
+        this.courseId = courseId;
+        this.type = type;
+        this.orderNum = orderNum;
+        this.topic = topic;
+        this.description = description;
+        this.createDate = createDate;
+        this.courses = courses;
+    }
 
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
     public Long getId() {
@@ -29,64 +48,6 @@ public class LessonEntity implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "course_id", nullable = false)
-    private CourseEntity courses;
-
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "type", nullable = false, insertable = false, updatable = false)
-    private LessonTypeEntity lessonTypes;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lesson")
-    private Set<LessonLinkEntity> lessonLinks;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessons")
-    private Set<MarkEntity> marks;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessons")
-    private Set<ForumMassagesEntity> forumMessages;
-
-    public CourseEntity getCourses() {
-        return courses;
-    }
-
-    public void setCourses(CourseEntity courses) {
-        this.courses = courses;
-    }
-
-    public LessonTypeEntity getLessonTypes() {
-        return lessonTypes;
-    }
-
-    public void setLessonTypes(LessonTypeEntity lessonTypes) {
-        this.lessonTypes = lessonTypes;
-    }
-
-    public Set<LessonLinkEntity> getLessonLinks() {
-        return lessonLinks;
-    }
-
-    public void setLessonLinks(Set<LessonLinkEntity> lessonLinks) {
-        this.lessonLinks = lessonLinks;
-    }
-
-    public Set<MarkEntity> getMarks() {
-        return marks;
-    }
-
-    public void setMarks(Set<MarkEntity> marks) {
-        this.marks = marks;
-    }
-
-    public Set<ForumMassagesEntity> getForumMessages() {
-        return forumMessages;
-    }
-
-    public void setForumMessages(Set<ForumMassagesEntity> forumMessages) {
-        this.forumMessages = forumMessages;
     }
 
     @Basic
@@ -109,13 +70,14 @@ public class LessonEntity implements Serializable {
         this.type = type;
     }
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic
     @Column(name = "order_num", nullable = true, insertable = true, updatable = true)
-    public Integer getOrderNum() {
+    public Long getOrderNum() {
         return orderNum;
     }
 
-    public void setOrderNum(Integer orderNum) {
+    public void setOrderNum(Long orderNum) {
         this.orderNum = orderNum;
     }
 
@@ -142,12 +104,67 @@ public class LessonEntity implements Serializable {
     @Basic
     @Column(name = "description", nullable = true, insertable = true, updatable = true, length = 16777215)
     public String getDescription() {
-        return content;
+        return description;
     }
 
-    public void setDescription(String content) {
-        this.content = content;
+    public void setDescription(String description) {
+        this.description = description;
     }
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "course_id", nullable = false)
+    private CourseEntity courses;
+
+    public CourseEntity getCourses() {
+        return courses;
+    }
+
+    public void setCourses(CourseEntity courses) {
+        this.courses = courses;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lesson")
+    private Set<PracticeLessonEntity> practiceLesson;
+
+    public Set<PracticeLessonEntity> getPracticeLesson() {
+        return practiceLesson;
+    }
+
+    public void setPracticeLesson(Set<PracticeLessonEntity> practiceLesson) {
+        this.practiceLesson = practiceLesson;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lesson")
+    private Set<LessonLinkEntity> lessonLinks;
+
+    public Set<LessonLinkEntity> getLessonLinks() {
+        return lessonLinks;
+    }
+
+    public void setLessonLinks(Set<LessonLinkEntity> lessonLinks) {
+        this.lessonLinks = lessonLinks;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessons")
+    private Set<MarkEntity> marks;
+    public Set<MarkEntity> getMarks() {
+        return marks;
+    }
+
+    public void setMarks(Set<MarkEntity> marks) {
+        this.marks = marks;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessons")
+    private Set<ForumMassagesEntity> forumMessages;
+    public Set<ForumMassagesEntity> getForumMessages() {
+        return forumMessages;
+    }
+
+    public void setForumMessages(Set<ForumMassagesEntity> forumMessages) {
+        this.forumMessages = forumMessages;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -156,16 +173,18 @@ public class LessonEntity implements Serializable {
 
         LessonEntity that = (LessonEntity) o;
 
-        if (content != null ? !content.equals(that.content) : that.content != null) return false;
+        if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (courseId != null ? !courseId.equals(that.courseId) : that.courseId != null) return false;
         if (courses != null ? !courses.equals(that.courses) : that.courses != null) return false;
+        if (createDate != null ? !createDate.equals(that.createDate) : that.createDate != null) return false;
         if (forumMessages != null ? !forumMessages.equals(that.forumMessages) : that.forumMessages != null)
             return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (lessonLinks != null ? !lessonLinks.equals(that.lessonLinks) : that.lessonLinks != null) return false;
-        if (lessonTypes != null ? !lessonTypes.equals(that.lessonTypes) : that.lessonTypes != null) return false;
         if (marks != null ? !marks.equals(that.marks) : that.marks != null) return false;
         if (orderNum != null ? !orderNum.equals(that.orderNum) : that.orderNum != null) return false;
+        if (practiceLesson != null ? !practiceLesson.equals(that.practiceLesson) : that.practiceLesson != null)
+            return false;
         if (topic != null ? !topic.equals(that.topic) : that.topic != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
 
@@ -179,9 +198,10 @@ public class LessonEntity implements Serializable {
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (orderNum != null ? orderNum.hashCode() : 0);
         result = 31 * result + (topic != null ? topic.hashCode() : 0);
-        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
         result = 31 * result + (courses != null ? courses.hashCode() : 0);
-        result = 31 * result + (lessonTypes != null ? lessonTypes.hashCode() : 0);
+        result = 31 * result + (practiceLesson != null ? practiceLesson.hashCode() : 0);
         result = 31 * result + (lessonLinks != null ? lessonLinks.hashCode() : 0);
         result = 31 * result + (marks != null ? marks.hashCode() : 0);
         result = 31 * result + (forumMessages != null ? forumMessages.hashCode() : 0);

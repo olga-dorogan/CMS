@@ -9,11 +9,10 @@ import java.util.Set;
  * Created by vika on 24.05.15.
  */
 @Entity
-@Table(name = "persons", schema = "")
+@Table(name = "person", schema = "")
 public class PersonEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     private Long id;
     @NotNull
     private String name;
@@ -27,20 +26,11 @@ public class PersonEntity implements Serializable {
     public PersonEntity() {
     }
 
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "persons")
-    private Set<MarkEntity> marks;
-
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER, mappedBy = "person")
-    private Set<CourseEntity> course;
-
-
-    public Set<MarkEntity> getMarks() {
-        return marks;
-    }
-
-    public void setMarks(Set<MarkEntity> marks) {
-        this.marks = marks;
+    public PersonEntity(String name, String secondName, String lastName, String email) {
+        this.name = name;
+        this.secondName = secondName;
+        this.lastName = lastName;
+        this.email = email;
     }
 
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
@@ -51,7 +41,6 @@ public class PersonEntity implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
 
     @Basic
     @Column(name = "name", nullable = true, insertable = true, updatable = true, length = 255)
@@ -82,6 +71,40 @@ public class PersonEntity implements Serializable {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "person")
+    private Set<PersonRoleEntity> personRole;
+
+    public void setPersonRole(Set<PersonRoleEntity> personRole) {
+        this.personRole = personRole;
+    }
+    public Set<PersonRoleEntity> getPersonRole() {
+        return personRole;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "persons")
+    private Set<ForumMassagesEntity> forumMassages;
+
+    public void setForumMassages(Set<ForumMassagesEntity> forumMassages) {
+        this.forumMassages = forumMassages;
+    }
+        public Set<ForumMassagesEntity> getForumMassages() {
+            return forumMassages;
+        }
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "persons")
+    private Set<MarkEntity> marks;
+
+    public Set<MarkEntity> getMarks() {
+        return marks;
+    }
+
+    public void setMarks(Set<MarkEntity> marks) {
+        this.marks = marks;
+    }
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER, mappedBy = "person")
+    private Set<CourseEntity> course;
 
     public Set<CourseEntity> getCourse() {
         return course;

@@ -12,14 +12,11 @@ import java.util.Set;
 @Entity
 @Table(name = "courses", schema = "")
 public class CourseEntity implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     private Long id;
     @NotNull
     private String name;
-
     @NotNull
     private Long owner;
     @NotNull
@@ -32,36 +29,13 @@ public class CourseEntity implements Serializable {
     public CourseEntity() {
     }
 
-    @ManyToMany
-    @JoinTable(name = "person_course",
-            joinColumns = @JoinColumn(name = "owner_id", referencedColumnName = "owner"),
-            inverseJoinColumns = @JoinColumn(name = "person_id", referencedColumnName = "id"))
-    private Set<PersonEntity> person;
-
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "courses")
-    private Set<NewsEntity> news;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "courses")
-    private Set<LessonEntity> lessons;
-
-
-    public Set<LessonEntity> getLessons() {
-        return lessons;
+    public CourseEntity(String name, Long owner, String description, Date startdate, Date enddate) {
+        this.name = name;
+        this.owner = owner;
+        this.description = description;
+        this.startdate = startdate;
+        this.enddate = enddate;
     }
-
-    public void setLessons(Set<LessonEntity> lessons) {
-        this.lessons = lessons;
-    }
-
-    public Set<NewsEntity> getNews() {
-        return news;
-    }
-
-    public void setNews(Set<NewsEntity> news) {
-        this.news = news;
-    }
-
 
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
     public Long getId() {
@@ -123,6 +97,12 @@ public class CourseEntity implements Serializable {
     }
 
 
+    @ManyToMany
+    @JoinTable(name = "person_course",
+            joinColumns = @JoinColumn(name = "owner_id", referencedColumnName = "owner"),
+            inverseJoinColumns = @JoinColumn(name = "person_id", referencedColumnName = "id"))
+    private Set<PersonEntity> person;
+
     public Set<PersonEntity> getPerson() {
         return person;
     }
@@ -130,6 +110,30 @@ public class CourseEntity implements Serializable {
     public void setPerson(Set<PersonEntity> person) {
         this.person = person;
     }
+
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "courses")
+    private Set<NewsEntity> news;
+
+    public Set<NewsEntity> getNews() {
+        return news;
+    }
+
+    public void setNews(Set<NewsEntity> news) {
+        this.news = news;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "courses")
+    private Set<LessonEntity> lessons;
+
+    public Set<LessonEntity> getLessons() {
+        return lessons;
+    }
+
+    public void setLessons(Set<LessonEntity> lessons) {
+        this.lessons = lessons;
+    }
+
 
     @Override
     public boolean equals(Object o) {

@@ -1,34 +1,23 @@
 package org.javatraining.dao;
 
 
-import org.javatraining.entity.CourseEntity;
 import org.javatraining.entity.LessonEntity;
-import org.javatraining.entity.LessonTypeEntity;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Query;
+import java.util.List;
 
 /**
  * Created by vika on 28.05.15.
  */
 public class LessonDAO extends GenericDAO<LessonEntity> {
 
-    @PersistenceContext
-    private EntityManager em;
-
-    public LessonDAO() {
+  public LessonDAO() {
         setEntityClass(LessonEntity.class);
     }
 
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
+    public List<LessonEntity> getAllLessons() {
+        Query query = getEntityManager().createQuery("SELECT c FROM LessonEntity c");
+        return query.getResultList();
     }
 
-    public void save(@NotNull LessonTypeEntity lessonTypes, @NotNull CourseEntity course, @NotNull LessonEntity lessons) {
-        lessons.setLessonTypes(lessonTypes);
-        lessons.setCourses(course);
-        super.save(lessons);
-    }
 }
