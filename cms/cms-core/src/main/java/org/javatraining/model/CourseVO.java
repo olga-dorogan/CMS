@@ -1,6 +1,8 @@
 package org.javatraining.model;
 
 
+import flexjson.JSON;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.Date;
@@ -23,15 +25,15 @@ public class CourseVO implements Serializable {
     private Date startdate;
     @NotNull
     private Date enddate;
+    @JSON(include = false)
+    private Set<PersonVO> person;
+    @JSON(include = false)
+    private Set<NewsVO> news;
+    @JSON(include = false)
+    private Set<LessonVO> lessons;
 
     public CourseVO() {
     }
-
-    private Set<PersonVO> person;
-
-    private Set<NewsVO> news;
-
-    private Set<LessonVO> lessons;
 
     public Set<LessonVO> getLessons() {
         return lessons;
