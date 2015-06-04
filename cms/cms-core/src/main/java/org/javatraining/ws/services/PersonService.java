@@ -1,33 +1,39 @@
 package org.javatraining.ws.services;
 
-import javax.enterprise.context.Dependent;
 import flexjson.JSONException;
-import org.javatraining.model.PersonRoleVO;
 import org.javatraining.model.PersonVO;
 
 import javax.ejb.Stateless;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by asudak on 5/29/15.
  */
 @Stateless
 @Path("person")
-@Dependent
 public class PersonService<T> extends AbstractService<PersonVO> {
     public PersonService() {
         super(PersonVO.class);
     }
 
     @GET
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonList() {
+        List<PersonVO> persons = new ArrayList<>();
+        //TODO get list of persons here
+        return Response.ok(serialize(persons)).build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("{client_id}")
     public Response getPerson(@PathParam("client_id") long clientId) {
         PersonVO person = new PersonVO();
@@ -42,7 +48,7 @@ public class PersonService<T> extends AbstractService<PersonVO> {
     }
 
     @PUT
-    @Consumes("application/json")
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response createPerson(@Context UriInfo uriInfo, @QueryParam("person_json") String personJson) {
         Response r;
         try {
