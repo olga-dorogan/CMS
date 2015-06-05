@@ -31,7 +31,7 @@ public interface GitlabAPI {
     //modification to existing user (only for admin)
     //put /users - rest method
     //http://localhost/api/v3/users?private_token=xTApBC_xvpkKEw7yHjDV&sudo=root - example without properties
-    public boolean updateUserByUserName(String userName) throws UserNotFoundException;
+    public void updateUserByUserName(String userName) throws UserNotFoundException;
 
     //    Deletes a user.
     // Available only for administrators.
@@ -45,4 +45,8 @@ public interface GitlabAPI {
     //return 401 unauthorized or 201 with json where with all properties we can get pToken
     //http://localhost/api/v3/session?private_token=xTApBC_xvpkKEw7yHjDV&sudo=root - example
     public GitLabSession getGitlabSessionForSpecifiedUser(String userName, String email, String password) throws UserNotFoundException;
+
+    public boolean createNewProjectForUser(GitLabUser user) throws UserNotFoundException;
+
+    public boolean addProjectTeamMember()
 }

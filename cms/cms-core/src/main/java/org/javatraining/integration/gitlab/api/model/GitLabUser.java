@@ -1,5 +1,6 @@
 package org.javatraining.integration.gitlab.api.model;
 
+
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
@@ -9,69 +10,35 @@ import org.codehaus.jackson.annotate.JsonProperty;
  */
 
 public class GitLabUser {
-    @JsonProperty("id")
-    private Long id;
-
-    @JsonProperty("email")
+    private Integer id;
     private String email;//required
-
-    @JsonProperty("password")
     private String password;//required
-
-    @JsonProperty("username")
-    private String userName;//required
-
-    @JsonProperty("name")
+    private String username;//required
     private String name;//required
-
-    @JsonProperty("skype")
     private String skype;//required
-
-    @JsonProperty("linkedin")
     private String linkedIn;
-
-    @JsonProperty("twitter")
-    private String twitterAccount;
-
+    private String twitter;
     @JsonProperty("website_url")
     private String websiteUrl;
-
     @JsonProperty("project_limit")
     private int projectsLimit;
-
     @JsonProperty("extern_uid")
     private String externUID;
-
-    @JsonProperty("provider")
     private String provider;
-
-    @JsonProperty("bio")
     private String bio;
-
-    @JsonProperty("admin")
     private boolean admin;
-
     @JsonProperty("can_create_group")
     private boolean canCreateGroup;
-
-    @JsonProperty("confirm")
     private boolean confirm;
-
-    @JsonProperty("state")
     private boolean state;
-
     @JsonProperty("theme_id")
     private int themeId;
-
     @JsonProperty("current_sign_in_at")
     private String currentSignInAt;
-
     @JsonProperty("can_create_project")
     private boolean canCreateProject;
-
     @JsonProperty("color_scheme_id")
     private int colorSchemeId;
-
     @JsonProperty("avatar_url")
     private String avatarUrl;
 
@@ -96,12 +63,12 @@ public class GitLabUser {
         this.password = password;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getName() {
@@ -128,12 +95,12 @@ public class GitLabUser {
         this.linkedIn = linkedIn;
     }
 
-    public String getTwitterAccount() {
-        return twitterAccount;
+    public String getTwitter() {
+        return twitter;
     }
 
-    public void setTwitterAccount(String twitterAccount) {
-        this.twitterAccount = twitterAccount;
+    public void setTwitter(String twitter) {
+        this.twitter = twitter;
     }
 
     public String getWebsiteUrl() {
@@ -248,11 +215,11 @@ public class GitLabUser {
         this.avatarUrl = avatarUrl;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 }
