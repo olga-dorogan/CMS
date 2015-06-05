@@ -6,4 +6,7 @@ function SessionService($window) {
     service.getAccessToken = function () {
         return $window.gapi.auth.getToken().access_token;
     };
+    service.getUserId = function() {
+        return $window.localStorage['id'];
+    };
 }
