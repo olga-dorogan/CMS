@@ -70,6 +70,12 @@
             <version>${google.api.calendar.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-drive</artifactId>
+            <version>${google.api.drive.version}</version>
+        </dependency>
+        <!-- -->
+        <dependency>
             <groupId>net.sf.flexjson</groupId>
             <artifactId>flexjson</artifactId>
             <version>${net.sf.flexjson.version}</version>
@@ -92,7 +98,7 @@
             <artifactId>mockito-all</artifactId>
             <version>${org.mockito.version}</version>
             <scope>test</scope>
-             </dependency>
+        </dependency>
 
         <dependency>
             <groupId>org.jboss.arquillian.container</groupId>
@@ -163,11 +169,20 @@
             <artifactId>h2</artifactId>
             <version>${h2.database.version}</version>
         </dependency>
+        <!-- -->
         <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
             <version>6.7</version>
         </dependency>
+        <!-- REST dependency-->
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-multipart-provider</artifactId>
+            <version>${resteasy.multipart.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- -->
     </dependencies>
 
     <build>
@@ -177,7 +192,19 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
-
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${plugin.resources.version}</version>
+                <configuration>
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>p12</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>types</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 
 </project>

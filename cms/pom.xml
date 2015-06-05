@@ -17,6 +17,8 @@
         <javaee.version>7.0</javaee.version>
         <google.api.oauth2.version>v2-rev91-1.20.0</google.api.oauth2.version>
         <google.api.calendar.version>v3-rev126-1.20.0</google.api.calendar.version>
+        <google.api.drive.version>v2-rev171-1.20.0</google.api.drive.version>
+        <resteasy.multipart.version>3.0.11.Final</resteasy.multipart.version>
         <slf4j.version>1.7.2</slf4j.version>
         <log4j.version>2.3</log4j.version>
         <h2.database.version>1.3.173</h2.database.version>
@@ -26,6 +28,7 @@
         <org.glassfish.jersey.core.version>2.4.1</org.glassfish.jersey.core.version>
         <plugin.compiler.version>3.3</plugin.compiler.version>
         <plugin.war.version>2.6</plugin.war.version>
+        <plugin.resources.version>2.7</plugin.resources.version>
     </properties>
 
     <dependencies>

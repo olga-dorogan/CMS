@@ -1,4 +1,4 @@
-package org.javatraining.integration.google.calendar;
+package org.javatraining.integration.google;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -7,7 +7,10 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.DriveScopes;
 import org.javatraining.integration.google.calendar.exception.CalendarException;
+import org.javatraining.integration.google.drive.exception.DriveException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
@@ -17,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
+import java.util.Set;
 
 /**
  * Created by olga on 22.05.15.
@@ -34,7 +38,7 @@ public class ServicesFromServiceAccountFactory {
     @Produces
     public Calendar getCalendarService() {
         try {
-            return new Calendar.Builder(GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY, getCredential())
+            return new Calendar.Builder(GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY, getCredential(Collections.singleton(CalendarScopes.CALENDAR)))
                     .setApplicationName(APPLICATION_NAME)
                     .build();
         } catch (GeneralSecurityException | IOException e) {
@@ -42,14 +46,25 @@ public class ServicesFromServiceAccountFactory {
         }
     }
 
-    private GoogleCredential getCredential() throws GeneralSecurityException, IOException {
+    @Produces
+    public Drive getDriveService() {
+        try {
+            return new Drive.Builder(GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY, getCredential(DriveScopes.all()))
+                    .setApplicationName(APPLICATION_NAME)
+                    .build();
+        } catch (GeneralSecurityException | IOException e) {
+            throw new DriveException(e);
+        }
+    }
+
+    private GoogleCredential getCredential(Set<String> scopes) throws GeneralSecurityException, IOException {
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         GoogleCredential credential = new GoogleCredential.Builder()
                 .setTransport(httpTransport)
                 .setJsonFactory(JSON_FACTORY)
                 .setServiceAccountId(EMAIL_ADDRESS)
                 .setServiceAccountPrivateKeyFromP12File(new File(servletContext.getRealPath(PATH_TO_PRIVATE_KEY_FILE)))
-                .setServiceAccountScopes(Collections.singleton(CalendarScopes.CALENDAR))
+                .setServiceAccountScopes(scopes)
                 .build();
         return credential;
     }
