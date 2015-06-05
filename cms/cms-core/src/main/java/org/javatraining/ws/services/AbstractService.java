@@ -6,14 +6,14 @@ import flexjson.JSONSerializer;
 /**
  * Created by asudak on 5/29/15.
  */
-public class AbstractService<T> {
+public abstract class AbstractService<T> {
     private Class<T> klass;
 
     public AbstractService(Class<T> genericClass) {
         klass = genericClass;
     }
 
-    String serialize(T object) {
+    String serialize(Object object) {
         return new JSONSerializer().exclude("*.class").deepSerialize(object);
     }
 
