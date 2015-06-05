@@ -3,6 +3,7 @@ package org.javatraining.integration.google.oauth.impl;
 import org.javatraining.integration.google.oauth.GoogleUserinfoService;
 import org.javatraining.integration.google.oauth.exception.AuthException;
 import org.javatraining.integration.google.oauth.exception.GoogleConnectionAuthException;
+import org.javatraining.model.PersonVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,9 +51,8 @@ public class GoogleUserinfoServiceImpl implements GoogleUserinfoService {
         }
     }
 
-    // TODO: изменить тип возвращаемого значения на тип соответствующего value object и изменить область видимости вложенного класса Userinfo на private
     @Override
-    public Userinfo getUserInfoByToken(String token) {
+    public PersonVO getUserInfoByToken(String token) {
         final String PARAM_FIELDS_KEY = "fields";
         final String PARAM_FIELDS_VALUE = "id,email,given_name,family_name";
         try {
@@ -68,7 +68,12 @@ public class GoogleUserinfoServiceImpl implements GoogleUserinfoService {
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
                 Userinfo userinfo = response.readEntity(Userinfo.class);
                 log.trace("token: {}; getUserInfoByToken() returns {}", token, userinfo);
-                return userinfo;
+                PersonVO personVO = new PersonVO();
+                personVO.setEmail(userinfo.getEmail());
+                personVO.setName(userinfo.getGiven_name());
+                personVO.setLastName(userinfo.getFamily_name());
+                //FIXME: set clientId to personVO
+                return personVO;
             }
             throw new AuthException(String.format("Response from query to get user info (token = %s) returns with status code %s",
                     token, response.getStatus()));
@@ -78,7 +83,7 @@ public class GoogleUserinfoServiceImpl implements GoogleUserinfoService {
         }
     }
 
-    public static class Userinfo {
+    private static class Userinfo {
         private String id;
         private String email;
         private String verified_email;

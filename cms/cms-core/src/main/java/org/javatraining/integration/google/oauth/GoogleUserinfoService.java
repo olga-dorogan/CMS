@@ -1,6 +1,6 @@
 package org.javatraining.integration.google.oauth;
 
-import org.javatraining.integration.google.oauth.impl.GoogleUserinfoServiceImpl;
+import org.javatraining.model.PersonVO;
 
 /**
  * Created by olga on 29.05.15.
@@ -8,5 +8,5 @@ import org.javatraining.integration.google.oauth.impl.GoogleUserinfoServiceImpl;
 public interface GoogleUserinfoService {
     String getClientIdByToken(String token);
 
-    GoogleUserinfoServiceImpl.Userinfo getUserInfoByToken(String token);
+    PersonVO getUserInfoByToken(String token);
 }

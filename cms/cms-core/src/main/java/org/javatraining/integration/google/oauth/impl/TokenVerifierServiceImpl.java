@@ -21,7 +21,7 @@ public class TokenVerifierServiceImpl implements TokenVerifierService {
     private static final String BASE = "https://www.googleapis.com/oauth2/v1/tokeninfo";
 
     @Override
-    public boolean verifyToken(String token) {
+    public boolean isTokenValid(String token) {
         try {
             Client client = ClientBuilder.newClient();
             WebTarget target = client.target(URI.create(new URL(BASE).toExternalForm()));
