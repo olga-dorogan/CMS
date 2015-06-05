@@ -58,7 +58,10 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
                 $window.localStorage['role'] = "teacher";
                 $window.localStorage['id'] = 1;
                 // тест для проверки установились ли заголовки
-                //$http.get("http://localhost:8080/cms-core-1.0/resources");
+                $http.get("http://localhost:8080/cms-core-1.0/resources/example");
+                $http.get("http://localhost:8080/cms-core-1.0/resources/example/teacher/1");
+                $http.get("http://localhost:8080/cms-core-1.0/resources/example/student/1");
+
 
                 console.log('doLogin');
             }, function () {
