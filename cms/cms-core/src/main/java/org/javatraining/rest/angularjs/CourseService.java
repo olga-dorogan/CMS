@@ -1,7 +1,6 @@
 package org.javatraining.rest.angularjs;
 
 
-import javax.ejb.Stateless;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -11,7 +10,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
 
-@Stateless
+//@Stateless
 @ApplicationPath("rest")
 @Path("/courses")
 public class CourseService extends Application {

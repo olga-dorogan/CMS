@@ -11,7 +11,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -19,7 +18,7 @@ import java.io.IOException;
 /**
  * Created by olga on 28.05.15.
  */
-@WebFilter("/resources/*")
+//@WebFilter("/resources/*")
 public class AuthenticationFilter extends AbstractFilter {
     private static final Logger log = LoggerFactory.getLogger(AuthenticationFilter.class);
     @EJB
