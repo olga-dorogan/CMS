@@ -9,7 +9,7 @@ import java.net.URL;
  * Created by sergey on 02.06.15 at 16:35.
  * For more information you should send mail to codedealerb@gmail.com
  */
-public interface GitlabRequestor {
+public interface GitLabRequestor {
 
     public HttpResponse execute(String method, URL url);
 

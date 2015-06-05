@@ -37,7 +37,7 @@ public class GitLabProject {
     @JsonProperty("last_activity_at")
     private Date lastActivityAt;
 
-    public GitLabProject(){
+    public GitLabProject() {
 
     }
 

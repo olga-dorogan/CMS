@@ -7,7 +7,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
  * Created by sergey on 05.06.15 at 20:10.
  * For more information you should send mail to codedealerb@gmail.com
  */
-public class GitLabProjectMember {
+public class GitLabProjectMember extends GitLabUser {
     @JsonProperty("access_level")
     private int accessLevel;
 
