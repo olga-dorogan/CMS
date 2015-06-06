@@ -13,7 +13,7 @@ import org.javatraining.integration.google.calendar.exception.CalendarRoleAlread
 import org.javatraining.integration.google.calendar.exception.CalendarRoleNotExistsException;
 import org.javatraining.model.PersonVO;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Created by olga on 27.05.15.
  */
-@Stateless
+@ApplicationScoped
 public class CalendarServiceImpl implements CalendarService {
 
     private static final String CALENDAR_ROLE_TEACHER = "writer";

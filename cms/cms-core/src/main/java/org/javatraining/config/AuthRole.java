@@ -1,4 +1,4 @@
-package org.javatraining.auth;
+package org.javatraining.config;
 
 /**
  * Created by olga on 05.06.15.

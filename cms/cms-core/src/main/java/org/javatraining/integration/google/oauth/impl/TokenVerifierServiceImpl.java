@@ -3,7 +3,7 @@ package org.javatraining.integration.google.oauth.impl;
 import org.javatraining.integration.google.oauth.TokenVerifierService;
 import org.javatraining.integration.google.oauth.exception.GoogleConnectionAuthException;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -16,7 +16,7 @@ import java.net.URL;
 /**
  * Created by olga on 29.05.15.
  */
-@Stateless
+@ApplicationScoped
 public class TokenVerifierServiceImpl implements TokenVerifierService {
     private static final String BASE = "https://www.googleapis.com/oauth2/v1/tokeninfo";
 

@@ -1,23 +1,23 @@
 package org.javatraining.service.impl;
 
-import org.javatraining.auth.AuthRole;
+import org.javatraining.config.AuthRole;
 import org.javatraining.integration.google.oauth.GoogleUserinfoService;
 import org.javatraining.service.AuthService;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 
 /**
  * Created by olga on 05.06.15.
  */
-@Stateless
+@ApplicationScoped
 public class AuthServiceImpl implements AuthService {
-    @EJB
+    @Inject
     private GoogleUserinfoService googleUserinfoService;
 
     @Override
-    public boolean isClientIdsFromDBAndFromTokenEqual(@NotNull String idFromRequest, @NotNull String token) {
+    public boolean isCredentialValid(@NotNull String idFromRequest, @NotNull String token) {
         String clientIdFromToken = googleUserinfoService.getClientIdByToken(token);
         // FIXME: get clientId from database by person id
         String clientIdFromDB = clientIdFromToken;

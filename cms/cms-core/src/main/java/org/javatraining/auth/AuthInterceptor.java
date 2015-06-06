@@ -1,9 +1,9 @@
 package org.javatraining.auth;
 
+import org.javatraining.config.Config;
 import org.javatraining.integration.google.oauth.TokenVerifierService;
 import org.javatraining.service.AuthService;
 
-import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
@@ -21,13 +21,14 @@ import java.lang.reflect.Method;
 public class AuthInterceptor implements Serializable {
     @Inject
     private HttpServletRequest request;
-    @EJB
+    @Inject
     private TokenVerifierService tokenVerifierService;
-    @EJB
+    @Inject
     private AuthService authService;
 
     @AroundInvoke
     public Object invoke(final InvocationContext context) throws Exception {
+        System.out.println(" AuthInterceptor:" + context.getMethod().getName());
         String[] methodAllowedRoles = getRoles(context.getMethod());
         // if the method wasn't annotated or role field in annotation is empty,
         // process request
@@ -43,7 +44,7 @@ public class AuthInterceptor implements Serializable {
         String id = getId();
         // if the id wasn't set in request header or if clientIDs from database and from the google are not equal,
         // return response with code 401
-        if (id == null || !authService.isClientIdsFromDBAndFromTokenEqual(id, token)) {
+        if (id == null || !authService.isCredentialValid(id, token)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
         String userRole = authService.getRoleById(id);

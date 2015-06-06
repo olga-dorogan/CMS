@@ -11,7 +11,7 @@ import org.javatraining.model.PersonVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import java.io.IOException;
 /**
  * Created by olga on 03.06.15.
  */
-@Stateless
+@ApplicationScoped
 public class DriveServiceImpl implements DriveService {
     private static final Logger log = LoggerFactory.getLogger(DriveServiceImpl.class);
     private static final String PARENT_FOLDER_NAME = "JavaTraining";
@@ -61,7 +61,7 @@ public class DriveServiceImpl implements DriveService {
     @Override
     public FileVO addFile(@NotNull FileVO fileVO) {
         try {
-            String parentFolderId = getParentFolderId(true);
+            String parentFolderId = getRootFolderId(true);
             File fileMetadata = new File();
             fileMetadata.setTitle(fileVO.getTitle());
             ByteArrayContent byteArrayContent = new ByteArrayContent(fileVO.getMimeType(), fileVO.getContent());
@@ -88,9 +88,9 @@ public class DriveServiceImpl implements DriveService {
     }
 
     @Override
-    public void setOwnerAccessToFiles(@NotNull PersonVO personVO) {
+    public void changeRootFolderOwner(@NotNull PersonVO personVO) {
         try {
-            String folderId = getParentFolderId(true);
+            String folderId = getRootFolderId(true);
             if (personVO.getEmail() != null) {
                 googleDriveService.permissions()
                         .insert(folderId, new Permission().setRole("owner").setType("user").setValue(personVO.getEmail()))
@@ -102,7 +102,7 @@ public class DriveServiceImpl implements DriveService {
         }
     }
 
-    private String getParentFolderId(boolean createIfNotExists) throws IOException {
+    private String getRootFolderId(boolean createIfNotExists) throws IOException {
         FileList fileList = googleDriveService.files().list().execute();
         if (fileList != null) {
             for (File file : fileList.getItems()) {

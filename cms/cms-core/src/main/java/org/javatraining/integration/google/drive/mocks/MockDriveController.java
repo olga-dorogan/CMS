@@ -5,7 +5,7 @@ import org.javatraining.model.PersonVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,7 +21,7 @@ public class MockDriveController extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MockDriveController.class);
     private static final String PARAM_METHOD = "_method";
     private static final String PARAM_EMAIL = "email";
-    @EJB
+    @Inject
     DriveService driveService;
 
     @Override
@@ -44,7 +44,7 @@ public class MockDriveController extends HttpServlet {
         if (param != null) {
             PersonVO personVO = new PersonVO();
             personVO.setEmail(param);
-            driveService.setOwnerAccessToFiles(personVO);
+            driveService.changeRootFolderOwner(personVO);
             resp.getWriter().write("owner is added successfully");
             return;
         }

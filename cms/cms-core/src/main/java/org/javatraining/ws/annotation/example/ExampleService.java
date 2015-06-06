@@ -1,7 +1,7 @@
 package org.javatraining.ws.annotation.example;
 
 import org.javatraining.auth.Auth;
-import org.javatraining.auth.AuthRole;
+import org.javatraining.config.AuthRole;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

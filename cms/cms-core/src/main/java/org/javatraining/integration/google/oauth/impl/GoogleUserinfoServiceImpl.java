@@ -7,7 +7,7 @@ import org.javatraining.model.PersonVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -20,7 +20,7 @@ import java.net.URL;
 /**
  * Created by olga on 29.05.15.
  */
-@Stateless
+@ApplicationScoped
 public class GoogleUserinfoServiceImpl implements GoogleUserinfoService {
     private static final Logger log = LoggerFactory.getLogger(GoogleUserinfoServiceImpl.class);
     private static final String BASE = "https://www.googleapis.com/oauth2/v2/userinfo";

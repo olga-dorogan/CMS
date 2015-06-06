@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.activation.MimetypesFileTypeMap;
-import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -24,7 +23,7 @@ import java.util.Map;
 @Path("/file")
 public class MockUploadFileRestService {
     private static final Logger log = LoggerFactory.getLogger(MockUploadFileRestService.class);
-    @EJB
+    @Inject
     private DriveService driveService;
     @Inject
     private MimetypesFileTypeMap mimetypesFileTypeMap;

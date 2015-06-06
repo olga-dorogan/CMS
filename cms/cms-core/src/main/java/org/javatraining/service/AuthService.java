@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
  */
 public interface AuthService {
 
-    boolean isClientIdsFromDBAndFromTokenEqual(@NotNull String idFromRequest, @NotNull String token);
+    boolean isCredentialValid(@NotNull String idFromRequest, @NotNull String token);
 
     String getRoleById(@NotNull String idFromRequest);
 }
