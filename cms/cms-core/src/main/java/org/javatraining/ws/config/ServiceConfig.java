@@ -12,7 +12,7 @@ import java.util.Set;
  * Created by asudak on 5/29/15.
  */
 @ApplicationPath("/resources")
-public class GenericServiceConfig extends Application {
+public class ServiceConfig extends Application {
     @Override
     public Set<Class<?>> getClasses() {
         HashSet<Class<?>> classes = new HashSet<>();
