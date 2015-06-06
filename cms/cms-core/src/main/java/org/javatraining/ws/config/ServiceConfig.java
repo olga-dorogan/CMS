@@ -13,12 +13,5 @@ import java.util.Set;
  */
 @ApplicationPath("/resources")
 public class ServiceConfig extends Application {
-    @Override
-    public Set<Class<?>> getClasses() {
-        HashSet<Class<?>> classes = new HashSet<>();
-        classes.add(PersonService.class);
-        //FIXME: (olga) delete class addition, because it was only for test
-        classes.add(ExampleService.class);
-        return classes;
-    }
+
 }
