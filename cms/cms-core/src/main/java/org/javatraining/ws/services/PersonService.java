@@ -2,8 +2,8 @@ package org.javatraining.ws.services;
 
 import flexjson.JSONException;
 import org.javatraining.auth.Auth;
-import org.javatraining.auth.AuthRole;
-import org.javatraining.auth.Config;
+import org.javatraining.config.AuthRole;
+import org.javatraining.config.Config;
 import org.javatraining.model.PersonRoleVO;
 import org.javatraining.model.PersonVO;
 
