@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 /**
  * Created by vika on 30.05.15.
  */
-public class ForumMassagesVO implements Serializable {
+public class ForumMessagesVO implements Serializable {
     @NotNull
     private Long id;
     @NotNull
@@ -27,7 +27,7 @@ public class ForumMassagesVO implements Serializable {
     private LessonVO lessons;
     private PersonVO persons;
 
-    public ForumMassagesVO() {
+    public ForumMessagesVO() {
     }
 
     public LessonVO getLessons() {
@@ -109,9 +109,9 @@ public class ForumMassagesVO implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ForumMassagesVO)) return false;
+        if (!(o instanceof ForumMessagesVO)) return false;
 
-        ForumMassagesVO that = (ForumMassagesVO) o;
+        ForumMessagesVO that = (ForumMessagesVO) o;
 
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;

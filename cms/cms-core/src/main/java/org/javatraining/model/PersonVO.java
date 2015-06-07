@@ -8,40 +8,30 @@ import java.util.Set;
  * Created by vika on 30.05.15.
  */
 public class PersonVO implements Serializable {
-    @NotNull
     private Long id;
     @NotNull
-    private String name;
+    private String googleClientId;
     @NotNull
+    private String name;
     private String secondName;
     @NotNull
     private String lastName;
     @NotNull
     private String email;
-    private Set<PersonRoleVO> personRole;
+    private PersonRoleVO personRole;
     private Set<MarkVO> marks;
-    private Set<CourseVO> course;
+    private Set<CourseVO> courses;
+    private Set<ForumMessagesVO> forumMessages;
 
     public PersonVO() {
     }
 
-    public PersonVO(Set<PersonRoleVO> personRole) {
-        this.personRole = personRole;
-    }
-
-    public Set<MarkVO> getMarks() {
-        return marks;
-    }
-
-    public void setMarks(Set<MarkVO> marks) {
-        this.marks = marks;
-    }
-
-    public Set<PersonRoleVO> getPersonRole() {
-        return personRole;
-    }
-
-    public void setPersonRole(Set<PersonRoleVO> personRole) {
+    public PersonVO(Long id, String clientId, String name, String lastName, String email, PersonRoleVO personRole) {
+        this.id = id;
+        this.googleClientId = clientId;
+        this.name = name;
+        this.lastName = lastName;
+        this.email = email;
         this.personRole = personRole;
     }
 
@@ -51,6 +41,14 @@ public class PersonVO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getGoogleClientId() {
+        return googleClientId;
+    }
+
+    public void setGoogleClientId(String clientId) {
+        this.googleClientId = clientId;
     }
 
     public String getName() {
@@ -77,20 +75,45 @@ public class PersonVO implements Serializable {
         this.lastName = lastName;
     }
 
-    public Set<CourseVO> getCourse() {
-        return course;
-    }
-
-    public void setCourse(Set<CourseVO> course) {
-        this.course = course;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public PersonRoleVO getPersonRole() {
+        return personRole;
+    }
+
+    public void setPersonRole(PersonRoleVO personRole) {
+        this.personRole = personRole;
+    }
+
+    public Set<MarkVO> getMarks() {
+        return marks;
+    }
+
+    public void setMarks(Set<MarkVO> marks) {
+        this.marks = marks;
+    }
+
+    public Set<CourseVO> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<CourseVO> courses) {
+        this.courses = courses;
+    }
+
+
+    public Set<ForumMessagesVO> getForumMessages() {
+        return forumMessages;
+    }
+
+    public void setForumMessages(Set<ForumMessagesVO> forumMessages) {
+        this.forumMessages = forumMessages;
     }
 
     @Override
@@ -119,5 +142,4 @@ public class PersonVO implements Serializable {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         return result;
     }
-
 }
