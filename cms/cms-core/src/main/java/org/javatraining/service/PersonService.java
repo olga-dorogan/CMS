@@ -25,12 +25,6 @@ public interface PersonService {
     @Valid
     PersonVO getById(@NotNull Long id);
 
-    PersonVO fillCourses(@NotNull @Valid PersonVO personVO);
-
-    PersonVO fillMarks(@NotNull @Valid PersonVO personVO);
-
-    PersonVO fillForumMessages(@NotNull @Valid PersonVO personVO);
-
     //    Person --- PersonRole methods
 
     @Valid

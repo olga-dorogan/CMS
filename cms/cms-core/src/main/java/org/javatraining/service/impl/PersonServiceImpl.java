@@ -38,21 +38,6 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonVO fillCourses(@NotNull @Valid PersonVO personVO) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public PersonVO fillMarks(@NotNull @Valid PersonVO personVO) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public PersonVO fillForumMessages(@NotNull @Valid PersonVO personVO) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public List<PersonVO> getPersonsByRole(@NotNull @Valid PersonRoleVO role) {
         throw new UnsupportedOperationException();
     }

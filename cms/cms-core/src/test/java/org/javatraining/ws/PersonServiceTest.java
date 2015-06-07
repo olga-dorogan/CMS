@@ -1,7 +1,5 @@
 package org.javatraining.ws;
 
-import flexjson.JSONDeserializer;
-import flexjson.JSONSerializer;
 import org.javatraining.model.PersonRoleVO;
 import org.javatraining.model.PersonVO;
 import org.javatraining.ws.services.PersonService;
@@ -9,14 +7,14 @@ import org.junit.Before;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by asudak on 5/29/15.
@@ -39,13 +37,13 @@ public class PersonServiceTest {
         role.setId(1L);
         role.setName("student");
         roles.add(role);
-        person.setPersonRole(roles);
+        person.setPersonRole(role);
     }
 
     @org.junit.Test
     public void testGetPerson() {
-        Response r = service.getPerson(clientId);
-        System.out.print(r.getEntity());
+//        Response r = service.getPerson(clientId);
+//        System.out.print(r.getEntity());
     }
 
     @org.junit.Test

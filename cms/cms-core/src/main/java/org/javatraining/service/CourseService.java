@@ -29,12 +29,6 @@ public interface CourseService {
     @Valid
     CourseVO getById(@NotNull Long id);
 
-    CourseVO fillPersons(@NotNull @Valid CourseVO courseVO);
-
-    CourseVO fillNews(@NotNull @Valid CourseVO courseVO);
-
-    CourseVO fillLessons(@NotNull @Valid CourseVO courseVO);
-
     //  Course --- Person methods
 
     void addPersonsToCourse(@NotNull CourseVO courseVO, @NotNull @Valid List<PersonVO> persons);
@@ -54,6 +48,10 @@ public interface CourseService {
     NewsVO updateNews(@NotNull @Valid NewsVO newsVO);
 
     NewsVO getNewsById(@NotNull Long id);
+
+    @NotNull
+    @Valid
+    List<NewsVO> getAllNewsFromCourse(@NotNull CourseVO courseVO);
 
     @NotNull
     @Valid
