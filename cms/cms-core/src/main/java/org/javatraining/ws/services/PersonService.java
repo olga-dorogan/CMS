@@ -63,7 +63,7 @@ public class PersonService<T> extends AbstractService<PersonVO> {
         return r.build();
     }
 
-    @PUT
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createPerson(@Context UriInfo uriInfo, @QueryParam("person_json") String personJson) {
         Response.ResponseBuilder r;
@@ -78,6 +78,32 @@ public class PersonService<T> extends AbstractService<PersonVO> {
         } catch (URISyntaxException e) {
             //this shouldn't happen
             r = Response.serverError();
+        }
+
+        return r.build();
+    }
+
+    @PUT
+    @Path("{person_id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Auth(roles = {AuthRole.TEACHER, AuthRole.STUDENT})
+    public Response updatePerson(@HeaderParam(Config.REQUEST_HEADER_ID) long userId, @PathParam("person_id") long personId, @QueryParam("person_json") String personJson) {
+        Response.ResponseBuilder r = null;
+        PersonVO client = new PersonVO();
+        //TODO get client
+
+        if (client.getPersonRole() != new PersonRoleVO()) //FIXME if person role not equals teacher
+            if (client.getId() != personId)
+                r = Response.status(Response.Status.FORBIDDEN);
+
+        if (r == null) {
+            PersonVO person = null;
+            //TODO save entity here
+
+            if (person == null)
+                r = Response.noContent();
+            else
+                r = Response.ok(serialize(person));
         }
 
         return r.build();

@@ -1,6 +1,9 @@
 package org.javatraining.ws.services;
 
 import flexjson.JSONException;
+import org.javatraining.auth.Auth;
+import org.javatraining.config.AuthRole;
+import org.javatraining.config.Config;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.PersonVO;
 
@@ -40,51 +43,71 @@ public class CourseService extends AbstractService<CourseVO> {
         CourseVO course = new CourseVO();
         course.setId(courseId);
         //TODO get course from DB
-        Response r;
+        Response.ResponseBuilder r;
         if (course == null)
-            r = Response.noContent().build();
+            r = Response.noContent();
         else
-            r = Response.ok(serialize(course)).build();
-        return r;
+            r = Response.ok(serialize(course));
+        return r.build();
     }
 
-    @PUT
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Auth(roles = {AuthRole.TEACHER})
     public Response createCourse(@Context UriInfo uriInfo, @QueryParam("course_json") String courseJson) {
-        Response r;
+        Response.ResponseBuilder r;
         try {
             CourseVO course = deserialize(courseJson);
             //TODO save entity here
             String courseUri = uriInfo.getRequestUri().toString() + "/" + course.getId();
-            r = Response.created(new URI(courseUri)).build();
+            r = Response.created(new URI(courseUri));
         } catch (JSONException e) {
             System.out.println(e);
-            r = Response.status(Response.Status.NOT_ACCEPTABLE).build();
+            r = Response.status(Response.Status.NOT_ACCEPTABLE);
         } catch (URISyntaxException e) {
             //this shouldn't happen
-            r = Response.serverError().build();
+            r = Response.serverError();
         }
 
-        return r;
+        return r.build();
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Auth(roles = {AuthRole.TEACHER})
+    public Response updateCourse( @QueryParam("course_json") String courseJson) {
+        Response.ResponseBuilder r;
+        try {
+            CourseVO course = deserialize(courseJson);
+            //TODO save entity here
+            r = Response.ok();
+        } catch (JSONException e) {
+            System.out.println(e);
+            r = Response.status(Response.Status.NOT_ACCEPTABLE);
+        }
+
+        return r.build();
     }
 
     @DELETE
     @Path("{course_id}")
+    @Auth(roles = {AuthRole.TEACHER})
     public Response deleteCourse(@PathParam("course_id") long courseId) {
-        Response r;
+        Response.ResponseBuilder r;
         CourseVO course = new CourseVO();
         course.setId(courseId);
         try {
             //TODO delete entity here
-            r = Response.ok().build();
+            r = Response.ok();
         } catch (Exception e) {
-            r = Response.noContent().build();
+            r = Response.noContent();
         }
-        return r;
+        return r.build();
     }
 
     @GET
     @Path("{course_id}/subscribers")
+    @Auth(roles = {AuthRole.TEACHER})
     public Response getSubscribers(@PathParam("course_id") long courseId) {
         CourseVO course = new CourseVO();
         course.setId(courseId);
@@ -95,6 +118,7 @@ public class CourseService extends AbstractService<CourseVO> {
 
     @PUT
     @Path("{course_id}/subscribe")
+    @Auth(roles = {AuthRole.STUDENT})
     public Response subscribeCourse(@PathParam("course_id") long courseId, @QueryParam("person_id") long personId) {
         PersonVO person = new PersonVO();
         person.setId(personId);
@@ -106,9 +130,10 @@ public class CourseService extends AbstractService<CourseVO> {
 
     @PUT
     @Path("{course_id}/unsubscribe")
-    public Response unsubscribeCourse(@PathParam("course_id") long courseId, @QueryParam("person_id") long personId) {
+    @Auth(roles = {AuthRole.STUDENT})
+    public Response unsubscribeCourse(@PathParam("course_id") long courseId, @HeaderParam(Config.REQUEST_HEADER_ID) long userId) {
         PersonVO person = new PersonVO();
-        person.setId(personId);
+        person.setId(userId);
         CourseVO course = new CourseVO();
         course.setId(courseId);
         //TODO unsubscribe person to course
