@@ -18,37 +18,37 @@ import java.util.List;
 @Stateless
 public class PersonServiceImpl implements PersonService {
     @Override
-    public PersonVO savePerson(@NotNull @Valid PersonVO personVO) {
+    public PersonVO save(@NotNull @Valid PersonVO personVO) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public PersonVO updatePerson(@NotNull @Valid PersonVO personVO) {
+    public PersonVO update(@NotNull @Valid PersonVO personVO) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void removePerson(@NotNull PersonVO personVO) {
+    public void remove(@NotNull PersonVO personVO) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public PersonVO getPersonById(@NotNull Long id) {
+    public PersonVO getById(@NotNull Long id) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public PersonVO fillPersonCourses(@NotNull @Valid PersonVO personVO) {
+    public PersonVO fillCourses(@NotNull @Valid PersonVO personVO) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public PersonVO fillPersonMarks(@NotNull @Valid PersonVO personVO) {
+    public PersonVO fillMarks(@NotNull @Valid PersonVO personVO) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public PersonVO fillPersonForumMessages(@NotNull @Valid PersonVO personVO) {
+    public PersonVO fillForumMessages(@NotNull @Valid PersonVO personVO) {
         throw new UnsupportedOperationException();
     }
 
@@ -68,22 +68,22 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<CourseVO> getPersonCourses(@NotNull PersonVO personVO) {
+    public List<CourseVO> getCourses(@NotNull PersonVO personVO) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void setPersonMark(@NotNull PersonVO personVO, @NotNull MarkVO markVO) {
+    public void setMark(@NotNull PersonVO personVO, @NotNull MarkVO markVO) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void updatePersonMark(@NotNull PersonVO personVO, @NotNull MarkVO markVO) {
+    public void updateMark(@NotNull PersonVO personVO, @NotNull MarkVO markVO) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<MarkVO> getPersonMarks(@NotNull PersonVO personVO) {
+    public List<MarkVO> getMarks(@NotNull PersonVO personVO) {
         throw new UnsupportedOperationException();
     }
 }

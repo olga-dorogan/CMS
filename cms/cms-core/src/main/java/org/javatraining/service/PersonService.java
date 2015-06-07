@@ -16,20 +16,20 @@ public interface PersonService {
 
     //     Person methods
 
-    PersonVO savePerson(@NotNull @Valid PersonVO personVO);
+    PersonVO save(@NotNull @Valid PersonVO personVO);
 
-    PersonVO updatePerson(@NotNull @Valid PersonVO personVO);
+    PersonVO update(@NotNull @Valid PersonVO personVO);
 
-    void removePerson(@NotNull PersonVO personVO);
+    void remove(@NotNull PersonVO personVO);
 
     @Valid
-    PersonVO getPersonById(@NotNull Long id);
+    PersonVO getById(@NotNull Long id);
 
-    PersonVO fillPersonCourses(@NotNull @Valid PersonVO personVO);
+    PersonVO fillCourses(@NotNull @Valid PersonVO personVO);
 
-    PersonVO fillPersonMarks(@NotNull @Valid PersonVO personVO);
+    PersonVO fillMarks(@NotNull @Valid PersonVO personVO);
 
-    PersonVO fillPersonForumMessages(@NotNull @Valid PersonVO personVO);
+    PersonVO fillForumMessages(@NotNull @Valid PersonVO personVO);
 
     //    Person --- PersonRole methods
 
@@ -44,15 +44,15 @@ public interface PersonService {
 
     @NotNull
     @Valid
-    List<CourseVO> getPersonCourses(@NotNull PersonVO personVO);
+    List<CourseVO> getCourses(@NotNull PersonVO personVO);
 
     //    Person --- Mark methods
 
-    void setPersonMark(@NotNull PersonVO personVO, @NotNull MarkVO markVO);
+    void setMark(@NotNull PersonVO personVO, @NotNull MarkVO markVO);
 
-    void updatePersonMark(@NotNull PersonVO personVO, @NotNull MarkVO markVO);
+    void updateMark(@NotNull PersonVO personVO, @NotNull MarkVO markVO);
 
     @NotNull
     @Valid
-    List<MarkVO> getPersonMarks(@NotNull PersonVO personVO);
+    List<MarkVO> getMarks(@NotNull PersonVO personVO);
 }
