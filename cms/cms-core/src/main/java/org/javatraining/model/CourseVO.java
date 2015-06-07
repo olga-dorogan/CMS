@@ -5,26 +5,20 @@ import flexjson.JSON;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Set;
 
 /**
  * Created by vika on 29.05.15.
  */
 public class CourseVO implements Serializable {
-
-    @NotNull
     private Long id;
     @NotNull
     private String name;
-    @NotNull
-    private Long owner;
-    @NotNull
     private String description;
-    @NotNull
     private Date startdate;
-    @NotNull
     private Date enddate;
+    // TODO: are the fields need to be excluded from json?
     @JSON(include = false)
     private Set<PersonVO> person;
     @JSON(include = false)
@@ -65,14 +59,6 @@ public class CourseVO implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Long owner) {
-        this.owner = owner;
     }
 
     public String getDescription() {
@@ -121,7 +107,6 @@ public class CourseVO implements Serializable {
         if (lessons != null ? !lessons.equals(that.lessons) : that.lessons != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (news != null ? !news.equals(that.news) : that.news != null) return false;
-        if (owner != null ? !owner.equals(that.owner) : that.owner != null) return false;
         if (person != null ? !person.equals(that.person) : that.person != null) return false;
         if (startdate != null ? !startdate.equals(that.startdate) : that.startdate != null) return false;
 
@@ -132,7 +117,6 @@ public class CourseVO implements Serializable {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (owner != null ? owner.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (startdate != null ? startdate.hashCode() : 0);
         result = 31 * result + (enddate != null ? enddate.hashCode() : 0);

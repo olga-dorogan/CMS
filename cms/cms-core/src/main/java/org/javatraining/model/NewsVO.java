@@ -1,63 +1,46 @@
 package org.javatraining.model;
 
 
-import org.javatraining.entity.CourseEntity;
-
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Created by vika on 30.05.15.
  */
 public class NewsVO implements Serializable {
-    @NotNull
-    private int id;
-    @NotNull
-    private Integer courseId;
+    private Long id;
     @NotNull
     private String title;
     @NotNull
     private String content;
     @NotNull
-    private Timestamp date;
+    private Date date;
 
-
-    public CourseEntity getCourses() {
-        return courses;
+    public NewsVO() {
     }
 
-    public void setCourses(CourseEntity courses) {
-        this.courses = courses;
+    public NewsVO(String title, String content, Date date) {
+        this.title = title;
+        this.content = content;
+        this.date = date;
     }
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "course_id", nullable = false)
-    private CourseEntity courses;
+    public NewsVO(Long id, String title, String content, Date date) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.date = date;
+    }
 
-
-    @Column(name = "id", nullable = false, insertable = true, updatable = true)
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "course_id", nullable = true, insertable = true, updatable = true)
-    public Integer getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(Integer courseId) {
-        this.courseId = courseId;
-    }
-
-    @Basic
-    @Column(name = "title", nullable = true, insertable = true, updatable = true, length = 255)
     public String getTitle() {
         return title;
     }
@@ -66,8 +49,6 @@ public class NewsVO implements Serializable {
         this.title = title;
     }
 
-    @Basic
-    @Column(name = "content", nullable = true, insertable = true, updatable = true, length = 16777215)
     public String getContent() {
         return content;
     }
@@ -76,13 +57,11 @@ public class NewsVO implements Serializable {
         this.content = content;
     }
 
-    @Basic
-    @Column(name = "date", nullable = true, insertable = true, updatable = true)
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -91,21 +70,18 @@ public class NewsVO implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        NewsVO that = (NewsVO) o;
+        NewsVO newsVO = (NewsVO) o;
 
-        if (id != that.id) return false;
-        if (content != null ? !content.equals(that.content) : that.content != null) return false;
-        if (courseId != null ? !courseId.equals(that.courseId) : that.courseId != null) return false;
-        if (date != null ? !date.equals(that.date) : that.date != null) return false;
-        if (title != null ? !title.equals(that.title) : that.title != null) return false;
+        if (id != null ? !id.equals(newsVO.id) : newsVO.id != null) return false;
+        if (title != null ? !title.equals(newsVO.title) : newsVO.title != null) return false;
+        if (content != null ? !content.equals(newsVO.content) : newsVO.content != null) return false;
+        return !(date != null ? !date.equals(newsVO.date) : newsVO.date != null);
 
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (courseId != null ? courseId.hashCode() : 0);
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (content != null ? content.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
