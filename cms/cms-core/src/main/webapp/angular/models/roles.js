@@ -1,12 +1,12 @@
-var teacherAccess=function($location, $q,$rootScope){
-    if($rootScope.role=="teacher"){
+var teacherAccess=function($location, $window){
+    if($window.localStorage['role']=="teacher"){
         return true;
     }else{
         $location.path("/home");
     }
 };
-var studentAccess=function($location, $q,$rootScope){
-    if($rootScope.role=="student"){
+var studentAccess=function($location, $window){
+    if($window.localStorage['role']=="student"){
         return true;
     }else{
         $location.path("/home");
