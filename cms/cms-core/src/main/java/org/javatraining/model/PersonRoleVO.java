@@ -1,5 +1,7 @@
 package org.javatraining.model;
 
+import org.javatraining.entity.PersonRoleEntity;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -12,6 +14,26 @@ public class PersonRoleVO implements Serializable {
     private Long id;
     @NotNull
     private String name;
+
+    public PersonRoleVO() {
+
+    }
+
+    public PersonRoleVO(PersonRoleEntity personRoleEntity) {
+        this.id = personRoleEntity.getId();
+        this.name = personRoleEntity.getName();
+    }
+
+    public static PersonRoleEntity convertToEntity(@NotNull PersonRoleVO personRoleVO) {
+        PersonRoleEntity entity = new PersonRoleEntity();
+        if (personRoleVO.getId() != null) {
+            entity.setPersonId(personRoleVO.getId());
+        }
+        if (personRoleVO.getName() != null) {
+            entity.setName(personRoleVO.getName());
+        }
+        return entity;
+    }
 
     public Long getId() {
         return id;

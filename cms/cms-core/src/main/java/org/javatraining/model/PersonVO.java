@@ -1,7 +1,12 @@
 package org.javatraining.model;
 
+import org.javatraining.entity.PersonEntity;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -9,8 +14,6 @@ import java.util.Set;
  */
 public class PersonVO implements Serializable {
     private Long id;
-    @NotNull
-    private String googleClientId;
     @NotNull
     private String name;
     private String secondName;
@@ -26,13 +29,64 @@ public class PersonVO implements Serializable {
     public PersonVO() {
     }
 
-    public PersonVO(Long id, String clientId, String name, String lastName, String email, PersonRoleVO personRole) {
+    public PersonVO(Long id, String name, String lastName, String email, PersonRoleVO personRole) {
         this.id = id;
-        this.googleClientId = clientId;
         this.name = name;
         this.lastName = lastName;
         this.email = email;
         this.personRole = personRole;
+    }
+
+    public PersonVO(@NotNull PersonEntity personEntity) {
+        this.id = personEntity.getId();
+        this.name = personEntity.getName();
+        this.secondName = personEntity.getSecondName();
+        this.lastName = personEntity.getLastName();
+        this.email = personEntity.getEmail();
+        if (personEntity.getPersonRole() != null && !personEntity.getPersonRole().isEmpty()) {
+            this.personRole = new PersonRoleVO(personEntity.getPersonRole().iterator().next());
+        }
+        //TODO: convert collections of marks, courses and messages
+    }
+
+    public static PersonEntity convertToEntity(@NotNull PersonVO personVO) {
+        PersonEntity personEntity = new PersonEntity();
+        if (personVO.getId() != null) {
+            personEntity.setId(personVO.getId());
+        }
+        if (personVO.getName() != null) {
+            personEntity.setName(personVO.getName());
+        }
+        if (personVO.getSecondName() != null) {
+            personEntity.setSecondName(personVO.getSecondName());
+        }
+        if (personVO.getLastName() != null) {
+            personEntity.setLastName(personVO.getLastName());
+        }
+        if (personVO.getEmail() != null) {
+            personEntity.setEmail(personVO.getEmail());
+        }
+        if (personVO.getPersonRole() != null) {
+            personEntity.setPersonRole(Collections.singleton(PersonRoleVO.convertToEntity(personVO.getPersonRole())));
+        }
+        // TODO: set person marks, courses and messages
+        return personEntity;
+    }
+
+    public static Set<PersonVO> convertEntitiesToVOs(@NotNull Collection<PersonEntity> personEntities) {
+        Set<PersonVO> personVOs = new HashSet<>(personEntities.size());
+        for (PersonEntity personEntity : personEntities) {
+            personVOs.add(new PersonVO(personEntity));
+        }
+        return personVOs;
+    }
+
+    public static Set<PersonEntity> convertVOsToEntities(@NotNull Collection<PersonVO> personVOs) {
+        Set<PersonEntity> personEntities = new HashSet<>(personVOs.size());
+        for (PersonVO personVO : personVOs) {
+            personEntities.add(convertToEntity(personVO));
+        }
+        return personEntities;
     }
 
     public Long getId() {
@@ -41,14 +95,6 @@ public class PersonVO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getGoogleClientId() {
-        return googleClientId;
-    }
-
-    public void setGoogleClientId(String clientId) {
-        this.googleClientId = clientId;
     }
 
     public String getName() {

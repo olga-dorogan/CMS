@@ -1,5 +1,9 @@
 package org.javatraining.service.impl;
 
+import org.javatraining.dao.CourseDAO;
+import org.javatraining.dao.PersonDAO;
+import org.javatraining.entity.CourseEntity;
+import org.javatraining.entity.PersonEntity;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.MarkVO;
 import org.javatraining.model.PersonRoleVO;
@@ -7,33 +11,45 @@ import org.javatraining.model.PersonVO;
 import org.javatraining.service.PersonService;
 import org.javatraining.service.exception.UnsupportedOperationException;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by olga on 07.06.15.
  */
 @Stateless
 public class PersonServiceImpl implements PersonService {
+    @EJB
+    private PersonDAO personDAO;
+    @EJB
+    private CourseDAO courseDAO;
+
     @Override
     public PersonVO save(@NotNull @Valid PersonVO personVO) {
-        throw new UnsupportedOperationException();
+        return new PersonVO(personDAO.save(PersonVO.convertToEntity(personVO)));
     }
 
     @Override
     public PersonVO update(@NotNull @Valid PersonVO personVO) {
-        throw new UnsupportedOperationException();
+        return new PersonVO(personDAO.update(PersonVO.convertToEntity(personVO)));
     }
 
     @Override
     public void remove(@NotNull PersonVO personVO) {
-        throw new UnsupportedOperationException();
+        personDAO.removeById(personVO.getId());
     }
 
     @Override
     public PersonVO getById(@NotNull Long id) {
+        return new PersonVO(personDAO.findById(id));
+    }
+
+    @Override
+    public PersonVO getByEmail(@NotNull String email) {
         throw new UnsupportedOperationException();
     }
 
@@ -44,17 +60,30 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public void addPersonToCourse(@NotNull PersonVO personVO, @NotNull CourseVO courseVO) {
-        throw new UnsupportedOperationException();
+        // TODO: !!! test this method
+        // owning side is CourseEntity, so all operations need to be from CourseEntity
+        PersonEntity personEntity = PersonVO.convertToEntity(personVO);
+        CourseEntity courseEntity = CourseVO.convertToEntity(courseVO);
+        courseEntity.getPerson().add(personEntity);
+        courseDAO.update(courseEntity);
     }
 
     @Override
     public void removePersonFromCourse(@NotNull PersonVO personVO, @NotNull CourseVO courseVO) {
-        throw new UnsupportedOperationException();
+        // TODO: !!! test this method
+        // owning side is CourseEntity, so all operations need to be from CourseEntity
+        PersonEntity personEntity = PersonVO.convertToEntity(personVO);
+        CourseEntity courseEntity = CourseVO.convertToEntity(courseVO);
+        courseEntity.getPerson().remove(personEntity);
+        courseDAO.update(courseEntity);
     }
 
     @Override
-    public List<CourseVO> getCourses(@NotNull PersonVO personVO) {
-        throw new UnsupportedOperationException();
+    public Set<CourseVO> getCourses(@NotNull PersonVO personVO) {
+        PersonEntity personEntity = PersonVO.convertToEntity(personVO);
+        // if FetchType is lazy, initiate data loading
+        personEntity.getCourse().size();
+        return CourseVO.convertEntitiesToVOs(personEntity.getCourse());
     }
 
     @Override
