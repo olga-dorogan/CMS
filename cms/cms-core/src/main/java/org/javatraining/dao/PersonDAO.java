@@ -2,9 +2,11 @@ package org.javatraining.dao;
 
 
 import org.javatraining.entity.PersonEntity;
+import org.javatraining.entity.PersonRole;
 
 import javax.ejb.Stateless;
 import javax.persistence.Query;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -20,6 +22,14 @@ public class PersonDAO extends GenericDAO<PersonEntity> {
     public List<PersonEntity> getAllPersons() {
         Query query = getEntityManager().createQuery("SELECT c FROM PersonEntity c");
         return query.getResultList();
+    }
+    public PersonEntity getByEmail(@NotNull String email) {
+        PersonEntity personEntity = getEntityManager().find(PersonEntity.class, email);
+        return personEntity;
+    }
+    public PersonEntity getByPersonRole(@NotNull PersonRole personRole) {
+        PersonEntity personEntity =  getEntityManager().find(PersonEntity.class, personRole);
+        return personEntity;
     }
 
 

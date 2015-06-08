@@ -19,7 +19,7 @@ public class PracticeLessonEntity implements Serializable {
     public PracticeLessonEntity() {
     }
 
-    public PracticeLessonEntity(String task, String resource, LessonEntity lesson) {
+    public PracticeLessonEntity(String task,LessonEntity lesson) {
         this.task = task;
         this.lesson = lesson;
     }

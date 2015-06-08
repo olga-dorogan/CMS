@@ -31,11 +31,11 @@ public class LessonVO {
     private CourseEntity courses;
     private PracticeLessonEntity lessonTypes;
 
-    private Set<LessonLinkEntity> lessonLinks;
+    private Set<LessonLinkVO> lessonLinks;
 
-    private Set<MarkEntity> marks;
+    private Set<MarkVO> marks;
 
-    private Set<ForumMassagesEntity> forumMessages;
+    private Set<ForumMessagesVO> forumMessages;
 
     public CourseEntity getCourses() {
         return courses;
@@ -53,27 +53,27 @@ public class LessonVO {
         this.lessonTypes = lessonTypes;
     }
 
-    public Set<LessonLinkEntity> getLessonLinks() {
+    public Set<LessonLinkVO> getLessonLinks() {
         return lessonLinks;
     }
 
-    public void setLessonLinks(Set<LessonLinkEntity> lessonLinks) {
+    public void setLessonLinks(Set<LessonLinkVO> lessonLinks) {
         this.lessonLinks = lessonLinks;
     }
 
-    public Set<MarkEntity> getMarks() {
+    public Set<MarkVO> getMarks() {
         return marks;
     }
 
-    public void setMarks(Set<MarkEntity> marks) {
+    public void setMarks(Set<MarkVO> marks) {
         this.marks = marks;
     }
 
-    public Set<ForumMassagesEntity> getForumMessages() {
+    public Set<ForumMessagesVO> getForumMessages() {
         return forumMessages;
     }
 
-    public void setForumMessages(Set<ForumMassagesEntity> forumMessages) {
+    public void setForumMessages(Set<ForumMessagesVO> forumMessages) {
         this.forumMessages = forumMessages;
     }
 

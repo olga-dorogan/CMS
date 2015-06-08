@@ -15,8 +15,6 @@ public class LessonEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
-   @NotNull
-    private Long courseId;
     @NotNull
     private Long type;
     @NotNull
@@ -31,8 +29,7 @@ public class LessonEntity implements Serializable {
     public LessonEntity() {
     }
 
-    public LessonEntity(Long courseId, Long type, Long orderNum, String topic, String description, Date createDate, CourseEntity courses) {
-        this.courseId = courseId;
+    public LessonEntity(Long type, Long orderNum, String topic, String description, Date createDate, CourseEntity courses) {
         this.type = type;
         this.orderNum = orderNum;
         this.topic = topic;
@@ -50,15 +47,6 @@ public class LessonEntity implements Serializable {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "course_id", nullable = false, insertable = true, updatable = true)
-    public Long getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
-    }
 
     @Basic
     @Column(name = "type", nullable = false, insertable = false, updatable = false)
@@ -156,12 +144,12 @@ public class LessonEntity implements Serializable {
     }
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessons")
-    private Set<ForumMassagesEntity> forumMessages;
-    public Set<ForumMassagesEntity> getForumMessages() {
+    private Set<ForumMessagesEntity> forumMessages;
+    public Set<ForumMessagesEntity> getForumMessages() {
         return forumMessages;
     }
 
-    public void setForumMessages(Set<ForumMassagesEntity> forumMessages) {
+    public void setForumMessages(Set<ForumMessagesEntity> forumMessages) {
         this.forumMessages = forumMessages;
     }
 
@@ -174,7 +162,6 @@ public class LessonEntity implements Serializable {
         LessonEntity that = (LessonEntity) o;
 
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (courseId != null ? !courseId.equals(that.courseId) : that.courseId != null) return false;
         if (courses != null ? !courses.equals(that.courses) : that.courses != null) return false;
         if (createDate != null ? !createDate.equals(that.createDate) : that.createDate != null) return false;
         if (forumMessages != null ? !forumMessages.equals(that.forumMessages) : that.forumMessages != null)
@@ -194,8 +181,7 @@ public class LessonEntity implements Serializable {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (courseId != null ? courseId.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
+         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (orderNum != null ? orderNum.hashCode() : 0);
         result = 31 * result + (topic != null ? topic.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);

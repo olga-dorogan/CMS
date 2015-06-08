@@ -15,8 +15,6 @@ public class NewsEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
-    private Long courseId;
-    @NotNull
     private String title;
     @NotNull
     private String content;
@@ -26,8 +24,7 @@ public class NewsEntity implements Serializable {
     public NewsEntity() {
     }
 
-    public NewsEntity(Long courseId, String title, String content, Timestamp date, CourseEntity courses) {
-        this.courseId = courseId;
+    public NewsEntity(String title, String content, Timestamp date, CourseEntity courses) {
         this.title = title;
         this.content = content;
         this.date = date;
@@ -40,16 +37,6 @@ public class NewsEntity implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Basic
-    @Column(name = "course_id", nullable = true, insertable = true, updatable = true)
-    public Long getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
     }
 
     @Basic
@@ -101,7 +88,6 @@ public class NewsEntity implements Serializable {
         NewsEntity that = (NewsEntity) o;
 
         if (content != null ? !content.equals(that.content) : that.content != null) return false;
-        if (courseId != null ? !courseId.equals(that.courseId) : that.courseId != null) return false;
         if (courses != null ? !courses.equals(that.courses) : that.courses != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
@@ -113,7 +99,6 @@ public class NewsEntity implements Serializable {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (courseId != null ? courseId.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (content != null ? content.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
