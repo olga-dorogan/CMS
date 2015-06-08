@@ -8,7 +8,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
  * Created by sergey on 02.06.15 at 14:33.
  * For more information you should send mail to codedealerb@gmail.com
  */
-
+//FIXME ZAMENA JSON PROPERTY NA ANALOGI
 public class GitLabUser {
     private Integer id;
     private String email;//required

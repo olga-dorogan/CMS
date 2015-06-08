@@ -1,6 +1,10 @@
 package org.javatraining.ws;
 
-import org.javatraining.stubs.Person;
+import flexjson.JSONDeserializer;
+import flexjson.JSONSerializer;
+import org.javatraining.model.PersonRoleVO;
+import org.javatraining.model.PersonVO;
+import org.javatraining.ws.services.PersonService;
 import org.junit.Before;
 
 import javax.ws.rs.core.Response;
@@ -8,6 +12,8 @@ import javax.ws.rs.core.UriInfo;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -16,14 +22,24 @@ import static org.mockito.Mockito.*;
  * Created by asudak on 5/29/15.
  */
 public class PersonServiceTest {
-    private String clientId = "test";
+    private long clientId = 123;
     private PersonService service = new PersonService();
-    private Person person;
+    private PersonVO person;
 
     @Before
     public void setUp() {
-        person = new Person(clientId);
+        person = new PersonVO();
+        person.setId(clientId);
+        person.setName("Vasya");
+        person.setLastName("Pupkin");
+        person.setEmail("test@gmail.com");
 
+        Set<PersonRoleVO> roles = new HashSet<>();
+        PersonRoleVO role = new PersonRoleVO();
+        role.setId(1L);
+        role.setName("student");
+        roles.add(role);
+        person.setPersonRole(roles);
     }
 
     @org.junit.Test
@@ -34,11 +50,11 @@ public class PersonServiceTest {
 
     @org.junit.Test
     public void testCreatePerson() throws URISyntaxException{
-        String json = "{\"firstname\":null,\"lastname\":null,\"role\":null,\"secondname\":null}";
+        String json = "{\"course\":null,\"email\":\"test@gmail.com\",\"id\":123,\"lastName\":\"Pupkin\",\"marks\":null,\"name\":\"Vasya\",\"personRole\":[{\"id\":1,\"name\":\"student\"}],\"secondName\":null}";
         UriInfo mockUriInfo = mock(UriInfo.class);
         when(mockUriInfo.getRequestUri()).thenReturn(new URI("http://www.test.com/ui/person/test"));
 
-        int status = service.createPerson(mockUriInfo, clientId, json).getStatus();
+        int status = service.createPerson(mockUriInfo, json).getStatus();
         assertEquals(Response.Status.CREATED.getStatusCode(), status);
 
     }

@@ -7,7 +7,12 @@
     <a href="" ng-if="!isLogin()"  ng-click="doLogin()" class="btn btn-default dropdown-toggle"><span class="glyphicon glyphicon-arrow-right"></span> Войти</a>
     <div ng-if="isLogin()">
         <img class="avatar" src="{{gapi.user.picture}}" />
-        <span>{{gapi.user.name}}</span>
+        <div  id="userinfo-wrapper">
+            <a ui-sref="{{role}}">
+                <span>{{gapi.user.name}}</span><br>
+                <span>{{gapi.user.email}}</span>
+            </a>
+        </div>
         <a href="" ng-click="doLogOut()" class="btn btn-default dropdown-toggle"><span class="glyphicon glyphicon-arrow-left"></span> Выйти</a>
     </div>
 </div>

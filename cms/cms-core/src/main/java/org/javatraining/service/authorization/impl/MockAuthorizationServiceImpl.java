@@ -13,7 +13,8 @@ public class MockAuthorizationServiceImpl implements AuthorizationService {
 
     @Override
     public Role getRoleByClientId(String clientId) {
-        return (Math.random() > 0.5) ? Role.TEACHER : Role.STUDENT;
+//        return (Math.random() > 0.5) ? Role.TEACHER : Role.STUDENT;
+        return Role.STUDENT;
     }
 
     @Override

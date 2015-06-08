@@ -8,7 +8,9 @@ import org.javatraining.integration.gitlab.api.model.GitLabUser;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The project name is cms.
@@ -17,7 +19,9 @@ import java.util.Map;
  */
 public interface GitLabAPI {
 
-    public URL getApiUrl(Map<String, String> urlTail) throws MalformedURLException;
+    public URL getApiUrl(Map<String, String> urlTail, String methodData) throws MalformedURLException;
+
+    public Collection<GitLabUser> getAllUsersFromGitlab();
 
     //get authenticated user
     //get /user
@@ -29,7 +33,7 @@ public interface GitLabAPI {
     //post /users - rest method
     //http://localhost/api/v3/users?private_token=xTApBC_xvpkKEw7yHjDV&sudo=root - example without properties
     //return status 201 if created
-    public boolean createNewGitLabUser(GitLabUser userProperties);
+    public boolean createGitLabUser(GitLabUser userProperties);
 
     //modification to existing user (only for admin)
     //put /users - rest method

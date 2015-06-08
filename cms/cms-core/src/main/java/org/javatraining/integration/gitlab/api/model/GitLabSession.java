@@ -1,7 +1,5 @@
 package org.javatraining.integration.gitlab.api.model;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
 /**
  * The project name is cms.
  * Created by sergey on 02.06.15 at 16:44.
@@ -9,16 +7,16 @@ import org.codehaus.jackson.annotate.JsonProperty;
  */
 
 public class GitLabSession {
-    //FIXME does it need username and email?
-    @JsonProperty("private_token")
-    private String privateToken;
+    //@JsonProperty("private_token")
+    //@QueryParam()?????
+    private String private_token;//FIXME flexjson hasnt jsonproperty, need own transformator
 
 
-    public String getPrivateToken() {
-        return privateToken;
+    public String getPrivate_token() {
+        return private_token;
     }
 
-    public void setPrivateToken(String privateToken) {
-        this.privateToken = privateToken;
+    public void setPrivate_token(String private_token) {
+        this.private_token = private_token;
     }
 }

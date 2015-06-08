@@ -29,12 +29,9 @@ public class TokenVerifierServiceImpl implements TokenVerifierService {
                     .queryParam("access_token", token)
                     .request(MediaType.APPLICATION_JSON)
                     .get();
-            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-                return true;
-            }
+            return response.getStatus() == Response.Status.OK.getStatusCode();
         } catch (MalformedURLException e) {
             throw new GoogleConnectionAuthException(e);
         }
-        return false;
     }
 }
