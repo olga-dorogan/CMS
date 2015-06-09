@@ -71,6 +71,14 @@ public class CourseVO implements Serializable {
         }
         return courses;
     }
+
+    public static Set<CourseEntity> convertVOsToEnities(@NotNull Collection<CourseVO> courseVOs) {
+        Set<CourseEntity> courseEntities = new HashSet<>(courseVOs.size());
+        for (CourseVO courseVO : courseVOs) {
+            courseEntities.add(convertToEntity(courseVO));
+        }
+        return courseEntities;
+    }
     public Set<LessonVO> getLessons() {
         return lessons;
     }

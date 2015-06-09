@@ -4,6 +4,7 @@ import org.javatraining.dao.CourseDAO;
 import org.javatraining.dao.PersonDAO;
 import org.javatraining.entity.CourseEntity;
 import org.javatraining.entity.PersonEntity;
+import org.javatraining.entity.PersonRole;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.MarkVO;
 import org.javatraining.model.PersonRoleVO;
@@ -30,6 +31,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public PersonVO save(@NotNull @Valid PersonVO personVO) {
+        personVO.setPersonRole(new PersonRoleVO(PersonRole.STUDENT));
         return new PersonVO(personDAO.save(PersonVO.convertToEntity(personVO)));
     }
 
@@ -45,12 +47,12 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public PersonVO getById(@NotNull Long id) {
-        return new PersonVO(personDAO.findById(id));
+        return new PersonVO(personDAO.getById(id));
     }
 
     @Override
     public PersonVO getByEmail(@NotNull String email) {
-        throw new UnsupportedOperationException();
+        return new PersonVO(personDAO.getByEmail(email));
     }
 
     @Override

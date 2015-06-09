@@ -5,7 +5,6 @@ import org.javatraining.entity.PersonEntity;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,10 +42,11 @@ public class PersonVO implements Serializable {
         this.secondName = personEntity.getSecondName();
         this.lastName = personEntity.getLastName();
         this.email = personEntity.getEmail();
-        if (personEntity.getPersonRole() != null && !personEntity.getPersonRole().isEmpty()) {
-            this.personRole = new PersonRoleVO(personEntity.getPersonRole().iterator().next());
+        this.personRole = new PersonRoleVO(personEntity.getPersonRole());
+        if (personEntity.getCourse() != null) {
+            this.courses = CourseVO.convertEntitiesToVOs(personEntity.getCourse());
         }
-        //TODO: convert collections of marks, courses and messages
+        //TODO: convert collections of marks and messages
     }
 
     public static PersonEntity convertToEntity(@NotNull PersonVO personVO) {
@@ -67,9 +67,12 @@ public class PersonVO implements Serializable {
             personEntity.setEmail(personVO.getEmail());
         }
         if (personVO.getPersonRole() != null) {
-            personEntity.setPersonRole(Collections.singleton(PersonRoleVO.convertToEntity(personVO.getPersonRole())));
+            personEntity.setPersonRole(personVO.getPersonRole().getRole());
         }
-        // TODO: set person marks, courses and messages
+        if (personVO.getCourses() != null) {
+            personEntity.setCourse(CourseVO.convertVOsToEnities(personVO.getCourses()));
+        }
+        // TODO: set person marks and messages
         return personEntity;
     }
 
@@ -167,25 +170,25 @@ public class PersonVO implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PersonVO that = (PersonVO) o;
+        PersonVO personVO = (PersonVO) o;
 
-        if (id != that.id) return false;
-        if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (secondName != null ? !secondName.equals(that.secondName) : that.secondName != null) return false;
+        if (id != null ? !id.equals(personVO.id) : personVO.id != null) return false;
+        if (!name.equals(personVO.name)) return false;
+        if (secondName != null ? !secondName.equals(personVO.secondName) : personVO.secondName != null) return false;
+        if (!lastName.equals(personVO.lastName)) return false;
+        if (!email.equals(personVO.email)) return false;
+        return !(personRole != null ? !personRole.equals(personVO.personRole) : personVO.personRole != null);
 
-        return true;
     }
-
 
     @Override
     public int hashCode() {
-        int result = (int) (name != null ? (id ^ (id >>> 32)) : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + name.hashCode();
         result = 31 * result + (secondName != null ? secondName.hashCode() : 0);
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + lastName.hashCode();
+        result = 31 * result + email.hashCode();
+        result = 31 * result + (personRole != null ? personRole.hashCode() : 0);
         return result;
     }
 }

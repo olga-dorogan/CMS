@@ -34,8 +34,8 @@ public class PersonServiceTest {
 
         Set<PersonRoleVO> roles = new HashSet<>();
         PersonRoleVO role = new PersonRoleVO();
-        role.setId(1L);
-        role.setName("student");
+//        role.setId(1L);
+//        role.setName("student");
         roles.add(role);
         person.setPersonRole(role);
     }

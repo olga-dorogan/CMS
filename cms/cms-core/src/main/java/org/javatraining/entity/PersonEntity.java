@@ -23,7 +23,7 @@ public class PersonEntity implements Serializable {
     @NotNull
     private String email;
 
-   @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private PersonRole personRole;
 
     public PersonEntity() {
@@ -83,9 +83,10 @@ public class PersonEntity implements Serializable {
     public void setForumMassages(Set<ForumMessagesEntity> forumMassages) {
         this.forumMassages = forumMassages;
     }
-        public Set<ForumMessagesEntity> getForumMassages() {
-            return forumMassages;
-        }
+
+    public Set<ForumMessagesEntity> getForumMassages() {
+        return forumMassages;
+    }
 
     public PersonRole getPersonRole() {
         return personRole;
@@ -142,9 +143,10 @@ public class PersonEntity implements Serializable {
 
         return true;
     }
+
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
+        int result = (id == null) ? 0 : (int) (id ^ (id >>> 32));
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (secondName != null ? secondName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
