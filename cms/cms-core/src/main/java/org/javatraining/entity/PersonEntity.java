@@ -23,14 +23,18 @@ public class PersonEntity implements Serializable {
     @NotNull
     private String email;
 
+   @Enumerated(EnumType.STRING)
+    private PersonRole personRole;
+
     public PersonEntity() {
     }
 
-    public PersonEntity(String name, String secondName, String lastName, String email) {
+    public PersonEntity(String name, String secondName, String lastName, String email, PersonRole personRole) {
         this.name = name;
         this.secondName = secondName;
         this.lastName = lastName;
         this.email = email;
+        this.personRole = personRole;
     }
 
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
@@ -72,25 +76,24 @@ public class PersonEntity implements Serializable {
         this.lastName = lastName;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "person")
-    private Set<PersonRoleEntity> personRole;
 
-    public void setPersonRole(Set<PersonRoleEntity> personRole) {
-        this.personRole = personRole;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "persons")
+    private Set<ForumMessagesEntity> forumMassages;
+
+    public void setForumMassages(Set<ForumMessagesEntity> forumMassages) {
+        this.forumMassages = forumMassages;
     }
-    public Set<PersonRoleEntity> getPersonRole() {
+        public Set<ForumMessagesEntity> getForumMassages() {
+            return forumMassages;
+        }
+
+    public PersonRole getPersonRole() {
         return personRole;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "persons")
-    private Set<ForumMassagesEntity> forumMassages;
-
-    public void setForumMassages(Set<ForumMassagesEntity> forumMassages) {
-        this.forumMassages = forumMassages;
+    public void setPersonRole(PersonRole personRole) {
+        this.personRole = personRole;
     }
-        public Set<ForumMassagesEntity> getForumMassages() {
-            return forumMassages;
-        }
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "persons")
     private Set<MarkEntity> marks;

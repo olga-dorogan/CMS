@@ -6,10 +6,13 @@ function CourseService(Restangular){
         return Course.getList();
 
     };
+    this.createCourses=function(newCourse){
+        //FIXME POST Запрос на сервер для добавления курса в базу
+    };
     //FIXME заглушка, для нормальной работы на без запуска WildFly
     this.getCoursesCap=function(){
-        return [{title:"Java EE",description:"Description for Java EE"},
-            {title:"Java SE",description:"Description for Java SE"},
-            {title:"Android",description:"Description for Android"}];
+        return [{id:1,name:"Java EE",description:"Description for Java EE"},
+            {id:2,name:"Java SE",description:"Description for Java SE"},
+            {id:3,name:"Android",description:"Description for Android"}];
     }
 }

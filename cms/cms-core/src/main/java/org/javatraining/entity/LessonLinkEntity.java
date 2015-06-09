@@ -13,17 +13,14 @@ public class LessonLinkEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
-    private Long lessonId;
-    @NotNull
+  @NotNull
     private String description;
     @NotNull
     private String link;
     public LessonLinkEntity() {
     }
 
-    public LessonLinkEntity(Long lessonId, String description, String link, LessonEntity lesson) {
-        this.lessonId = lessonId;
+    public LessonLinkEntity(String description, String link, LessonEntity lesson) {
         this.description = description;
         this.link = link;
         this.lesson = lesson;
@@ -37,17 +34,6 @@ public class LessonLinkEntity implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
-    @Basic
-    @Column(name = "lesson_id", nullable = false, insertable = true, updatable = true)
-    public Long getLessonId() {
-        return lessonId;
-    }
-
-    public void setLessonId(Long lessonId) {
-        this.lessonId = lessonId;
-    }
-
     @Basic
     @Column(name = "description", nullable = true, insertable = true, updatable = true, length = 255)
     public String getDescription() {
@@ -89,7 +75,6 @@ public class LessonLinkEntity implements Serializable {
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (lesson != null ? !lesson.equals(that.lesson) : that.lesson != null) return false;
-        if (lessonId != null ? !lessonId.equals(that.lessonId) : that.lessonId != null) return false;
         if (link != null ? !link.equals(that.link) : that.link != null) return false;
 
         return true;
@@ -98,7 +83,6 @@ public class LessonLinkEntity implements Serializable {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (lessonId != null ? lessonId.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (link != null ? link.hashCode() : 0);
         result = 31 * result + (lesson != null ? lesson.hashCode() : 0);

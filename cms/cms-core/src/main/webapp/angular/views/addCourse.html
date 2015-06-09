@@ -1,0 +1,36 @@
+<div class="col-xs-6 col-md-6">
+    <div class="row">
+        <h3>Add or edit new course</h3>
+        <form class="form-horizontal" ng-controller="AddCourseCtrl">
+            <div class="form-group">
+                <label for="title" class="col-sm-3 control-label">Название</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="title" ng-model="course.name" placeholder="Введите название...">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="content" class="col-sm-3 control-label">Содержимое</label>
+                <div class="col-sm-9">
+                    <textarea class="form-control" id="content" ng-model="course.description" placeholder="Enter few words about the course" rows="4"> </textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="content" class="col-sm-3 control-label"> Преподаватели </label>
+                <div class="col-sm-9">
+                    <select class="form-control" id="multiselect" multiple="multiple" size="7" ng-model="course.teachers">
+                        <optgroup label="Множественный выбор">
+                            <option>One</option>
+                            <option>Two</option>
+                            <option>Three</option>
+                            <option>Siz</option>
+                            <option>Seven</option>
+                            <option>Nine</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+            <button type="button" class="btn btn-success  trench_out full_screen" ng-click="createCourse()">Добавить курс</button>
+        </form>
+    </div>
+
+</div>

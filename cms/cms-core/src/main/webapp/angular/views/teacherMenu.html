@@ -1,7 +1,7 @@
 <ul class="nav nav-tabs nav ">
-    <li class="active"><a ui-sref="javase" data-toggle="tab1">Java SE</a></li>
-    <li ><a ui-sref="javaee" data-toggle="tab">Java EE</a></li>
-    <li ><a ui-sref="android" data-toggle="tab">Android</a></li>
+    <li ui-sref-active="active" ng-repeat="course in courses">
+        <a ui-sref="teacher({courseId:{{course.id}}})" data-toggle="tab1">{{course.name}}</a>
+    </li>
 </ul>
 <div class="row trench">
     <div class="col-xs-6 col-md-2">

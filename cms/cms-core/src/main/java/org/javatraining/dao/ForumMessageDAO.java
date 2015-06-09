@@ -1,7 +1,7 @@
 package org.javatraining.dao;
 
 
-import org.javatraining.entity.ForumMassagesEntity;
+import org.javatraining.entity.ForumMessagesEntity;
 import org.javatraining.entity.LessonEntity;
 import org.javatraining.entity.PersonEntity;
 
@@ -15,19 +15,19 @@ import java.util.List;
  */
 
 @Stateless
-public class ForumMassageDAO extends GenericDAO<ForumMassagesEntity> {
+public class ForumMessageDAO extends GenericDAO<ForumMessagesEntity> {
 
-    public ForumMassageDAO() {
-        setEntityClass(ForumMassagesEntity.class);
+    public ForumMessageDAO() {
+        setEntityClass(ForumMessagesEntity.class);
     }
 
-    public ForumMassagesEntity save(@NotNull ForumMassagesEntity forumMessagesEntity, @NotNull PersonEntity personEntity, @NotNull LessonEntity lesson) {
+    public ForumMessagesEntity save(@NotNull ForumMessagesEntity forumMessagesEntity, @NotNull PersonEntity personEntity, @NotNull LessonEntity lesson) {
         forumMessagesEntity.setPersons(personEntity);
         forumMessagesEntity.setLessons(lesson);
         getEntityManager().persist(forumMessagesEntity);
         return forumMessagesEntity;
     }
-    public List<ForumMassagesEntity> getAllForumMassage() {
+    public List<ForumMessagesEntity> getAllForumMassage() {
         Query query = getEntityManager().createQuery("SELECT c FROM ForumMassagesEntity c");
         return query.getResultList();
     }
