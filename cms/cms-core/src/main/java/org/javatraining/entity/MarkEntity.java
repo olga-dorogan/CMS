@@ -14,16 +14,13 @@ public class MarkEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
-    private Long lessonId;
-    @NotNull
     private Long mark;
 
     public MarkEntity() {
     }
 
-    public MarkEntity(Long lessonId, Long mark) {
-        this.lessonId = lessonId;
-        this.mark = mark;
+    public MarkEntity(Long mark) {
+           this.mark = mark;
     }
 
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
@@ -35,15 +32,6 @@ public class MarkEntity implements Serializable {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "lesson_id", nullable = true, insertable = true, updatable = true)
-    public Long getLessonId() {
-        return lessonId;
-    }
-
-    public void setLessonId(Long lessonId) {
-        this.lessonId = lessonId;
-    }
 
     @Basic
     @Column(name = "mark", nullable = true, insertable = true, updatable = true)
@@ -87,7 +75,6 @@ public class MarkEntity implements Serializable {
         MarkEntity that = (MarkEntity) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (lessonId != null ? !lessonId.equals(that.lessonId) : that.lessonId != null) return false;
         if (lessons != null ? !lessons.equals(that.lessons) : that.lessons != null) return false;
         if (mark != null ? !mark.equals(that.mark) : that.mark != null) return false;
         if (persons != null ? !persons.equals(that.persons) : that.persons != null) return false;
@@ -98,7 +85,6 @@ public class MarkEntity implements Serializable {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (lessonId != null ? lessonId.hashCode() : 0);
         result = 31 * result + (mark != null ? mark.hashCode() : 0);
         result = 31 * result + (persons != null ? persons.hashCode() : 0);
         result = 31 * result + (lessons != null ? lessons.hashCode() : 0);

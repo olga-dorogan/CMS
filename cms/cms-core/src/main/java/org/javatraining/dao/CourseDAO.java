@@ -2,7 +2,6 @@ package org.javatraining.dao;
 
 
 import org.javatraining.entity.CourseEntity;
-import org.javatraining.entity.LessonLinkEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.Query;
@@ -18,7 +17,7 @@ public class CourseDAO extends GenericDAO<CourseEntity> {
       setEntityClass(CourseEntity.class);
        }
 
-    public List<LessonLinkEntity> getAllCourses() {
+    public List<CourseEntity> getAllCourses() {
        Query query = getEntityManager().createQuery("SELECT c FROM CourseEntity c");
        return query.getResultList();
     }

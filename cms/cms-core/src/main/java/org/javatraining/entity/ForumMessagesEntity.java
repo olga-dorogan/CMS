@@ -10,7 +10,7 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "forum_messages", schema = "")
-public class ForumMassagesEntity implements Serializable {
+public class ForumMessagesEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,17 +21,14 @@ public class ForumMassagesEntity implements Serializable {
     @NotNull
     private String description;
     @NotNull
-    private Long lessonId;
-    @NotNull
     private Timestamp date;
-    public ForumMassagesEntity() {
+    public ForumMessagesEntity() {
     }
 
-    public ForumMassagesEntity(Long parentId, String title, String description, Long lessonId, Timestamp date) {
+    public ForumMessagesEntity(Long parentId, String title, String description, Timestamp date) {
         this.parentId = parentId;
         this.title = title;
         this.description = description;
-        this.lessonId = lessonId;
         this.date = date;
     }
 
@@ -99,16 +96,6 @@ public class ForumMassagesEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "lesson_id", nullable = true, insertable = true, updatable = true)
-    public Long getLessonId() {
-        return lessonId;
-    }
-
-    public void setLessonId(Long lessonId) {
-        this.lessonId = lessonId;
-    }
-
-    @Basic
     @Column(name = "date", nullable = true, insertable = true, updatable = true)
     public Timestamp getDate() {
         return date;
@@ -121,14 +108,13 @@ public class ForumMassagesEntity implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ForumMassagesEntity)) return false;
+        if (!(o instanceof ForumMessagesEntity)) return false;
 
-        ForumMassagesEntity that = (ForumMassagesEntity) o;
+        ForumMessagesEntity that = (ForumMessagesEntity) o;
 
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (lessonId != null ? !lessonId.equals(that.lessonId) : that.lessonId != null) return false;
         if (lessons != null ? !lessons.equals(that.lessons) : that.lessons != null) return false;
         if (parentId != null ? !parentId.equals(that.parentId) : that.parentId != null) return false;
         if (persons != null ? !persons.equals(that.persons) : that.persons != null) return false;
@@ -143,7 +129,6 @@ public class ForumMassagesEntity implements Serializable {
         result = 31 * result + (parentId != null ? parentId.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (lessonId != null ? lessonId.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (lessons != null ? lessons.hashCode() : 0);
         result = 31 * result + (persons != null ? persons.hashCode() : 0);

@@ -8,7 +8,7 @@
     <div ng-if="isLogin()">
         <img class="avatar" src="{{gapi.user.picture}}" />
         <div  id="userinfo-wrapper">
-            <a ui-sref="{{role}}">
+            <a ui-sref="teacher({courseId:1})">
                 <span>{{gapi.user.name}}</span><br>
                 <span>{{gapi.user.email}}</span>
             </a>

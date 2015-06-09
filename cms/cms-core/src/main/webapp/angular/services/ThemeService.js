@@ -4,7 +4,6 @@ function ThemeService(Restangular){
     this.createTheme=function(newTheme){
         //Запрос POST
         return Theme.post(newTheme);
-
     };
 
 }

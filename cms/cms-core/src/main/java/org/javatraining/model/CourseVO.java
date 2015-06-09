@@ -2,31 +2,28 @@ package org.javatraining.model;
 
 
 import flexjson.JSON;
+import org.javatraining.entity.CourseEntity;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Created by vika on 29.05.15.
  */
 public class CourseVO implements Serializable {
-
-    @NotNull
     private Long id;
     @NotNull
     private String name;
-    @NotNull
-    private Long owner;
-    @NotNull
     private String description;
-    @NotNull
     private Date startdate;
-    @NotNull
     private Date enddate;
+    // TODO: are the fields need to be excluded from json?
     @JSON(include = false)
-    private Set<PersonVO> person;
+    private Set<PersonVO> persons;
     @JSON(include = false)
     private Set<NewsVO> news;
     @JSON(include = false)
@@ -35,6 +32,53 @@ public class CourseVO implements Serializable {
     public CourseVO() {
     }
 
+    public CourseVO(CourseEntity courseEntity) {
+        this.id = courseEntity.getId();
+        this.name = courseEntity.getName();
+        this.description = courseEntity.getDescription();
+        this.startdate = courseEntity.getStartdate();
+        this.enddate = courseEntity.getEnddate();
+        this.persons = PersonVO.convertEntitiesToVOs(courseEntity.getPerson());
+        //TODO: set news and lessons fields
+    }
+
+    public static CourseEntity convertToEntity(@NotNull CourseVO courseVO) {
+        CourseEntity courseEntity = new CourseEntity();
+        if (courseVO.getId() != null) {
+            courseEntity.setId(courseVO.getId());
+        }
+        courseEntity.setName(courseVO.getName());
+        if (courseVO.getDescription() != null) {
+            courseEntity.setDescription(courseVO.getDescription());
+        }
+        if (courseVO.getStartdate() != null) {
+            courseEntity.setStartdate(new java.sql.Date(courseVO.getStartdate().getTime()));
+        }
+        if (courseVO.getEnddate() != null) {
+            courseEntity.setEnddate(new java.sql.Date(courseVO.getEnddate().getTime()));
+        }
+        if (courseVO.getPersons() != null) {
+            courseEntity.setPerson(PersonVO.convertVOsToEntities(courseVO.getPersons()));
+        }
+        // TODO: convert collections of news and lessons
+        return courseEntity;
+    }
+
+    public static Set<CourseVO> convertEntitiesToVOs(@NotNull Collection<CourseEntity> courseEntities) {
+        Set<CourseVO> courses = new HashSet<>(courseEntities.size());
+        for (CourseEntity courseEntity : courseEntities) {
+            courses.add(new CourseVO(courseEntity));
+        }
+        return courses;
+    }
+
+    public static Set<CourseEntity> convertVOsToEnities(@NotNull Collection<CourseVO> courseVOs) {
+        Set<CourseEntity> courseEntities = new HashSet<>(courseVOs.size());
+        for (CourseVO courseVO : courseVOs) {
+            courseEntities.add(convertToEntity(courseVO));
+        }
+        return courseEntities;
+    }
     public Set<LessonVO> getLessons() {
         return lessons;
     }
@@ -67,14 +111,6 @@ public class CourseVO implements Serializable {
         this.name = name;
     }
 
-    public Long getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Long owner) {
-        this.owner = owner;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -100,12 +136,12 @@ public class CourseVO implements Serializable {
     }
 
 
-    public Set<PersonVO> getPerson() {
-        return person;
+    public Set<PersonVO> getPersons() {
+        return persons;
     }
 
-    public void setPerson(Set<PersonVO> person) {
-        this.person = person;
+    public void setPersons(Set<PersonVO> persons) {
+        this.persons = persons;
     }
 
     @Override
@@ -121,8 +157,7 @@ public class CourseVO implements Serializable {
         if (lessons != null ? !lessons.equals(that.lessons) : that.lessons != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (news != null ? !news.equals(that.news) : that.news != null) return false;
-        if (owner != null ? !owner.equals(that.owner) : that.owner != null) return false;
-        if (person != null ? !person.equals(that.person) : that.person != null) return false;
+        if (persons != null ? !persons.equals(that.persons) : that.persons != null) return false;
         if (startdate != null ? !startdate.equals(that.startdate) : that.startdate != null) return false;
 
         return true;
@@ -132,11 +167,10 @@ public class CourseVO implements Serializable {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (owner != null ? owner.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (startdate != null ? startdate.hashCode() : 0);
         result = 31 * result + (enddate != null ? enddate.hashCode() : 0);
-        result = 31 * result + (person != null ? person.hashCode() : 0);
+        result = 31 * result + (persons != null ? persons.hashCode() : 0);
         result = 31 * result + (news != null ? news.hashCode() : 0);
         result = 31 * result + (lessons != null ? lessons.hashCode() : 0);
         return result;

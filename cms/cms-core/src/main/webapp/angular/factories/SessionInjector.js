@@ -3,14 +3,9 @@ function SessionInjector($rootScope, sessionService) {
         request: function (config) {
             if (!sessionService.isAnonymous()) {
                 config.headers['x-session-token'] = sessionService.getAccessToken();
+                config.headers['x-session-id'] = sessionService.getUserId();
             }
             return config;
-        },
-        response: function (response, headers) {
-            if (response.status === 204) {
-                $rootScope.$broadcast('app.changeLocation', {location: response.headers('location')});
-            }
-            return response;
         },
         responseError: function (response) {
             if (response.status === 401) {

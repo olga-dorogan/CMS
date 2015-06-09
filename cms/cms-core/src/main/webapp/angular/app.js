@@ -9,7 +9,8 @@ var myApp = angular.module('myApp', [
     'myApp.teacher',
     'myApp.student'
 ]);
-myApp.service('sessionService', ['$window', SessionService]);
+myApp.service('sessionService', ['$window', '$rootScope', SessionService]);
+myApp.service('AuthService', ['Restangular','$http', AuthService]);
 myApp.factory('sessionInjector', ['$rootScope', 'sessionService', SessionInjector]);
 
 myApp.config(function(RestangularProvider) {
@@ -23,8 +24,8 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider',
         $httpProvider.interceptors.push('sessionInjector');
     }]);
 
-myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope',
-    function (GAuth, GApi, GData, $state, $rootScope) {
+myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http','AuthService',
+    function (GAuth, GApi, GData, $state, $rootScope, $window, $http,AuthService) {
 
         var CLIENT = '895405022160-pi238d0pi57fsmsov8khtpr4415hj5j5.apps.googleusercontent.com';
         var BASE;
@@ -37,21 +38,38 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope',
         GAuth.setClient(CLIENT);
         GAuth.setScope('https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar.readonly');
 
-        GAuth.checkAuth().then(
-            function () {
-                $rootScope.role="teacher";
-                //Если пользовательно не новый логиним его и отправляем куда нужно
-            },
-            function () {
-                //Если пользовательно не залогинен отправляем его на главную страницу
-                $state.go('home');
-            }
-        );
+        // FIXME: (olga) возможно, этот код не нужен, т.к. при первом входе мы запоминаем пользователя и дальше не зависим от google
+        //GAuth.checkAuth().then(
+        //    function () {
+        //        //$rootScope.role="teacher";
+        //        console.log($rootScope.role);
+        //        //Если пользовательно не новый логиним его и отправляем куда нужно
+        //    },
+        //    function () {
+        //        //Если пользовательно не залогинен отправляем его на главную страницу
+        //        $state.go('home');
+        //    }
+        //);
 
-        //Заглушка для определения роли
+
 
         $rootScope.doLogin = function () {
             GAuth.login().then(function () {
+                //FIXME: (olga) add http PUT request to get user info: role and id
+                //FIXME:  (Andrey) Добавил POST запрос на сервер для получения
+                //FIXME: Раскомментировать для авторизации
+                //AuthService.goAuth(GData.getUser()).then(function(data) {
+                //    $window.localStorage['id']=data.id;
+                //    $window.localStorage['id']=data.personRole['name'];
+                //});
+                //Заглушка для определения роли
+                $window.localStorage['role'] = "teacher";
+                $window.localStorage['id'] = 1;
+                // тест для проверки установились ли заголовки
+                $http.get("http://localhost:8080/cms-core-1.0/resources/example");
+                $http.get("http://localhost:8080/cms-core-1.0/resources/example/teacher/1");
+                $http.get("http://localhost:8080/cms-core-1.0/resources/example/student/1");
+
                 console.log('doLogin');
             }, function () {
                 $state.go("home");
@@ -71,11 +89,5 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope',
         $rootScope.$on('app.unauthorized', function () {
             $state.go("home");
             console.log('attempt to get secure data');
-        });
-        // обработчик оповещения об изменении страницы пользователя в соответствии с его ролью
-        $rootScope.$on('app.changeLocation', function (event, args) {
-            //$state.go(args.location);
-            $rootScope.role=args.location;
-            console.log("location change to " + args.location);
         });
     }]);

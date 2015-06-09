@@ -25,7 +25,7 @@ public interface DriveService {
      * can't remove it and has only permissions to edit the files.
      * @param personVO new owner of the files
      */
-    void setOwnerAccessToFiles(@NotNull PersonVO personVO);
+    void changeRootFolderOwner(@NotNull PersonVO personVO);
 
     void getFilesList();
 

@@ -1,6 +1,10 @@
 package org.javatraining.ws.services;
 
 import flexjson.JSONException;
+import org.javatraining.auth.Auth;
+import org.javatraining.config.AuthRole;
+import org.javatraining.config.Config;
+import org.javatraining.model.PersonRoleVO;
 import org.javatraining.model.PersonVO;
 
 import javax.ejb.Stateless;
@@ -26,6 +30,7 @@ public class PersonService<T> extends AbstractService<PersonVO> {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Auth(roles = {AuthRole.TEACHER})
     public Response getPersonList() {
         List<PersonVO> persons = new ArrayList<>();
         //TODO get list of persons here
@@ -34,51 +39,100 @@ public class PersonService<T> extends AbstractService<PersonVO> {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("{client_id}")
-    public Response getPerson(@PathParam("client_id") long clientId) {
-        PersonVO person = new PersonVO();
-        person.setId(clientId);
-        //TODO get person from DB
-        Response r;
-        if (person == null)
-            r = Response.noContent().build();
-        else
-            r = Response.ok(serialize(person)).build();
-        return r;
+    @Path("{person_id}")
+    @Auth(roles = {AuthRole.TEACHER, AuthRole.STUDENT})
+    public Response getPerson(@HeaderParam(Config.REQUEST_HEADER_ID) long clientId, @PathParam("person_id") long personId) {
+        Response.ResponseBuilder r = null;
+        PersonVO client = new PersonVO();
+        client.setId(clientId);
+        //TODO get client
+
+        if (client.getPersonRole() != new PersonRoleVO()) //FIXME if person role not equals teacher
+            if (client.getId() != personId)
+                r = Response.status(Response.Status.FORBIDDEN);
+
+        if (r == null) {
+            PersonVO person = null;
+            //TODO get person from DB
+
+            if (person == null)
+                r = Response.noContent();
+            else
+                r = Response.ok(serialize(person));
+        }
+
+        return r.build();
     }
 
-    @PUT
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createPerson(@Context UriInfo uriInfo, @QueryParam("person_json") String personJson) {
-        Response r;
+        Response.ResponseBuilder r;
         try {
             PersonVO person = deserialize(personJson);
             //TODO save entity here
             String personUri = uriInfo.getRequestUri().toString() + "/" + person.getId();
-            r = Response.created(new URI(personUri)).build();
+            r = Response.created(new URI(personUri));
         } catch (JSONException e) {
             System.out.println(e);
-            r = Response.status(Response.Status.NOT_ACCEPTABLE).build();
+            r = Response.status(Response.Status.NOT_ACCEPTABLE);
         } catch (URISyntaxException e) {
             //this shouldn't happen
-            r = Response.serverError().build();
+            r = Response.serverError();
         }
 
-        return r;
+        return r.build();
+    }
+
+    @PUT
+    @Path("{person_id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Auth(roles = {AuthRole.TEACHER, AuthRole.STUDENT})
+    public Response updatePerson(@HeaderParam(Config.REQUEST_HEADER_ID) long clientId, @PathParam("person_id") long personId, @QueryParam("person_json") String personJson) {
+        Response.ResponseBuilder r = null;
+        PersonVO client = new PersonVO();
+        //TODO get client
+
+        if (client.getPersonRole() != new PersonRoleVO()) //FIXME if person role not equals teacher
+            if (client.getId() != personId)
+                r = Response.status(Response.Status.FORBIDDEN);
+
+        if (r == null) {
+            PersonVO person = null;
+            //TODO save entity here
+
+            if (person == null)
+                r = Response.noContent();
+            else
+                r = Response.ok(serialize(person));
+        }
+
+        return r.build();
     }
 
     @DELETE
-    @Path("{client_id}")
-    public Response deletePerson(@PathParam("client_id") long clientId) {
-        Response r;
-        PersonVO person = new PersonVO();
-        person.setId(clientId);
-        try {
-            //TODO delete entity here
-            r = Response.ok().build();
-        } catch (Exception e) {
-            r = Response.noContent().build();
+    @Path("{person_id}")
+    @Auth(roles = {AuthRole.TEACHER, AuthRole.STUDENT})
+    public Response deletePerson(@HeaderParam(Config.REQUEST_HEADER_ID) long clientId, @PathParam("person_id") long personId) {
+        Response.ResponseBuilder r = null;
+        PersonVO client = new PersonVO();
+        //TODO get client
+
+        if (client.getPersonRole() != new PersonRoleVO()) //FIXME if person role not equals teacher
+            if (client.getId() != personId)
+                r = Response.status(Response.Status.FORBIDDEN);
+
+        if (r == null) {
+            PersonVO person = null;
+
+            try {
+                //TODO delete entity here
+                r = Response.ok();
+            } catch (Exception e) {
+                r = Response.noContent();
+            }
         }
-        return r;
+
+        return r.build();
     }
 }
