@@ -69,7 +69,7 @@ public class GitLabLowLevelApi implements GitLabAPI {
                     put("sudo", "root");
                 }
             };
-            HttpGet get = new HttpGet(getApiUrl(pairToTail, "users").toString());//FIXME change users to MethodData enum value
+            HttpGet get = new HttpGet(getApiUrl(pairToTail, MethodData.FOR_USERS.value).toString());
             HttpResponse response = httpClient.execute(get);
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
                 JSONDeserializer<Collection<GitLabUserEntity>> deserializer = new JSONDeserializer<>();
@@ -94,7 +94,7 @@ public class GitLabLowLevelApi implements GitLabAPI {
                     put("sudo", "root");
                 }
             };
-            HttpGet get = new HttpGet(getApiUrl(pairToTail, "users").toString());//FIXME change users to MethodData enum value
+            HttpGet get = new HttpGet(getApiUrl(pairToTail, MethodData.FOR_USERS.value).toString());
             HttpResponse response = httpClient.execute(get);
 
             //FIXME vot tut null ne yasno
@@ -122,7 +122,7 @@ public class GitLabLowLevelApi implements GitLabAPI {
                     put("sudo", "root");
                 }
             };
-            HttpPost post = new HttpPost(getApiUrl(pairToTail, "users").toString());
+            HttpPost post = new HttpPost(getApiUrl(pairToTail, MethodData.FOR_USERS.value).toString());
             JSONSerializer serializer = new JSONSerializer();
             StringEntity sEntity = new StringEntity(serializer.serialize(userProperties), ContentType.APPLICATION_JSON);
             post.setEntity(sEntity);
@@ -151,7 +151,7 @@ public class GitLabLowLevelApi implements GitLabAPI {
                     + userProperties.getUsername() + " not found in system");
             if (!gitLabUserEntity.getEmail().equals(userProperties.getEmail()))
                 throw new UserRequiredPropertiesIsNotComparable();
-            HttpPut put = new HttpPut(getApiUrl(pairToTail, "users").toString());
+            HttpPut put = new HttpPut(getApiUrl(pairToTail, MethodData.FOR_USERS.value).toString());
             JSONSerializer serializer = new JSONSerializer();
             StringEntity sEntity = new StringEntity(serializer.serialize(userProperties), ContentType.APPLICATION_JSON);
             put.setEntity(sEntity);
@@ -175,7 +175,7 @@ public class GitLabLowLevelApi implements GitLabAPI {
                 }
             };
             GitLabUserEntity user = getUserByUserName(userName);
-            HttpDelete put = new HttpDelete(getApiUrl(pairToTail, ("users/" + user.getId())).toString());
+            HttpDelete put = new HttpDelete(getApiUrl(pairToTail, (MethodData.FOR_USERS.value + "/" + user.getId())).toString());
             httpClient.execute(put);
         } catch (UserNotFoundException | MalformedURLException | ClientProtocolException e) {
             e.printStackTrace();
@@ -220,7 +220,7 @@ public class GitLabLowLevelApi implements GitLabAPI {
         };
         try {
             getUserByUserName(user.getUsername());//except userNotFoundExc, if not exist
-            HttpPost post = new HttpPost(getApiUrl(pairToTail, "projects/user/" + user.getId()).toString());
+            HttpPost post = new HttpPost(getApiUrl(pairToTail, MethodData.FOR_PROJECTS.value + "/user/" + user.getId()).toString());
             StringEntity stringEntity = new StringEntity(
                     new JSONSerializer().serialize(projectProperties),
                     ContentType.APPLICATION_JSON);
@@ -246,7 +246,7 @@ public class GitLabLowLevelApi implements GitLabAPI {
                     put("sudo", "root");
                 }
             };
-            HttpGet get = new HttpGet(getApiUrl(pairToTail, "projects/all").toString());
+            HttpGet get = new HttpGet(getApiUrl(pairToTail, MethodData.FOR_PROJECTS.value + "/all").toString());
             HttpResponse response = httpClient.execute(get);
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
                 JSONDeserializer<Collection<GitLabProjectEntity>> deserializer = new JSONDeserializer<>();
@@ -271,7 +271,7 @@ public class GitLabLowLevelApi implements GitLabAPI {
                     put("sudo", "root");
                 }
             };
-            HttpPost post = new HttpPost(getApiUrl(pairToTail, "projects/" + project.getId() + "/members").toString());
+            HttpPost post = new HttpPost(getApiUrl(pairToTail, MethodData.FOR_PROJECTS.value + "/" + project.getId() + "/members").toString());
             StringEntity entity = new StringEntity(new JSONSerializer().serialize(projectMemberToAdd));
 
             HttpResponse response = httpClient.execute(post);
@@ -294,7 +294,7 @@ public class GitLabLowLevelApi implements GitLabAPI {
                     put("sudo", "root");
                 }
             };
-            HttpDelete delete = new HttpDelete(getApiUrl(pairToTail, "projects/" + project.getId() + "/members/" + projectMemberToRemove.getId()).toString());
+            HttpDelete delete = new HttpDelete(getApiUrl(pairToTail, MethodData.FOR_PROJECTS.value + "/" + project.getId() + "/members/" + projectMemberToRemove.getId()).toString());
             HttpResponse response = httpClient.execute(delete);
         } catch (UserNotFoundException | MalformedURLException | ClientProtocolException e) {
             e.printStackTrace();

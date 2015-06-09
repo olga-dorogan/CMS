@@ -6,5 +6,14 @@ package org.javatraining.integration.gitlab.api.impl;
  * For more information you should send mail to codedealerb@gmail.com
  */
 public enum MethodData {
-    GET_USER()
+    FOR_USERS("users"),
+    FOR_PROJECTS("projects");
+
+
+    public final String value;
+
+    MethodData(String value) {
+        this.value = value;
+    }
+
 }
