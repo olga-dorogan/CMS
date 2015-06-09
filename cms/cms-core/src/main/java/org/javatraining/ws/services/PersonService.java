@@ -41,9 +41,10 @@ public class PersonService<T> extends AbstractService<PersonVO> {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{person_id}")
     @Auth(roles = {AuthRole.TEACHER, AuthRole.STUDENT})
-    public Response getPerson(@HeaderParam(Config.REQUEST_HEADER_ID) long userId, @PathParam("person_id") long personId) {
+    public Response getPerson(@HeaderParam(Config.REQUEST_HEADER_ID) long clientId, @PathParam("person_id") long personId) {
         Response.ResponseBuilder r = null;
         PersonVO client = new PersonVO();
+        client.setId(clientId);
         //TODO get client
 
         if (client.getPersonRole() != new PersonRoleVO()) //FIXME if person role not equals teacher
@@ -87,7 +88,7 @@ public class PersonService<T> extends AbstractService<PersonVO> {
     @Path("{person_id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER, AuthRole.STUDENT})
-    public Response updatePerson(@HeaderParam(Config.REQUEST_HEADER_ID) long userId, @PathParam("person_id") long personId, @QueryParam("person_json") String personJson) {
+    public Response updatePerson(@HeaderParam(Config.REQUEST_HEADER_ID) long clientId, @PathParam("person_id") long personId, @QueryParam("person_json") String personJson) {
         Response.ResponseBuilder r = null;
         PersonVO client = new PersonVO();
         //TODO get client
@@ -112,7 +113,7 @@ public class PersonService<T> extends AbstractService<PersonVO> {
     @DELETE
     @Path("{person_id}")
     @Auth(roles = {AuthRole.TEACHER, AuthRole.STUDENT})
-    public Response deletePerson(@HeaderParam(Config.REQUEST_HEADER_ID) long userId, @PathParam("person_id") long personId) {
+    public Response deletePerson(@HeaderParam(Config.REQUEST_HEADER_ID) long clientId, @PathParam("person_id") long personId) {
         Response.ResponseBuilder r = null;
         PersonVO client = new PersonVO();
         //TODO get client
