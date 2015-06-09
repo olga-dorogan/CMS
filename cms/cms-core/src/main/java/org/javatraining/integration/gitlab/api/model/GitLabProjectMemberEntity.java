@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by sergey on 05.06.15 at 20:10.
  * For more information you should send mail to codedealerb@gmail.com
  */
-public class GitLabProjectMemberEntity extends GitLabUserEntity implements Serializable {
+public class GitLabProjectMemberEntity extends GitLabUserEntity {
     @JsonProperty("access_level")
     private int accessLevel;
 

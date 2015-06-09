@@ -14,7 +14,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.javatraining.integration.gitlab.api.exception.UserNotFoundException;
 import org.javatraining.integration.gitlab.api.exception.UserRequiredPropertiesIsNotComparable;
-import org.javatraining.integration.gitlab.api.interfaces.GitLabAPI;
+import org.javatraining.integration.gitlab.api.ifaces.GitLabAPI;
 import org.javatraining.integration.gitlab.api.model.GitLabProjectEntity;
 import org.javatraining.integration.gitlab.api.model.GitLabProjectMemberEntity;
 import org.javatraining.integration.gitlab.api.model.GitLabSessionEntity;
@@ -210,17 +210,96 @@ public class GitLabLowLevelApi implements GitLabAPI {
     }
 
     @Override
-    public boolean createNewProjectForUser(GitLabUserEntity user) throws UserNotFoundException {
+    public boolean createNewProjectForUser(GitLabUserEntity user, GitLabProjectEntity projectProperties) throws UserNotFoundException {
+        GitLabSessionEntity session = getGitlabSessionForSpecifiedUser(rootLogin, rootEmail, rootPass);
+        Map<String, String> pairToTail = new HashMap<String, String>() {
+            {
+                put("private_token", session.getPrivateToken());
+                put("sudo", "root");
+            }
+        };
+        try {
+            getUserByUserName(user.getUsername());//except userNotFoundExc, if not exist
+            HttpPost post = new HttpPost(getApiUrl(pairToTail, "projects/user/" + user.getId()).toString());
+            StringEntity stringEntity = new StringEntity(
+                    new JSONSerializer().serialize(projectProperties),
+                    ContentType.APPLICATION_JSON);
+            post.setEntity(stringEntity);
+
+            HttpResponse response = httpClient.execute(post);
+            return response.getFirstHeader("null").getValue().contains("201");
+        } catch (MalformedURLException | ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
     @Override
+    public Collection<GitLabProjectEntity> getAllProjects() {
+        try {
+            GitLabSessionEntity session = getGitlabSessionForSpecifiedUser(rootLogin, rootEmail, rootPass);
+            Map<String, String> pairToTail = new HashMap<String, String>() {
+                {
+                    put("private_token", session.getPrivateToken());
+                    put("sudo", "root");
+                }
+            };
+            HttpGet get = new HttpGet(getApiUrl(pairToTail, "projects/all").toString());
+            HttpResponse response = httpClient.execute(get);
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
+                JSONDeserializer<Collection<GitLabProjectEntity>> deserializer = new JSONDeserializer<>();
+                //MB NEED ADD TRANSFORMER FOR DATE
+                return deserializer.deserialize(reader);
+            }
+        } catch (UserNotFoundException | MalformedURLException | ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public boolean addProjectTeamMember(GitLabProjectMemberEntity projectMemberToAdd, GitLabProjectEntity project) throws UserNotFoundException {
+        try {
+            GitLabSessionEntity session = getGitlabSessionForSpecifiedUser(rootLogin, rootEmail, rootPass);
+            Map<String, String> pairToTail = new HashMap<String, String>() {
+                {
+                    put("private_token", session.getPrivateToken());
+                    put("sudo", "root");
+                }
+            };
+            HttpPost post = new HttpPost(getApiUrl(pairToTail, "projects/" + project.getId() + "/members").toString());
+            StringEntity entity = new StringEntity(new JSONSerializer().serialize(projectMemberToAdd));
+
+            HttpResponse response = httpClient.execute(post);
+            return response.getFirstHeader("null").getValue().contains("201");
+        } catch (UserNotFoundException | MalformedURLException | ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
     @Override
     public void removeProjectTeamMember(GitLabProjectEntity project, GitLabProjectMemberEntity projectMemberToRemove) throws UserNotFoundException {
-
+        try {
+            GitLabSessionEntity session = getGitlabSessionForSpecifiedUser(rootLogin, rootEmail, rootPass);
+            Map<String, String> pairToTail = new HashMap<String, String>() {
+                {
+                    put("private_token", session.getPrivateToken());
+                    put("sudo", "root");
+                }
+            };
+            HttpDelete delete = new HttpDelete(getApiUrl(pairToTail, "projects/" + project.getId() + "/members/" + projectMemberToRemove.getId()).toString());
+            HttpResponse response = httpClient.execute(delete);
+        } catch (UserNotFoundException | MalformedURLException | ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

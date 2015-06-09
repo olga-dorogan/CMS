@@ -1,4 +1,4 @@
-package org.javatraining.integration.gitlab.api.interfaces;
+package org.javatraining.integration.gitlab.api.ifaces;
 
 import org.javatraining.integration.gitlab.api.exception.UserNotFoundException;
 import org.javatraining.integration.gitlab.api.exception.UserRequiredPropertiesIsNotComparable;
@@ -58,7 +58,10 @@ public interface GitLabAPI {
     //post /projects/user/:user_id
     //http://localhost/api/v3/projects/user/2?private_token=xTApBC_xvpkKEw7yHjDV&sudo=root
     //return 404 or 201 created with project json properties
-    public boolean createNewProjectForUser(GitLabUserEntity user) throws UserNotFoundException;
+    public boolean createNewProjectForUser(GitLabUserEntity user, GitLabProjectEntity projectProperties) throws UserNotFoundException;
+
+    public Collection<GitLabProjectEntity> getAllProjects();
+
 
     //add specified user to project membership
     //post /projects/:proj_id/members

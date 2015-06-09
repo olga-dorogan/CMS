@@ -12,37 +12,37 @@ import java.io.Serializable;
  */
 //FIXME ZAMENA JSON PROPERTY NA ANALOGI
 public class GitLabUserEntity implements Serializable{
-    private Integer id;
-    private String email;//required
-    private String password;//required
-    private String username;//required
-    private String name;
-    private String skype;
-    private String linkedIn;
-    private String twitter;
+    protected Integer id;
+    protected String email;//required
+    protected String password;//required
+    protected String username;//required
+    protected String name;
+    protected String skype;
+    protected String linkedIn;
+    protected String twitter;
     @JSON(name = "website_url")
-    private String websiteUrl;
+    protected String websiteUrl;
     @JSON(name = "project_limit")
-    private int projectsLimit;
+    protected int projectsLimit;
     @JSON(name = "extern_uid")
-    private String externUID;
-    private String provider;
-    private String bio;
-    private boolean admin;
+    protected String externUID;
+    protected String provider;
+    protected String bio;
+    protected boolean admin;
     @JSON(name = "can_create_group")
-    private boolean canCreateGroup;
-    private boolean confirm;
-    private boolean state;
+    protected boolean canCreateGroup;
+    protected boolean confirm;
+    protected boolean state;
     @JSON(name = "theme_id")
-    private int themeId;
+    protected int themeId;
     @JSON(name = "current_sign_in_at")
-    private String currentSignInAt;
+    protected String currentSignInAt;
     @JSON(name = "can_create_project")
-    private boolean canCreateProject;
+    protected boolean canCreateProject;
     @JSON(name = "color_scheme_id")
-    private int colorSchemeId;
+    protected int colorSchemeId;
     @JSON(name = "avatar_url")
-    private String avatarUrl;
+    protected String avatarUrl;
 
     public GitLabUserEntity() {
 

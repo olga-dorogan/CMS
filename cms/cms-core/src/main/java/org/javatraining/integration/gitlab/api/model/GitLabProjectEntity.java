@@ -21,7 +21,7 @@ public class GitLabProjectEntity implements Serializable{
     private String description;
     @JSON(name = "default_branch")
     private String defaultBranch;
-    private String owner;
+    private GitLabUserEntity owner;
     private boolean publicProject;
     private String path;
 
@@ -82,11 +82,11 @@ public class GitLabProjectEntity implements Serializable{
         this.visibilityLevel = visibilityLevel;
     }
 
-    public String getOwner() {
+    public GitLabUserEntity getOwner() {
         return owner;
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(GitLabUserEntity owner) {
         this.owner = owner;
     }
 
