@@ -1,7 +1,8 @@
 package org.javatraining.integration.gitlab.api.model;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import flexjson.JSON;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Date;
  * Created by sergey on 05.06.15 at 19:19.
  * For more information you should send mail to codedealerb@gmail.com
  */
-public class GitLabProject {
+public class GitLabProjectEntity implements Serializable{
     public static final int VISIBILITY_PRIVATE_LEVEL = 0;//Project access must be granted explicitly for each user.
     public static final int VISIBILITY_INTERNAL_LEVEL = 10;//The project can be cloned by any logged in user.
     public static final int VISIBILITY_PUBLIC_LEVEL = 20;//The project can be cloned without any authentication.
@@ -18,26 +19,26 @@ public class GitLabProject {
     private Integer id;
     private String name;
     private String description;
-    @JsonProperty("default_branch")
+    @JSON(name = "default_branch")
     private String defaultBranch;
-    private GitLabUser owner;
+    private String owner;
     private boolean publicProject;
     private String path;
 
-    @JsonProperty("visibility_level")
+    @JSON(name = "visibility_level")
     private Integer visibilityLevel;
-    @JsonProperty("issues_enabled")
+    @JSON(name = "issues_enabled")
     private boolean issuesEnabled;
-    @JsonProperty("merge_requests_enabled")
+    @JSON(name = "merge_requests_enabled")
     private boolean mergeRequestsEnabled;
-    @JsonProperty("snippets_enabled")
+    @JSON(name = "snippets_enabled")
     private boolean snippetsEnabled;
-    @JsonProperty("wiki_enabled")
+    @JSON(name = "wiki_enabled")
     private boolean wikiEnabled;
-    @JsonProperty("last_activity_at")
+    @JSON(name = "last_activity_at")
     private Date lastActivityAt;
 
-    public GitLabProject() {
+    public GitLabProjectEntity() {
 
     }
 
@@ -81,11 +82,11 @@ public class GitLabProject {
         this.visibilityLevel = visibilityLevel;
     }
 
-    public GitLabUser getOwner() {
+    public String getOwner() {
         return owner;
     }
 
-    public void setOwner(GitLabUser owner) {
+    public void setOwner(String owner) {
         this.owner = owner;
     }
 

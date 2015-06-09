@@ -2,12 +2,14 @@ package org.javatraining.integration.gitlab.api.model;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import java.io.Serializable;
+
 /**
  * The project name is cms.
  * Created by sergey on 05.06.15 at 20:10.
  * For more information you should send mail to codedealerb@gmail.com
  */
-public class GitLabProjectMember extends GitLabUser {
+public class GitLabProjectMemberEntity extends GitLabUserEntity implements Serializable {
     @JsonProperty("access_level")
     private int accessLevel;
 

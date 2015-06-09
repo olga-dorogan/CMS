@@ -20,14 +20,12 @@ public enum GitLabAccessLevel {
         this.accessValue = accessValue;
     }
 
-    // http://fasterxml.github.io/jackson-annotations/javadoc/2.2.0/index.html?com/fasterxml/jackson/annotation/JsonCreator.html
-//    @JsonCreator
-//    public static GitLabAccessLevel fromAccessValue(final int accessValue) throws IllegalArgumentException {
-//        for (final GitLabAccessLevel gitlabAccessLevel : GitLabAccessLevel.values()) {
-//            if (gitlabAccessLevel.accessValue == accessValue) {
-//                return gitlabAccessLevel;
-//            }
-//        }
-//        throw new IllegalArgumentException("No GitLab Access Level enum constant with access value: " + accessValue);
-//    }
+    public static GitLabAccessLevel fromAccessValue(final int accessValue) throws IllegalArgumentException {
+        for (final GitLabAccessLevel gitlabAccessLevel : GitLabAccessLevel.values()) {
+            if (gitlabAccessLevel.accessValue == accessValue) {
+                return gitlabAccessLevel;
+            }
+        }
+        throw new IllegalArgumentException("No GitLab Access Level enum constant with access value: " + accessValue);
+    }
 }
