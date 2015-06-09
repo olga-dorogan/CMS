@@ -16,6 +16,9 @@
     <properties>
         <datasource>java:/MySqlDS</datasource>
         <hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
+        <sql-load-script>META-INF/sql/data-mysql.sql</sql-load-script>
+        <persistence-schema-generation>drop-and-create</persistence-schema-generation>
+
     </properties>
     <profiles>
         <profile>
@@ -26,6 +29,8 @@
             <properties>
                 <datasource>java:global/CMS/DefaultDS</datasource>
                 <hibernate.dialect>org.hibernate.dialect.H2Dialect</hibernate.dialect>
+                <sql-load-script>META-INF/sql/data-h2.sql</sql-load-script>
+                <persistence-schema-generation>drop-and-create</persistence-schema-generation>
             </properties>
         </profile>
         <profile>
@@ -201,6 +206,7 @@
                     <nonFilteredFileExtensions>
                         <nonFilteredFileExtension>p12</nonFilteredFileExtension>
                         <nonFilteredFileExtension>types</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>sql</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
                 </configuration>
             </plugin>
