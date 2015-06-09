@@ -37,26 +37,26 @@
             <id>full-stack</id>
             <build>
                 <plugins>
-                    <!--<plugin>-->
-                        <!--<groupId>org.codehaus.mojo</groupId>-->
-                        <!--<artifactId>exec-maven-plugin</artifactId>-->
-                        <!--<executions>-->
-                            <!--<execution>-->
-                                <!--<id>exec-npm-install</id>-->
-                                <!--<phase>generate-sources</phase>-->
-                                <!--<configuration>-->
-                                    <!--<workingDirectory>${project.basedir}/src/main</workingDirectory>-->
-                                    <!--<executable>npm</executable>-->
-                                    <!--<arguments>-->
-                                        <!--<argument>install</argument>-->
-                                    <!--</arguments>-->
-                                <!--</configuration>-->
-                                <!--<goals>-->
-                                    <!--<goal>exec</goal>-->
-                                <!--</goals>-->
-                            <!--</execution>-->
-                        <!--</executions>-->
-                    <!--</plugin>-->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>exec-npm-install</id>
+                                <phase>generate-sources</phase>
+                                <configuration>
+                                    <workingDirectory>${project.basedir}/src/main</workingDirectory>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>install</argument>
+                                    </arguments>
+                                </configuration>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                 </plugins>
             </build>
             <!--git-->
@@ -75,11 +75,11 @@
             <artifactId>google-api-services-calendar</artifactId>
             <version>${google.api.calendar.version}</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.google.apis</groupId>-->
-            <!--<artifactId>google-api-services-drive</artifactId>-->
-            <!--<version>${google.api.drive.version}</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-drive</artifactId>
+            <version>${google.api.drive.version}</version>
+        </dependency>
         <!-- -->
         <dependency>
             <groupId>net.sf.flexjson</groupId>
@@ -127,27 +127,27 @@
             <!--<scope>test</scope>-->
         <!--</dependency>-->
 
-        <!--&lt;!&ndash;Logging dependencies&ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.slf4j</groupId>-->
-            <!--<artifactId>slf4j-api</artifactId>-->
-            <!--<version>${slf4j.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.apache.logging.log4j</groupId>-->
-            <!--<artifactId>log4j-slf4j-impl</artifactId>-->
-            <!--<version>${log4j.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.apache.logging.log4j</groupId>-->
-            <!--<artifactId>log4j-api</artifactId>-->
-            <!--<version>${log4j.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.apache.logging.log4j</groupId>-->
-            <!--<artifactId>log4j-core</artifactId>-->
-            <!--<version>${log4j.version}</version>-->
-        <!--</dependency>-->
+        <!--Logging dependencies-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
         <!--gitlab api dep-cs-->
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
@@ -179,24 +179,24 @@
         </dependency>
         <!-- -->
         <!-- h2 jdbc dependencies for ignoring mysql purpose-->
-        <!--<dependency>-->
-            <!--<groupId>com.h2database</groupId>-->
-            <!--<artifactId>h2</artifactId>-->
-            <!--<version>${h2.database.version}</version>-->
-        <!--</dependency>-->
-        <!--&lt;!&ndash; &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>com.puppycrawl.tools</groupId>-->
-            <!--<artifactId>checkstyle</artifactId>-->
-            <!--<version>6.7</version>-->
-        <!--</dependency>-->
-        <!--&lt;!&ndash; REST dependency&ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.jboss.resteasy</groupId>-->
-            <!--<artifactId>resteasy-multipart-provider</artifactId>-->
-            <!--<version>${resteasy.multipart.version}</version>-->
-            <!--<scope>provided</scope>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.database.version}</version>
+        </dependency>
+        <!-- -->
+        <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>6.7</version>
+        </dependency>
+        <!-- REST dependency-->
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-multipart-provider</artifactId>
+            <version>${resteasy.multipart.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
@@ -225,7 +225,6 @@
             </resource>
         </resources>
         <plugins>
-<<<<<<< HEAD
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -238,19 +237,6 @@
                     </nonFilteredFileExtensions>
                 </configuration>
             </plugin>
-=======
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-resources-plugin</artifactId>-->
-                <!--<version>${plugin.resources.version}</version>-->
-                <!--<configuration>-->
-                    <!--<nonFilteredFileExtensions>-->
-                        <!--<nonFilteredFileExtension>p12</nonFilteredFileExtension>-->
-                        <!--<nonFilteredFileExtension>types</nonFilteredFileExtension>-->
-                    <!--</nonFilteredFileExtensions>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
->>>>>>> 22a714cc15c43986281cf009c8a64e2bfcbf788c
         </plugins>
     </build>
 

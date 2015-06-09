@@ -52,7 +52,11 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public PersonVO getByEmail(@NotNull String email) {
-        return new PersonVO(personDAO.getByEmail(email));
+        PersonEntity personEntity = personDAO.getByEmail(email);
+        if (personEntity == null) {
+            return null;
+        }
+        return new PersonVO(personEntity);
     }
 
     @Override

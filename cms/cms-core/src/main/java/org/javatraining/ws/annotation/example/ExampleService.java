@@ -10,10 +10,8 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 /**
  * Created by olga on 05.06.15.
@@ -26,9 +24,12 @@ public class ExampleService {
     @POST
     @Path("/person")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createPerson(PersonVO person, @Context UriInfo uriInfo) {
-        person = personService.save(person);
-        return Response.ok(person, MediaType.APPLICATION_JSON_TYPE).build();
+    public Response createPerson(PersonVO person) {
+        PersonVO existingPerson = personService.getByEmail(person.getEmail());
+        if (existingPerson == null) {
+            existingPerson = personService.save(person);
+        }
+        return Response.ok(existingPerson, MediaType.APPLICATION_JSON_TYPE).build();
     }
 
     @GET
