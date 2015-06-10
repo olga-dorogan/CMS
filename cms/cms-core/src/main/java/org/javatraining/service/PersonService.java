@@ -1,8 +1,8 @@
 package org.javatraining.service;
 
+import org.javatraining.entity.PersonRole;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.MarkVO;
-import org.javatraining.model.PersonRoleVO;
 import org.javatraining.model.PersonVO;
 
 import javax.annotation.Nullable;
@@ -18,7 +18,7 @@ public interface PersonService {
 
     //     Person methods
 
-    PersonVO save(@NotNull @Valid PersonVO personVO);
+    PersonVO saveStudent(@NotNull @Valid PersonVO personVO);
 
     PersonVO update(@NotNull @Valid PersonVO personVO);
 
@@ -34,7 +34,7 @@ public interface PersonService {
     //    Person --- PersonRole methods
 
     @Valid
-    List<PersonVO> getPersonsByRole(@NotNull @Valid PersonRoleVO role);
+    List<PersonVO> getPersonsByRole(@NotNull @Valid PersonRole role);
 
     //     Person --- Course methods
 

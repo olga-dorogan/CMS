@@ -19,8 +19,8 @@ public class CourseVO implements Serializable {
     @NotNull
     private String name;
     private String description;
-    private Date startdate;
-    private Date enddate;
+    private Date startDate;
+    private Date endDate;
     // TODO: are the fields need to be excluded from json?
     @JSON(include = false)
     private Set<PersonVO> persons;
@@ -36,8 +36,8 @@ public class CourseVO implements Serializable {
         this.id = courseEntity.getId();
         this.name = courseEntity.getName();
         this.description = courseEntity.getDescription();
-        this.startdate = courseEntity.getStartdate();
-        this.enddate = courseEntity.getEnddate();
+        this.startDate = courseEntity.getStartdate();
+        this.endDate = courseEntity.getEnddate();
         this.persons = PersonVO.convertEntitiesToVOs(courseEntity.getPerson());
         //TODO: set news and lessons fields
     }
@@ -51,11 +51,11 @@ public class CourseVO implements Serializable {
         if (courseVO.getDescription() != null) {
             courseEntity.setDescription(courseVO.getDescription());
         }
-        if (courseVO.getStartdate() != null) {
-            courseEntity.setStartdate(new java.sql.Date(courseVO.getStartdate().getTime()));
+        if (courseVO.getStartDate() != null) {
+            courseEntity.setStartdate(new java.sql.Date(courseVO.getStartDate().getTime()));
         }
-        if (courseVO.getEnddate() != null) {
-            courseEntity.setEnddate(new java.sql.Date(courseVO.getEnddate().getTime()));
+        if (courseVO.getEndDate() != null) {
+            courseEntity.setEnddate(new java.sql.Date(courseVO.getEndDate().getTime()));
         }
         if (courseVO.getPersons() != null) {
             courseEntity.setPerson(PersonVO.convertVOsToEntities(courseVO.getPersons()));
@@ -64,6 +64,7 @@ public class CourseVO implements Serializable {
         return courseEntity;
     }
 
+    //TODO move to separate instances
     public static Set<CourseVO> convertEntitiesToVOs(@NotNull Collection<CourseEntity> courseEntities) {
         Set<CourseVO> courses = new HashSet<>(courseEntities.size());
         for (CourseEntity courseEntity : courseEntities) {
@@ -79,6 +80,7 @@ public class CourseVO implements Serializable {
         }
         return courseEntities;
     }
+
     public Set<LessonVO> getLessons() {
         return lessons;
     }
@@ -119,20 +121,20 @@ public class CourseVO implements Serializable {
         this.description = description;
     }
 
-    public Date getStartdate() {
-        return startdate;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setStartdate(Date startdate) {
-        this.startdate = startdate;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public Date getEnddate() {
-        return enddate;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setEnddate(Date enddate) {
-        this.enddate = enddate;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
 
@@ -152,13 +154,13 @@ public class CourseVO implements Serializable {
         CourseVO that = (CourseVO) o;
 
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (enddate != null ? !enddate.equals(that.enddate) : that.enddate != null) return false;
+        if (endDate != null ? !endDate.equals(that.endDate) : that.endDate != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (lessons != null ? !lessons.equals(that.lessons) : that.lessons != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (news != null ? !news.equals(that.news) : that.news != null) return false;
         if (persons != null ? !persons.equals(that.persons) : that.persons != null) return false;
-        if (startdate != null ? !startdate.equals(that.startdate) : that.startdate != null) return false;
+        if (startDate != null ? !startDate.equals(that.startDate) : that.startDate != null) return false;
 
         return true;
     }
@@ -168,8 +170,8 @@ public class CourseVO implements Serializable {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (startdate != null ? startdate.hashCode() : 0);
-        result = 31 * result + (enddate != null ? enddate.hashCode() : 0);
+        result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
+        result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
         result = 31 * result + (persons != null ? persons.hashCode() : 0);
         result = 31 * result + (news != null ? news.hashCode() : 0);
         result = 31 * result + (lessons != null ? lessons.hashCode() : 0);

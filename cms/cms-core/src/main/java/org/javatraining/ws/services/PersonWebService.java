@@ -5,7 +5,6 @@ import org.javatraining.auth.Auth;
 import org.javatraining.config.AuthRole;
 import org.javatraining.config.Config;
 import org.javatraining.entity.PersonRole;
-import org.javatraining.model.PersonRoleVO;
 import org.javatraining.model.PersonVO;
 import org.javatraining.service.PersonService;
 
@@ -52,7 +51,7 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
         Response.ResponseBuilder r = null;
         PersonVO client = personService.getById(clientId);
 
-        if (client.getPersonRole() != new PersonRoleVO(PersonRole.TEACHER)) //FIXME I don't like how roles are compared
+        if (client.getPersonRole() != PersonRole.TEACHER) //FIXME I don't like how roles are compared
             if (client.getId() != personId)
                 r = Response.status(Response.Status.FORBIDDEN);
 
@@ -74,7 +73,7 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
         Response.ResponseBuilder r;
         try {
             PersonVO person = deserialize(personJson);
-            personService.save(person);
+            personService.saveStudent(person);
             String personUri = uriInfo.getRequestUri().toString() + "/" + person.getId();
             r = Response.created(new URI(personUri));
         } catch (JSONException e) {
@@ -97,7 +96,7 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
         Response.ResponseBuilder r = null;
         PersonVO client = personService.getById(clientId);
 
-        if (client.getPersonRole() != new PersonRoleVO(PersonRole.TEACHER)) //FIXME I don't like how roles are compared
+        if (client.getPersonRole() != PersonRole.TEACHER) //FIXME I don't like how roles are compared
             if (client.getId() != personId)
                 r = Response.status(Response.Status.FORBIDDEN);
 
@@ -117,7 +116,7 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
         Response.ResponseBuilder r = null;
         PersonVO client = personService.getById(clientId);
 
-        if (client.getPersonRole() != new PersonRoleVO(PersonRole.TEACHER)) //FIXME I don't like how roles are compared
+        if (client.getPersonRole() != PersonRole.TEACHER) //FIXME I don't like how roles are compared
             if (client.getId() != personId)
                 r = Response.status(Response.Status.FORBIDDEN);
 

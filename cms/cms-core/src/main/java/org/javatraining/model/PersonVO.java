@@ -1,6 +1,7 @@
 package org.javatraining.model;
 
 import org.javatraining.entity.PersonEntity;
+import org.javatraining.entity.PersonRole;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -20,7 +21,7 @@ public class PersonVO implements Serializable {
     private String lastName;
     @NotNull
     private String email;
-    private PersonRoleVO personRole;
+    private PersonRole personRole;
     private Set<MarkVO> marks;
     private Set<CourseVO> courses;
     private Set<ForumMessagesVO> forumMessages;
@@ -28,7 +29,7 @@ public class PersonVO implements Serializable {
     public PersonVO() {
     }
 
-    public PersonVO(Long id, String name, String lastName, String email, PersonRoleVO personRole) {
+    public PersonVO(Long id, String name, String lastName, String email, PersonRole personRole) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -42,7 +43,7 @@ public class PersonVO implements Serializable {
         this.secondName = personEntity.getSecondName();
         this.lastName = personEntity.getLastName();
         this.email = personEntity.getEmail();
-        this.personRole = new PersonRoleVO(personEntity.getPersonRole());
+        this.personRole = personEntity.getPersonRole();
         if (personEntity.getCourse() != null) {
             this.courses = CourseVO.convertEntitiesToVOs(personEntity.getCourse());
         }
@@ -67,7 +68,7 @@ public class PersonVO implements Serializable {
             personEntity.setEmail(personVO.getEmail());
         }
         if (personVO.getPersonRole() != null) {
-            personEntity.setPersonRole(personVO.getPersonRole().getRole());
+            personEntity.setPersonRole(personVO.getPersonRole());
         }
         if (personVO.getCourses() != null) {
             personEntity.setCourse(CourseVO.convertVOsToEnities(personVO.getCourses()));
@@ -132,11 +133,11 @@ public class PersonVO implements Serializable {
         this.email = email;
     }
 
-    public PersonRoleVO getPersonRole() {
+    public PersonRole getPersonRole() {
         return personRole;
     }
 
-    public void setPersonRole(PersonRoleVO personRole) {
+    public void setPersonRole(PersonRole personRole) {
         this.personRole = personRole;
     }
 

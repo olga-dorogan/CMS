@@ -27,7 +27,7 @@ public class ExampleService {
     public Response createPerson(PersonVO person) {
         PersonVO existingPerson = personService.getByEmail(person.getEmail());
         if (existingPerson == null) {
-            existingPerson = personService.save(person);
+            existingPerson = personService.saveStudent(person);
         }
         return Response.ok(existingPerson, MediaType.APPLICATION_JSON_TYPE).build();
     }

@@ -4,8 +4,8 @@ import flexjson.JSONException;
 import org.javatraining.auth.Auth;
 import org.javatraining.config.AuthRole;
 import org.javatraining.config.Config;
+import org.javatraining.entity.PersonRole;
 import org.javatraining.model.CourseVO;
-import org.javatraining.model.PersonRoleVO;
 import org.javatraining.model.PersonVO;
 import org.javatraining.service.CourseService;
 import org.javatraining.service.PersonService;
@@ -19,7 +19,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -117,7 +116,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     public Response getSubscribers(@PathParam("course_id") long courseId) {
         CourseVO course = new CourseVO();
         course.setId(courseId);
-        List<PersonVO> persons = courseService.getAllPersonsFromCourseByRole(course, new PersonRoleVO()); //FIXME
+        List<PersonVO> persons = courseService.getAllPersonsFromCourseByRole(course, PersonRole.STUDENT); //FIXME
         return Response.ok(serialize(persons)).build();
     }
 
