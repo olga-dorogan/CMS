@@ -8,6 +8,8 @@ import org.javatraining.entity.PersonRole;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.MarkVO;
 import org.javatraining.model.PersonVO;
+import org.javatraining.model.conversion.CourseConverter;
+import org.javatraining.model.conversion.PersonConverter;
 import org.javatraining.service.PersonService;
 import org.javatraining.service.exception.UnsupportedOperationException;
 
@@ -31,16 +33,16 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonVO saveStudent(@NotNull @Valid PersonVO personVO) {
         personVO.setPersonRole(PersonRole.STUDENT);
-        PersonEntity entity = PersonVO.convertToEntity(personVO);
+        PersonEntity entity = PersonConverter.convertVOToEntity(personVO);
         PersonEntity savedEntity = personDAO.save(entity);
-        return new PersonVO(savedEntity);
+        return PersonConverter.convertEntityToVO(savedEntity);
     }
 
     @Override
     public PersonVO update(@NotNull @Valid PersonVO personVO) {
-        PersonEntity entity = PersonVO.convertToEntity(personVO);
+        PersonEntity entity = PersonConverter.convertVOToEntity(personVO);
         PersonEntity updatedEntity = personDAO.update(entity);
-        return new PersonVO(updatedEntity);
+        return PersonConverter.convertEntityToVO(updatedEntity);
     }
 
     @Override
@@ -50,8 +52,8 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public PersonVO getById(@NotNull Long id) {
-        PersonEntity entity = personDAO.getById(id);
-        return new PersonVO(entity);
+        PersonEntity personEntity = personDAO.getById(id);
+        return PersonConverter.convertEntityToVO(personEntity);
     }
 
     @Override
@@ -60,7 +62,7 @@ public class PersonServiceImpl implements PersonService {
         if (personEntity == null) {
             return null;
         }
-        return new PersonVO(personEntity);
+        return PersonConverter.convertEntityToVO(personEntity);
     }
 
     @Override
@@ -90,10 +92,10 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Set<CourseVO> getCourses(@NotNull PersonVO personVO) {
-        PersonEntity personEntity = PersonVO.convertToEntity(personVO);
+        PersonEntity personEntity = PersonConverter.convertVOToEntity(personVO);
         // if FetchType is lazy, initiate data loading
         personEntity.getCourse().size();
-        return CourseVO.convertEntitiesToVOs(personEntity.getCourse());
+        return CourseConverter.convertEntitiesToVOs(personEntity.getCourse());
     }
 
     @Override

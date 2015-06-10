@@ -1,12 +1,9 @@
 package org.javatraining.model;
 
-import org.javatraining.entity.PersonEntity;
 import org.javatraining.entity.PersonRole;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -35,62 +32,6 @@ public class PersonVO implements Serializable {
         this.lastName = lastName;
         this.email = email;
         this.personRole = personRole;
-    }
-
-    public PersonVO(@NotNull PersonEntity personEntity) {
-        this.id = personEntity.getId();
-        this.name = personEntity.getName();
-        this.secondName = personEntity.getSecondName();
-        this.lastName = personEntity.getLastName();
-        this.email = personEntity.getEmail();
-        this.personRole = personEntity.getPersonRole();
-        if (personEntity.getCourse() != null) {
-            this.courses = CourseVO.convertEntitiesToVOs(personEntity.getCourse());
-        }
-        //TODO: convert collections of marks and messages
-    }
-
-    public static PersonEntity convertToEntity(@NotNull PersonVO personVO) {
-        PersonEntity personEntity = new PersonEntity();
-        if (personVO.getId() != null) {
-            personEntity.setId(personVO.getId());
-        }
-        if (personVO.getName() != null) {
-            personEntity.setName(personVO.getName());
-        }
-        if (personVO.getSecondName() != null) {
-            personEntity.setSecondName(personVO.getSecondName());
-        }
-        if (personVO.getLastName() != null) {
-            personEntity.setLastName(personVO.getLastName());
-        }
-        if (personVO.getEmail() != null) {
-            personEntity.setEmail(personVO.getEmail());
-        }
-        if (personVO.getPersonRole() != null) {
-            personEntity.setPersonRole(personVO.getPersonRole());
-        }
-        if (personVO.getCourses() != null) {
-            personEntity.setCourse(CourseVO.convertVOsToEnities(personVO.getCourses()));
-        }
-        // TODO: set person marks and messages
-        return personEntity;
-    }
-
-    public static Set<PersonVO> convertEntitiesToVOs(@NotNull Collection<PersonEntity> personEntities) {
-        Set<PersonVO> personVOs = new HashSet<>(personEntities.size());
-        for (PersonEntity personEntity : personEntities) {
-            personVOs.add(new PersonVO(personEntity));
-        }
-        return personVOs;
-    }
-
-    public static Set<PersonEntity> convertVOsToEntities(@NotNull Collection<PersonVO> personVOs) {
-        Set<PersonEntity> personEntities = new HashSet<>(personVOs.size());
-        for (PersonVO personVO : personVOs) {
-            personEntities.add(convertToEntity(personVO));
-        }
-        return personEntities;
     }
 
     public Long getId() {
