@@ -1,6 +1,6 @@
 package org.javatraining.ws;
 
-import org.javatraining.ws.services.PersonService;
+import org.javatraining.ws.services.PersonWebService;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
@@ -15,8 +15,8 @@ import static org.mockito.Mockito.when;
 /**
  * Created by asudak on 5/29/15.
  */
-public class PersonServiceTest {
-    private PersonService service = new PersonService();
+public class PersonWebServiceTest {
+    private PersonWebService service = new PersonWebService();
 
     @Test
     public void testGetPersonThatNotExist() {

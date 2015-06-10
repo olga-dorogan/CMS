@@ -4,10 +4,14 @@ import flexjson.JSONException;
 import org.javatraining.auth.Auth;
 import org.javatraining.config.AuthRole;
 import org.javatraining.config.Config;
+import org.javatraining.entity.PersonRole;
 import org.javatraining.model.PersonRoleVO;
 import org.javatraining.model.PersonVO;
+import org.javatraining.service.PersonService;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.validation.ValidationException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -23,8 +27,11 @@ import java.util.List;
  */
 @Stateless
 @Path("person")
-public class PersonService<T> extends AbstractService<PersonVO> {
-    public PersonService() {
+public class PersonWebService extends AbstractWebService<PersonVO> {
+    @EJB
+    private PersonService personService;
+
+    public PersonWebService() {
         super(PersonVO.class);
     }
 
@@ -43,17 +50,14 @@ public class PersonService<T> extends AbstractService<PersonVO> {
     @Auth(roles = {AuthRole.TEACHER, AuthRole.STUDENT})
     public Response getPerson(@HeaderParam(Config.REQUEST_HEADER_ID) long clientId, @PathParam("person_id") long personId) {
         Response.ResponseBuilder r = null;
-        PersonVO client = new PersonVO();
-        client.setId(clientId);
-        //TODO get client
+        PersonVO client = personService.getById(clientId);
 
-        if (client.getPersonRole() != new PersonRoleVO()) //FIXME if person role not equals teacher
+        if (client.getPersonRole() != new PersonRoleVO(PersonRole.TEACHER)) //FIXME I don't like how roles are compared
             if (client.getId() != personId)
                 r = Response.status(Response.Status.FORBIDDEN);
 
         if (r == null) {
-            PersonVO person = null;
-            //TODO get person from DB
+            PersonVO person = personService.getById(personId);
 
             if (person == null)
                 r = Response.noContent();
@@ -70,15 +74,16 @@ public class PersonService<T> extends AbstractService<PersonVO> {
         Response.ResponseBuilder r;
         try {
             PersonVO person = deserialize(personJson);
-            //TODO save entity here
+            personService.save(person);
             String personUri = uriInfo.getRequestUri().toString() + "/" + person.getId();
             r = Response.created(new URI(personUri));
         } catch (JSONException e) {
-            System.out.println(e);
             r = Response.status(Response.Status.NOT_ACCEPTABLE);
         } catch (URISyntaxException e) {
             //this shouldn't happen
             r = Response.serverError();
+        } catch (ValidationException e) {
+            r = Response.status(422); //422 Unprocessable Entity
         }
 
         return r.build();
@@ -90,21 +95,16 @@ public class PersonService<T> extends AbstractService<PersonVO> {
     @Auth(roles = {AuthRole.TEACHER, AuthRole.STUDENT})
     public Response updatePerson(@HeaderParam(Config.REQUEST_HEADER_ID) long clientId, @PathParam("person_id") long personId, @QueryParam("person_json") String personJson) {
         Response.ResponseBuilder r = null;
-        PersonVO client = new PersonVO();
-        //TODO get client
+        PersonVO client = personService.getById(clientId);
 
-        if (client.getPersonRole() != new PersonRoleVO()) //FIXME if person role not equals teacher
+        if (client.getPersonRole() != new PersonRoleVO(PersonRole.TEACHER)) //FIXME I don't like how roles are compared
             if (client.getId() != personId)
                 r = Response.status(Response.Status.FORBIDDEN);
 
         if (r == null) {
-            PersonVO person = null;
-            //TODO save entity here
-
-            if (person == null)
-                r = Response.noContent();
-            else
-                r = Response.ok(serialize(person));
+            PersonVO person = deserialize(personJson);
+            personService.update(person);
+            r = Response.ok();
         }
 
         return r.build();
@@ -115,18 +115,18 @@ public class PersonService<T> extends AbstractService<PersonVO> {
     @Auth(roles = {AuthRole.TEACHER, AuthRole.STUDENT})
     public Response deletePerson(@HeaderParam(Config.REQUEST_HEADER_ID) long clientId, @PathParam("person_id") long personId) {
         Response.ResponseBuilder r = null;
-        PersonVO client = new PersonVO();
-        //TODO get client
+        PersonVO client = personService.getById(clientId);
 
-        if (client.getPersonRole() != new PersonRoleVO()) //FIXME if person role not equals teacher
+        if (client.getPersonRole() != new PersonRoleVO(PersonRole.TEACHER)) //FIXME I don't like how roles are compared
             if (client.getId() != personId)
                 r = Response.status(Response.Status.FORBIDDEN);
 
         if (r == null) {
-            PersonVO person = null;
 
             try {
-                //TODO delete entity here
+                PersonVO person = new PersonVO();
+                person.setId(personId);
+                personService.remove(person);
                 r = Response.ok();
             } catch (Exception e) {
                 r = Response.noContent();

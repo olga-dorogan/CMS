@@ -5,8 +5,12 @@ import org.javatraining.auth.Auth;
 import org.javatraining.config.AuthRole;
 import org.javatraining.config.Config;
 import org.javatraining.model.CourseVO;
+import org.javatraining.model.PersonRoleVO;
 import org.javatraining.model.PersonVO;
+import org.javatraining.service.CourseService;
+import org.javatraining.service.PersonService;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -23,16 +27,20 @@ import java.util.List;
  */
 @Stateless
 @Path("course")
-public class CourseService extends AbstractService<CourseVO> {
-    CourseService() {
+public class CourseWebService extends AbstractWebService<CourseVO> {
+    @EJB
+    private CourseService courseService;
+    @EJB
+    private PersonService personService;
+
+    CourseWebService() {
         super(CourseVO.class);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCourseList() {
-        List<CourseVO> courses = new ArrayList<>();
-        //TODO get list of courses here
+        List<CourseVO> courses = courseService.getAll();
         return Response.ok(serialize(courses)).build();
     }
 
@@ -40,9 +48,7 @@ public class CourseService extends AbstractService<CourseVO> {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{course_id}")
     public Response getCourse(@PathParam("course_id") long courseId) {
-        CourseVO course = new CourseVO();
-        course.setId(courseId);
-        //TODO get course from DB
+        CourseVO course =courseService.getById(courseId);
         Response.ResponseBuilder r;
         if (course == null)
             r = Response.noContent();
@@ -58,7 +64,7 @@ public class CourseService extends AbstractService<CourseVO> {
         Response.ResponseBuilder r;
         try {
             CourseVO course = deserialize(courseJson);
-            //TODO save entity here
+            courseService.save(course);
             String courseUri = uriInfo.getRequestUri().toString() + "/" + course.getId();
             r = Response.created(new URI(courseUri));
         } catch (JSONException e) {
@@ -79,7 +85,7 @@ public class CourseService extends AbstractService<CourseVO> {
         Response.ResponseBuilder r;
         try {
             CourseVO course = deserialize(courseJson);
-            //TODO save entity here
+            courseService.update(course);
             r = Response.ok();
         } catch (JSONException e) {
             System.out.println(e);
@@ -97,7 +103,7 @@ public class CourseService extends AbstractService<CourseVO> {
         CourseVO course = new CourseVO();
         course.setId(courseId);
         try {
-            //TODO delete entity here
+            courseService.remove(course);
             r = Response.ok();
         } catch (Exception e) {
             r = Response.noContent();
@@ -111,8 +117,7 @@ public class CourseService extends AbstractService<CourseVO> {
     public Response getSubscribers(@PathParam("course_id") long courseId) {
         CourseVO course = new CourseVO();
         course.setId(courseId);
-        List<PersonVO> persons = new ArrayList<>();
-        //TODO subscribe person to course
+        List<PersonVO> persons = courseService.getAllPersonsFromCourseByRole(course, new PersonRoleVO()); //FIXME
         return Response.ok(serialize(persons)).build();
     }
 
@@ -124,7 +129,7 @@ public class CourseService extends AbstractService<CourseVO> {
         person.setId(personId);
         CourseVO course = new CourseVO();
         course.setId(courseId);
-        //TODO subscribe person to course
+        personService.addPersonToCourse(person, course);
         return Response.accepted().build();
     }
 
@@ -136,7 +141,7 @@ public class CourseService extends AbstractService<CourseVO> {
         person.setId(userId);
         CourseVO course = new CourseVO();
         course.setId(courseId);
-        //TODO unsubscribe person to course
+        personService.removePersonFromCourse(person, course);
         return Response.accepted().build();
     }
 }
