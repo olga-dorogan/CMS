@@ -116,7 +116,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     public Response getSubscribers(@PathParam("course_id") long courseId) {
         CourseVO course = new CourseVO();
         course.setId(courseId);
-        List<PersonVO> persons = courseService.getAllPersonsFromCourseByRole(course, PersonRole.STUDENT); //FIXME
+        List<PersonVO> persons = courseService.getAllPersonsFromCourseByRole(course, PersonRole.STUDENT);
         return Response.ok(serialize(persons)).build();
     }
 

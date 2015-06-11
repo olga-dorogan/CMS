@@ -36,22 +36,13 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Auth(roles = {AuthRole.TEACHER})
-    public Response getPersonList() {
-        List<PersonVO> persons = new ArrayList<>();
-        //TODO get list of persons here
-        return Response.ok(serialize(persons)).build();
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("{person_id}")
     @Auth(roles = {AuthRole.TEACHER, AuthRole.STUDENT})
     public Response getPerson(@HeaderParam(Config.REQUEST_HEADER_ID) long clientId, @PathParam("person_id") long personId) {
         Response.ResponseBuilder r = null;
         PersonVO client = personService.getById(clientId);
 
-        if (client.getPersonRole() != PersonRole.TEACHER) //FIXME I don't like how roles are compared
+        if (client.getPersonRole() != PersonRole.TEACHER)
             if (client.getId() != personId)
                 r = Response.status(Response.Status.FORBIDDEN);
 
@@ -96,7 +87,7 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
         Response.ResponseBuilder r = null;
         PersonVO client = personService.getById(clientId);
 
-        if (client.getPersonRole() != PersonRole.TEACHER) //FIXME I don't like how roles are compared
+        if (client.getPersonRole() != PersonRole.TEACHER)
             if (client.getId() != personId)
                 r = Response.status(Response.Status.FORBIDDEN);
 
@@ -116,7 +107,7 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
         Response.ResponseBuilder r = null;
         PersonVO client = personService.getById(clientId);
 
-        if (client.getPersonRole() != PersonRole.TEACHER) //FIXME I don't like how roles are compared
+        if (client.getPersonRole() != PersonRole.TEACHER)
             if (client.getId() != personId)
                 r = Response.status(Response.Status.FORBIDDEN);
 
