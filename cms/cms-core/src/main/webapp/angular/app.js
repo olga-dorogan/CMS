@@ -91,3 +91,5 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
             console.log('attempt to get secure data');
         });
     }]);
+
+
