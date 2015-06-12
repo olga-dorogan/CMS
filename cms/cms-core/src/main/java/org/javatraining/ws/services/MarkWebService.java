@@ -71,13 +71,14 @@ public class MarkWebService extends AbstractWebService<MarkVO> {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
-    @Path("{person_id}/mark")
-    public Response updateMark(@PathParam("person_id") long personId, @QueryParam("mark_json") String markJson) {
+    @Path("{person_id}/mark/{mark_id}")
+    public Response updateMark(@PathParam("person_id") long personId, @PathParam("mark_id") long markId, @QueryParam("mark_json") String markJson) {
         Response.ResponseBuilder r;
         PersonVO person = new PersonVO();
         person.setId(personId);
         try {
             MarkVO mark = deserialize(markJson);
+            mark.setId(markId);
             personService.updateMark(person, mark);
             r = Response.ok();
         } catch (JSONException e) {
