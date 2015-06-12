@@ -20,6 +20,8 @@ public interface PersonService {
 
     PersonVO saveStudent(@NotNull @Valid PersonVO personVO);
 
+    PersonVO getByEmailAndSaveIfNotExist(@NotNull @Valid PersonVO personVO);
+
     PersonVO update(@NotNull @Valid PersonVO personVO);
 
     void remove(@NotNull PersonVO personVO);

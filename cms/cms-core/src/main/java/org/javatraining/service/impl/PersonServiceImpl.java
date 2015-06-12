@@ -39,6 +39,15 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public PersonVO getByEmailAndSaveIfNotExist(@NotNull @Valid PersonVO personVO) {
+        PersonVO personVOFromEmail = getByEmail(personVO.getEmail());
+        if (personVOFromEmail != null) {
+            return personVOFromEmail;
+        }
+        return saveStudent(personVO);
+    }
+
+    @Override
     public PersonVO update(@NotNull @Valid PersonVO personVO) {
         PersonEntity entity = PersonConverter.convertVOToEntity(personVO);
         PersonEntity updatedEntity = personDAO.update(entity);
