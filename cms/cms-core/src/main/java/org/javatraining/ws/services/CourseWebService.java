@@ -80,10 +80,12 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
-    public Response updateCourse( @QueryParam("course_json") String courseJson) {
+    @Path("{course_id}")
+    public Response updateCourse(@PathParam("course_id") long courseId, @QueryParam("course_json") String courseJson) {
         Response.ResponseBuilder r;
         try {
             CourseVO course = deserialize(courseJson);
+            course.setId(courseId);
             courseService.update(course);
             r = Response.ok();
         } catch (JSONException e) {
