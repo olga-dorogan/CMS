@@ -126,10 +126,10 @@ public class PersonVO implements Serializable {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + name.hashCode();
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (secondName != null ? secondName.hashCode() : 0);
-        result = 31 * result + lastName.hashCode();
-        result = 31 * result + email.hashCode();
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (personRole != null ? personRole.hashCode() : 0);
         return result;
     }
