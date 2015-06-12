@@ -2,8 +2,6 @@ package org.javatraining.integration.gitlab.api.model;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import java.io.Serializable;
-
 /**
  * The project name is cms.
  * Created by sergey on 05.06.15 at 20:10.

@@ -1,4 +1,4 @@
-package org.javatraining.integration.gitlab.api.exception;
+package org.javatraining.integration.gitlab.exception;
 
 /**
  * The project name is cms.

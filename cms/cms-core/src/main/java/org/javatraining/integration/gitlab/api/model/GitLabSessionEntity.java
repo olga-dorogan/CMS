@@ -1,6 +1,8 @@
 package org.javatraining.integration.gitlab.api.model;
 
-import flexjson.JSON;
+import org.codehaus.jackson.annotate.JsonProperty;
+
+import java.io.Serializable;
 
 /**
  * The project name is cms.
@@ -8,8 +10,8 @@ import flexjson.JSON;
  * For more information you should send mail to codedealerb@gmail.com
  */
 
-public class GitLabSessionEntity {
-    @JSON(name = "private_token")
+public class GitLabSessionEntity implements Serializable{
+    @JsonProperty("private_token")
     private String privateToken;
 
 

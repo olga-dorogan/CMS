@@ -1,7 +1,7 @@
 package org.javatraining.integration.gitlab.api.model;
 
 
-import flexjson.JSON;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.io.Serializable;
 
@@ -10,8 +10,7 @@ import java.io.Serializable;
  * Created by sergey on 02.06.15 at 14:33.
  * For more information you should send mail to codedealerb@gmail.com
  */
-//FIXME ZAMENA JSON PROPERTY NA ANALOGI
-public class GitLabUserEntity implements Serializable{
+public class GitLabUserEntity implements Serializable {
     protected Integer id;
     protected String email;//required
     protected String password;//required
@@ -20,28 +19,28 @@ public class GitLabUserEntity implements Serializable{
     protected String skype;
     protected String linkedIn;
     protected String twitter;
-    @JSON(name = "website_url")
+    @JsonProperty("website_url")
     protected String websiteUrl;
-    @JSON(name = "project_limit")
+    @JsonProperty("project_limit")
     protected int projectsLimit;
-    @JSON(name = "extern_uid")
+    @JsonProperty("extern_uid")
     protected String externUID;
     protected String provider;
     protected String bio;
     protected boolean admin;
-    @JSON(name = "can_create_group")
+    @JsonProperty("can_create_group")
     protected boolean canCreateGroup;
     protected boolean confirm;
     protected boolean state;
-    @JSON(name = "theme_id")
+    @JsonProperty("theme_id")
     protected int themeId;
-    @JSON(name = "current_sign_in_at")
+    @JsonProperty("current_sign_in_at")
     protected String currentSignInAt;
-    @JSON(name = "can_create_project")
+    @JsonProperty("can_create_project")
     protected boolean canCreateProject;
-    @JSON(name = "color_scheme_id")
+    @JsonProperty("color_scheme_id")
     protected int colorSchemeId;
-    @JSON(name = "avatar_url")
+    @JsonProperty("avatar_url")
     protected String avatarUrl;
 
     public GitLabUserEntity() {

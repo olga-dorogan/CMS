@@ -1,6 +1,7 @@
 package org.javatraining.integration.gitlab.api.model;
 
 import flexjson.JSON;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -19,23 +20,23 @@ public class GitLabProjectEntity implements Serializable{
     private Integer id;
     private String name;
     private String description;
-    @JSON(name = "default_branch")
-    private String defaultBranch;
     private GitLabUserEntity owner;
     private boolean publicProject;
     private String path;
 
-    @JSON(name = "visibility_level")
+    @JsonProperty("default_branch")
+    private String defaultBranch;
+    @JsonProperty("visibility_level")
     private Integer visibilityLevel;
-    @JSON(name = "issues_enabled")
+    @JsonProperty("issues_enabled")
     private boolean issuesEnabled;
-    @JSON(name = "merge_requests_enabled")
+    @JsonProperty("merge_requests_enabled")
     private boolean mergeRequestsEnabled;
-    @JSON(name = "snippets_enabled")
+    @JsonProperty("snippets_enabled")
     private boolean snippetsEnabled;
-    @JSON(name = "wiki_enabled")
+    @JsonProperty("wiki_enabled")
     private boolean wikiEnabled;
-    @JSON(name = "last_activity_at")
+    @JsonProperty("last_activity_at")
     private Date lastActivityAt;
 
     public GitLabProjectEntity() {

@@ -1,3 +1,4 @@
+/*
 package org.javatraining.integration.gitlab.api.impl;
 
 import flexjson.JSONDeserializer;
@@ -12,9 +13,9 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.javatraining.integration.gitlab.api.exception.UserNotFoundException;
-import org.javatraining.integration.gitlab.api.exception.UserRequiredPropertiesIsNotComparable;
-import org.javatraining.integration.gitlab.api.ifaces.GitLabAPI;
+import org.javatraining.integration.gitlab.exception.UserNotFoundException;
+import org.javatraining.integration.gitlab.exception.UserRequiredPropertiesIsNotComparable;
+import org.javatraining.integration.gitlab.api.ifaces.GitLabAPIClient;
 import org.javatraining.integration.gitlab.api.model.GitLabProjectEntity;
 import org.javatraining.integration.gitlab.api.model.GitLabProjectMemberEntity;
 import org.javatraining.integration.gitlab.api.model.GitLabSessionEntity;
@@ -29,12 +30,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+*/
 /**
  * The project name is cms.
  * Created by sergey on 03.06.15 at 9:39.
  * For more information you should send mail to codedealerb@gmail.com
- */
-public class GitLabLowLevelApi implements GitLabAPI {
+ *//*
+
+public class GitLabLowLevelApiClient implements GitLabAPIClient {
     private static final String API_NAMESPACE = "/api/v3";
     private String hostUrl;
     private HttpClient httpClient = HttpClientBuilder.create().build();
@@ -42,15 +45,14 @@ public class GitLabLowLevelApi implements GitLabAPI {
     private String rootPass;
     private String rootEmail;
 
-    public GitLabLowLevelApi(String hostUrl, String rootEmail, String rootLogin, String rootPass) {
+    public GitLabLowLevelApiClient(String hostUrl, String rootEmail, String rootLogin, String rootPass) {
         this.hostUrl = hostUrl;
         this.rootEmail = rootEmail;
         this.rootLogin = rootLogin;
         this.rootPass = rootPass;
     }
 
-    @Override
-    public URL getApiUrl(Map<String, String> urlTail, String methodData) throws MalformedURLException {
+    private URL getApiUrl(Map<String, String> urlTail, String methodData) throws MalformedURLException {
         String tail = (methodData.compareTo("") != 0) ? "/" + methodData + "/" : "";
         for (Map.Entry<String, String> entry : urlTail.entrySet()) {
             tail += entry.getKey() + "=" + entry.getValue() + "&";
@@ -60,9 +62,9 @@ public class GitLabLowLevelApi implements GitLabAPI {
     }
 
     @Override
-    public Collection<GitLabUserEntity> getAllUsersFromGitlab() {
+    public Collection<GitLabUserEntity> getAllUsers() {
         try {
-            GitLabSessionEntity session = getGitlabSessionForSpecifiedUser(rootLogin, rootEmail, rootPass);
+            GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
                 {
                     put("private_token", session.getPrivateToken());
@@ -84,9 +86,9 @@ public class GitLabLowLevelApi implements GitLabAPI {
     }
 
     @Override
-    public GitLabUserEntity getUserByUserName(String userName) throws UserNotFoundException {
+    public GitLabUserEntity getUser(String userName) throws UserNotFoundException {
         try {
-            GitLabSessionEntity session = getGitlabSessionForSpecifiedUser(rootLogin, rootEmail, rootPass);
+            GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
                 {
                     put("search", userName);
@@ -96,7 +98,6 @@ public class GitLabLowLevelApi implements GitLabAPI {
             };
             HttpGet get = new HttpGet(getApiUrl(pairToTail, MethodData.FOR_USERS.value).toString());
             HttpResponse response = httpClient.execute(get);
-
             //FIXME vot tut null ne yasno
             //FIXME 2 http://www.mkyong.com/java/how-to-get-http-response-header-in-java/ bral otsuda schemu
             if (response.getFirstHeader("null").getValue().contains("200")) {
@@ -113,9 +114,9 @@ public class GitLabLowLevelApi implements GitLabAPI {
     }
 
     @Override
-    public boolean createGitLabUser(GitLabUserEntity userProperties) {
+    public boolean createUser(GitLabUserEntity userProperties) {
         try {
-            GitLabSessionEntity session = getGitlabSessionForSpecifiedUser(rootLogin, rootEmail, rootPass);
+            GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
                 {
                     put("private_token", session.getPrivateToken());
@@ -137,16 +138,16 @@ public class GitLabLowLevelApi implements GitLabAPI {
     }
 
     @Override
-    public void updateUserByUserName(GitLabUserEntity userProperties) throws UserNotFoundException, UserRequiredPropertiesIsNotComparable {
+    public void updateUser(GitLabUserEntity userProperties) throws UserNotFoundException, UserRequiredPropertiesIsNotComparable {
         try {
-            GitLabSessionEntity session = getGitlabSessionForSpecifiedUser(rootLogin, rootEmail, rootPass);
+            GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
                 {
                     put("private_token", session.getPrivateToken());
                     put("sudo", "root");
                 }
             };
-            GitLabUserEntity gitLabUserEntity = getUserByUserName(userProperties.getUsername());
+            GitLabUserEntity gitLabUserEntity = getUser(userProperties.getUsername());
             if (gitLabUserEntity == null) throw new UserNotFoundException("User with userName="
                     + userProperties.getUsername() + " not found in system");
             if (!gitLabUserEntity.getEmail().equals(userProperties.getEmail()))
@@ -165,16 +166,16 @@ public class GitLabLowLevelApi implements GitLabAPI {
     }
 
     @Override
-    public void removeUserByUserName(String userName) {
+    public void removeUser(String userName) {
         try {
-            GitLabSessionEntity session = getGitlabSessionForSpecifiedUser(rootLogin, rootEmail, rootPass);
+            GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
                 {
                     put("private_token", session.getPrivateToken());
                     put("sudo", "root");
                 }
             };
-            GitLabUserEntity user = getUserByUserName(userName);
+            GitLabUserEntity user = getUser(userName);
             HttpDelete put = new HttpDelete(getApiUrl(pairToTail, (MethodData.FOR_USERS.value + "/" + user.getId())).toString());
             httpClient.execute(put);
         } catch (UserNotFoundException | MalformedURLException | ClientProtocolException e) {
@@ -185,7 +186,7 @@ public class GitLabLowLevelApi implements GitLabAPI {
     }
 
     @Override
-    public GitLabSessionEntity getGitlabSessionForSpecifiedUser(String userName, String email, String password) throws UserNotFoundException {
+    public GitLabSessionEntity getSession(String userName, String email, String password) throws UserNotFoundException {
         Map<String, String> pairToTail = new HashMap<String, String>() {
             {
                 put("sudo", "root");
@@ -199,6 +200,7 @@ public class GitLabLowLevelApi implements GitLabAPI {
             post.setEntity(sEntity);
 
             HttpResponse response = httpClient.execute(post);
+            response.getStatusLine().getStatusCode();
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
                 JSONDeserializer<GitLabSessionEntity> deserializer = new JSONDeserializer<>();
                 return deserializer.deserialize(reader);
@@ -210,8 +212,8 @@ public class GitLabLowLevelApi implements GitLabAPI {
     }
 
     @Override
-    public boolean createNewProjectForUser(GitLabUserEntity user, GitLabProjectEntity projectProperties) throws UserNotFoundException {
-        GitLabSessionEntity session = getGitlabSessionForSpecifiedUser(rootLogin, rootEmail, rootPass);
+    public boolean createProject(GitLabUserEntity user, GitLabProjectEntity projectProperties) throws UserNotFoundException {
+        GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
         Map<String, String> pairToTail = new HashMap<String, String>() {
             {
                 put("private_token", session.getPrivateToken());
@@ -219,7 +221,7 @@ public class GitLabLowLevelApi implements GitLabAPI {
             }
         };
         try {
-            getUserByUserName(user.getUsername());//except userNotFoundExc, if not exist
+            getUser(user.getUsername());//except userNotFoundExc, if not exist
             HttpPost post = new HttpPost(getApiUrl(pairToTail, MethodData.FOR_PROJECTS.value + "/user/" + user.getId()).toString());
             StringEntity stringEntity = new StringEntity(
                     new JSONSerializer().serialize(projectProperties),
@@ -239,7 +241,7 @@ public class GitLabLowLevelApi implements GitLabAPI {
     @Override
     public Collection<GitLabProjectEntity> getAllProjects() {
         try {
-            GitLabSessionEntity session = getGitlabSessionForSpecifiedUser(rootLogin, rootEmail, rootPass);
+            GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
                 {
                     put("private_token", session.getPrivateToken());
@@ -264,7 +266,7 @@ public class GitLabLowLevelApi implements GitLabAPI {
     @Override
     public boolean addProjectTeamMember(GitLabProjectMemberEntity projectMemberToAdd, GitLabProjectEntity project) throws UserNotFoundException {
         try {
-            GitLabSessionEntity session = getGitlabSessionForSpecifiedUser(rootLogin, rootEmail, rootPass);
+            GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
                 {
                     put("private_token", session.getPrivateToken());
@@ -287,7 +289,7 @@ public class GitLabLowLevelApi implements GitLabAPI {
     @Override
     public void removeProjectTeamMember(GitLabProjectEntity project, GitLabProjectMemberEntity projectMemberToRemove) throws UserNotFoundException {
         try {
-            GitLabSessionEntity session = getGitlabSessionForSpecifiedUser(rootLogin, rootEmail, rootPass);
+            GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
                 {
                     put("private_token", session.getPrivateToken());
@@ -303,3 +305,4 @@ public class GitLabLowLevelApi implements GitLabAPI {
         }
     }
 }
+*/
