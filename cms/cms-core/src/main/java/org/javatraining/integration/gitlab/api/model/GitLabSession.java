@@ -10,7 +10,7 @@ import java.io.Serializable;
  * For more information you should send mail to codedealerb@gmail.com
  */
 
-public class GitLabSessionEntity implements Serializable{
+public class GitLabSession implements Serializable{
     @JsonProperty("private_token")
     private String privateToken;
 

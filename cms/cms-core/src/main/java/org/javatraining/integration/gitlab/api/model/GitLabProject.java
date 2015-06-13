@@ -11,7 +11,7 @@ import java.util.Date;
  * Created by sergey on 05.06.15 at 19:19.
  * For more information you should send mail to codedealerb@gmail.com
  */
-public class GitLabProjectEntity implements Serializable{
+public class GitLabProject implements Serializable{
     public static final int VISIBILITY_PRIVATE_LEVEL = 0;//Project access must be granted explicitly for each user.
     public static final int VISIBILITY_INTERNAL_LEVEL = 10;//The project can be cloned by any logged in user.
     public static final int VISIBILITY_PUBLIC_LEVEL = 20;//The project can be cloned without any authentication.
@@ -39,7 +39,7 @@ public class GitLabProjectEntity implements Serializable{
     @JsonProperty("last_activity_at")
     private Date lastActivityAt;
 
-    public GitLabProjectEntity() {
+    public GitLabProject() {
 
     }
 

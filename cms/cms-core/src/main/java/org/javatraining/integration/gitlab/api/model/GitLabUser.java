@@ -10,7 +10,7 @@ import java.io.Serializable;
  * Created by sergey on 02.06.15 at 14:33.
  * For more information you should send mail to codedealerb@gmail.com
  */
-public class GitLabUserEntity implements Serializable {
+public class GitLabUser implements Serializable {
     protected Integer id;
     protected String email;//required
     protected String password;//required
@@ -43,7 +43,7 @@ public class GitLabUserEntity implements Serializable {
     @JsonProperty("avatar_url")
     protected String avatarUrl;
 
-    public GitLabUserEntity() {
+    public GitLabUser() {
 
     }
 
