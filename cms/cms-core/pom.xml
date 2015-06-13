@@ -26,32 +26,35 @@
             <properties>
                 <datasource>java:global/CMS/DefaultDS</datasource>
                 <hibernate.dialect>org.hibernate.dialect.H2Dialect</hibernate.dialect>
+                <sql-load-script>META-INF/sql/data-h2.sql</sql-load-script>
+                <persistence-schema-generation>drop-and-create</persistence-schema-generation>
             </properties>
         </profile>
         <profile>
             <id>full-stack</id>
             <build>
                 <plugins>
-                    <!--<plugin>-->
-                        <!--<groupId>org.codehaus.mojo</groupId>-->
-                        <!--<artifactId>exec-maven-plugin</artifactId>-->
-                        <!--<executions>-->
-                            <!--<execution>-->
-                                <!--<id>exec-npm-install</id>-->
-                                <!--<phase>generate-sources</phase>-->
-                                <!--<configuration>-->
-                                    <!--<workingDirectory>${project.basedir}/src/main</workingDirectory>-->
-                                    <!--<executable>npm</executable>-->
-                                    <!--<arguments>-->
-                                        <!--<argument>install</argument>-->
-                                    <!--</arguments>-->
-                                <!--</configuration>-->
-                                <!--<goals>-->
-                                    <!--<goal>exec</goal>-->
-                                <!--</goals>-->
-                            <!--</execution>-->
-                        <!--</executions>-->
-                    <!--</plugin>-->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>${plugin.exec.version}</version>
+                        <executions>
+                            <execution>
+                                <id>exec-npm-install</id>
+                                <phase>generate-sources</phase>
+                                <configuration>
+                                    <workingDirectory>${project.basedir}/src/main</workingDirectory>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>install</argument>
+                                    </arguments>
+                                </configuration>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                 </plugins>
             </build>
             <!--git-->
@@ -122,7 +125,7 @@
             <!--<scope>test</scope>-->
         <!--</dependency>-->
 
-        <!--&lt;!&ndash;Logging dependencies&ndash;&gt;-->
+        <!--Logging dependencies-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -144,18 +147,16 @@
             <version>${log4j.version}</version>
         </dependency>
         <!--gitlab api dep-cs-->
-<!--        <dependency>
+        <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-core-asl</artifactId>
             <version>1.9.13</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.9.13</version>
-            <scope>provided</scope>
-        </dependency> -->
+        </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -186,18 +187,36 @@
         </dependency>
         <!-- -->
         <!-- h2 jdbc dependencies for ignoring mysql purpose-->
-        <!--<dependency>-->
-            <!--<groupId>com.h2database</groupId>-->
-            <!--<artifactId>h2</artifactId>-->
-            <!--<version>${h2.database.version}</version>-->
-        <!--</dependency>-->
-        <!--&lt;!&ndash; &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>com.puppycrawl.tools</groupId>-->
-            <!--<artifactId>checkstyle</artifactId>-->
-            <!--<version>6.7</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.database.version}</version>
+        </dependency>
+        <!-- -->
+        <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>6.7</version>
+        </dependency>
         <!--&lt;!&ndash; REST dependency&ndash;&gt;-->
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-multipart-provider</artifactId>
+            <version>${resteasy.multipart.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.database.version}</version>
+        </dependency>
+        <!-- -->
+        <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>6.7</version>
+        </dependency>
+        <!-- REST dependency-->
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-multipart-provider</artifactId>
@@ -232,17 +251,18 @@
             </resource>
         </resources>
         <plugins>
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-resources-plugin</artifactId>-->
-                <!--<version>${plugin.resources.version}</version>-->
-                <!--<configuration>-->
-                    <!--<nonFilteredFileExtensions>-->
-                        <!--<nonFilteredFileExtension>p12</nonFilteredFileExtension>-->
-                        <!--<nonFilteredFileExtension>types</nonFilteredFileExtension>-->
-                    <!--</nonFilteredFileExtensions>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${plugin.resources.version}</version>
+                <configuration>
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>p12</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>types</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>sql</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

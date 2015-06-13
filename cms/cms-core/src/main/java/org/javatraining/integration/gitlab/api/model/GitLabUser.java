@@ -12,9 +12,8 @@ import java.io.Serializable;
  * Created by sergey on 02.06.15 at 14:33.
  * For more information you should send mail to codedealerb@gmail.com
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class GitLabUser implements Serializable {
-    protected Long id;
+public class GitLabUserEntity implements Serializable {
+    protected Integer id;
     protected String email;//required
     protected String password;//required
     protected String username;//required
@@ -34,7 +33,7 @@ public class GitLabUser implements Serializable {
     @JsonProperty("can_create_group")
     protected boolean canCreateGroup;
     protected boolean confirm;
-    protected String state;
+    protected boolean state;
     @JsonProperty("theme_id")
     protected int themeId;
     @JsonProperty("current_sign_in_at")
@@ -46,7 +45,7 @@ public class GitLabUser implements Serializable {
     @JsonProperty("avatar_url")
     protected String avatarUrl;
 
-    public GitLabUser() {
+    public GitLabUserEntity() {
 
     }
 
@@ -171,11 +170,11 @@ public class GitLabUser implements Serializable {
         this.confirm = confirm;
     }
 
-    public String isState() {
+    public boolean isState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(boolean state) {
         this.state = state;
     }
 
@@ -219,7 +218,7 @@ public class GitLabUser implements Serializable {
         this.avatarUrl = avatarUrl;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

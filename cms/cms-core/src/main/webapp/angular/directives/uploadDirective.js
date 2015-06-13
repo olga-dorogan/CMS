@@ -4,7 +4,7 @@ function uploadDirective(UploadManager) {
         link: function (scope, element, attrs) {
             $(element).fileupload({
                 dataType: 'text',
-                url: "/file/upload",
+                url: "resources/file/upload",
                 add: function (e, data) {
                     UploadManager.add(data);
                 },
