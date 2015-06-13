@@ -1,6 +1,5 @@
 package org.javatraining.integration.gitlab.api.model;
 
-import flexjson.JSON;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.io.Serializable;
@@ -20,7 +19,7 @@ public class GitLabProject implements Serializable{
     private Integer id;
     private String name;
     private String description;
-    private GitLabUserEntity owner;
+    private GitLabUser owner;
     private boolean publicProject;
     private String path;
 
@@ -83,11 +82,11 @@ public class GitLabProject implements Serializable{
         this.visibilityLevel = visibilityLevel;
     }
 
-    public GitLabUserEntity getOwner() {
+    public GitLabUser getOwner() {
         return owner;
     }
 
-    public void setOwner(GitLabUserEntity owner) {
+    public void setOwner(GitLabUser owner) {
         this.owner = owner;
     }
 

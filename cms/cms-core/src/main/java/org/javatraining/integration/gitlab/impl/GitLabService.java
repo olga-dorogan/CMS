@@ -76,7 +76,7 @@ public class GitLabService {
     }
 
     public boolean createProject(PersonVO personVO) {
-        GitLabProjectEntity defaultProject = getStandartProject(personVO);
+        GitLabProject defaultProject = getStandartProject(personVO);
         String pToken = getPrivateToken();
 
         Response.Status status = gitLabClient.createProject(pToken, personVO.getId(), defaultProject);
@@ -84,7 +84,7 @@ public class GitLabService {
         return status.getStatusCode() == 201;
     }
 
-    public Collection<GitLabProjectEntity> getAllProjects() {
+    public Collection<GitLabProject> getAllProjects() {
         String pToken = getPrivateToken();
 
         return gitLabClient.getAllProjects(pToken);
@@ -92,8 +92,8 @@ public class GitLabService {
 
     public boolean addProjectMember(PersonVO personVO, Integer projId) throws ResourceNotFoundException {
         String pToken = getPrivateToken();
-        GitLabProjectMemberEntity projectMember =
-                (GitLabProjectMemberEntity) new PersonConverter().convertPerson(personVO);
+        GitLabProjectMember projectMember =
+                (GitLabProjectMember) new PersonConverter().convertPerson(personVO);
         projectMember.setAccessLevel(GitLabAccessLevel.Reporter);
         Response.Status status = gitLabClient.addProjectTeamMember(pToken, projectMember, projId);
 
@@ -104,7 +104,7 @@ public class GitLabService {
         return true;
     }
 
-    public boolean removeProjectMember(PersonVO personVO, GitLabProjectEntity project) throws ResourceNotFoundException {
+    public boolean removeProjectMember(PersonVO personVO, GitLabProject project) throws ResourceNotFoundException {
         String pToken = getPrivateToken();
         Response.Status status = gitLabClient.removeProjectTeamMember(pToken, project.getId(), personVO.getId());
         if (status.getStatusCode() != 200) {
@@ -123,12 +123,12 @@ public class GitLabService {
     }
 
     private String getPrivateToken() {
-        GitLabSessionEntity session = gitLabClient.getSession(params);
+        GitLabSession session = gitLabClient.getSession(params);
         return session.getPrivateToken();
     }
 
-    private GitLabProjectEntity getStandartProject(PersonVO owner) {//FIXME mojno i ubrat' ownera
-        GitLabProjectEntity projectEntity = new GitLabProjectEntity();
+    private GitLabProject getStandartProject(PersonVO owner) {//FIXME mojno i ubrat' ownera
+        GitLabProject projectEntity = new GitLabProject();
 
         projectEntity.setDescription("Personal project");
         //FIXME id???
@@ -136,7 +136,7 @@ public class GitLabService {
         projectEntity.setMergeRequestsEnabled(false);
         projectEntity.setName("Personal");
         projectEntity.setOwner(new PersonConverter().convertPerson(owner));
-        projectEntity.setVisibilityLevel(GitLabProjectEntity.VISIBILITY_PRIVATE_LEVEL);
+        projectEntity.setVisibilityLevel(GitLabProject.VISIBILITY_PRIVATE_LEVEL);
         projectEntity.setPublic(false);
         projectEntity.setWikiEnabled(true);
         projectEntity.setSnippetsEnabled(true);

@@ -62,9 +62,9 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
     }
 
     @Override
-    public Collection<GitLabUserEntity> getAllUsers() {
+    public Collection<GitLabUser> getAllUsers() {
         try {
-            GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
+            GitLabSession session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
                 {
                     put("private_token", session.getPrivateToken());
@@ -74,7 +74,7 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
             HttpGet get = new HttpGet(getApiUrl(pairToTail, MethodData.FOR_USERS.value).toString());
             HttpResponse response = httpClient.execute(get);
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
-                JSONDeserializer<Collection<GitLabUserEntity>> deserializer = new JSONDeserializer<>();
+                JSONDeserializer<Collection<GitLabUser>> deserializer = new JSONDeserializer<>();
                 return deserializer.deserialize(reader);//FIXME VOT TUT NE YASNO, NADEYUS' VERNET, SLEDIT' SUDA
             }
         } catch (ResourceNotFoundException | MalformedURLException | ClientProtocolException e) {
@@ -86,9 +86,9 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
     }
 
     @Override
-    public GitLabUserEntity getUser(String userName) throws ResourceNotFoundException {
+    public GitLabUser getUser(String userName) throws ResourceNotFoundException {
         try {
-            GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
+            GitLabSession session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
                 {
                     put("search", userName);
@@ -102,7 +102,7 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
             //FIXME 2 http://www.mkyong.com/java/how-to-get-http-response-header-in-java/ bral otsuda schemu
             if (response.getFirstHeader("null").getValue().contains("200")) {
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
-                    JSONDeserializer<GitLabUserEntity> deserializer = new JSONDeserializer<>();
+                    JSONDeserializer<GitLabUser> deserializer = new JSONDeserializer<>();
                 }
             } else throw new ResourceNotFoundException("User with userName=" + userName + " not found in system");
         } catch (ResourceNotFoundException | MalformedURLException | ClientProtocolException e) {
@@ -114,9 +114,9 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
     }
 
     @Override
-    public boolean createUser(GitLabUserEntity userProperties) {
+    public boolean createUser(GitLabUser userProperties) {
         try {
-            GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
+            GitLabSession session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
                 {
                     put("private_token", session.getPrivateToken());
@@ -138,16 +138,16 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
     }
 
     @Override
-    public void updateUser(GitLabUserEntity userProperties) throws ResourceNotFoundException, UserRequiredPropertiesIsNotComparable {
+    public void updateUser(GitLabUser userProperties) throws ResourceNotFoundException, UserRequiredPropertiesIsNotComparable {
         try {
-            GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
+            GitLabSession session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
                 {
                     put("private_token", session.getPrivateToken());
                     put("sudo", "root");
                 }
             };
-            GitLabUserEntity gitLabUserEntity = getUser(userProperties.getUsername());
+            GitLabUser gitLabUserEntity = getUser(userProperties.getUsername());
             if (gitLabUserEntity == null) throw new ResourceNotFoundException("User with userName="
                     + userProperties.getUsername() + " not found in system");
             if (!gitLabUserEntity.getEmail().equals(userProperties.getEmail()))
@@ -168,14 +168,14 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
     @Override
     public void removeUser(String userName) {
         try {
-            GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
+            GitLabSession session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
                 {
                     put("private_token", session.getPrivateToken());
                     put("sudo", "root");
                 }
             };
-            GitLabUserEntity user = getUser(userName);
+            GitLabUser user = getUser(userName);
             HttpDelete put = new HttpDelete(getApiUrl(pairToTail, (MethodData.FOR_USERS.value + "/" + user.getId())).toString());
             httpClient.execute(put);
         } catch (ResourceNotFoundException | MalformedURLException | ClientProtocolException e) {
@@ -186,7 +186,7 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
     }
 
     @Override
-    public GitLabSessionEntity getSession(String userName, String email, String password) throws ResourceNotFoundException {
+    public GitLabSession getSession(String userName, String email, String password) throws ResourceNotFoundException {
         Map<String, String> pairToTail = new HashMap<String, String>() {
             {
                 put("sudo", "root");
@@ -202,7 +202,7 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
             HttpResponse response = httpClient.execute(post);
             response.getStatusLine().getStatusCode();
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
-                JSONDeserializer<GitLabSessionEntity> deserializer = new JSONDeserializer<>();
+                JSONDeserializer<GitLabSession> deserializer = new JSONDeserializer<>();
                 return deserializer.deserialize(reader);
             }
         } catch (IOException e) {
@@ -212,8 +212,8 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
     }
 
     @Override
-    public boolean createProject(GitLabUserEntity user, GitLabProjectEntity projectProperties) throws ResourceNotFoundException {
-        GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
+    public boolean createProject(GitLabUser user, GitLabProject projectProperties) throws ResourceNotFoundException {
+        GitLabSession session = getSession(rootLogin, rootEmail, rootPass);
         Map<String, String> pairToTail = new HashMap<String, String>() {
             {
                 put("private_token", session.getPrivateToken());
@@ -239,9 +239,9 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
     }
 
     @Override
-    public Collection<GitLabProjectEntity> getAllProjects() {
+    public Collection<GitLabProject> getAllProjects() {
         try {
-            GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
+            GitLabSession session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
                 {
                     put("private_token", session.getPrivateToken());
@@ -251,7 +251,7 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
             HttpGet get = new HttpGet(getApiUrl(pairToTail, MethodData.FOR_PROJECTS.value + "/all").toString());
             HttpResponse response = httpClient.execute(get);
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
-                JSONDeserializer<Collection<GitLabProjectEntity>> deserializer = new JSONDeserializer<>();
+                JSONDeserializer<Collection<GitLabProject>> deserializer = new JSONDeserializer<>();
                 //MB NEED ADD TRANSFORMER FOR DATE
                 return deserializer.deserialize(reader);
             }
@@ -264,9 +264,9 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
     }
 
     @Override
-    public boolean addProjectTeamMember(GitLabProjectMemberEntity projectMemberToAdd, GitLabProjectEntity project) throws ResourceNotFoundException {
+    public boolean addProjectTeamMember(GitLabProjectMember projectMemberToAdd, GitLabProject project) throws ResourceNotFoundException {
         try {
-            GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
+            GitLabSession session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
                 {
                     put("private_token", session.getPrivateToken());
@@ -287,9 +287,9 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
     }
 
     @Override
-    public void removeProjectTeamMember(GitLabProjectEntity project, GitLabProjectMemberEntity projectMemberToRemove) throws ResourceNotFoundException {
+    public void removeProjectTeamMember(GitLabProject project, GitLabProjectMember projectMemberToRemove) throws ResourceNotFoundException {
         try {
-            GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
+            GitLabSession session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
                 {
                     put("private_token", session.getPrivateToken());

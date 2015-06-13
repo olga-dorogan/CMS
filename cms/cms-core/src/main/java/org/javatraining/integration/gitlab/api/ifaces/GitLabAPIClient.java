@@ -17,7 +17,7 @@ public interface GitLabAPIClient {
     @GET
     @Path("/users?private_token={privateToken}&sudo=root")
     @Produces("application/json")
-    Collection<GitLabUserEntity> getAllUsers(@PathParam("privateToken") String privateToken);
+    Collection<GitLabUser> getAllUsers(@PathParam("privateToken") String privateToken);
 
     //get authenticated user
     //get /user
@@ -25,7 +25,7 @@ public interface GitLabAPIClient {
     @GET
     @Path("/users/{id}?&private_token={privateToken}&sudo=root")
     @Produces("application/json")
-    GitLabUserEntity getUser(@PathParam("privateToken") String privateToken, @PathParam("userName") Long id);
+    GitLabUser getUser(@PathParam("privateToken") String privateToken, @PathParam("userName") Long id);
 
     //gitlab usr CRUD
     //user creation (only for admin)
@@ -35,7 +35,7 @@ public interface GitLabAPIClient {
     @POST
     @Path("/users?private_token={privateToken}&sudo=root")
     @Consumes("application/json")
-    Response.Status createUser(@PathParam("privateToken") String privateToken, GitLabUserEntity userProperties);
+    Response.Status createUser(@PathParam("privateToken") String privateToken, GitLabUser userProperties);
 
     //modification to existing user (only for admin)
     //put /users - rest methodroot_
@@ -43,7 +43,7 @@ public interface GitLabAPIClient {
     @PUT
     @Path("/users?private_token={privateToken}&sudo=root")
     @Consumes("application/json")
-    Response.Status updateUser(@PathParam("privateToken") String privateToken, GitLabUserEntity userProperties);
+    Response.Status updateUser(@PathParam("privateToken") String privateToken, GitLabUser userProperties);
 
     //    Deletes a user.
     // Available only for administrators.
@@ -62,7 +62,7 @@ public interface GitLabAPIClient {
     @Path("/session?sudo=root")
     @Consumes("application/json")
     @Produces("application/json")
-    GitLabSessionEntity getSession(GitLabSessionParameters parameters);
+    GitLabSession getSession(GitLabSessionParameters parameters);
 
     //create new project for sspecified user
     //post /projects/user/:user_id
@@ -73,12 +73,12 @@ public interface GitLabAPIClient {
     @Consumes("application/json")
     Response.Status createProject(@PathParam("privateToken") String privateToken,
                                   @PathParam("id") Long id,
-                                  GitLabProjectEntity projectProperties);
+                                  GitLabProject projectProperties);
 
     @GET
     @Path("/projects/all?private_token={privateToken}&sudo=root")
     @Produces("application/json")
-    Collection<GitLabProjectEntity> getAllProjects(@PathParam("privateToken") String privateToken);
+    Collection<GitLabProject> getAllProjects(@PathParam("privateToken") String privateToken);
 
 
     //add specified user to project membership
@@ -90,7 +90,7 @@ public interface GitLabAPIClient {
     @Path("/projects/{proj_id}/members?private_token={privateToken}&sudo=root")
     @Consumes("application/json")
     Response.Status addProjectTeamMember(@PathParam("privateToken") String privateToken,
-                                         GitLabProjectMemberEntity projectMemberToAdd,
+                                         GitLabProjectMember projectMemberToAdd,
                                          @PathParam("proj_id") Integer projectId);
 
     //delete /projects/:proj_id/members/:user_id_to_remove

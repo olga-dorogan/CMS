@@ -1,6 +1,6 @@
 package org.javatraining.integration.gitlab.converter;
 
-import org.javatraining.integration.gitlab.api.model.GitLabUserEntity;
+import org.javatraining.integration.gitlab.api.model.GitLabUser;
 import org.javatraining.integration.gitlab.exception.UserRequiredPropertiesIsNotComparable;
 import org.javatraining.model.PersonVO;
 
@@ -18,8 +18,8 @@ public class PersonConverter {
 
     }
 
-    public GitLabUserEntity convertPerson(PersonVO personVO) {
-        GitLabUserEntity entity = new GitLabUserEntity();
+    public GitLabUser convertPerson(PersonVO personVO) {
+        GitLabUser entity = new GitLabUser();
 
         entity.setId(personVO.getId());
         entity.setEmail(personVO.getEmail());
@@ -37,7 +37,7 @@ public class PersonConverter {
         return entity;
     }
 
-    public PersonVO convertGitLabUserEntity(GitLabUserEntity userEntity) {
+    public PersonVO convertGitLabUserEntity(GitLabUser userEntity) {
         PersonVO personVO = new PersonVO();
 
         personVO.setId(Long.valueOf(userEntity.getId()));
@@ -64,10 +64,10 @@ public class PersonConverter {
         return p1;
     }
 
-    public Collection<PersonVO> convertAllEntities(Collection<GitLabUserEntity> entities) {
+    public Collection<PersonVO> convertAllEntities(Collection<GitLabUser> entities) {
         Collection<PersonVO> personVOs = new TreeSet<>();
 
-        for(GitLabUserEntity x:entities){
+        for(GitLabUser x:entities){
             personVOs.add(convertGitLabUserEntity(x));
         }
 
