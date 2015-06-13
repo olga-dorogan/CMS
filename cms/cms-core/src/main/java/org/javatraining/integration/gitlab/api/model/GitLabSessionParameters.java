@@ -7,13 +7,19 @@ import java.io.Serializable;
  * Created by sergey on 12.06.15 at 20:40.
  * For more information you should send mail to codedealerb@gmail.com
  */
-public class GitLabSessionParameters implements Serializable{
+public class GitLabSessionParameters implements Serializable {
     private String login;
     private String password;
     private String email;
 
     public GitLabSessionParameters() {
 
+    }
+
+    public GitLabSessionParameters(String login, String password, String email) {
+        this.email = email;
+        this.login = login;
+        this.password = password;
     }
 
     public String getLogin() {

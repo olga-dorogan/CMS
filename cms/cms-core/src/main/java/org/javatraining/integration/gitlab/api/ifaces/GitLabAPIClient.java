@@ -11,6 +11,7 @@ import java.util.Collection;
  * Created by sergey on 02.06.15 at 15:32.
  * For more information you should send mail to codedealerb@gmail.com
  */
+@Path("/api/v3")
 public interface GitLabAPIClient {
 
     @GET
@@ -22,9 +23,9 @@ public interface GitLabAPIClient {
     //get /user
     //http://localhost/api/v3/users?private_token=xTApBC_xvpkKEw7yHjDV&sudo=root example
     @GET
-    @Path("/users?search={userName}&private_token={privateToken}&sudo=root")
+    @Path("/users/{id}?&private_token={privateToken}&sudo=root")
     @Produces("application/json")
-    GitLabUserEntity getUser(@PathParam("userName") String userName);
+    GitLabUserEntity getUser(@PathParam("privateToken") String privateToken, @PathParam("userName") Long id);
 
     //gitlab usr CRUD
     //user creation (only for admin)
@@ -37,7 +38,7 @@ public interface GitLabAPIClient {
     Response.Status createUser(@PathParam("privateToken") String privateToken, GitLabUserEntity userProperties);
 
     //modification to existing user (only for admin)
-    //put /users - rest method
+    //put /users - rest methodroot_
     //http://localhost/api/v3/users?private_token=xTApBC_xvpkKEw7yHjDV&sudo=root - example without properties
     @PUT
     @Path("/users?private_token={privateToken}&sudo=root")
@@ -50,7 +51,7 @@ public interface GitLabAPIClient {
     //http://localhost/api/v3/users/3?private_token=xTApBC_xvpkKEw7yHjDV&sudo=root - example
     @DELETE
     @Path("/users/{id}?private_token={privateToken}&sudo=root")
-    Response.Status removeUser(@PathParam("privateToken") String privateToken, @PathParam("id") Integer id);//FIXME idempotent function, add or not throws UserNotFoundException;
+    Response.Status removeUser(@PathParam("privateToken") String privateToken, @PathParam("id") Long id);//FIXME idempotent function, add or not throws ResourceNotFoundException;
 
     //get session for manage user's account with special private token
     //POST /session
@@ -71,7 +72,7 @@ public interface GitLabAPIClient {
     @Path("/projects/user/{id}?private_token={privateToken}&sudo=root")
     @Consumes("application/json")
     Response.Status createProject(@PathParam("privateToken") String privateToken,
-                                  @PathParam("id") Integer id,
+                                  @PathParam("id") Long id,
                                   GitLabProjectEntity projectProperties);
 
     @GET
@@ -99,5 +100,5 @@ public interface GitLabAPIClient {
     @Path("/projects/{proj_id}/members/{user_id}?private_token={privateToken}&sudo=root")
     Response.Status removeProjectTeamMember(@PathParam("privateToken") String privateToken,
                                             @PathParam("proj_id") Integer projectId,
-                                            @PathParam("user_id") Integer userId);
+                                            @PathParam("user_id") Long userId);
 }

@@ -5,12 +5,12 @@ package org.javatraining.integration.gitlab.exception;
  * Created by sergey on 02.06.15 at 15:02.
  * For more information you should send mail to codedealerb@gmail.com
  */
-public class UserNotFoundException extends Exception {
-    public UserNotFoundException(){
+public class ResourceNotFoundException extends Exception {
+    public ResourceNotFoundException(){
 
     }
 
-    public UserNotFoundException(String message){
+    public ResourceNotFoundException(String message){
         super(message);
     }
 }

@@ -77,7 +77,7 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
                 JSONDeserializer<Collection<GitLabUserEntity>> deserializer = new JSONDeserializer<>();
                 return deserializer.deserialize(reader);//FIXME VOT TUT NE YASNO, NADEYUS' VERNET, SLEDIT' SUDA
             }
-        } catch (UserNotFoundException | MalformedURLException | ClientProtocolException e) {
+        } catch (ResourceNotFoundException | MalformedURLException | ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -86,7 +86,7 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
     }
 
     @Override
-    public GitLabUserEntity getUser(String userName) throws UserNotFoundException {
+    public GitLabUserEntity getUser(String userName) throws ResourceNotFoundException {
         try {
             GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
@@ -104,8 +104,8 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
                     JSONDeserializer<GitLabUserEntity> deserializer = new JSONDeserializer<>();
                 }
-            } else throw new UserNotFoundException("User with userName=" + userName + " not found in system");
-        } catch (UserNotFoundException | MalformedURLException | ClientProtocolException e) {
+            } else throw new ResourceNotFoundException("User with userName=" + userName + " not found in system");
+        } catch (ResourceNotFoundException | MalformedURLException | ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -129,7 +129,7 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
             post.setEntity(sEntity);
             HttpResponse response = httpClient.execute(post);
             return response.getFirstHeader("null").getValue().contains("201");//FIXME dont forget to look at null header
-        } catch (UserNotFoundException | MalformedURLException | ClientProtocolException e) {
+        } catch (ResourceNotFoundException | MalformedURLException | ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -138,7 +138,7 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
     }
 
     @Override
-    public void updateUser(GitLabUserEntity userProperties) throws UserNotFoundException, UserRequiredPropertiesIsNotComparable {
+    public void updateUser(GitLabUserEntity userProperties) throws ResourceNotFoundException, UserRequiredPropertiesIsNotComparable {
         try {
             GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
@@ -148,7 +148,7 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
                 }
             };
             GitLabUserEntity gitLabUserEntity = getUser(userProperties.getUsername());
-            if (gitLabUserEntity == null) throw new UserNotFoundException("User with userName="
+            if (gitLabUserEntity == null) throw new ResourceNotFoundException("User with userName="
                     + userProperties.getUsername() + " not found in system");
             if (!gitLabUserEntity.getEmail().equals(userProperties.getEmail()))
                 throw new UserRequiredPropertiesIsNotComparable();
@@ -158,7 +158,7 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
             put.setEntity(sEntity);
             //HttpResponse response = httpClient.execute(put);
             httpClient.execute(put);
-        } catch (UserNotFoundException | MalformedURLException | ClientProtocolException e) {
+        } catch (ResourceNotFoundException | MalformedURLException | ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -178,7 +178,7 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
             GitLabUserEntity user = getUser(userName);
             HttpDelete put = new HttpDelete(getApiUrl(pairToTail, (MethodData.FOR_USERS.value + "/" + user.getId())).toString());
             httpClient.execute(put);
-        } catch (UserNotFoundException | MalformedURLException | ClientProtocolException e) {
+        } catch (ResourceNotFoundException | MalformedURLException | ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -186,7 +186,7 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
     }
 
     @Override
-    public GitLabSessionEntity getSession(String userName, String email, String password) throws UserNotFoundException {
+    public GitLabSessionEntity getSession(String userName, String email, String password) throws ResourceNotFoundException {
         Map<String, String> pairToTail = new HashMap<String, String>() {
             {
                 put("sudo", "root");
@@ -212,7 +212,7 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
     }
 
     @Override
-    public boolean createProject(GitLabUserEntity user, GitLabProjectEntity projectProperties) throws UserNotFoundException {
+    public boolean createProject(GitLabUserEntity user, GitLabProjectEntity projectProperties) throws ResourceNotFoundException {
         GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
         Map<String, String> pairToTail = new HashMap<String, String>() {
             {
@@ -255,7 +255,7 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
                 //MB NEED ADD TRANSFORMER FOR DATE
                 return deserializer.deserialize(reader);
             }
-        } catch (UserNotFoundException | MalformedURLException | ClientProtocolException e) {
+        } catch (ResourceNotFoundException | MalformedURLException | ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -264,7 +264,7 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
     }
 
     @Override
-    public boolean addProjectTeamMember(GitLabProjectMemberEntity projectMemberToAdd, GitLabProjectEntity project) throws UserNotFoundException {
+    public boolean addProjectTeamMember(GitLabProjectMemberEntity projectMemberToAdd, GitLabProjectEntity project) throws ResourceNotFoundException {
         try {
             GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
@@ -278,7 +278,7 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
 
             HttpResponse response = httpClient.execute(post);
             return response.getFirstHeader("null").getValue().contains("201");
-        } catch (UserNotFoundException | MalformedURLException | ClientProtocolException e) {
+        } catch (ResourceNotFoundException | MalformedURLException | ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -287,7 +287,7 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
     }
 
     @Override
-    public void removeProjectTeamMember(GitLabProjectEntity project, GitLabProjectMemberEntity projectMemberToRemove) throws UserNotFoundException {
+    public void removeProjectTeamMember(GitLabProjectEntity project, GitLabProjectMemberEntity projectMemberToRemove) throws ResourceNotFoundException {
         try {
             GitLabSessionEntity session = getSession(rootLogin, rootEmail, rootPass);
             Map<String, String> pairToTail = new HashMap<String, String>() {
@@ -298,7 +298,7 @@ public class GitLabLowLevelApiClient implements GitLabAPIClient {
             };
             HttpDelete delete = new HttpDelete(getApiUrl(pairToTail, MethodData.FOR_PROJECTS.value + "/" + project.getId() + "/members/" + projectMemberToRemove.getId()).toString());
             HttpResponse response = httpClient.execute(delete);
-        } catch (UserNotFoundException | MalformedURLException | ClientProtocolException e) {
+        } catch (ResourceNotFoundException | MalformedURLException | ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
