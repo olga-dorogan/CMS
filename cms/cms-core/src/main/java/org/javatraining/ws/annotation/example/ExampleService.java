@@ -25,11 +25,8 @@ public class ExampleService {
     @Path("/person")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createPerson(PersonVO person) {
-        PersonVO existingPerson = personService.getByEmail(person.getEmail());
-        if (existingPerson == null) {
-            existingPerson = personService.saveStudent(person);
-        }
-        return Response.ok(existingPerson, MediaType.APPLICATION_JSON_TYPE).build();
+        personService.save(person);
+        return Response.ok(person, MediaType.APPLICATION_JSON_TYPE).build();
     }
 
     @GET
