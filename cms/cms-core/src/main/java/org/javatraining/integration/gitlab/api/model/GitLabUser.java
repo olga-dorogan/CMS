@@ -2,7 +2,6 @@ package org.javatraining.integration.gitlab.api.model;
 
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -12,8 +11,8 @@ import java.io.Serializable;
  * Created by sergey on 02.06.15 at 14:33.
  * For more information you should send mail to codedealerb@gmail.com
  */
-public class GitLabUserEntity implements Serializable {
-    protected Integer id;
+public class GitLabUser implements Serializable {
+    protected Long id;
     protected String email;//required
     protected String password;//required
     protected String username;//required
@@ -45,7 +44,7 @@ public class GitLabUserEntity implements Serializable {
     @JsonProperty("avatar_url")
     protected String avatarUrl;
 
-    public GitLabUserEntity() {
+    public GitLabUser() {
 
     }
 
@@ -218,7 +217,7 @@ public class GitLabUserEntity implements Serializable {
         this.avatarUrl = avatarUrl;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
