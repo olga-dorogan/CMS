@@ -2,9 +2,9 @@ package org.javatraining.integration.gitlab.impl;
 
 import org.javatraining.integration.gitlab.api.ifaces.GitLabAPIClient;
 import org.javatraining.integration.gitlab.api.model.*;
+import org.javatraining.integration.gitlab.converter.PersonConverter;
 import org.javatraining.integration.gitlab.exception.ResourceNotFoundException;
 import org.javatraining.integration.gitlab.exception.UserRequiredPropertiesIsNotComparable;
-import org.javatraining.integration.gitlab.converter.PersonConverter;
 import org.javatraining.model.PersonVO;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
@@ -19,10 +19,10 @@ import java.util.Collection;
  * For more information you should send mail to codedealerb@gmail.com
  */
 public class GitLabService {
-//    private static final String ROOT_LOGIN = "root";
+    //    private static final String ROOT_LOGIN = "root";
 //    private static final String ROOT_MAIL = "admin@example.com";
 //    private static final String ROOT_PASS = "12345678";
-
+    private static final String ROOT = "root";
     private GitLabSessionParameters params;
     private GitLabAPIClient gitLabClient;
 
@@ -37,18 +37,18 @@ public class GitLabService {
     public Collection<PersonVO> getAllPersons() {
         String pToken = getPrivateToken();
 
-        return new PersonConverter().convertAllEntities(gitLabClient.getAllUsers(pToken));
+        return new PersonConverter().convertAllEntities(gitLabClient.getAllUsers(pToken, ROOT));
     }
 
     public PersonVO getPerson(Long id) {
         String pToken = getPrivateToken();
 
-        return new PersonConverter().convertGitLabUserEntity(gitLabClient.getUser(pToken, id));
+        return new PersonConverter().convertGitLabUserEntity(gitLabClient.getUser(pToken, ROOT, id));
     }
 
     public boolean addPerson(PersonVO personVO) {
         String pToken = getPrivateToken();
-        Response.Status status = gitLabClient.createUser(pToken, new PersonConverter().convertPerson(personVO));
+        Response.Status status = gitLabClient.createUser(pToken, ROOT, new PersonConverter().convertPerson(personVO));
         return status.getStatusCode() == 201;
     }
 
@@ -56,11 +56,11 @@ public class GitLabService {
     public boolean updatePerson(PersonVO personVO) {
         String pToken = getPrivateToken();
         PersonVO person = new PersonConverter().convertGitLabUserEntity(
-                gitLabClient.getUser(pToken, personVO.getId()));
+                gitLabClient.getUser(pToken, ROOT, personVO.getId()));
 
         try {
             person = new PersonConverter().mergePersons(person, personVO);
-            Response.Status status = gitLabClient.updateUser(pToken, new PersonConverter().convertPerson(person));
+            Response.Status status = gitLabClient.updateUser(pToken, ROOT, new PersonConverter().convertPerson(person));
             return status.getStatusCode() == 200;//FIXME check 200 or 201
         } catch (UserRequiredPropertiesIsNotComparable e) {
             System.err.println(e.getMessage());//TODO change on logger
@@ -72,14 +72,14 @@ public class GitLabService {
     public void removePerson(PersonVO personVO) {
         String pToken = getPrivateToken();
 
-        gitLabClient.removeUser(pToken, personVO.getId());
+        gitLabClient.removeUser(pToken, ROOT, personVO.getId());
     }
 
     public boolean createProject(PersonVO personVO) {
         GitLabProject defaultProject = getStandartProject(personVO);
         String pToken = getPrivateToken();
 
-        Response.Status status = gitLabClient.createProject(pToken, personVO.getId(), defaultProject);
+        Response.Status status = gitLabClient.createProject(pToken, ROOT, personVO.getId(), defaultProject);
 
         return status.getStatusCode() == 201;
     }
@@ -87,7 +87,7 @@ public class GitLabService {
     public Collection<GitLabProject> getAllProjects() {
         String pToken = getPrivateToken();
 
-        return gitLabClient.getAllProjects(pToken);
+        return gitLabClient.getAllProjects(pToken, ROOT);
     }
 
     public boolean addProjectMember(PersonVO personVO, Integer projId) throws ResourceNotFoundException {
@@ -95,7 +95,7 @@ public class GitLabService {
         GitLabProjectMember projectMember =
                 (GitLabProjectMember) new PersonConverter().convertPerson(personVO);
         projectMember.setAccessLevel(GitLabAccessLevel.Reporter);
-        Response.Status status = gitLabClient.addProjectTeamMember(pToken, projectMember, projId);
+        Response.Status status = gitLabClient.addProjectTeamMember(pToken,ROOT, projectMember, projId);
 
         if (status.getStatusCode() != 201) {
             throw new ResourceNotFoundException("user or project not found");
@@ -106,7 +106,7 @@ public class GitLabService {
 
     public boolean removeProjectMember(PersonVO personVO, GitLabProject project) throws ResourceNotFoundException {
         String pToken = getPrivateToken();
-        Response.Status status = gitLabClient.removeProjectTeamMember(pToken, project.getId(), personVO.getId());
+        Response.Status status = gitLabClient.removeProjectTeamMember(pToken, ROOT, project.getId(), personVO.getId());
         if (status.getStatusCode() != 200) {
             throw new ResourceNotFoundException("user or project not found");
         }
@@ -123,7 +123,7 @@ public class GitLabService {
     }
 
     private String getPrivateToken() {
-        GitLabSession session = gitLabClient.getSession(params);
+        GitLabSession session = gitLabClient.getSession(params, "root");
         return session.getPrivateToken();
     }
 

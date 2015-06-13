@@ -1,6 +1,7 @@
 package org.javatraining.integration.gitlab.api.model;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * The project name is cms.

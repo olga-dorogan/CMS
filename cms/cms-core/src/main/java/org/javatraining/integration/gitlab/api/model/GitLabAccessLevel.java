@@ -1,6 +1,5 @@
 package org.javatraining.integration.gitlab.api.model;
 
-import org.codehaus.jackson.annotate.JsonCreator;
 
 /**
  * The project name is cms.

@@ -1,5 +1,6 @@
 package org.javatraining.integration.gitlab.api.impl;
 
+import org.javatraining.entity.PersonRole;
 import org.javatraining.integration.gitlab.impl.GitLabService;
 import org.javatraining.model.PersonVO;
 import org.junit.After;
@@ -18,20 +19,20 @@ public class GitLabServiceTest {
     private GitLabService service;
     private PersonVO testPerson;
 
-    @Ignore
+//    @Ignore
     @Before
     public void setUpGitlabClient() {
         service = new GitLabService("http://localhost", "root", "12345678", "admin@example.com");
-        //testPerson = new PersonVO(new Long(1), "test1", "test1", "test1@mail.ru", new PersonRoleVO(PersonRole.STUDENT));
+        testPerson = new PersonVO(new Long(1), "test1", "test1", "test1@mail.ru", PersonRole.STUDENT);
     }
 
-    @Ignore
+//    @Ignore
     @After
     public void closeClient() {
         service = null;
     }
 
-    @Ignore
+//    @Ignore
     @Test
     public void testGetResultOfCreatingNewUser() {
         assertTrue(service.addPerson(testPerson));

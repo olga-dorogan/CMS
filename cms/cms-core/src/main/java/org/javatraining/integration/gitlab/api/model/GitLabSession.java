@@ -1,6 +1,7 @@
 package org.javatraining.integration.gitlab.api.model;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
@@ -10,10 +11,9 @@ import java.io.Serializable;
  * For more information you should send mail to codedealerb@gmail.com
  */
 
-public class GitLabSession implements Serializable{
+public class GitLabSession extends GitLabUser implements Serializable{
     @JsonProperty("private_token")
     private String privateToken;
-
 
     public String getPrivateToken() {
         return privateToken;
