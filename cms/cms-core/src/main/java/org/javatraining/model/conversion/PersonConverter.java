@@ -17,10 +17,6 @@ public class PersonConverter {
         PersonVO personVO = new PersonVO(personEntity.getId(), personEntity.getName(), personEntity.getLastName(),
                 personEntity.getEmail(), personEntity.getPersonRole());
         personVO.setSecondName(personEntity.getSecondName());
-        if (personEntity.getCourse() != null) {
-            personVO.setCourses(CourseConverter.convertEntitiesToVOs(personEntity.getCourse()));
-        }
-        //TODO: convert collections of marks and messages
         return personVO;
     }
 
@@ -44,10 +40,6 @@ public class PersonConverter {
         if (personVO.getPersonRole() != null) {
             personEntity.setPersonRole(personVO.getPersonRole());
         }
-        if (personVO.getCourses() != null) {
-            personEntity.setCourse(CourseConverter.convertVOsToEntities(personVO.getCourses()));
-        }
-        // TODO: set person marks and messages
         return personEntity;
     }
 
