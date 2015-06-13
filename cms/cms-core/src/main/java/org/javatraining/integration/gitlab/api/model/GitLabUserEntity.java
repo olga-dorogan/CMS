@@ -11,7 +11,7 @@ import java.io.Serializable;
  * For more information you should send mail to codedealerb@gmail.com
  */
 public class GitLabUserEntity implements Serializable {
-    protected Integer id;
+    protected Long id;
     protected String email;//required
     protected String password;//required
     protected String username;//required
@@ -216,7 +216,7 @@ public class GitLabUserEntity implements Serializable {
         this.avatarUrl = avatarUrl;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

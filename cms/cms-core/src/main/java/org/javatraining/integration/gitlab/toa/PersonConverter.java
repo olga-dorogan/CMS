@@ -25,7 +25,7 @@ public class PersonConverter {
         entity.setEmail(personVO.getEmail());
         entity.setName(personVO.getName() + "_" + personVO.getLastName());
 
-        switch (personVO.getPersonRole().getRole()) {
+        switch (personVO.getPersonRole()) {
             case STUDENT:
                 entity.setPassword("student" + personVO.getId());
                 break;
