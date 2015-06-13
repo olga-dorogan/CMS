@@ -13,6 +13,8 @@
     <packaging>pom</packaging>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <javaee.version>7.0</javaee.version>
         <google.api.oauth2.version>v2-rev91-1.20.0</google.api.oauth2.version>
@@ -29,6 +31,7 @@
         <plugin.compiler.version>3.3</plugin.compiler.version>
         <plugin.war.version>2.6</plugin.war.version>
         <plugin.resources.version>2.7</plugin.resources.version>
+        <plugin.exec.version>1.4.0</plugin.exec.version>
     </properties>
 
     <dependencies>

@@ -5,31 +5,42 @@
             <div class="row">
                 <div class="col">
                     <h3>Добавить / Редактировать тему</h3>
-                    <form class="form-horizontal" ng-controller="AddThemeCtrl">
+                    <form data-file-upload="options" class="form-horizontal" ng-controller="AddThemeCtrl">
                         <div class="form-group">
                             <label for="title" class="col-sm-3 control-label">Название</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" ng-model="theme.title"  id="title" placeholder="Введите название">
+                                <input type="text" class="form-control" ng-model="theme.title" id="title" placeholder="Введите название">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="plan" class="col-sm-3 control-label">План</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control" ng-model="theme.plan" id="plan" placeholder="Enter plan"></textarea>
+                                <textarea class="form-control" ng-model="theme.plan" id="plan" placeholder="Enter plan" rows="7"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="additional_resources" class="col-sm-3 control-label">Дополнительные ресурсы</label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" ng-model="theme.resources" id="additional_resources" placeholder="List of Additional resources" rows="5"></textarea>
+                                <br>
+                                <div ui-view="uploadFile"></div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="additional_resources" class="col-sm-3 control-label">Дополнитеьные ресурсы</label>
-                            <div class="col-sm-9">
-                                <textarea class="form-control" ng-model="theme.resources" id="additional_resources" placeholder="Enter Additional resources"></textarea>
-                            </div>
+
                         </div>
                         <div class="form-group">
                             <label for="task" class="col-sm-3 control-label">Практическое задание</label>
-                            <div class="col-sm-9">
-                                <textarea class="form-control" ng-model="theme.task" id="task" placeholder="Type in Practical task"></textarea>
+                            <div class="col-sm-6">
+                                <textarea class="form-control" ng-model="theme.task" id="task" placeholder="Type in Practical task" rows="4"></textarea>
                             </div>
+                            <!--<div class="col-sm-3">
+                                <button type="button" class="form-control btn-success btn-custom trench_out full_screen">Добавить <span class="glyphicon glyphicon-plus"></span></button>
+                                <button type="button" class="form-control btn-danger  trench_out "  title="delete current">Удалить <span class="glyphicon glyphicon-minus"></span></button>
+                            </div>-->
                         </div>
+
                         <div class="row">
                             <div class="col-xs-12 col-md-4" id="git-id">
                                 <div class="form-group">
@@ -43,13 +54,11 @@
                                 <div class="col-sm-offset-2 col-sm-10">
                                     <button type="button" class="btn btn-default trench_out full_screen" ng-click="createTheme()">Создать тему</button>
                                     <button type="button" class="btn btn-default trench_out full_screen">Сгенерировать директорию в gitlab </button>
-                                    <button type="button" class="btn btn-danger trench_out full_screen" data-toggle="popover" title="delete current" data-content="DELETE practical">Удалить практическое задание</button>
-                                    <button type="button" class="btn btn-success btn-custom trench_out full_screen">Добавить практическое задание</button>
                                 </div>
-
                             </div>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>

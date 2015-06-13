@@ -1,8 +1,8 @@
 package org.javatraining.service;
 
+import org.javatraining.entity.PersonRole;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.NewsVO;
-import org.javatraining.model.PersonRoleVO;
 import org.javatraining.model.PersonVO;
 
 import javax.validation.Valid;
@@ -37,7 +37,7 @@ public interface CourseService {
 
     @NotNull
     @Valid
-    List<PersonVO> getAllPersonsFromCourseByRole(@NotNull CourseVO courseVO, @NotNull PersonRoleVO role);
+    List<PersonVO> getAllPersonsFromCourseByRole(@NotNull CourseVO courseVO, @NotNull PersonRole role);
 
     //  Course --- News methods; News methods
 

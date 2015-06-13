@@ -6,10 +6,10 @@ import flexjson.JSONSerializer;
 /**
  * Created by asudak on 5/29/15.
  */
-public abstract class AbstractService<T> {
+public abstract class AbstractWebService<T> {
     private Class<T> klass;
 
-    public AbstractService(Class<T> genericClass) {
+    public AbstractWebService(Class<T> genericClass) {
         klass = genericClass;
     }
 

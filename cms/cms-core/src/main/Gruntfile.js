@@ -15,7 +15,12 @@ module.exports = function(grunt) {
         //Подключаем все файлы которые скачал bower
         bower_concat: {
             all: {
-                dest: 'webapp/build/_bower.js'  // Склеенный файл
+                dest: 'webapp/build/_bower.js',  // Склеенный файл
+                exclude: [  // Пакеты, которые нужно исключить из сборки
+                    'blueimp-canvas-to-blob',
+                    'blueimp-tmpl',
+                    "blueimp-load-image",
+                ]
             }
         },
         // Сжимаем

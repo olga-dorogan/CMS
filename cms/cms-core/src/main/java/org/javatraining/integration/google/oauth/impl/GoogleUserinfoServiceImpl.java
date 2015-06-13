@@ -23,60 +23,47 @@ import java.net.URL;
 @ApplicationScoped
 public class GoogleUserinfoServiceImpl implements GoogleUserinfoService {
     private static final Logger log = LoggerFactory.getLogger(GoogleUserinfoServiceImpl.class);
-    private static final String BASE = "https://www.googleapis.com/oauth2/v2/userinfo";
+    private static final String GOOGLE_USERINFO_URL_BASE = "https://www.googleapis.com/oauth2/v2/userinfo";
+    private static final String GOOGLE_PARAM_FIELDS_KEY = "fields";
 
     @Override
     public String getClientIdByToken(String token) {
-        final String PARAM_FIELDS_KEY = "fields";
         final String PARAM_FIELDS_VALUE = "id";
-        try {
-            Client client = ClientBuilder.newClient();
-            WebTarget target = client.target(URI.create(new URL(BASE).toExternalForm()));
-            target.register(Userinfo.class);
-            Response response = target
-                    .queryParam(PARAM_FIELDS_KEY, PARAM_FIELDS_VALUE)
-                    .request(MediaType.APPLICATION_JSON)
-                    .header("Authorization", "Bearer " + token)
-                    .get();
+        return getUserInfoWithSpecifiedFields(token, PARAM_FIELDS_VALUE, "to get client id").getId();
+    }
 
-            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-                Userinfo userinfo = response.readEntity(Userinfo.class);
-                log.trace("token: {}; getClientById() returns {} as clientId", token, userinfo.getId());
-                return userinfo.getId();
-            }
-            throw new AuthException(String.format("Response from query to get client id (token = %s) returns with status code %s",
-                    token, response.getStatus()));
-        } catch (MalformedURLException e) {
-            throw new GoogleConnectionAuthException(e);
-        }
+    @Override
+    public String getEmailByToken(String token) {
+        final String PARAM_FIELDS_VALUE = "email";
+        return getUserInfoWithSpecifiedFields(token, PARAM_FIELDS_VALUE, "to get email").getEmail();
     }
 
     @Override
     public PersonVO getUserInfoByToken(String token) {
-        final String PARAM_FIELDS_KEY = "fields";
         final String PARAM_FIELDS_VALUE = "id,email,given_name,family_name";
+        Userinfo userinfo = getUserInfoWithSpecifiedFields(token, PARAM_FIELDS_VALUE, "to get user info");
+        PersonVO personVO = new PersonVO();
+        personVO.setEmail(userinfo.getEmail());
+        personVO.setName(userinfo.getGiven_name());
+        personVO.setLastName(userinfo.getFamily_name());
+        return personVO;
+    }
+
+    private Userinfo getUserInfoWithSpecifiedFields(final String token, final String paramFields, final String queryPurpose) throws AuthException {
         try {
             Client client = ClientBuilder.newClient();
-            WebTarget target = client.target(URI.create(new URL(BASE).toExternalForm()));
+            WebTarget target = client.target(URI.create(new URL(GOOGLE_USERINFO_URL_BASE).toExternalForm()));
             target.register(Userinfo.class);
             Response response = target
-                    .queryParam(PARAM_FIELDS_KEY, PARAM_FIELDS_VALUE)
+                    .queryParam(GOOGLE_PARAM_FIELDS_KEY, paramFields)
                     .request(MediaType.APPLICATION_JSON)
                     .header("Authorization", "Bearer " + token)
                     .get();
-
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-                Userinfo userinfo = response.readEntity(Userinfo.class);
-                log.trace("token: {}; getUserInfoByToken() returns {}", token, userinfo);
-                PersonVO personVO = new PersonVO();
-                personVO.setEmail(userinfo.getEmail());
-                personVO.setName(userinfo.getGiven_name());
-                personVO.setLastName(userinfo.getFamily_name());
-                //FIXME: set clientId to personVO
-                return personVO;
+                return response.readEntity(Userinfo.class);
             }
-            throw new AuthException(String.format("Response from query to get user info (token = %s) returns with status code %s",
-                    token, response.getStatus()));
+            throw new AuthException(String.format("Response from query %s (token = %s) returns with status code %s",
+                    queryPurpose, token, response.getStatus()));
 
         } catch (MalformedURLException e) {
             throw new GoogleConnectionAuthException(e);

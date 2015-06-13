@@ -7,8 +7,9 @@ import org.javatraining.entity.PersonEntity;
 import org.javatraining.entity.PersonRole;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.MarkVO;
-import org.javatraining.model.PersonRoleVO;
 import org.javatraining.model.PersonVO;
+import org.javatraining.model.conversion.CourseConverter;
+import org.javatraining.model.conversion.PersonConverter;
 import org.javatraining.service.PersonService;
 import org.javatraining.service.exception.UnsupportedOperationException;
 
@@ -30,14 +31,27 @@ public class PersonServiceImpl implements PersonService {
     private CourseDAO courseDAO;
 
     @Override
-    public PersonVO save(@NotNull @Valid PersonVO personVO) {
-        personVO.setPersonRole(new PersonRoleVO(PersonRole.STUDENT));
-        return new PersonVO(personDAO.save(PersonVO.convertToEntity(personVO)));
+    public PersonVO saveStudent(@NotNull @Valid PersonVO personVO) {
+        personVO.setPersonRole(PersonRole.STUDENT);
+        PersonEntity entity = PersonConverter.convertVOToEntity(personVO);
+        PersonEntity savedEntity = personDAO.save(entity);
+        return PersonConverter.convertEntityToVO(savedEntity);
+    }
+
+    @Override
+    public PersonVO getByEmailAndSaveIfNotExist(@NotNull @Valid PersonVO personVO) {
+        PersonVO personVOFromEmail = getByEmail(personVO.getEmail());
+        if (personVOFromEmail != null) {
+            return personVOFromEmail;
+        }
+        return saveStudent(personVO);
     }
 
     @Override
     public PersonVO update(@NotNull @Valid PersonVO personVO) {
-        return new PersonVO(personDAO.update(PersonVO.convertToEntity(personVO)));
+        PersonEntity entity = PersonConverter.convertVOToEntity(personVO);
+        PersonEntity updatedEntity = personDAO.update(entity);
+        return PersonConverter.convertEntityToVO(updatedEntity);
     }
 
     @Override
@@ -47,16 +61,21 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public PersonVO getById(@NotNull Long id) {
-        return new PersonVO(personDAO.getById(id));
+        PersonEntity personEntity = personDAO.getById(id);
+        return PersonConverter.convertEntityToVO(personEntity);
     }
 
     @Override
     public PersonVO getByEmail(@NotNull String email) {
-        return new PersonVO(personDAO.getByEmail(email));
+        PersonEntity personEntity = personDAO.getByEmail(email);
+        if (personEntity == null) {
+            return null;
+        }
+        return PersonConverter.convertEntityToVO(personEntity);
     }
 
     @Override
-    public List<PersonVO> getPersonsByRole(@NotNull @Valid PersonRoleVO role) {
+    public List<PersonVO> getPersonsByRole(@NotNull @Valid PersonRole role) {
         throw new UnsupportedOperationException();
     }
 
@@ -64,8 +83,8 @@ public class PersonServiceImpl implements PersonService {
     public void addPersonToCourse(@NotNull PersonVO personVO, @NotNull CourseVO courseVO) {
         // TODO: !!! test this method
         // owning side is CourseEntity, so all operations need to be from CourseEntity
-        PersonEntity personEntity = PersonVO.convertToEntity(personVO);
-        CourseEntity courseEntity = CourseVO.convertToEntity(courseVO);
+        PersonEntity personEntity = personDAO.getById(personVO.getId());
+        CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
         courseEntity.getPerson().add(personEntity);
         courseDAO.update(courseEntity);
     }
@@ -74,18 +93,18 @@ public class PersonServiceImpl implements PersonService {
     public void removePersonFromCourse(@NotNull PersonVO personVO, @NotNull CourseVO courseVO) {
         // TODO: !!! test this method
         // owning side is CourseEntity, so all operations need to be from CourseEntity
-        PersonEntity personEntity = PersonVO.convertToEntity(personVO);
-        CourseEntity courseEntity = CourseVO.convertToEntity(courseVO);
+        PersonEntity personEntity = personDAO.getById(personVO.getId());
+        CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
         courseEntity.getPerson().remove(personEntity);
         courseDAO.update(courseEntity);
     }
 
     @Override
     public Set<CourseVO> getCourses(@NotNull PersonVO personVO) {
-        PersonEntity personEntity = PersonVO.convertToEntity(personVO);
+        PersonEntity personEntity = PersonConverter.convertVOToEntity(personVO);
         // if FetchType is lazy, initiate data loading
         personEntity.getCourse().size();
-        return CourseVO.convertEntitiesToVOs(personEntity.getCourse());
+        return CourseConverter.convertEntitiesToVOs(personEntity.getCourse());
     }
 
     @Override
