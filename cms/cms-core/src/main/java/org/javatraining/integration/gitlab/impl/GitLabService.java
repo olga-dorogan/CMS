@@ -4,7 +4,7 @@ import org.javatraining.integration.gitlab.api.ifaces.GitLabAPIClient;
 import org.javatraining.integration.gitlab.api.model.*;
 import org.javatraining.integration.gitlab.exception.ResourceNotFoundException;
 import org.javatraining.integration.gitlab.exception.UserRequiredPropertiesIsNotComparable;
-import org.javatraining.integration.gitlab.toa.PersonConverter;
+import org.javatraining.integration.gitlab.converter.PersonConverter;
 import org.javatraining.model.PersonVO;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;

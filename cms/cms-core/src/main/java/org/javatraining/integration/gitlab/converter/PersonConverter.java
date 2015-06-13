@@ -1,4 +1,4 @@
-package org.javatraining.integration.gitlab.toa;
+package org.javatraining.integration.gitlab.converter;
 
 import org.javatraining.integration.gitlab.api.model.GitLabUserEntity;
 import org.javatraining.integration.gitlab.exception.UserRequiredPropertiesIsNotComparable;
