@@ -198,24 +198,6 @@
             <artifactId>checkstyle</artifactId>
             <version>6.7</version>
         </dependency>
-        <!--&lt;!&ndash; REST dependency&ndash;&gt;-->
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-multipart-provider</artifactId>
-            <version>${resteasy.multipart.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2.database.version}</version>
-        </dependency>
-        <!-- -->
-        <dependency>
-            <groupId>com.puppycrawl.tools</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>6.7</version>
-        </dependency>
         <!-- REST dependency-->
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
