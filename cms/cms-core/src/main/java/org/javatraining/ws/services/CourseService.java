@@ -125,7 +125,7 @@ public class CourseService extends AbstractService<CourseVO> {
         CourseVO course = new CourseVO();
         course.setId(courseId);
         //TODO subscribe person to course
-        return Response.accepted().build();
+        return null; //Response.accepted().build();
     }
 
     @PUT
@@ -137,6 +137,6 @@ public class CourseService extends AbstractService<CourseVO> {
         CourseVO course = new CourseVO();
         course.setId(courseId);
         //TODO unsubscribe person to course
-        return Response.accepted().build();
+        return null;//Response.accepted().build();
     }
 }

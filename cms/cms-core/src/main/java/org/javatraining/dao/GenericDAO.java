@@ -32,12 +32,12 @@ public abstract class GenericDAO<T extends Serializable> {
     return entity;
     }
 
-    public T getById(@NotNull Object id) {
+    public T getById(@NotNull Long id) {
         T entity = (T) getEntityManager().find(entityClass, id);
     return entity;
     }
 
-    public T removeById(@NotNull Object id) {
+    public T removeById(@NotNull Long id) {
         T entity = (T) getEntityManager().find(entityClass, id);
         getEntityManager().remove(entity);
         return entity;

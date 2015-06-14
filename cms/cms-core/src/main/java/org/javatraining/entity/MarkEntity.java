@@ -12,9 +12,21 @@ import java.io.Serializable;
 public class MarkEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, insertable = true, updatable = true)
     private Long id;
+
     @NotNull
+    @Basic
+    @Column(name = "mark", nullable = true, insertable = true, updatable = true)
     private Long mark;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "person_id", nullable = false)
+    private PersonEntity persons;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "lesson_id", nullable = false)
+    private LessonEntity lessons;
 
     public MarkEntity() {
     }
@@ -23,7 +35,6 @@ public class MarkEntity implements Serializable {
            this.mark = mark;
     }
 
-    @Column(name = "id", nullable = false, insertable = true, updatable = true)
     public Long getId() {
         return id;
     }
@@ -32,9 +43,6 @@ public class MarkEntity implements Serializable {
         this.id = id;
     }
 
-
-    @Basic
-    @Column(name = "mark", nullable = true, insertable = true, updatable = true)
     public Long getMark() {
         return mark;
     }
@@ -43,10 +51,6 @@ public class MarkEntity implements Serializable {
         this.mark = mark;
     }
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "person_id", nullable = false)
-    private PersonEntity persons;
-
     public PersonEntity getPersons() {
         return persons;
     }
@@ -54,10 +58,6 @@ public class MarkEntity implements Serializable {
     public void setPersons(PersonEntity persons) {
         this.persons = persons;
     }
-
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "lesson_id", nullable = false)
-    private LessonEntity lessons;
 
     public LessonEntity getLessons() {
         return lessons;

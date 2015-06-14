@@ -40,7 +40,7 @@ public class GoogleUserinfoServiceImpl implements GoogleUserinfoService {
                     .get();
 
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-                Userinfo userinfo = response.readEntity(Userinfo.class);
+                Userinfo userinfo = null;//response.readEntity(Userinfo.class);
                 log.trace("token: {}; getClientById() returns {} as clientId", token, userinfo.getId());
                 return userinfo.getId();
             }
@@ -66,7 +66,7 @@ public class GoogleUserinfoServiceImpl implements GoogleUserinfoService {
                     .get();
 
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-                Userinfo userinfo = response.readEntity(Userinfo.class);
+                Userinfo userinfo =null;// response.readEntity(Userinfo.class);
                 log.trace("token: {}; getUserInfoByToken() returns {}", token, userinfo);
                 PersonVO personVO = new PersonVO();
                 personVO.setEmail(userinfo.getEmail());

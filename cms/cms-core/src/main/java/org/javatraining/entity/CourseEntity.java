@@ -14,17 +14,46 @@ import java.util.Set;
 public class CourseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, insertable = true, updatable = true)
     private Long id;
+
     @NotNull
+    @Basic
+    @Column(name = "name", nullable = true, insertable = true, updatable = true, length = 255)
     private String name;
+
     @NotNull
+    @Basic
+    @Column(name = "owner", nullable = true, insertable = true, updatable = true)
     private Long owner;
+
     @NotNull
+    @Basic
+    @Column(name = "description", nullable = true, insertable = true, updatable = true, length = 16777215)
     private String description;
+
     @NotNull
+    @Basic
+    @Column(name = "startdate", nullable = true, insertable = true, updatable = true)
     private Date startdate;
+
     @NotNull
+    @Basic
+    @Column(name = "enddate", nullable = true, insertable = true, updatable = true)
     private Date enddate;
+
+    @ManyToMany
+    @JoinTable(name = "person_course",
+            joinColumns = @JoinColumn(name = "owner_id", referencedColumnName = "owner"),
+            inverseJoinColumns = @JoinColumn(name = "person_id", referencedColumnName = "id"))
+    private Set<PersonEntity> person;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "courses")
+    private Set<LessonEntity> lessons;
+
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "courses")
+    private Set<NewsEntity> news;
 
     public CourseEntity() {
     }
@@ -37,7 +66,6 @@ public class CourseEntity implements Serializable {
         this.enddate = enddate;
     }
 
-    @Column(name = "id", nullable = false, insertable = true, updatable = true)
     public Long getId() {
         return id;
     }
@@ -46,8 +74,6 @@ public class CourseEntity implements Serializable {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "name", nullable = true, insertable = true, updatable = true, length = 255)
     public String getName() {
         return name;
     }
@@ -56,8 +82,6 @@ public class CourseEntity implements Serializable {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "owner", nullable = true, insertable = true, updatable = true)
     public Long getOwner() {
         return owner;
     }
@@ -66,8 +90,6 @@ public class CourseEntity implements Serializable {
         this.owner = owner;
     }
 
-    @Basic
-    @Column(name = "description", nullable = true, insertable = true, updatable = true, length = 16777215)
     public String getDescription() {
         return description;
     }
@@ -76,8 +98,6 @@ public class CourseEntity implements Serializable {
         this.description = description;
     }
 
-    @Basic
-    @Column(name = "startdate", nullable = true, insertable = true, updatable = true)
     public Date getStartdate() {
         return startdate;
     }
@@ -86,8 +106,6 @@ public class CourseEntity implements Serializable {
         this.startdate = startdate;
     }
 
-    @Basic
-    @Column(name = "enddate", nullable = true, insertable = true, updatable = true)
     public Date getEnddate() {
         return enddate;
     }
@@ -95,13 +113,6 @@ public class CourseEntity implements Serializable {
     public void setEnddate(Date enddate) {
         this.enddate = enddate;
     }
-
-
-    @ManyToMany
-    @JoinTable(name = "person_course",
-            joinColumns = @JoinColumn(name = "owner_id", referencedColumnName = "owner"),
-            inverseJoinColumns = @JoinColumn(name = "person_id", referencedColumnName = "id"))
-    private Set<PersonEntity> person;
 
     public Set<PersonEntity> getPerson() {
         return person;
@@ -111,10 +122,6 @@ public class CourseEntity implements Serializable {
         this.person = person;
     }
 
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "courses")
-    private Set<NewsEntity> news;
-
     public Set<NewsEntity> getNews() {
         return news;
     }
@@ -122,9 +129,6 @@ public class CourseEntity implements Serializable {
     public void setNews(Set<NewsEntity> news) {
         this.news = news;
     }
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "courses")
-    private Set<LessonEntity> lessons;
 
     public Set<LessonEntity> getLessons() {
         return lessons;
@@ -163,9 +167,6 @@ public class CourseEntity implements Serializable {
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (startdate != null ? startdate.hashCode() : 0);
         result = 31 * result + (enddate != null ? enddate.hashCode() : 0);
-        result = 31 * result + (person != null ? person.hashCode() : 0);
-        result = 31 * result + (news != null ? news.hashCode() : 0);
-        result = 31 * result + (lessons != null ? lessons.hashCode() : 0);
         return result;
     }
 }

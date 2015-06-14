@@ -13,18 +13,41 @@ import java.util.Set;
 public class PersonEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, insertable = true, updatable = true)
     private Long id;
+
     @NotNull
+    @Basic
+    @Column(name = "name", nullable = true, insertable = true, updatable = true, length = 255)
     private String name;
+
     @NotNull
+    @Basic
+    @Column(name = "second_name", nullable = true, insertable = true, updatable = true, length = 255)
     private String secondName;
+
     @NotNull
+    @Basic
+    @Column(name = "last_name", nullable = true, insertable = true, updatable = true, length = 255)
     private String lastName;
+
     @NotNull
+    @Basic
+    @Column(name = "email", nullable = true, insertable = true, updatable = true, length = 255)
     private String email;
 
    @Enumerated(EnumType.STRING)
     private PersonRole personRole;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "persons")
+    private Set<ForumMessagesEntity> forumMassages;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "persons")
+    private Set<MarkEntity> marks;
+
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER, mappedBy = "person")
+    private Set<CourseEntity> course;
 
     public PersonEntity() {
     }
@@ -37,7 +60,6 @@ public class PersonEntity implements Serializable {
         this.personRole = personRole;
     }
 
-    @Column(name = "id", nullable = false, insertable = true, updatable = true)
     public Long getId() {
         return id;
     }
@@ -46,8 +68,6 @@ public class PersonEntity implements Serializable {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "name", nullable = true, insertable = true, updatable = true, length = 255)
     public String getName() {
         return name;
     }
@@ -56,8 +76,6 @@ public class PersonEntity implements Serializable {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "second_name", nullable = true, insertable = true, updatable = true, length = 255)
     public String getSecondName() {
         return secondName;
     }
@@ -66,8 +84,6 @@ public class PersonEntity implements Serializable {
         this.secondName = secondName;
     }
 
-    @Basic
-    @Column(name = "last_name", nullable = true, insertable = true, updatable = true, length = 255)
     public String getLastName() {
         return lastName;
     }
@@ -75,10 +91,6 @@ public class PersonEntity implements Serializable {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "persons")
-    private Set<ForumMessagesEntity> forumMassages;
 
     public void setForumMassages(Set<ForumMessagesEntity> forumMassages) {
         this.forumMassages = forumMassages;
@@ -95,9 +107,6 @@ public class PersonEntity implements Serializable {
         this.personRole = personRole;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "persons")
-    private Set<MarkEntity> marks;
-
     public Set<MarkEntity> getMarks() {
         return marks;
     }
@@ -105,9 +114,6 @@ public class PersonEntity implements Serializable {
     public void setMarks(Set<MarkEntity> marks) {
         this.marks = marks;
     }
-
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER, mappedBy = "person")
-    private Set<CourseEntity> course;
 
     public Set<CourseEntity> getCourse() {
         return course;
@@ -117,8 +123,6 @@ public class PersonEntity implements Serializable {
         this.course = course;
     }
 
-    @Basic
-    @Column(name = "email", nullable = true, insertable = true, updatable = true, length = 255)
     public String getEmail() {
         return email;
     }
@@ -130,26 +134,28 @@ public class PersonEntity implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof PersonEntity)) return false;
 
         PersonEntity that = (PersonEntity) o;
 
-        if (id != that.id) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (personRole != that.personRole) return false;
         if (secondName != null ? !secondName.equals(that.secondName) : that.secondName != null) return false;
 
         return true;
     }
+
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (secondName != null ? secondName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (personRole != null ? personRole.hashCode() : 0);
         return result;
     }
-
 }

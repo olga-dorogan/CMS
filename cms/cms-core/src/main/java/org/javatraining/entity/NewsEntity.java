@@ -13,13 +13,27 @@ import java.sql.Timestamp;
 public class NewsEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, insertable = true, updatable = true)
     private Long id;
+
     @NotNull
+    @Basic
+    @Column(name = "title", nullable = true, insertable = true, updatable = true, length = 255)
     private String title;
+
     @NotNull
+    @Basic
+    @Column(name = "content", nullable = true, insertable = true, updatable = true, length = 16777215)
     private String content;
+
     @NotNull
+    @Basic
+    @Column(name = "date", nullable = true, insertable = true, updatable = true)
     private Timestamp date;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "course_id", nullable = false)
+    private CourseEntity courses;
 
     public NewsEntity() {
     }
@@ -30,7 +44,6 @@ public class NewsEntity implements Serializable {
         this.date = date;
         this.courses = courses;
     }
-    @Column(name = "id", nullable = false, insertable = true, updatable = true)
     public Long getId() {
         return id;
     }
@@ -39,8 +52,6 @@ public class NewsEntity implements Serializable {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "title", nullable = true, insertable = true, updatable = true, length = 255)
     public String getTitle() {
         return title;
     }
@@ -49,18 +60,14 @@ public class NewsEntity implements Serializable {
         this.title = title;
     }
 
-    @Basic
-    @Column(name = "content", nullable = true, insertable = true, updatable = true, length = 16777215)
     public String getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setDescription(String content) {
         this.content = content;
     }
 
-    @Basic
-    @Column(name = "date", nullable = true, insertable = true, updatable = true)
     public Timestamp getDate() {
         return date;
     }
@@ -69,9 +76,6 @@ public class NewsEntity implements Serializable {
         this.date = date;
     }
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "course_id", nullable = false)
-    private CourseEntity courses;
     public CourseEntity getCourses() {
         return courses;
     }

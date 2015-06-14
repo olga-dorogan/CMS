@@ -14,22 +14,60 @@ import java.util.Set;
 public class LessonEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+    @Column(name = "id", nullable = false, insertable = true, updatable = true)
+    private Long id;
+
     @NotNull
+    @Basic
+    @Column(name = "type", nullable = false, insertable = false, updatable = false)
     private Long type;
+
     @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic
+    @Column(name = "order_num", nullable = true, insertable = true, updatable = true)
     private Long orderNum;
+
     @NotNull
+    @Basic
+    @Column(name = "topic", nullable = true, insertable = true, updatable = true, length = 255)
     private String topic;
+
     @NotNull
+    @Basic
+    @Column(name = "description", nullable = true, insertable = true, updatable = true, length = 16777215)
     private String description;
+
     @NotNull
+    @Basic
+    @Column(name = "date", nullable = true, insertable = true, updatable = true, length = 255)
     private Date createDate;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lesson")
+    private Set<LessonLinkEntity> lessonLinks;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "course_id", nullable = false)
+    private CourseEntity courses;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessons")
+    private Set<MarkEntity> marks;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessons")
+    private Set<ForumMessagesEntity> forumMessages;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lesson")
+    private Set<PracticeLessonEntity> practiceLesson;
+
+    public Set<MarkEntity> getMarks() {
+        return marks;
+    }
 
     public LessonEntity() {
     }
 
-    public LessonEntity(Long type, Long orderNum, String topic, String description, Date createDate, CourseEntity courses) {
+    public LessonEntity(Long type, Long orderNum, String topic, String description,
+                        Date createDate, CourseEntity courses) {
         this.type = type;
         this.orderNum = orderNum;
         this.topic = topic;
@@ -38,7 +76,6 @@ public class LessonEntity implements Serializable {
         this.courses = courses;
     }
 
-    @Column(name = "id", nullable = false, insertable = true, updatable = true)
     public Long getId() {
         return id;
     }
@@ -47,9 +84,6 @@ public class LessonEntity implements Serializable {
         this.id = id;
     }
 
-
-    @Basic
-    @Column(name = "type", nullable = false, insertable = false, updatable = false)
     public Long getType() {
         return type;
     }
@@ -58,9 +92,6 @@ public class LessonEntity implements Serializable {
         this.type = type;
     }
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic
-    @Column(name = "order_num", nullable = true, insertable = true, updatable = true)
     public Long getOrderNum() {
         return orderNum;
     }
@@ -69,8 +100,6 @@ public class LessonEntity implements Serializable {
         this.orderNum = orderNum;
     }
 
-    @Basic
-    @Column(name = "topic", nullable = true, insertable = true, updatable = true, length = 255)
     public String getTopic() {
         return topic;
     }
@@ -79,8 +108,6 @@ public class LessonEntity implements Serializable {
         this.topic = topic;
     }
 
-    @Basic
-    @Column(name = "date", nullable = true, insertable = true, updatable = true, length = 255)
     public Date getCreateDate() {
         return createDate;
     }
@@ -89,8 +116,6 @@ public class LessonEntity implements Serializable {
         this.createDate = topic;
     }
 
-    @Basic
-    @Column(name = "description", nullable = true, insertable = true, updatable = true, length = 16777215)
     public String getDescription() {
         return description;
     }
@@ -98,10 +123,6 @@ public class LessonEntity implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "course_id", nullable = false)
-    private CourseEntity courses;
 
     public CourseEntity getCourses() {
         return courses;
@@ -111,9 +132,6 @@ public class LessonEntity implements Serializable {
         this.courses = courses;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lesson")
-    private Set<PracticeLessonEntity> practiceLesson;
-
     public Set<PracticeLessonEntity> getPracticeLesson() {
         return practiceLesson;
     }
@@ -121,9 +139,6 @@ public class LessonEntity implements Serializable {
     public void setPracticeLesson(Set<PracticeLessonEntity> practiceLesson) {
         this.practiceLesson = practiceLesson;
     }
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lesson")
-    private Set<LessonLinkEntity> lessonLinks;
 
     public Set<LessonLinkEntity> getLessonLinks() {
         return lessonLinks;
@@ -133,18 +148,10 @@ public class LessonEntity implements Serializable {
         this.lessonLinks = lessonLinks;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessons")
-    private Set<MarkEntity> marks;
-    public Set<MarkEntity> getMarks() {
-        return marks;
-    }
-
     public void setMarks(Set<MarkEntity> marks) {
         this.marks = marks;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessons")
-    private Set<ForumMessagesEntity> forumMessages;
     public Set<ForumMessagesEntity> getForumMessages() {
         return forumMessages;
     }
