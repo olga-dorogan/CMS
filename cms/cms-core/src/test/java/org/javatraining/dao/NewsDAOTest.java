@@ -27,8 +27,7 @@ public class NewsDAOTest {
 
     @EJB
     NewsDAO newsDAO;
-    private NewsEntity newsEntity;
-    private CourseEntity courseEntity;
+
     @Deployment
     public static WebArchive createDeployment() {
         File[] files = Maven.resolver().loadPomFromFile("cms-core/pom.xml")
