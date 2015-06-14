@@ -21,7 +21,7 @@
     </properties>
     <profiles>
         <profile>
-            <id>datasource-ignore-mysql</id>
+            <id>datasource-in-memory</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
@@ -33,7 +33,7 @@
             </properties>
         </profile>
         <profile>
-            <id>full-stack</id>
+            <id>build-both-back-and-front</id>
             <build>
                 <plugins>
                     <plugin>
