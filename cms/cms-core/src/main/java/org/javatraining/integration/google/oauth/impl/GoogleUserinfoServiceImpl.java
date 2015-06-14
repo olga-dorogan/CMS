@@ -31,24 +31,10 @@ public class GoogleUserinfoServiceImpl implements GoogleUserinfoService {
         final String PARAM_FIELDS_VALUE = "id";
         return getUserInfoWithSpecifiedFields(token, PARAM_FIELDS_VALUE, "to get client id").getId();
     }
-
-<<<<<<< HEAD
-            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-                Userinfo userinfo = null;//response.readEntity(Userinfo.class);
-                log.trace("token: {}; getClientById() returns {} as clientId", token, userinfo.getId());
-                return userinfo.getId();
-            }
-            throw new AuthException(String.format("Response from query to get client id (token = %s) returns with status code %s",
-                    token, response.getStatus()));
-        } catch (MalformedURLException e) {
-            throw new GoogleConnectionAuthException(e);
-        }
-=======
     @Override
     public String getEmailByToken(String token) {
         final String PARAM_FIELDS_VALUE = "email";
         return getUserInfoWithSpecifiedFields(token, PARAM_FIELDS_VALUE, "to get email").getEmail();
->>>>>>> ce992ded0a5395afa5d2f0a4aa1f58da723501b4
     }
 
     @Override
@@ -73,18 +59,7 @@ public class GoogleUserinfoServiceImpl implements GoogleUserinfoService {
                     .header("Authorization", "Bearer " + token)
                     .get();
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-<<<<<<< HEAD
-                Userinfo userinfo =null;// response.readEntity(Userinfo.class);
-                log.trace("token: {}; getUserInfoByToken() returns {}", token, userinfo);
-                PersonVO personVO = new PersonVO();
-                personVO.setEmail(userinfo.getEmail());
-                personVO.setName(userinfo.getGiven_name());
-                personVO.setLastName(userinfo.getFamily_name());
-                //FIXME: set clientId to personVO
-                return personVO;
-=======
                 return response.readEntity(Userinfo.class);
->>>>>>> ce992ded0a5395afa5d2f0a4aa1f58da723501b4
             }
             throw new AuthException(String.format("Response from query %s (token = %s) returns with status code %s",
                     queryPurpose, token, response.getStatus()));

@@ -130,13 +130,8 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
         person.setId(personId);
         CourseVO course = new CourseVO();
         course.setId(courseId);
-<<<<<<< HEAD:cms/cms-core/src/main/java/org/javatraining/ws/services/CourseService.java
-        //TODO subscribe person to course
-        return null; //Response.accepted().build();
-=======
         personService.addPersonToCourse(person, course);
         return Response.accepted().build();
->>>>>>> ce992ded0a5395afa5d2f0a4aa1f58da723501b4:cms/cms-core/src/main/java/org/javatraining/ws/services/CourseWebService.java
     }
 
     @PUT
@@ -147,12 +142,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
         person.setId(userId);
         CourseVO course = new CourseVO();
         course.setId(courseId);
-<<<<<<< HEAD:cms/cms-core/src/main/java/org/javatraining/ws/services/CourseService.java
-        //TODO unsubscribe person to course
-        return null;//Response.accepted().build();
-=======
         personService.removePersonFromCourse(person, course);
         return Response.accepted().build();
->>>>>>> ce992ded0a5395afa5d2f0a4aa1f58da723501b4:cms/cms-core/src/main/java/org/javatraining/ws/services/CourseWebService.java
     }
 }
