@@ -1,0 +1,1 @@
+INSERT INTO person(id, email, name, secondName, lastName, personRole) VALUES(1, 'dorogan.olga.test@gmail.com', 'test', 'test', 'test', 'TEACHER');

@@ -1,8 +1,8 @@
 package org.javatraining.service.impl;
 
+import org.javatraining.entity.PersonRole;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.NewsVO;
-import org.javatraining.model.PersonRoleVO;
 import org.javatraining.model.PersonVO;
 import org.javatraining.service.CourseService;
 import org.javatraining.service.exception.UnsupportedOperationException;
@@ -53,7 +53,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<PersonVO> getAllPersonsFromCourseByRole(@NotNull CourseVO courseVO, @NotNull PersonRoleVO role) {
+    public List<PersonVO> getAllPersonsFromCourseByRole(@NotNull CourseVO courseVO, @NotNull PersonRole role) {
         throw new UnsupportedOperationException();
     }
 

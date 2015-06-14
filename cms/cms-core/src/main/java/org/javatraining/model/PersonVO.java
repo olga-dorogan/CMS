@@ -1,8 +1,9 @@
 package org.javatraining.model;
 
+import org.javatraining.entity.PersonRole;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Set;
 
 /**
  * Created by vika on 30.05.15.
@@ -10,25 +11,19 @@ import java.util.Set;
 public class PersonVO implements Serializable {
     private Long id;
     @NotNull
-    private String googleClientId;
-    @NotNull
     private String name;
     private String secondName;
     @NotNull
     private String lastName;
     @NotNull
     private String email;
-    private PersonRoleVO personRole;
-    private Set<MarkVO> marks;
-    private Set<CourseVO> courses;
-    private Set<ForumMessagesVO> forumMessages;
+    private PersonRole personRole;
 
     public PersonVO() {
     }
 
-    public PersonVO(Long id, String clientId, String name, String lastName, String email, PersonRoleVO personRole) {
+    public PersonVO(Long id, String name, String lastName, String email, PersonRole personRole) {
         this.id = id;
-        this.googleClientId = clientId;
         this.name = name;
         this.lastName = lastName;
         this.email = email;
@@ -41,14 +36,6 @@ public class PersonVO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getGoogleClientId() {
-        return googleClientId;
-    }
-
-    public void setGoogleClientId(String clientId) {
-        this.googleClientId = clientId;
     }
 
     public String getName() {
@@ -83,37 +70,12 @@ public class PersonVO implements Serializable {
         this.email = email;
     }
 
-    public PersonRoleVO getPersonRole() {
+    public PersonRole getPersonRole() {
         return personRole;
     }
 
-    public void setPersonRole(PersonRoleVO personRole) {
+    public void setPersonRole(PersonRole personRole) {
         this.personRole = personRole;
-    }
-
-    public Set<MarkVO> getMarks() {
-        return marks;
-    }
-
-    public void setMarks(Set<MarkVO> marks) {
-        this.marks = marks;
-    }
-
-    public Set<CourseVO> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(Set<CourseVO> courses) {
-        this.courses = courses;
-    }
-
-
-    public Set<ForumMessagesVO> getForumMessages() {
-        return forumMessages;
-    }
-
-    public void setForumMessages(Set<ForumMessagesVO> forumMessages) {
-        this.forumMessages = forumMessages;
     }
 
     @Override
@@ -121,25 +83,25 @@ public class PersonVO implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PersonVO that = (PersonVO) o;
+        PersonVO personVO = (PersonVO) o;
 
-        if (id != that.id) return false;
-        if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (secondName != null ? !secondName.equals(that.secondName) : that.secondName != null) return false;
+        if (id != null ? !id.equals(personVO.id) : personVO.id != null) return false;
+        if (!name.equals(personVO.name)) return false;
+        if (secondName != null ? !secondName.equals(personVO.secondName) : personVO.secondName != null) return false;
+        if (!lastName.equals(personVO.lastName)) return false;
+        if (!email.equals(personVO.email)) return false;
+        return !(personRole != null ? !personRole.equals(personVO.personRole) : personVO.personRole != null);
 
-        return true;
     }
-
 
     @Override
     public int hashCode() {
-        int result = (int) (name != null ? (id ^ (id >>> 32)) : 0);
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (secondName != null ? secondName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (personRole != null ? personRole.hashCode() : 0);
         return result;
     }
 }

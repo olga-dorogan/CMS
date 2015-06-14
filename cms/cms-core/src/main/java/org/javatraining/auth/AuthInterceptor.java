@@ -28,7 +28,6 @@ public class AuthInterceptor implements Serializable {
 
     @AroundInvoke
     public Object invoke(final InvocationContext context) throws Exception {
-        System.out.println(" AuthInterceptor:" + context.getMethod().getName());
         String[] methodAllowedRoles = getRoles(context.getMethod());
         // if the method wasn't annotated or role field in annotation is empty,
         // process request

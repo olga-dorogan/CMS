@@ -60,6 +60,8 @@
             <properties>
                 <datasource>java:global/CMS/DefaultDS</datasource>
                 <hibernate.dialect>org.hibernate.dialect.H2Dialect</hibernate.dialect>
+                <sql-load-script>META-INF/sql/data-h2.sql</sql-load-script>
+                <persistence-schema-generation>drop-and-create</persistence-schema-generation>
             </properties>
         </profile>
         <profile>
@@ -70,6 +72,7 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
+                        <version>${plugin.exec.version}</version>
                         <executions>
                             <execution>
                                 <id>exec-npm-install</id>
@@ -89,6 +92,7 @@
                     </plugin>
                 </plugins>
             </build>
+            <!--git-->
         </profile>
 
     </profiles>
@@ -136,6 +140,7 @@
             <scope>test</scope>
         </dependency>
 
+<<<<<<< HEAD
         <!--Test arquillian -->
         <dependency>
             <groupId>com.h2database</groupId>
@@ -150,6 +155,28 @@
             <scope>test</scope>
         </dependency>
 
+=======
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.arquillian.container</groupId>-->
+            <!--<artifactId>arquillian-weld-ee-embedded-1.1</artifactId>-->
+            <!--<version>1.0.0.CR3</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.arquillian.core</groupId>-->
+            <!--<artifactId>arquillian-core-impl-base</artifactId>-->
+            <!--<version>1.1.8.Final</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.weld</groupId>-->
+            <!--<artifactId>weld-core</artifactId>-->
+            <!--<version>1.1.5.Final</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
+>>>>>>> ce992ded0a5395afa5d2f0a4aa1f58da723501b4
 
         <!--Logging dependencies-->
         <dependency>
@@ -193,6 +220,25 @@
             <artifactId>hamcrest-all</artifactId>
             <version>1.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-client</artifactId>
+            <version>3.0.8.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jackson2-provider</artifactId>
+            <version>3.0.8.Final</version>
+        </dependency>
+        <!-- HTTP CLIENT API-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>
+                4.3.5
+            </version>
+        </dependency>
+        <!-- -->
         <!-- h2 jdbc dependencies for ignoring mysql purpose-->
         <!--
                 <dependency>
@@ -215,11 +261,31 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+<<<<<<< HEAD
             <groupId>org.jboss.shrinkwrap.resolver</groupId>
             <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
             <scope>test</scope>
         </dependency>
+=======
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+        </dependency>
+        <!-- -->
+
+>>>>>>> ce992ded0a5395afa5d2f0a4aa1f58da723501b4
     </dependencies>
+    <repositories>
+        <repository>
+            <id>YOUR-PROJECT-NAME-mvn-repo</id>
+            <url>https://raw.github.com/timols/java-gitlab-api/mvn-repo/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
 
     <dependencyManagement>
         <dependencies>
@@ -274,6 +340,7 @@
                     <nonFilteredFileExtensions>
                         <nonFilteredFileExtension>p12</nonFilteredFileExtension>
                         <nonFilteredFileExtension>types</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>sql</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
                 </configuration>
             </plugin>

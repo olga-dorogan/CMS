@@ -8,6 +8,13 @@ function CourseService(Restangular){
     };
     this.createCourses=function(newCourse){
         //FIXME POST Запрос на сервер для добавления курса в базу
+        return Course.post({
+            "description": newCourse.description,
+            "endDate": null,
+            "id": 123,
+            "name": newCourse.name,
+            "startDate": null
+        })
     };
     //FIXME заглушка, для нормальной работы на без запуска WildFly
     this.getCoursesCap=function(){

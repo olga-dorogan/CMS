@@ -13,6 +13,8 @@
     <packaging>pom</packaging>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <javaee.version>7.0</javaee.version>
         <google.api.oauth2.version>v2-rev91-1.20.0</google.api.oauth2.version>
@@ -29,12 +31,16 @@
         <plugin.compiler.version>3.3</plugin.compiler.version>
         <plugin.war.version>2.6</plugin.war.version>
         <plugin.resources.version>2.7</plugin.resources.version>
+<<<<<<< HEAD
         <shrinkwrap.version>2.2.0-beta-2</shrinkwrap.version>
         <arquillian.bom.version>1.0.3.Final</arquillian.bom.version>
         <arquillian.wildfly.version>8.1.0.Final</arquillian.wildfly.version>
         <jboss.spec.version>1.0.0.Final</jboss.spec.version>
         <slf4j.simple.version>1.6.4</slf4j.simple.version>
         <wildfly.remote.version>1.0.0.Alpha5</wildfly.remote.version>
+=======
+        <plugin.exec.version>1.4.0</plugin.exec.version>
+>>>>>>> ce992ded0a5395afa5d2f0a4aa1f58da723501b4
     </properties>
 
     <dependencies>

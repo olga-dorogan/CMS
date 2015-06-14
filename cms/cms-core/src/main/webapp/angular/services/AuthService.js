@@ -5,9 +5,8 @@ function AuthService(Restangular,$http){
         var name=user.name.split(" ");
         return Auth.post(
                     {
-                        "course": null,
                         "email": user.email,
-                        "id": user.id,
+                        "id": null,
                         "lastName": name[1],
                         "marks": null,
                         "name": name[0],

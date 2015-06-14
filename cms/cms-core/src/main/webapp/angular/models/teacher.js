@@ -28,6 +28,10 @@ angular.module('myApp.teacher', ['ui.router'])
                     "content@teacher": {
                         templateUrl: 'angular/views/addTheme.html',
                         controller: 'AddThemeCtrl'
+                    },
+                    "uploadFile@teacher.addTheme":{
+                        templateUrl: 'angular/views/addFile.html',
+                        controller: "FileUploadCtrl"
                     }
                 },
                 resolve: {teacherAccess:teacherAccess}
@@ -45,5 +49,7 @@ angular.module('myApp.teacher', ['ui.router'])
     }])
     .service('ThemeService',ThemeService)
     .controller("AddThemeCtrl",AddThemeCtrl)
-    .controller("AddCourseCtrl",AddCourseCtrl);
-
+    .controller("AddCourseCtrl",AddCourseCtrl)
+    .factory('UploadManager',["$rootScope",UploadManager])
+    .controller('FileUploadCtrl', ['$scope', '$rootScope', 'UploadManager', FileUploadCtrl])
+    .directive('upload', ['UploadManager', uploadDirective])

@@ -1,12 +1,9 @@
 package org.javatraining.model;
 
 
-import flexjson.JSON;
-
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 
 /**
  * Created by vika on 29.05.15.
@@ -16,33 +13,16 @@ public class CourseVO implements Serializable {
     @NotNull
     private String name;
     private String description;
-    private Date startdate;
-    private Date enddate;
-    // TODO: are the fields need to be excluded from json?
-    @JSON(include = false)
-    private Set<PersonVO> person;
-    @JSON(include = false)
-    private Set<NewsVO> news;
-    @JSON(include = false)
-    private Set<LessonVO> lessons;
+    private Date startDate;
+    private Date endDate;
 
     public CourseVO() {
     }
 
-    public Set<LessonVO> getLessons() {
-        return lessons;
-    }
-
-    public void setLessons(Set<LessonVO> lessons) {
-        this.lessons = lessons;
-    }
-
-    public Set<NewsVO> getNews() {
-        return news;
-    }
-
-    public void setNews(Set<NewsVO> news) {
-        this.news = news;
+    public CourseVO(Long id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
     }
 
     public Long getId() {
@@ -69,29 +49,20 @@ public class CourseVO implements Serializable {
         this.description = description;
     }
 
-    public Date getStartdate() {
-        return startdate;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setStartdate(Date startdate) {
-        this.startdate = startdate;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public Date getEnddate() {
-        return enddate;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setEnddate(Date enddate) {
-        this.enddate = enddate;
-    }
-
-
-    public Set<PersonVO> getPerson() {
-        return person;
-    }
-
-    public void setPerson(Set<PersonVO> person) {
-        this.person = person;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     @Override
@@ -102,14 +73,10 @@ public class CourseVO implements Serializable {
         CourseVO that = (CourseVO) o;
 
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (enddate != null ? !enddate.equals(that.enddate) : that.enddate != null) return false;
+        if (endDate != null ? !endDate.equals(that.endDate) : that.endDate != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (lessons != null ? !lessons.equals(that.lessons) : that.lessons != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (news != null ? !news.equals(that.news) : that.news != null) return false;
-        if (person != null ? !person.equals(that.person) : that.person != null) return false;
-        if (startdate != null ? !startdate.equals(that.startdate) : that.startdate != null) return false;
-
+        if (startDate != null ? !startDate.equals(that.startDate) : that.startDate != null) return false;
         return true;
     }
 
@@ -118,11 +85,8 @@ public class CourseVO implements Serializable {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (startdate != null ? startdate.hashCode() : 0);
-        result = 31 * result + (enddate != null ? enddate.hashCode() : 0);
-        result = 31 * result + (person != null ? person.hashCode() : 0);
-        result = 31 * result + (news != null ? news.hashCode() : 0);
-        result = 31 * result + (lessons != null ? lessons.hashCode() : 0);
+        result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
+        result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
         return result;
     }
 }

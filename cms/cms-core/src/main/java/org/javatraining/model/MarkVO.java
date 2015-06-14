@@ -62,9 +62,9 @@ public class MarkVO implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + lessonId.hashCode();
-        result = 31 * result + mark.hashCode();
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (lessonId != null ? lessonId.hashCode() : 0);
+        result = 31 * result + (mark != null ? mark.hashCode() : 0);
         return result;
     }
 }
