@@ -25,14 +25,14 @@ public class PersonDAO extends GenericDAO<PersonEntity> {
     }
 
     public PersonEntity getByEmail(@NotNull String email) {
-        Query query = getEntityManager().createQuery("SELECT c FROM PersonEntity c WHERE c.email like " + email + "");
+        Query query = getEntityManager().createQuery("SELECT c FROM PersonEntity c WHERE c.email like '" + email + "'");
         List<PersonEntity> resultList = query.getResultList();
         if (resultList.size() == 0 || resultList.size() > 1) ;
         return resultList.get(0);
     }
 
     public List<PersonEntity> getByPersonRole(@NotNull PersonRole personRole) {
-        Query query = getEntityManager().createQuery("SELECT c FROM PersonEntity c WHERE c.personRole like " + personRole);
+        Query query = getEntityManager().createQuery("SELECT c FROM PersonEntity c WHERE c.personRole like'" + personRole + "'");
         return query.getResultList();
     }
 }

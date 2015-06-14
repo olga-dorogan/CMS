@@ -4,19 +4,9 @@
              version="2.0">
     <persistence-unit name="cms" transaction-type="JTA">
            <jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
-        <class>org.javatraining.entity.CourseEntity</class>
-        <class>org.javatraining.entity.PersonEntity</class>
-        <class>org.javatraining.entity.MarkEntity</class>
-        <class>org.javatraining.entity.LessonEntity</class>
-        <class>org.javatraining.entity.NewsEntity</class>
-        <class>org.javatraining.entity.PracticeLessonEntity</class>
-        <class>org.javatraining.entity.ForumMessagesEntity</class>
-        <class>org.javatraining.entity.LessonLinkEntity</class>
-
         <properties>
-            <property name="hibernate.dialect" value="${hibernate.dialect}"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
             <property name="hibernate.hbm2ddl.auto" value="create"/>
-            <property name="wildfly.jpa.twophasebootstrap" value="false"/>
         </properties>
     </persistence-unit>
 </persistence>
