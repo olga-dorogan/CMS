@@ -83,7 +83,7 @@
             </dependencies>
         </profile>
         <profile>
-            <id>arquillian-wildfly-embedded</id>
+            <id>arquillian-wildfly-managed</id>
             <activation>
                 <property>
                     <name>env</name>
@@ -93,13 +93,8 @@
             <dependencies>
                 <dependency>
                     <groupId>org.wildfly</groupId>
-                    <artifactId>wildfly-arquillian-container-embedded</artifactId>
-                    <version>${wildfly.embedded.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.wildfly</groupId>
-                    <artifactId>wildfly-embedded</artifactId>
-                    <version>${wildfly.embedded.version}</version>
+                    <artifactId>wildfly-arquillian-container-managed</artifactId>
+                    <version>${wildfly.managed.version}</version>
                 </dependency>
             </dependencies>
             <build>
@@ -118,7 +113,7 @@
                                         <artifactItem>
                                             <groupId>org.wildfly</groupId>
                                             <artifactId>wildfly-dist</artifactId>
-                                            <version>${wildfly.embedded.version}</version>
+                                            <version>${wildfly.managed.version}</version>
                                             <type>zip</type>
                                             <overWrite>false</overWrite>
                                             <outputDirectory>target</outputDirectory>
@@ -129,27 +124,14 @@
                         </executions>
                     </plugin>
                     <plugin>
-                        <groupId>org.wildfly.plugins</groupId>
-                        <artifactId>wildfly-maven-plugin</artifactId>
-                        <version>${plugin.wildfly.version}</version>
-                        <executions>
-                            <execution>
-                                <phase>prepare-package</phase>
-                                <goals>
-                                    <goal>start</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId> <!-- must be failsafe plugin -->
-                        <version>2.18.1</version>
+                        <version>${plugin.surefire.version}</version>
                         <configuration>
                             <systemPropertyVariables>
                                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                                <jboss.home>${project.basedir}/target/wildfly-8.2.0.Final</jboss.home>
-                                <module.path>${project.basedir}/target/wildfly-8.2.0.Final/modules</module.path>
+                                <jboss.home>${project.basedir}/target/wildfly-${wildfly.managed.version}</jboss.home>
+                                <module.path>${project.basedir}/target/wildfly-${wildfly.managed.version}/modules</module.path>
                             </systemPropertyVariables>
                         </configuration>
                         <executions>

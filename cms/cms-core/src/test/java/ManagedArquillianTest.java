@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
  * Created by olga on 14.06.15.
  */
 @RunWith(Arquillian.class)
-public class EmbeddedArquillianTest {
+public class ManagedArquillianTest {
     @Deployment
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class);
