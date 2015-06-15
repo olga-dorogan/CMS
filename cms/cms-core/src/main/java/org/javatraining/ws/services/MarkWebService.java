@@ -44,7 +44,7 @@ public class MarkWebService extends AbstractWebService<MarkVO> {
             if (person == null)
                 r = Response.noContent();
             else
-                r = Response.ok(serialize(person.getMarks()));
+                r = Response.ok(serialize(personService.getMarks(person)));
         }
 
         return r.build();

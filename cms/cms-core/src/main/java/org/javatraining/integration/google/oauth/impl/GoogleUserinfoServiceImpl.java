@@ -31,7 +31,6 @@ public class GoogleUserinfoServiceImpl implements GoogleUserinfoService {
         final String PARAM_FIELDS_VALUE = "id";
         return getUserInfoWithSpecifiedFields(token, PARAM_FIELDS_VALUE, "to get client id").getId();
     }
-
     @Override
     public String getEmailByToken(String token) {
         final String PARAM_FIELDS_VALUE = "email";

@@ -18,9 +18,9 @@ public interface PersonService {
 
     //     Person methods
 
-    PersonVO saveStudent(@NotNull @Valid PersonVO personVO);
+    void saveStudent(@NotNull @Valid PersonVO personVO);
 
-    PersonVO getByEmailAndSaveIfNotExist(@NotNull @Valid PersonVO personVO);
+    void save(@NotNull @Valid PersonVO personVO);
 
     PersonVO update(@NotNull @Valid PersonVO personVO);
 

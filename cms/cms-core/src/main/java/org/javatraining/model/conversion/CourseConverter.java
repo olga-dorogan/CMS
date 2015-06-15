@@ -17,8 +17,6 @@ public class CourseConverter {
         CourseVO courseVO = new CourseVO(courseEntity.getId(), courseEntity.getName(), courseEntity.getDescription());
         courseVO.setStartDate(courseEntity.getStartdate());
         courseVO.setEndDate(courseEntity.getEnddate());
-        courseVO.setPersons(PersonConverter.convertEntitiesToVOs(courseEntity.getPerson()));
-        //TODO: set news and lessons fields
         return courseVO;
     }
 
@@ -37,10 +35,6 @@ public class CourseConverter {
         if (courseVO.getEndDate() != null) {
             courseEntity.setEnddate(new java.sql.Date(courseVO.getEndDate().getTime()));
         }
-        if (courseVO.getPersons() != null) {
-            courseEntity.setPerson(PersonConverter.convertVOsToEntities(courseVO.getPersons()));
-        }
-        // TODO: convert collections of news and lessons
         return courseEntity;
     }
 

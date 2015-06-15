@@ -52,11 +52,12 @@ public class PersonConverter {
         if (!p1.getId().equals(p2.getId())) {
             throw new UserRequiredPropertiesIsNotComparable("p1 isn\'t comparable with p2");
         }
-        p1.setCourses(p2.getCourses());
-        p1.setEmail(p2.getEmail());
-        p1.setForumMessages(p2.getForumMessages());
-        p1.setLastName(p2.getLastName());
-        p1.setMarks(p2.getMarks());
+        // FIXME: changes in PersonVO
+//        p1.setCourses(p2.getCourses());
+//        p1.setEmail(p2.getEmail());
+//        p1.setForumMessages(p2.getForumMessages());
+//        p1.setLastName(p2.getLastName());
+//        p1.setMarks(p2.getMarks());
         p1.setName(p2.getName());
         p1.setPersonRole(p2.getPersonRole());
         p1.setSecondName(p2.getSecondName());

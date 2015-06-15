@@ -13,17 +13,38 @@ import java.sql.Timestamp;
 public class ForumMessagesEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, insertable = true, updatable = true)
     private Long id;
+
     @NotNull
+    @Basic
+    @Column(name = "parent_id", nullable = true, insertable = true, updatable = true)
     private Long parentId;
+
     @NotNull
+    @Basic
+    @Column(name = "title", nullable = true, insertable = true, updatable = true, length = 255)
     private String title;
+
     @NotNull
+    @Basic
+    @Column(name = "description", nullable = true, insertable = true, updatable = true, length = 16777215)
     private String description;
+
     @NotNull
+    @Basic
+    @Column(name = "date", nullable = true, insertable = true, updatable = true)
     private Timestamp date;
+
     public ForumMessagesEntity() {
     }
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "lesson_id", nullable = false)
+    private LessonEntity lessons;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "author", nullable = false)
+    private PersonEntity persons;
 
     public ForumMessagesEntity(Long parentId, String title, String description, Timestamp date) {
         this.parentId = parentId;
@@ -31,10 +52,6 @@ public class ForumMessagesEntity implements Serializable {
         this.description = description;
         this.date = date;
     }
-
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "lesson_id", nullable = false)
-    private LessonEntity lessons;
 
     public LessonEntity getLessons() {
         return lessons;
@@ -44,10 +61,6 @@ public class ForumMessagesEntity implements Serializable {
         this.lessons = lessons;
     }
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "author", nullable = false)
-    private PersonEntity persons;
-
     public PersonEntity getPersons() {
         return persons;
     }
@@ -56,7 +69,6 @@ public class ForumMessagesEntity implements Serializable {
         this.persons = persons;
     }
 
-    @Column(name = "id", nullable = false, insertable = true, updatable = true)
     public Long getId() {
         return id;
     }
@@ -65,8 +77,6 @@ public class ForumMessagesEntity implements Serializable {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "parent_id", nullable = true, insertable = true, updatable = true)
     public Long getParentId() {
         return parentId;
     }
@@ -75,8 +85,6 @@ public class ForumMessagesEntity implements Serializable {
         this.parentId = parentId;
     }
 
-    @Basic
-    @Column(name = "title", nullable = true, insertable = true, updatable = true, length = 255)
     public String getTitle() {
         return title;
     }
@@ -85,8 +93,6 @@ public class ForumMessagesEntity implements Serializable {
         this.title = title;
     }
 
-    @Basic
-    @Column(name = "description", nullable = true, insertable = true, updatable = true, length = 16777215)
     public String getDescription() {
         return description;
     }
@@ -95,8 +101,6 @@ public class ForumMessagesEntity implements Serializable {
         this.description = content;
     }
 
-    @Basic
-    @Column(name = "date", nullable = true, insertable = true, updatable = true)
     public Timestamp getDate() {
         return date;
     }

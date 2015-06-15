@@ -31,20 +31,22 @@ public class PersonServiceImpl implements PersonService {
     private CourseDAO courseDAO;
 
     @Override
-    public PersonVO saveStudent(@NotNull @Valid PersonVO personVO) {
+    public void saveStudent(@NotNull @Valid PersonVO personVO) {
         personVO.setPersonRole(PersonRole.STUDENT);
         PersonEntity entity = PersonConverter.convertVOToEntity(personVO);
         PersonEntity savedEntity = personDAO.save(entity);
-        return PersonConverter.convertEntityToVO(savedEntity);
+        personVO.setId(savedEntity.getId());
     }
 
     @Override
-    public PersonVO getByEmailAndSaveIfNotExist(@NotNull @Valid PersonVO personVO) {
+    public void save(@NotNull @Valid PersonVO personVO) {
         PersonVO personVOFromEmail = getByEmail(personVO.getEmail());
         if (personVOFromEmail != null) {
-            return personVOFromEmail;
+            personVO.setPersonRole(personVOFromEmail.getPersonRole());
+            personVO.setId(personVOFromEmail.getId());
+        } else {
+            saveStudent(personVO);
         }
-        return saveStudent(personVO);
     }
 
     @Override

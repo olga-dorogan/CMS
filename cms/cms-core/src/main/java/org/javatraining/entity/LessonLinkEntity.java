@@ -12,11 +12,22 @@ import java.io.Serializable;
 public class LessonLinkEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, insertable = true, updatable = true)
     private Long id;
-  @NotNull
+
+    @NotNull
+    @Basic
+    @Column(name = "description", nullable = true, insertable = true, updatable = true, length = 255)
     private String description;
     @NotNull
+    @Basic
+    @Column(name = "link", nullable = false, insertable = true, updatable = true, length = 255)
     private String link;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "lesson_id", nullable = false)
+    private LessonEntity lesson;
+
     public LessonLinkEntity() {
     }
 
@@ -26,7 +37,6 @@ public class LessonLinkEntity implements Serializable {
         this.lesson = lesson;
     }
 
-     @Column(name = "id", nullable = false, insertable = true, updatable = true)
     public Long getId() {
         return id;
     }
@@ -34,8 +44,7 @@ public class LessonLinkEntity implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-    @Basic
-    @Column(name = "description", nullable = true, insertable = true, updatable = true, length = 255)
+
     public String getDescription() {
         return description;
     }
@@ -44,8 +53,6 @@ public class LessonLinkEntity implements Serializable {
         this.description = description;
     }
 
-    @Basic
-    @Column(name = "link", nullable = false, insertable = true, updatable = true, length = 255)
     public String getLink() {
         return link;
     }
@@ -54,9 +61,6 @@ public class LessonLinkEntity implements Serializable {
         this.link = link;
     }
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "lesson_id", nullable = false)
-    private LessonEntity lesson;
     public LessonEntity getLesson() {
         return lesson;
     }

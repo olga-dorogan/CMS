@@ -12,9 +12,16 @@ import java.io.Serializable;
 public class PracticeLessonEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, insertable = true, updatable = true)
     private Long id;
     @NotNull
+    @Basic
+    @Column(name = "task", nullable = false, insertable = true, updatable = true, length = 255)
     private String task;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "lesson_id", nullable = false, insertable = false, updatable = false)
+    private LessonEntity lesson;
 
     public PracticeLessonEntity() {
     }
@@ -24,8 +31,7 @@ public class PracticeLessonEntity implements Serializable {
         this.lesson = lesson;
     }
 
-    @Column(name = "id", nullable = false, insertable = true, updatable = true)
-    public Long getId() {
+     public Long getId() {
         return id;
     }
 
@@ -33,8 +39,6 @@ public class PracticeLessonEntity implements Serializable {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "task", nullable = false, insertable = true, updatable = true, length = 255)
     public String getTask() {
         return task;
     }
@@ -42,9 +46,6 @@ public class PracticeLessonEntity implements Serializable {
         this.task = task;
     }
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "lesson_id", nullable = false, insertable = false, updatable = false)
-    private LessonEntity lesson;
     public LessonEntity getLesson() {
         return lesson;
     }

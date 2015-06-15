@@ -4,7 +4,6 @@ import org.javatraining.entity.PersonRole;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Set;
 
 /**
  * Created by vika on 30.05.15.
@@ -19,9 +18,6 @@ public class PersonVO implements Serializable {
     @NotNull
     private String email;
     private PersonRole personRole;
-    private Set<MarkVO> marks;
-    private Set<CourseVO> courses;
-    private Set<ForumMessagesVO> forumMessages;
 
     public PersonVO() {
     }
@@ -80,31 +76,6 @@ public class PersonVO implements Serializable {
 
     public void setPersonRole(PersonRole personRole) {
         this.personRole = personRole;
-    }
-
-    public Set<MarkVO> getMarks() {
-        return marks;
-    }
-
-    public void setMarks(Set<MarkVO> marks) {
-        this.marks = marks;
-    }
-
-    public Set<CourseVO> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(Set<CourseVO> courses) {
-        this.courses = courses;
-    }
-
-
-    public Set<ForumMessagesVO> getForumMessages() {
-        return forumMessages;
-    }
-
-    public void setForumMessages(Set<ForumMessagesVO> forumMessages) {
-        this.forumMessages = forumMessages;
     }
 
     @Override

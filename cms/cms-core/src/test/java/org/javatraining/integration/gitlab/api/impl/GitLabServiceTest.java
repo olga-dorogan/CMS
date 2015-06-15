@@ -5,7 +5,6 @@ import org.javatraining.integration.gitlab.impl.GitLabService;
 import org.javatraining.model.PersonVO;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;

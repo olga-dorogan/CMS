@@ -16,22 +16,35 @@
     <properties>
         <datasource>java:/MySqlDS</datasource>
         <hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
+        <sql-load-script>META-INF/sql/data-mysql.sql</sql-load-script>
+        <persistence-schema-generation>drop-and-create</persistence-schema-generation>
     </properties>
+
     <profiles>
         <profile>
-            <id>datasource-ignore-mysql</id>
+            <id>datasource-in-memory</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>env</name>
+                    <value>ci</value>
+                </property>
             </activation>
             <properties>
-                <datasource>java:global/CMS/DefaultDS</datasource>
+                <datasource>java:jboss/datasources/ExampleDS</datasource>
                 <hibernate.dialect>org.hibernate.dialect.H2Dialect</hibernate.dialect>
                 <sql-load-script>META-INF/sql/data-h2.sql</sql-load-script>
-                <persistence-schema-generation>drop-and-create</persistence-schema-generation>
+                <persistence-schema-generation>create</persistence-schema-generation>
             </properties>
         </profile>
         <profile>
-            <id>full-stack</id>
+            <id>build-both-back-and-front</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>ci</value>
+                </property>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -57,7 +70,81 @@
                     </plugin>
                 </plugins>
             </build>
-            <!--git-->
+        </profile>
+        <profile>
+            <id>arquillian-wildfly-remote</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.wildfly.arquillian</groupId>
+                    <artifactId>wildfly-arquillian-container-remote</artifactId>
+                    <version>${wildfly.remote.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>arquillian-wildfly-managed</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>ci</value>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.wildfly</groupId>
+                    <artifactId>wildfly-arquillian-container-managed</artifactId>
+                    <version>${wildfly.managed.version}</version>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.wildfly</groupId>
+                                            <artifactId>wildfly-dist</artifactId>
+                                            <version>${wildfly.managed.version}</version>
+                                            <type>zip</type>
+                                            <overWrite>false</overWrite>
+                                            <outputDirectory>target</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId> <!-- must be failsafe plugin -->
+                        <version>${plugin.surefire.version}</version>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                                <jboss.home>${project.basedir}/target/wildfly-${wildfly.managed.version}</jboss.home>
+                                <module.path>${project.basedir}/target/wildfly-${wildfly.managed.version}/modules</module.path>
+                            </systemPropertyVariables>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>test</id> <!-- must be integration-test -->
+                                <goals>
+                                    <goal>test</goal> <!-- must be integration-test -->
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
@@ -103,27 +190,6 @@
             <version>${org.mockito.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!--<dependency>-->
-            <!--<groupId>org.jboss.arquillian.container</groupId>-->
-            <!--<artifactId>arquillian-weld-ee-embedded-1.1</artifactId>-->
-            <!--<version>1.0.0.CR3</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.jboss.arquillian.core</groupId>-->
-            <!--<artifactId>arquillian-core-impl-base</artifactId>-->
-            <!--<version>1.1.8.Final</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.jboss.weld</groupId>-->
-            <!--<artifactId>weld-core</artifactId>-->
-            <!--<version>1.1.5.Final</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
 
         <!--Logging dependencies-->
         <dependency>
@@ -171,40 +237,22 @@
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-client</artifactId>
             <version>3.0.8.Final</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jackson2-provider</artifactId>
             <version>3.0.8.Final</version>
+            <scope>provided</scope>
         </dependency>
         <!-- HTTP CLIENT API-->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>
-                4.3.5
-            </version>
+            <version>4.3.5</version>
         </dependency>
         <!-- -->
         <!-- h2 jdbc dependencies for ignoring mysql purpose-->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2.database.version}</version>
-        </dependency>
-        <!-- -->
-        <dependency>
-            <groupId>com.puppycrawl.tools</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>6.7</version>
-        </dependency>
-        <!--&lt;!&ndash; REST dependency&ndash;&gt;-->
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-multipart-provider</artifactId>
-            <version>${resteasy.multipart.version}</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -229,7 +277,17 @@
             <version>3.1</version>
         </dependency>
         <!-- -->
-
+        <!--Arquillian dependencies-->
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>
@@ -242,6 +300,27 @@
         </repository>
     </repositories>
 
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss.shrinkwrap.resolver</groupId>
+                <artifactId>shrinkwrap-resolver-bom</artifactId>
+                <version>${shrinkwrap.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>${arquillian.bom.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <resources>
