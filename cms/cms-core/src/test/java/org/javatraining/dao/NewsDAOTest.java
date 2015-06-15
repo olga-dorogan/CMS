@@ -25,6 +25,9 @@ public class NewsDAOTest {
     @EJB
     NewsDAO newsDAO;
 
+    @EJB
+    CourseDAO courseDAO;
+
     @Deployment
     public static WebArchive createDeployment() {
         WebArchive war = ShrinkWrap.create(WebArchive.class)
@@ -39,8 +42,8 @@ public class NewsDAOTest {
         courseEntity.setName("JavaEE");
         courseEntity.setStartdate(  Date.valueOf("2015-10-10"));
         courseEntity.setEnddate(  Date.valueOf("2016-11-11"));
-        courseEntity.setOwner((long) 2324);
         courseEntity.setDescription("Java");
+        courseDAO.save(courseEntity);
         newsEntity.setCourses(courseEntity);
         newsEntity.setDescription("description");
         newsEntity.setTitle("title");
@@ -53,5 +56,33 @@ public class NewsDAOTest {
         CourseEntity courseEntity = new CourseEntity();
         NewsEntity newsEntity =  new NewsEntity();
         assertEquals(newsEntityInit(newsEntity,courseEntity),newsDAO.save(newsEntityInit(newsEntity,courseEntity)));
+    }
+
+    @Test
+    public void testUpdateReturnNewsEntity() {
+        CourseEntity courseEntity = new CourseEntity();
+        NewsEntity newsEntity = new NewsEntity();
+        newsEntity =newsEntityInit(newsEntity, courseEntity);
+        newsDAO.save(newsEntity);
+        newsEntity.setTitle("other title");
+        assertEquals(newsEntity,newsDAO.update(newsEntity));
+    }
+    @Test
+    public void testRemoveReturnNewsEntity() {
+        CourseEntity courseEntity = new CourseEntity();
+        NewsEntity newsEntity = new NewsEntity();
+        newsEntity =newsEntityInit(newsEntity,courseEntity);
+        newsDAO.save(newsEntity);
+        assertEquals(newsEntity,newsDAO.remove(newsEntity));
+    }
+
+    @Test
+    public void testGetReturnNewsEntity() {
+        CourseEntity courseEntity = new CourseEntity();
+        NewsEntity newsEntity = new NewsEntity();
+        newsEntity =newsEntityInit(newsEntity,courseEntity);
+        newsDAO.save(newsEntity);
+        assertEquals(newsEntity,newsDAO.getById(newsEntity.getId()));
+
     }
 }

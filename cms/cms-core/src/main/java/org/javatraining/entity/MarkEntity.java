@@ -32,7 +32,7 @@ public class MarkEntity implements Serializable {
     }
 
     public MarkEntity(Long mark) {
-           this.mark = mark;
+        this.mark = mark;
     }
 
     public Long getId() {

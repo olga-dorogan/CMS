@@ -4,13 +4,15 @@ import org.javatraining.entity.PersonEntity;
 import org.javatraining.entity.PersonRole;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.junit.InSequence;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
@@ -23,44 +25,89 @@ public class PesronDAOTest {
     @EJB
     PersonDAO personDAO;
 
-    private PersonEntity personEntityStudent;
-    private PersonEntity personEntityTeacher;
-
     @Deployment
     public static WebArchive createDeployment() {
         WebArchive war = ShrinkWrap.create(WebArchive.class)
                 .addPackage("org.javatraining.dao")
                 .addPackage("org.javatraining.entity")
-                .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml");
+                .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
+                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
         return war;
     }
-    @Before
-    public void setUp() {
-        personEntityStudent = new PersonEntity("Person", "Ivan", "ivanov", "Ivanovgmail.ru", PersonRole.STUDENT);
-        personEntityTeacher = new PersonEntity("Person", "Petro", "Petrov", "Petrovgmail.ru", PersonRole.TEACHER);
+
+    public PersonEntity personEntityInit(PersonEntity personEntity) {
+        personEntity.setName("Petro");
+        personEntity.setEmail("Petrovg@mail.ru");
+        personEntity.setLastName("Last Name");
+        personEntity.setSecondName("Second name");
+        personEntity.setPersonRole(PersonRole.TEACHER);
+        return personEntity;
     }
 
     @Test
-    public void testGetPersonByEmail() {
-       personDAO.save(personEntityStudent);
-       assertEquals(personDAO.getByEmail("Ivanovgmail.ru"), personEntityStudent);
+    @InSequence(1)
+    public void testGetPersonByPersonRole() {
+        personDAO.clear();
+        PersonEntity personEntity = personEntityInit(new PersonEntity());
+        personDAO.save(personEntity);
+        assertEquals(Arrays.asList(personEntity), personDAO.getByPersonRole(PersonRole.TEACHER));
     }
+
     @Test
-    public void testGetPersonByPersonRole(){
-      personDAO.save(personEntityStudent);
-      personDAO.save(personEntityTeacher);
-        assertEquals(personDAO.getByPersonRole(PersonRole.TEACHER), Arrays.asList(personEntityTeacher));
+    @InSequence(2)
+    public void testGetPersonByEmail() {
+        personDAO.clear();
+        PersonEntity personEntity = personDAO.save(personEntityInit(new PersonEntity()));
+        assertEquals(personDAO.getByEmail(personEntity.getEmail()), personEntity);
     }
+
+    @InSequence(3)
     @Test
     public void testSaveReturnPersonEntity() {
-          assertEquals(personDAO.save(personEntityStudent), personEntityStudent);
-    }
-    @Test
-    public void testUpdateReturnCourseEntity() {
-        personDAO.save(personEntityStudent);
-        personEntityStudent.setName("Student");
-        assertEquals(personDAO.update(personEntityStudent), personEntityStudent);
+        PersonEntity personEntity = new PersonEntity();
+        assertEquals(personEntity, personDAO.save(personEntityInit(personEntity)));
     }
 
+    @InSequence(4)
+    @Test(expected = EJBException.class)
+    public void testSaveNullPersonEntity() {
+        PersonEntity personEntity = new PersonEntity();
+        personDAO.save(personEntity);
+    }
+
+    @InSequence(5)
+    @Test
+    public void testUpdateReturnPersonEntity() {
+        PersonEntity personEntity = new PersonEntity();
+        personEntity = personEntityInit(personEntity);
+        personDAO.save(personEntity);
+        personEntity.setName("Student");
+        assertEquals(personDAO.update(personEntity), personEntity);
+    }
+
+    @InSequence(6)
+    @Test
+    public void testGetPersonEntity() {
+        PersonEntity personEntity = personEntityInit(new PersonEntity());
+        personDAO.save(personEntity);
+        assertEquals(personDAO.getById(personEntity.getId()), personEntity);
+    }
+
+    @InSequence(7)
+    @Test
+    public void testRemovePersonEntity() {
+        PersonEntity personEntity = personEntityInit(new PersonEntity());
+        personDAO.remove(personEntity);
+        assertEquals(personDAO.remove(personEntity), personEntity);
+    }
+
+    @InSequence(8)
+    @Test
+    public void testGetAllPersons() {
+        personDAO.clear();
+        PersonEntity personEntity = personEntityInit(new PersonEntity());
+        personDAO.save(personEntity);
+        assertEquals(personDAO.getAllPersons(), Arrays.asList(personEntity));
+    }
 
 }

@@ -23,16 +23,22 @@ public class PersonDAO extends GenericDAO<PersonEntity> {
         Query query = getEntityManager().createQuery("SELECT c FROM PersonEntity c");
         return query.getResultList();
     }
-
     public PersonEntity getByEmail(@NotNull String email) {
-        Query query = getEntityManager().createQuery("SELECT c FROM PersonEntity c WHERE c.email like '" + email + "'");
+        Query query = getEntityManager().createQuery("SELECT c FROM PersonEntity c WHERE c.email =:email ").setParameter("email", email);
         List<PersonEntity> resultList = query.getResultList();
-        if (resultList.size() == 0 || resultList.size() > 1) ;
+        if(resultList.size()==0||resultList.size()>1);
         return resultList.get(0);
     }
 
     public List<PersonEntity> getByPersonRole(@NotNull PersonRole personRole) {
-        Query query = getEntityManager().createQuery("SELECT c FROM PersonEntity c WHERE c.personRole like'" + personRole + "'");
+        Query query = getEntityManager().createQuery("SELECT c FROM PersonEntity c WHERE c.personRole =:personRole ").setParameter("personRole", personRole);
         return query.getResultList();
     }
+
+    public void clear()
+    {
+        getEntityManager().createQuery("delete from PersonEntity").executeUpdate();
+    }
+
+
 }

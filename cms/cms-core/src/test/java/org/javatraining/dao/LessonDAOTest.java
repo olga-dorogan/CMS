@@ -5,8 +5,8 @@ import org.javatraining.entity.LessonEntity;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -27,50 +27,43 @@ public class LessonDAOTest {
     @EJB
     CourseDAO courseDAO;
 
-    private LessonEntity lessonEntity;
-    private CourseEntity courseEntity;
-
     @Deployment
     public static WebArchive createDeployment() {
+
         WebArchive war = ShrinkWrap.create(WebArchive.class)
                 .addPackage("org.javatraining.dao")
                 .addPackage("org.javatraining.entity")
-                .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml");
+                .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
+                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+        System.out.println(war.toString(true));
         return war;
     }
 
-    @Before
-    public void setUp() {
-        courseEntity = new CourseEntity("JavaEE",Long.valueOf(2324),"Java",
+
+    public LessonEntity lessonEntityInit(LessonEntity lessonEntity, CourseEntity courseEntity){
+        courseEntity = new CourseEntity("JavaEE","Java",
                 Date.valueOf("2015-10-10"),Date.valueOf("2016-11-11"));
-        courseEntity.setId(Long.valueOf(1));
-        courseEntity.setStartdate(Date.valueOf("2015-10-10"));
-        courseEntity.setEnddate(Date.valueOf("2016-11-11"));
-        courseEntity.setName("JavaEE");
-        courseEntity.setOwner(Long.valueOf(2324));
-        courseEntity.setDescription("Java");
-
-        lessonEntity = new LessonEntity();
-        lessonEntity.setDescription("JavaEE");
-        lessonEntity.setCreateDate(Date.valueOf("2016-11-11"));
-        lessonEntity.setOrderNum(Long.valueOf(3234));
-        lessonEntity.setType(Long.valueOf(3234));
-        lessonEntity.setTopic("topic");
+        lessonEntity = new LessonEntity( (long) 3234, (long) 326,"JavaEE",
+                "topic",Date.valueOf("2016-11-11"),courseEntity);
         courseDAO.save(courseEntity);
-        lessonEntity.setCourses(courseEntity);
-
+        return lessonEntity;
     }
+
+
 
     @Test
     public void testSaveReturnLessonEntity() {
-         assertEquals(lessonDAO.save(lessonEntity), lessonEntity);
+        CourseEntity courseEntity = new CourseEntity();
+        LessonEntity lessonEntity = lessonEntityInit(new LessonEntity(), courseEntity);
+        assertEquals(lessonDAO.save(lessonEntity), lessonEntity);
     }
 
     @Test
     public void testUpdateReturnLessonEntity() {
-       lessonDAO.save(lessonEntity);
-       lessonEntity.setDescription("description other");
+        CourseEntity courseEntity = new CourseEntity();
+        LessonEntity lessonEntity = lessonEntityInit(new LessonEntity(), courseEntity);
+        lessonDAO.save(lessonEntity);
+        lessonEntity.setDescription("description other");
         assertEquals(lessonDAO.update(lessonEntity), lessonEntity);
     }
-
 }

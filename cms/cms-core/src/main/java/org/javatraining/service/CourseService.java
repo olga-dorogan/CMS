@@ -20,7 +20,7 @@ public interface CourseService {
 
     CourseVO update(@NotNull @Valid CourseVO courseVO);
 
-    void remove(@NotNull CourseVO courseVO);
+    CourseVO remove(@NotNull CourseVO courseVO);
 
     @NotNull
     @Valid
@@ -31,7 +31,7 @@ public interface CourseService {
 
     //  Course --- Person methods
 
-    void addPersonsToCourse(@NotNull CourseVO courseVO, @NotNull @Valid List<PersonVO> persons);
+    CourseVO addPersonsToCourse(@NotNull CourseVO courseVO, @NotNull @Valid List<PersonVO> persons);
 
     void removePersonsFromCourse(@NotNull CourseVO courseVO, @NotNull @Valid List<PersonVO> persons);
 

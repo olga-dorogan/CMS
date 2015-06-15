@@ -188,7 +188,7 @@ public class LessonEntity implements Serializable {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-         result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (orderNum != null ? orderNum.hashCode() : 0);
         result = 31 * result + (topic != null ? topic.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
@@ -201,3 +201,4 @@ public class LessonEntity implements Serializable {
         return result;
     }
 }
+

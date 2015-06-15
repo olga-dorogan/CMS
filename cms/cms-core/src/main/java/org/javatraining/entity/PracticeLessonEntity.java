@@ -31,7 +31,7 @@ public class PracticeLessonEntity implements Serializable {
         this.lesson = lesson;
     }
 
-     public Long getId() {
+    public Long getId() {
         return id;
     }
 

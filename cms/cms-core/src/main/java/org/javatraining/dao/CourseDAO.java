@@ -22,4 +22,8 @@ public class CourseDAO extends GenericDAO<CourseEntity> {
        return query.getResultList();
     }
 
+    public void clear()
+    {
+        getEntityManager().createQuery("delete from CourseEntity").executeUpdate();
+    }
 }

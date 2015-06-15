@@ -37,6 +37,7 @@ public class PersonEntity implements Serializable {
     private String email;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "personRole", nullable = true, insertable = true, updatable = true, length = 255)
     private PersonRole personRole;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "persons")
@@ -46,8 +47,10 @@ public class PersonEntity implements Serializable {
     private Set<MarkEntity> marks;
 
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER, mappedBy = "person")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "person")
     private Set<CourseEntity> course;
+
+
 
     public PersonEntity() {
     }
@@ -95,7 +98,6 @@ public class PersonEntity implements Serializable {
     public void setForumMassages(Set<ForumMessagesEntity> forumMassages) {
         this.forumMassages = forumMassages;
     }
-
     public Set<ForumMessagesEntity> getForumMassages() {
         return forumMassages;
     }
@@ -151,7 +153,7 @@ public class PersonEntity implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = (id == null) ? 0 : (int) (id ^ (id >>> 32));
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (secondName != null ? secondName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);

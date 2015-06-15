@@ -87,7 +87,7 @@ public class PersonServiceImpl implements PersonService {
         // owning side is CourseEntity, so all operations need to be from CourseEntity
         PersonEntity personEntity = personDAO.getById(personVO.getId());
         CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
-        courseEntity.getPerson().add(personEntity);
+        courseEntity.getPersons().add(personEntity);
         courseDAO.update(courseEntity);
     }
 
@@ -97,7 +97,7 @@ public class PersonServiceImpl implements PersonService {
         // owning side is CourseEntity, so all operations need to be from CourseEntity
         PersonEntity personEntity = personDAO.getById(personVO.getId());
         CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
-        courseEntity.getPerson().remove(personEntity);
+        courseEntity.getPersons().remove(personEntity);
         courseDAO.update(courseEntity);
     }
 
