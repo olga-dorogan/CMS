@@ -2,6 +2,7 @@ package org.javatraining.integration.gitlab.api.model;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import java.io.Serializable;
  * Created by sergey on 02.06.15 at 14:33.
  * For more information you should send mail to codedealerb@gmail.com
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GitLabUser implements Serializable {
     protected Long id;
     protected String email;//required
@@ -32,7 +34,7 @@ public class GitLabUser implements Serializable {
     @JsonProperty("can_create_group")
     protected boolean canCreateGroup;
     protected boolean confirm;
-    protected boolean state;
+    protected String state;
     @JsonProperty("theme_id")
     protected int themeId;
     @JsonProperty("current_sign_in_at")
@@ -169,11 +171,11 @@ public class GitLabUser implements Serializable {
         this.confirm = confirm;
     }
 
-    public boolean isState() {
+    public String isState() {
         return state;
     }
 
-    public void setState(boolean state) {
+    public void setState(String state) {
         this.state = state;
     }
 
