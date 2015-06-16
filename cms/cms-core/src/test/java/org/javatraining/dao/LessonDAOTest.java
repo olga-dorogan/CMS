@@ -41,15 +41,17 @@ public class LessonDAOTest {
 
 
     public LessonEntity lessonEntityInit(LessonEntity lessonEntity, CourseEntity courseEntity){
-        courseEntity = new CourseEntity("JavaEE","Java",
-                Date.valueOf("2015-10-10"),Date.valueOf("2016-11-11"));
-        lessonEntity = new LessonEntity( (long) 3234, (long) 326,"JavaEE",
-                "topic",Date.valueOf("2016-11-11"),courseEntity);
+        courseEntity.setDescription("Java");
+        courseEntity.setName("JavaEE");
+        courseEntity.setStartdate(Date.valueOf("2015-11-11"));
+        courseEntity.setEnddate(Date.valueOf("2016-11-11"));
         courseDAO.save(courseEntity);
+        lessonEntity.setCourses(courseEntity);
+        lessonEntity.setCreateDate(Date.valueOf("2016-08-11"));
+        lessonEntity.setType((long) 675);
+        lessonEntity.setOrderNum((long) 764);
         return lessonEntity;
     }
-
-
 
     @Test
     public void testSaveReturnLessonEntity() {

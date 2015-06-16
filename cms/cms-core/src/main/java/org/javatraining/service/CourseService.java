@@ -26,6 +26,7 @@ public interface CourseService {
     @Valid
     List<CourseVO> getAll();
 
+    void clear();
     @Valid
     CourseVO getById(@NotNull Long id);
 
@@ -33,7 +34,9 @@ public interface CourseService {
 
     CourseVO addPersonsToCourse(@NotNull CourseVO courseVO, @NotNull @Valid List<PersonVO> persons);
 
-    void removePersonsFromCourse(@NotNull CourseVO courseVO, @NotNull @Valid List<PersonVO> persons);
+    CourseVO removePersonsFromCourse(@NotNull CourseVO courseVO, @NotNull @Valid List<PersonVO> persons);
+
+
 
     @NotNull
     @Valid
