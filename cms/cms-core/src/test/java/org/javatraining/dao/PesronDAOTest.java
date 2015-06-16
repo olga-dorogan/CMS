@@ -38,6 +38,7 @@ public class PesronDAOTest {
     public PersonEntity personEntityInit(PersonEntity personEntity) {
         personEntity.setName("Petro");
         personEntity.setEmail("Petrovg@mail.ru");
+        personEntity.setPhone("0933122345");
         personEntity.setLastName("Last Name");
         personEntity.setSecondName("Second name");
         personEntity.setPersonRole(PersonRole.TEACHER);
@@ -58,7 +59,11 @@ public class PesronDAOTest {
     public void testGetPersonByEmail() {
         personDAO.clear();
         PersonEntity personEntity = personDAO.save(personEntityInit(new PersonEntity()));
+        PersonEntity otherPersonEntity = personEntityInit(new PersonEntity());
+        otherPersonEntity.setEmail("OtherEmeil@gmail.com");
+        personDAO.save(otherPersonEntity);
         assertEquals(personDAO.getByEmail(personEntity.getEmail()), personEntity);
+        assertEquals(personDAO.getByEmail(otherPersonEntity.getEmail()), otherPersonEntity);
     }
 
     @InSequence(3)

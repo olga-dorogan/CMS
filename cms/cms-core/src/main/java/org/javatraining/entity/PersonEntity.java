@@ -36,6 +36,11 @@ public class PersonEntity implements Serializable {
     @Column(name = "email", nullable = true, insertable = true, updatable = true, length = 255)
     private String email;
 
+    @NotNull
+    @Basic
+    @Column(name = "phone", nullable = true, insertable = true, updatable = true, length = 11)
+    private String phone;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "personRole", nullable = true, insertable = true, updatable = true, length = 255)
     private PersonRole personRole;
@@ -55,11 +60,12 @@ public class PersonEntity implements Serializable {
     public PersonEntity() {
     }
 
-    public PersonEntity(String name, String secondName, String lastName, String email, PersonRole personRole) {
+    public PersonEntity(String name, String secondName, String lastName, String email,String phone, PersonRole personRole) {
         this.name = name;
         this.secondName = secondName;
         this.lastName = lastName;
         this.email = email;
+        this.phone = phone;
         this.personRole = personRole;
     }
 
@@ -134,6 +140,14 @@ public class PersonEntity implements Serializable {
         this.email = email;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -145,6 +159,7 @@ public class PersonEntity implements Serializable {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
         if (personRole != that.personRole) return false;
         if (secondName != null ? !secondName.equals(that.secondName) : that.secondName != null) return false;
 
@@ -158,6 +173,7 @@ public class PersonEntity implements Serializable {
         result = 31 * result + (secondName != null ? secondName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (phone != null ? phone.hashCode() : 0);
         result = 31 * result + (personRole != null ? personRole.hashCode() : 0);
         return result;
     }

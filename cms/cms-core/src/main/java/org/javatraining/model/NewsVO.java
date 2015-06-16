@@ -3,7 +3,7 @@ package org.javatraining.model;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  * Created by vika on 30.05.15.
@@ -15,18 +15,18 @@ public class NewsVO implements Serializable {
     @NotNull
     private String content;
     @NotNull
-    private Date date;
+    private Timestamp date;
 
     public NewsVO() {
     }
 
-    public NewsVO(String title, String content, Date date) {
+    public NewsVO(String title, String content, Timestamp date) {
         this.title = title;
         this.content = content;
         this.date = date;
     }
 
-    public NewsVO(Long id, String title, String content, Date date) {
+    public NewsVO(Long id, String title, String content, Timestamp date) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -57,11 +57,11 @@ public class NewsVO implements Serializable {
         this.content = content;
     }
 
-    public Date getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 

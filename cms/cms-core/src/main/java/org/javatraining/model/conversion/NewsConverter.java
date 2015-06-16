@@ -26,8 +26,7 @@ public class NewsConverter {
             newsEntity.setDescription(newsVO.getContent());
         }
         if(newsVO.getDate()!=null){
-            //different types ??
-          //  newsEntity.setDate((newsVO.getDate()));
+            newsEntity.setDate((newsVO.getDate()));
         }
         if(newsVO.getTitle()!=null){
             newsEntity.setTitle(newsVO.getTitle());
@@ -40,5 +39,12 @@ public class NewsConverter {
             news.add(convertEntityToVO(newsEntity));
         }
         return news;
+    }
+    public static Set<NewsEntity> convertVOsToEntities(@NotNull Collection<NewsVO> newsVOs) {
+        Set<NewsEntity> newsEntities = new HashSet<>(newsVOs.size());
+        for (NewsVO newsVO : newsVOs) {
+            newsEntities.add(convertVOToEntity(newsVO));
+        }
+        return newsEntities;
     }
 }

@@ -1,6 +1,8 @@
 package org.javatraining.service;
 
+import org.javatraining.entity.PersonRole;
 import org.javatraining.model.CourseVO;
+import org.javatraining.model.PersonVO;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -22,6 +24,9 @@ import static org.junit.Assert.assertEquals;
 public class CourseServiceImplTest {
     @Inject
     private CourseService courseService;
+
+    @Inject
+    private PersonService personService;
 
     @Deployment
     public static WebArchive createDeployment() {
@@ -45,6 +50,14 @@ public class CourseServiceImplTest {
         courseVO.setEndDate(Date.valueOf("2016-11-11"));
         courseVO.setDescription("Java");
         return courseVO;
+    }
+    private PersonVO personVOInit(PersonVO personVO){
+        personVO.setName("Petro");
+        personVO.setEmail("Petrovg@mail.ru");
+        personVO.setLastName("Last Name");
+        personVO.setSecondName("Second name");
+        personVO.setPersonRole(PersonRole.TEACHER);
+        return personVO;
     }
     @Test
     public void testSaveReturnCourseVO() {
@@ -77,9 +90,32 @@ public class CourseServiceImplTest {
 
     @Test
     public void testGetAllCourses() {
+        CourseVO courseVO = courseVOInit(new CourseVO());
+        CourseVO otherCourseVO = courseVOInit(new CourseVO());
+        courseService.clear();
+        courseService.save(courseVO);
+        courseService.save(otherCourseVO);
+        assertEquals(courseService.getAll(), Arrays.asList(courseVO,otherCourseVO));
+    }
+    @Test
+    public void testGetAllPersonsFromCourseByRole(){
+        CourseVO courseVO = courseVOInit(new CourseVO());
+        PersonVO personVOStudent = personVOInit(new PersonVO());
+        PersonVO personVOTeacher = personVOInit(new PersonVO());
+        personVOTeacher.setPersonRole(PersonRole.TEACHER);
+        personService.save(personVOStudent);
+        personService.save(personVOTeacher);
+        courseService.save(courseVO);
+        courseService.getAllPersonsFromCourseByRole(courseVO,PersonRole.TEACHER);
+    }
+
+
+    @Test
+    public void testGetAllNewsFromCourse() {
         CourseVO courseVO = new CourseVO();
         courseService.save(courseVOInit(courseVO));
-        assertEquals(courseService.getAll(), Arrays.asList(courseVO));
+        // TODO: !!! need to use NewsService
+
     }
 
 }
