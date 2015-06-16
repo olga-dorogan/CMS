@@ -1,11 +1,11 @@
 package org.javatraining.integration.gitlab.api.model;
 
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * The project name is cms.
@@ -18,18 +18,19 @@ public class GitLabUser implements Serializable {
     protected String email;//required
     protected String password;//required
     protected String username;//required
-    protected String name;
+    protected String name;//required
     protected String skype;
-    protected String linkedIn;
+    protected String linkedin;
     protected String twitter;
     @JsonProperty("website_url")
     protected String websiteUrl;
-    @JsonProperty("project_limit")
+    @JsonProperty("projects_limit")
     protected int projectsLimit;
     @JsonProperty("extern_uid")
     protected String externUID;
     protected String provider;
     protected String bio;
+    @JsonProperty("is_admin")
     protected boolean admin;
     @JsonProperty("can_create_group")
     protected boolean canCreateGroup;
@@ -45,6 +46,9 @@ public class GitLabUser implements Serializable {
     protected int colorSchemeId;
     @JsonProperty("avatar_url")
     protected String avatarUrl;
+    @JsonProperty("created_at")
+    protected String createdAt;
+    protected List identities;
 
     public GitLabUser() {
 
@@ -91,12 +95,12 @@ public class GitLabUser implements Serializable {
         this.skype = skype;
     }
 
-    public String getLinkedIn() {
-        return linkedIn;
+    public String getLinkedin() {
+        return linkedin;
     }
 
-    public void setLinkedIn(String linkedIn) {
-        this.linkedIn = linkedIn;
+    public void setLinkedin(String linkedin) {
+        this.linkedin = linkedin;
     }
 
     public String getTwitter() {
@@ -225,5 +229,21 @@ public class GitLabUser implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public List getIdentities() {
+        return identities;
+    }
+
+    public void setIdentities(List identities) {
+        this.identities = identities;
     }
 }

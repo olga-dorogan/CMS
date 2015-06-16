@@ -3,9 +3,12 @@ package org.javatraining.integration.gitlab.converter;
 import org.javatraining.integration.gitlab.api.model.GitLabUser;
 import org.javatraining.integration.gitlab.exception.UserRequiredPropertiesIsNotComparable;
 import org.javatraining.model.PersonVO;
+import org.javatraining.service.impl.PersonServiceImpl;
 
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * The project name is cms.
@@ -13,16 +16,18 @@ import java.util.TreeSet;
  * For more information you should send mail to codedealerb@gmail.com
  */
 public class PersonConverter {
+    @Inject//FIXME @EJB + stateless?
+    private PersonServiceImpl personService;
 
     public PersonConverter() {
-
     }
 
     public GitLabUser convertPerson(PersonVO personVO) {
         GitLabUser entity = new GitLabUser();
-
-        entity.setId(personVO.getId());
+        //FIXME OTPRAVKA NA MILO PASS
         entity.setEmail(personVO.getEmail());
+        String userName = personVO.getEmail().split("@")[0];
+        entity.setUsername(userName);
         entity.setName(personVO.getName() + "_" + personVO.getLastName());
 
         switch (personVO.getPersonRole()) {
@@ -38,21 +43,13 @@ public class PersonConverter {
     }
 
     public PersonVO convertGitLabUserEntity(GitLabUser userEntity) {
-        PersonVO personVO = new PersonVO();
-
-        personVO.setId(Long.valueOf(userEntity.getId()));
-        personVO.setEmail(userEntity.getEmail());
-        personVO.setName(userEntity.getName().split("_")[0]);//name surname
-        personVO.setLastName(userEntity.getName().split("_")[1]);
-
-        return personVO;
+        return personService.getByEmail(userEntity.getEmail());
     }
 
     public PersonVO mergePersons(PersonVO p1, PersonVO p2) throws UserRequiredPropertiesIsNotComparable {
         if (!p1.getId().equals(p2.getId())) {
             throw new UserRequiredPropertiesIsNotComparable("p1 isn\'t comparable with p2");
         }
-        // FIXME: changes in PersonVO
         p1.setEmail(p2.getEmail());
         p1.setLastName(p2.getLastName());
         p1.setName(p2.getName());
@@ -63,11 +60,11 @@ public class PersonConverter {
     }
 
     public Collection<PersonVO> convertAllEntities(Collection<GitLabUser> entities) {
-        Collection<PersonVO> personVOs = new TreeSet<>();
-
-        for(GitLabUser x:entities){
-            personVOs.add(convertGitLabUserEntity(x));
-        }
+        Collection<PersonVO> personVOs = entities.stream().map(
+                this::convertGitLabUserEntity
+        ).collect(
+                Collectors.toCollection(TreeSet::new)
+        );
 
         return personVOs;
     }

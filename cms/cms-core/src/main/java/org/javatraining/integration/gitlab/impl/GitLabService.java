@@ -1,6 +1,6 @@
 package org.javatraining.integration.gitlab.impl;
 
-import org.javatraining.integration.gitlab.api.ifaces.GitLabAPIClient;
+import org.javatraining.integration.gitlab.api.interfaces.GitLabAPIClient;
 import org.javatraining.integration.gitlab.api.model.*;
 import org.javatraining.integration.gitlab.converter.PersonConverter;
 import org.javatraining.integration.gitlab.exception.ResourceNotFoundException;
@@ -19,12 +19,10 @@ import java.util.Collection;
  * For more information you should send mail to codedealerb@gmail.com
  */
 public class GitLabService {
-    //    private static final String ROOT_LOGIN = "root";
-//    private static final String ROOT_MAIL = "admin@example.com";
-//    private static final String ROOT_PASS = "12345678";
     private static final String ROOT = "root";
     private GitLabSessionParameters params;
     private GitLabAPIClient gitLabClient;
+    private String pToken;
 
     public GitLabService(String host, String root_login, String root_pass, String root_email) {
         ResteasyClient client = new ResteasyClientBuilder().build();
@@ -32,70 +30,61 @@ public class GitLabService {
 
         setParams(new GitLabSessionParameters(root_login, root_pass, root_email));
         this.gitLabClient = target.proxy(GitLabAPIClient.class);
+        this.pToken = getPrivateToken();
     }
 
     public Collection<PersonVO> getAllPersons() {
-        String pToken = getPrivateToken();
-
         return new PersonConverter().convertAllEntities(gitLabClient.getAllUsers(pToken, ROOT));
     }
 
-    public PersonVO getPerson(Long id) {
-        String pToken = getPrivateToken();
-
-        return new PersonConverter().convertGitLabUserEntity(gitLabClient.getUser(pToken, ROOT, id));
+    public PersonVO getPerson(String email) {
+        return new PersonConverter().convertGitLabUserEntity(gitLabClient.getUser(pToken, ROOT, email));
     }
 
     public boolean addPerson(PersonVO personVO) {
-        String pToken = getPrivateToken();
         Response.Status status = gitLabClient.createUser(pToken, ROOT, new PersonConverter().convertPerson(personVO));
+
         return status.getStatusCode() == 201;
     }
 
 
     public boolean updatePerson(PersonVO personVO) {
-        String pToken = getPrivateToken();
         PersonVO person = new PersonConverter().convertGitLabUserEntity(
-                gitLabClient.getUser(pToken, ROOT, personVO.getId()));
+                gitLabClient.getUser(pToken, ROOT, personVO.getEmail()));
 
         try {
             person = new PersonConverter().mergePersons(person, personVO);
             Response.Status status = gitLabClient.updateUser(pToken, ROOT, new PersonConverter().convertPerson(person));
             return status.getStatusCode() == 200;//FIXME check 200 or 201
         } catch (UserRequiredPropertiesIsNotComparable e) {
-            System.err.println(e.getMessage());//TODO change on logger
+            System.err.println(e.getMessage());
         }
 
         return false;
     }
 
     public void removePerson(PersonVO personVO) {
-        String pToken = getPrivateToken();
-
-        gitLabClient.removeUser(pToken, ROOT, personVO.getId());
+        PersonVO gitLabUserVO = getPerson(personVO.getEmail());
+        gitLabClient.removeUser(pToken, ROOT, gitLabUserVO.getId());
     }
 
     public boolean createProject(PersonVO personVO) {
-        GitLabProject defaultProject = getStandartProject(personVO);
-        String pToken = getPrivateToken();
-
-        Response.Status status = gitLabClient.createProject(pToken, ROOT, personVO.getId(), defaultProject);
+        GitLabProject defaultProject = getDefaultProject();
+        PersonVO gitLabUserVO = getPerson(personVO.getEmail());
+        Response.Status status = gitLabClient.createProject(pToken, ROOT, gitLabUserVO.getId(), defaultProject);
 
         return status.getStatusCode() == 201;
     }
 
     public Collection<GitLabProject> getAllProjects() {
-        String pToken = getPrivateToken();
-
         return gitLabClient.getAllProjects(pToken, ROOT);
     }
 
     public boolean addProjectMember(PersonVO personVO, Integer projId) throws ResourceNotFoundException {
-        String pToken = getPrivateToken();
         GitLabProjectMember projectMember =
                 (GitLabProjectMember) new PersonConverter().convertPerson(personVO);
         projectMember.setAccessLevel(GitLabAccessLevel.Reporter);
-        Response.Status status = gitLabClient.addProjectTeamMember(pToken,ROOT, projectMember, projId);
+        Response.Status status = gitLabClient.addProjectTeamMember(pToken, ROOT, projectMember, projId);
 
         if (status.getStatusCode() != 201) {
             throw new ResourceNotFoundException("user or project not found");
@@ -105,8 +94,12 @@ public class GitLabService {
     }
 
     public boolean removeProjectMember(PersonVO personVO, GitLabProject project) throws ResourceNotFoundException {
-        String pToken = getPrivateToken();
+        PersonVO gitLabEntityVO = getPerson(personVO.getEmail());
+        GitLabProjectMember projectMember =
+                (GitLabProjectMember) new PersonConverter().convertPerson(gitLabEntityVO);
+
         Response.Status status = gitLabClient.removeProjectTeamMember(pToken, ROOT, project.getId(), personVO.getId());
+
         if (status.getStatusCode() != 200) {
             throw new ResourceNotFoundException("user or project not found");
         }
@@ -127,15 +120,13 @@ public class GitLabService {
         return session.getPrivateToken();
     }
 
-    private GitLabProject getStandartProject(PersonVO owner) {//FIXME mojno i ubrat' ownera
+    private GitLabProject getDefaultProject() {
         GitLabProject projectEntity = new GitLabProject();
 
         projectEntity.setDescription("Personal project");
-        //FIXME id???
         projectEntity.setIssuesEnabled(true);
         projectEntity.setMergeRequestsEnabled(false);
         projectEntity.setName("Personal");
-        projectEntity.setOwner(new PersonConverter().convertPerson(owner));
         projectEntity.setVisibilityLevel(GitLabProject.VISIBILITY_PRIVATE_LEVEL);
         projectEntity.setPublic(false);
         projectEntity.setWikiEnabled(true);
