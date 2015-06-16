@@ -64,6 +64,9 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonVO getById(@NotNull Long id) {
         PersonEntity personEntity = personDAO.getById(id);
+        if (personEntity == null) {
+            return null;
+        }
         return PersonConverter.convertEntityToVO(personEntity);
     }
 
@@ -83,7 +86,6 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public void addPersonToCourse(@NotNull PersonVO personVO, @NotNull CourseVO courseVO) {
-        // TODO: !!! test this method
         // owning side is CourseEntity, so all operations need to be from CourseEntity
         PersonEntity personEntity = personDAO.getById(personVO.getId());
         CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
@@ -93,7 +95,6 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public void removePersonFromCourse(@NotNull PersonVO personVO, @NotNull CourseVO courseVO) {
-        // TODO: !!! test this method
         // owning side is CourseEntity, so all operations need to be from CourseEntity
         PersonEntity personEntity = personDAO.getById(personVO.getId());
         CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
@@ -103,7 +104,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Set<CourseVO> getCourses(@NotNull PersonVO personVO) {
-        PersonEntity personEntity = PersonConverter.convertVOToEntity(personVO);
+        PersonEntity personEntity = personDAO.getById(personVO.getId());
         // if FetchType is lazy, initiate data loading
         personEntity.getCourse().size();
         return CourseConverter.convertEntitiesToVOs(personEntity.getCourse());

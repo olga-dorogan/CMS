@@ -27,6 +27,7 @@ public interface PersonService {
     void remove(@NotNull PersonVO personVO);
 
     @Valid
+    @Nullable
     PersonVO getById(@NotNull Long id);
 
     @Valid
