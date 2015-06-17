@@ -17,10 +17,10 @@
             <AppenderRef ref="Console"/>
         </Logger>
         <!--<Logger name="org.jboss.resteasy.core" level="TRACE" additivity="false">-->
-            <!--<AppenderRef ref="Console"/>-->
+        <!--<AppenderRef ref="Console"/>-->
         <!--</Logger>-->
         <!--<Logger name="org.jboss.resteasy.specimpl" level="TRACE" additivity="false">-->
-            <!--<AppenderRef ref="Console"/>-->
+        <!--<AppenderRef ref="Console"/>-->
         <!--</Logger>-->
     </Loggers>
 </Configuration>
