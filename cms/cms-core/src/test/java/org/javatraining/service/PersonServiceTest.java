@@ -49,13 +49,13 @@ public class PersonServiceTest {
     private static final String DATASETS_PERSON_AFTER_UPDATE = DATASETS_DIR + "/expected-persons-after-update.json";
     private static final String DATASETS_PERSON_AFTER_SAVE = DATASETS_DIR + "/expected-persons-after-save.json";
 
-    private static PersonVO predefinedPerson;
-    private static CourseVO predefinedCourse;
-    private static int predefinedPersonCoursesCnt;
-    private static String predefinedPersonNameForUpdate;
-    private static PersonVO personForSaving;
-    private static String notExistingEmail;
-    private static Long notExistingId;
+    private static final PersonVO predefinedPerson;
+    private static final CourseVO predefinedCourse;
+    private static final int predefinedPersonCoursesCnt;
+    private static final String predefinedPersonNameForUpdate;
+    private static final PersonVO personForSaving;
+    private static final String notExistingEmail;
+    private static final Long notExistingId;
 
     static {
         predefinedPerson = new PersonVO(1L, "teacherName", "teacherLastName", "teacher@gmail.com", PersonRole.TEACHER);
@@ -82,7 +82,7 @@ public class PersonServiceTest {
                 .addClasses(PersonDAO.class, CourseDAO.class, GenericDAO.class)
                 .addClasses(PersonService.class, PersonServiceImpl.class, UnsupportedOperationException.class)
                 .addAsResource(DATASETS_DIR)
-                .addAsResource("META-INF/test-person-service-persistence.xml", "META-INF/persistence.xml");
+                .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml");
     }
 
     @EJB
@@ -185,7 +185,6 @@ public class PersonServiceTest {
     public void testUpdate() throws Exception {
         predefinedPerson.setName(predefinedPersonNameForUpdate);
         personService.update(predefinedPerson);
-        ;
     }
 
     @Test(expected = RuntimeException.class)
@@ -243,40 +242,174 @@ public class PersonServiceTest {
 
     @Test
     @UsingDataSet(value = {DATASETS_PERSON, DATASETS_COURSE, DATASETS_COURSE_PERSON})
-    public void testGetCourses() {
+    public void testGetCourses() throws Exception {
         Set<CourseVO> personCourses = personService.getCourses(predefinedPerson);
         assertThat(personCourses, is(notNullValue()));
         assertThat(personCourses.size(), is(predefinedPersonCoursesCnt));
     }
 
+    @Test(expected = RuntimeException.class)
+    @UsingDataSet(value = {DATASETS_PERSON, DATASETS_COURSE, DATASETS_COURSE_PERSON})
+    public void testGetCoursesForNotExistingPerson() throws Exception {
+        PersonVO notExistingPerson = createNotExistingPerson();
+        try {
+            personService.getCourses(notExistingPerson);
+        } catch (EJBException e) {
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                throw e;
+            }
+        }
+    }
+
     @Test
     @UsingDataSet(value = {DATASETS_PERSON, DATASETS_COURSE})
     @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON, DATASETS_COURSE, DATASETS_COURSE_PERSON})
-    public void testAddPersonToCourse() {
+    public void testAddPersonToCourse() throws Exception {
         personService.addPersonToCourse(predefinedPerson, predefinedCourse);
+    }
+
+    @Test
+    @UsingDataSet(value = {DATASETS_PERSON, DATASETS_COURSE, DATASETS_COURSE_PERSON})
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON, DATASETS_COURSE, DATASETS_COURSE_PERSON})
+    public void testAddPersonToCourseForPersonAlreadyAddedToCourse() throws Exception {
+        personService.addPersonToCourse(predefinedPerson, predefinedCourse);
+    }
+
+    @Test(expected = RuntimeException.class)
+    @UsingDataSet(value = {DATASETS_PERSON})
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON})
+    public void testAddPersonToCourseForNotExistingCourseShouldThrowException() throws Exception {
+        try {
+            CourseVO notExistingCourse = createNotExistingCourse();
+            personService.addPersonToCourse(predefinedPerson, notExistingCourse);
+        } catch (EJBException e) {
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                throw e;
+            }
+        }
+    }
+
+    @Test(expected = RuntimeException.class)
+    @UsingDataSet(value = {DATASETS_COURSE})
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_COURSE})
+    public void testAddPersonToCourseForNotExistingPersonShouldThrowException() throws Exception {
+        try {
+            PersonVO notExistingPerson = createNotExistingPerson();
+            personService.addPersonToCourse(notExistingPerson, predefinedCourse);
+        } catch (EJBException e) {
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                throw e;
+            }
+        }
+    }
+
+    @Test(expected = RuntimeException.class)
+    @UsingDataSet(value = {DATASETS_PERSON})
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON})
+    public void testAddPersonToCourseForNullAsCourseShouldThrowException() throws Exception {
+        try {
+            personService.addPersonToCourse(predefinedPerson, null);
+        } catch (EJBException e) {
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                throw e;
+            }
+        }
+    }
+
+    @Test(expected = RuntimeException.class)
+    @UsingDataSet(value = {DATASETS_COURSE})
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_COURSE})
+    public void testAddPersonToCourseForNullAsPersonShouldThrowException() throws Exception {
+        try {
+            personService.addPersonToCourse(null, predefinedCourse);
+        } catch (EJBException e) {
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                throw e;
+            }
+        }
+    }
+
+    @Test
+    @UsingDataSet(value = {DATASETS_COURSE, DATASETS_PERSON})
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_COURSE, DATASETS_PERSON, DATASETS_COURSE_PERSON})
+    public void testAddPersonToCourseForNotValidCourseShouldAddCorrectly() throws Exception {
+        CourseVO existingButNotValidCourse = new CourseVO();
+        existingButNotValidCourse.setId(predefinedCourse.getId());
+        personService.addPersonToCourse(predefinedPerson, existingButNotValidCourse);
+    }
+
+    @Test
+    @UsingDataSet(value = {DATASETS_COURSE, DATASETS_PERSON})
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_COURSE, DATASETS_PERSON, DATASETS_COURSE_PERSON})
+    public void testAddPersonToCourseForNotValidPersonShouldAddCorrectly() throws Exception {
+        PersonVO existingButNotValidPerson = new PersonVO();
+        existingButNotValidPerson.setId(predefinedPerson.getId());
+        personService.addPersonToCourse(existingButNotValidPerson, predefinedCourse);
     }
 
     @Test
     @UsingDataSet(value = {DATASETS_PERSON, DATASETS_COURSE, DATASETS_COURSE_PERSON})
     @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON, DATASETS_COURSE})
-    public void testRemovePersonFromCourse() {
+    public void testRemovePersonFromCourse() throws Exception {
         personService.removePersonFromCourse(predefinedPerson, predefinedCourse);
     }
 
     @Test
-    @UsingDataSet(value = {DATASETS_PERSON, DATASETS_COURSE, DATASETS_COURSE_PERSON})
-    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON, DATASETS_COURSE, DATASETS_COURSE_PERSON})
-    public void testAddPersonToCourseForPersonAlreadyAddedToCourse() {
-        personService.addPersonToCourse(predefinedPerson, predefinedCourse);
+    @UsingDataSet(value = {DATASETS_PERSON, DATASETS_COURSE})
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON, DATASETS_COURSE})
+    public void testRemovePersonFromCourseForNotInvolvedPerson() throws Exception {
+        personService.removePersonFromCourse(predefinedPerson, predefinedCourse);
+    }
+
+    @Test(expected = RuntimeException.class)
+    @UsingDataSet(value = {DATASETS_COURSE})
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_COURSE})
+    public void testRemovePersonFromCourseForNotExistingPerson() throws Exception {
+        PersonVO notExistingPerson = createNotExistingPerson();
+        try {
+            personService.removePersonFromCourse(notExistingPerson, predefinedCourse);
+        } catch (EJBException e) {
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                throw e;
+            }
+        }
+    }
+
+    @Test(expected = RuntimeException.class)
+    @UsingDataSet(value = {DATASETS_PERSON})
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON})
+    public void testRemovePersonFromCourseForNotExistingCourse() throws Exception {
+        CourseVO notExistingCourse = createNotExistingCourse();
+        try {
+            personService.removePersonFromCourse(predefinedPerson, notExistingCourse);
+        } catch (EJBException e) {
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                throw e;
+            }
+        }
+    }
+
+    private PersonVO createNotExistingPerson() {
+        PersonVO notExistingPerson = new PersonVO(null, "name", "lastName", "person@gmail.com", PersonRole.STUDENT);
+        notExistingPerson.setSecondName("secondName");
+        return notExistingPerson;
+    }
+
+    private CourseVO createNotExistingCourse() {
+        return new CourseVO(null, "courseName", "courseDescription");
     }
 
     private boolean checkNotNullArgumentViolationException(ConstraintViolationException e) {
         Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
-        if (constraintViolations.size() != 1 ||
-                !constraintViolations.iterator().next().getMessage().equals("may not be null")) {
-            return false;
-        }
-        return true;
+        return !(constraintViolations.size() != 1 ||
+                !constraintViolations.iterator().next().getMessage().equals("may not be null"));
     }
 
     private boolean checkValidPersonViolationException(ConstraintViolationException e) {
