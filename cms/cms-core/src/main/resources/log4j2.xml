@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="TRACE" name="MyApp" packages="">
+<Configuration status="ERROR" name="MyApp" packages="">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
@@ -7,7 +7,7 @@
     </Appenders>
 
     <Loggers>
-        <Root level="ALL">
+        <Root level="ERROR">
             <AppenderRef ref="Console"/>
         </Root>
         <Logger name="org.javatraining.authorization" level="TRACE" additivity="false">
