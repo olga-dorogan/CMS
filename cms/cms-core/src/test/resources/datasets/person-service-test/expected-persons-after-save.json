@@ -1,0 +1,18 @@
+{
+  "person": [
+    {
+      "email": "teacher@gmail.com",
+      "name": "teacherName",
+      "second_name": "teacherSecondName",
+      "last_name": "teacherLastName",
+      "personRole": "TEACHER"
+    },
+    {
+      "email": "tested@gmail.com",
+      "name": "testedName",
+      "second_name": "testedSecondName",
+      "last_name": "testedLastName",
+      "personRole": "STUDENT"
+    }
+  ]
+}

@@ -125,21 +125,25 @@
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId> <!-- must be failsafe plugin -->
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <!-- must be failsafe plugin -->
                         <version>${plugin.surefire.version}</version>
                         <configuration>
                             <systemPropertyVariables>
                                 <arquillian.launch>wildfly-managed</arquillian.launch>
                                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                                 <jboss.home>${project.basedir}/target/wildfly-${wildfly.managed.version}</jboss.home>
-                                <module.path>${project.basedir}/target/wildfly-${wildfly.managed.version}/modules</module.path>
+                                <module.path>${project.basedir}/target/wildfly-${wildfly.managed.version}/modules
+                                </module.path>
                             </systemPropertyVariables>
                         </configuration>
                         <executions>
                             <execution>
-                                <id>test</id> <!-- must be integration-test -->
+                                <id>test</id>
+                                <!-- must be integration-test -->
                                 <goals>
-                                    <goal>test</goal> <!-- must be integration-test -->
+                                    <goal>test</goal>
+                                    <!-- must be integration-test -->
                                 </goals>
                             </execution>
                         </executions>
@@ -330,6 +334,12 @@
         <dependency>
             <groupId>org.jboss.shrinkwrap.resolver</groupId>
             <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.extension</groupId>
+            <artifactId>arquillian-persistence-impl</artifactId>
+            <version>${arquillian.persistence.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

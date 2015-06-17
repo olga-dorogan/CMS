@@ -36,6 +36,7 @@
         <shrinkwrap.version>2.2.0-beta-2</shrinkwrap.version>
         <arquillian.bom.version>1.0.3.Final</arquillian.bom.version>
         <arquillian.wildfly.version>8.1.0.Final</arquillian.wildfly.version>
+        <arquillian.persistence.version>1.0.0.Alpha6</arquillian.persistence.version>
         <jboss.spec.version>1.0.0.Final</jboss.spec.version>
         <slf4j.simple.version>1.6.4</slf4j.simple.version>
         <wildfly.remote.version>1.0.0.Alpha5</wildfly.remote.version>

@@ -12,7 +12,7 @@ import org.javatraining.service.exception.UnsupportedOperationException;
 import org.javatraining.service.impl.PersonServiceImpl;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.junit.InSequence;
+import org.jboss.arquillian.persistence.*;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
@@ -31,44 +31,46 @@ import java.util.stream.Collectors;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.nullValue;
 
 /**
  * Created by olga on 15.06.15.
  */
-// FIXME: set real expected exception class for all tests expect Exceptions
 @RunWith(Arquillian.class)
+@UsingDataSet(value = "datasets/person-service-test/persons-one-person.json")
+@Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
 public class PersonServiceTest {
 
-    private static PersonVO predefinedTeacher;
-    private static PersonVO predefinedStudent;
-    private static PersonVO testedPerson;
+    private static final String DATASETS_DIR = "datasets/person-service-test";
+    private static final String DATASETS_EMPTY = DATASETS_DIR + "/empty.json";
+    private static final String DATASETS_PERSON = DATASETS_DIR + "/persons-one-person.json";
+    private static final String DATASETS_COURSE = DATASETS_DIR + "/courses-one-course.json";
+    private static final String DATASETS_COURSE_PERSON = DATASETS_DIR + "/person-course.json";
+    private static final String DATASETS_PERSON_AFTER_UPDATE = DATASETS_DIR + "/expected-persons-after-update.json";
+    private static final String DATASETS_PERSON_AFTER_SAVE = DATASETS_DIR + "/expected-persons-after-save.json";
+
+    private static PersonVO predefinedPerson;
     private static CourseVO predefinedCourse;
-    private static int predefinedTeacherCoursesCnt;
-    private static int predefinedStudentCoursesCnt;
+    private static int predefinedPersonCoursesCnt;
+    private static String predefinedPersonNameForUpdate;
+    private static PersonVO personForSaving;
     private static String notExistingEmail;
     private static Long notExistingId;
 
     static {
-        predefinedTeacher = new PersonVO(1L, "teacherName", "teacherLastName", "teacher@gmail.com", PersonRole.TEACHER);
-        predefinedTeacher.setSecondName("teacherSecondName");
-        predefinedTeacherCoursesCnt = 1;
-        predefinedStudent = new PersonVO(2L, "studentName", "studentLastName", "student@gmail.com", PersonRole.STUDENT);
-        predefinedStudent.setSecondName("studentSecondName");
-        predefinedStudentCoursesCnt = 0;
+        predefinedPerson = new PersonVO(1L, "teacherName", "teacherLastName", "teacher@gmail.com", PersonRole.TEACHER);
+        predefinedPerson.setSecondName("teacherSecondName");
+        personForSaving = new PersonVO(null, "testedName", "testedLastName", "tested@gmail.com", PersonRole.STUDENT);
+        personForSaving.setSecondName("testedSecondName");
+        predefinedPersonNameForUpdate = "updatedName";
 
         predefinedCourse = new CourseVO(1L, "courseName", "courseDescription");
         predefinedCourse.setStartDate(Date.valueOf("2014-01-10"));
         predefinedCourse.setEndDate(Date.valueOf("2015-07-31"));
+        predefinedPersonCoursesCnt = 1;
 
         notExistingEmail = "12345";
         notExistingId = Long.MIN_VALUE;
-
-        testedPerson = new PersonVO();
-        testedPerson.setName("testedName");
-        testedPerson.setSecondName("testedSecondName");
-        testedPerson.setLastName("testedLastName");
-        testedPerson.setEmail("tested@gmail.com");
-        testedPerson.setPersonRole(PersonRole.STUDENT);
     }
 
     @Deployment
@@ -79,97 +81,29 @@ public class PersonServiceTest {
                 .addPackage(PersonConverter.class.getPackage())
                 .addClasses(PersonDAO.class, CourseDAO.class, GenericDAO.class)
                 .addClasses(PersonService.class, PersonServiceImpl.class, UnsupportedOperationException.class)
-                .addAsResource("META-INF/sql/test-person-service.sql", "META-INF/sql/test-person-service.sql")
+                .addAsResource(DATASETS_DIR)
                 .addAsResource("META-INF/test-person-service-persistence.xml", "META-INF/persistence.xml");
     }
 
     @EJB
     PersonService personService;
 
-    @InSequence(Integer.MIN_VALUE + 1)
     @Test
-    public void testPersonServiceShouldBeInjected() {
+    public void testPersonServiceShouldBeInjected() throws Exception {
         assertThat(personService, is(notNullValue()));
     }
 
-    @InSequence(Integer.MIN_VALUE + 2)
     @Test
-    public void testGetById() {
-        PersonVO predefinedTeacherFromService = personService.getById(predefinedTeacher.getId());
-        assertThat(predefinedTeacherFromService, is(equalTo(predefinedTeacher)));
-        PersonVO predefinedStudentFromService = personService.getById(predefinedStudent.getId());
-        assertThat(predefinedStudentFromService, is(equalTo(predefinedStudent)));
+    public void testGetById() throws Exception {
+        PersonVO predefinedPersonFromService = personService.getById(predefinedPerson.getId());
+        assertThat(predefinedPersonFromService, is(equalTo(predefinedPerson)));
     }
 
-    @InSequence(Integer.MIN_VALUE + 3)
     @Test
-    public void testSave() {
-        assertThat(testedPerson.getId(), is(nullValue()));
-        personService.save(testedPerson);
-        assertThat(testedPerson.getId(), is(notNullValue()));
-        PersonVO testedPersonFromService = personService.getById(testedPerson.getId());
-        assertThat(testedPersonFromService, is(equalTo(testedPerson)));
-    }
-
-    @InSequence(Integer.MIN_VALUE + 4)
-    @Test
-    public void testRemove() {
-        PersonVO testedPersonFromService = personService.getById(testedPerson.getId());
-        assertThat(testedPersonFromService, is(notNullValue()));
-        personService.remove(testedPerson);
-        testedPersonFromService = personService.getById(testedPerson.getId());
-        assertThat(testedPersonFromService, is(nullValue()));
-    }
-
-    @InSequence(Integer.MIN_VALUE + 5)
-    @Test
-    public void testGetCourses() {
-        Set<CourseVO> teacherCourses = personService.getCourses(predefinedTeacher);
-        assertThat(teacherCourses, is(notNullValue()));
-        assertThat(teacherCourses.size(), is(predefinedTeacherCoursesCnt));
-    }
-
-    @InSequence(Integer.MIN_VALUE + 6)
-    @Test
-    public void testAddPersonToCourse() {
-        assertThat(predefinedStudentCoursesCnt, is(0));
-        personService.addPersonToCourse(predefinedStudent, predefinedCourse);
-        Set<CourseVO> courses = personService.getCourses(predefinedStudent);
-        assertThat(courses, is(notNullValue()));
-        assertThat(courses.size(), is(predefinedStudentCoursesCnt + 1));
-    }
-
-    @InSequence(Integer.MIN_VALUE + 7)
-    @Test
-    public void testRemovePersonFromCourse() {
-        assertThat(personService.getCourses(predefinedStudent).size(), is(predefinedStudentCoursesCnt + 1));
-        personService.removePersonFromCourse(predefinedStudent, predefinedCourse);
-        Set<CourseVO> courses = personService.getCourses(predefinedStudent);
-        assertThat(courses, is(notNullValue()));
-        assertThat(courses.size(), is(predefinedStudentCoursesCnt));
-    }
-
-    @InSequence(Integer.MIN_VALUE + 8)
-    @Test
-    public void testAddPersonToCourseForPersonAlreadyAddedToCourse() {
-        Set<CourseVO> teacherCourses = personService.getCourses(predefinedTeacher);
-        assertThat(teacherCourses, is(notNullValue()));
-        assertThat(teacherCourses.size(), is(predefinedTeacherCoursesCnt));
-        assertThat(teacherCourses.iterator().next(), is(equalTo(predefinedCourse)));
-
-        personService.addPersonToCourse(predefinedTeacher, predefinedCourse);
-        teacherCourses = personService.getCourses(predefinedTeacher);
-        assertThat(teacherCourses, is(notNullValue()));
-        assertThat(teacherCourses.size(), is(predefinedTeacherCoursesCnt));
-    }
-
-
-    @Test
-    public void testGetByIdForNotExistingIdShouldReturnNull() {
+    public void testGetByIdForNotExistingIdShouldReturnNull() throws Exception {
         PersonVO personWithNotExistingId = personService.getById(notExistingId);
         assertThat(personWithNotExistingId, is(nullValue()));
     }
-
 
     @Test(expected = RuntimeException.class)
     public void testGetByIdForNullIdShouldThrowConstraintViolationException() throws Exception {
@@ -184,13 +118,13 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void testGetByEmail() {
-        PersonVO predefinedTeacherFromServiceByEmail = personService.getByEmail(predefinedTeacher.getEmail());
-        assertThat(predefinedTeacherFromServiceByEmail, is(equalTo(predefinedTeacher)));
+    public void testGetByEmail() throws Exception {
+        PersonVO predefinedPersonFromServiceByEmail = personService.getByEmail(predefinedPerson.getEmail());
+        assertThat(predefinedPersonFromServiceByEmail, is(equalTo(predefinedPerson)));
     }
 
     @Test
-    public void testGetByEmailForNotExistingEmailShouldBeNull() {
+    public void testGetByEmailForNotExistingEmailShouldReturnNull() throws Exception {
         PersonVO personWithNotExistingEmail = personService.getByEmail(notExistingEmail);
         assertThat(personWithNotExistingEmail, is(nullValue()));
     }
@@ -208,15 +142,20 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void testSaveForAlreadyExistingPersonShouldDoNothing() {
-        final Long existingPersonId = predefinedTeacher.getId();
-        PersonVO personFromService = personService.getById(existingPersonId);
-        assertThat(personFromService, is(notNullValue()));
-        personService.save(personFromService);
-        assertThat(personFromService.getId(), is(equalTo(existingPersonId)));
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON_AFTER_SAVE}, excludeColumns = {"id", "phone"})
+    public void testSave() throws Exception {
+        personService.save(personForSaving);
+    }
+
+
+    @Test
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON}, excludeColumns = {"id", "phone"})
+    public void testSaveForAlreadyExistingPersonShouldDoNothing() throws Exception {
+        personService.save(predefinedPerson);
     }
 
     @Test(expected = RuntimeException.class)
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON}, excludeColumns = {"id", "phone"})
     public void testSaveForNullPersonShouldThrowConstraintViolationException() throws Exception {
         try {
             personService.save(null);
@@ -229,6 +168,7 @@ public class PersonServiceTest {
     }
 
     @Test(expected = RuntimeException.class)
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON}, excludeColumns = {"id", "phone"})
     public void testSaveForNotValidPersonShouldThrowConstraintViolationException() throws Exception {
         try {
             personService.save(new PersonVO());
@@ -241,15 +181,15 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void testUpdate() {
-        predefinedTeacher.setName("updated name");
-        PersonVO personFromService = personService.getById(predefinedTeacher.getId());
-        assertThat(personFromService, not(equalTo(predefinedTeacher)));
-        personFromService = personService.update(predefinedTeacher);
-        assertThat(personFromService, is(equalTo(predefinedTeacher)));
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON_AFTER_UPDATE}, excludeColumns = {"id", "phone"})
+    public void testUpdate() throws Exception {
+        predefinedPerson.setName(predefinedPersonNameForUpdate);
+        personService.update(predefinedPerson);
+        ;
     }
 
     @Test(expected = RuntimeException.class)
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON}, excludeColumns = {"id", "phone"})
     public void testUpdateForNullPersonShouldThrowConstraintViolationException() throws Exception {
         try {
             personService.update(null);
@@ -262,6 +202,7 @@ public class PersonServiceTest {
     }
 
     @Test(expected = RuntimeException.class)
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON}, excludeColumns = {"id", "phone"})
     public void testUpdateForNotValidPersonShouldThrowConstraintViolationException() throws Exception {
         try {
             personService.update(new PersonVO());
@@ -273,8 +214,15 @@ public class PersonServiceTest {
         }
     }
 
+    @Test
+    @ShouldMatchDataSet(value = DATASETS_EMPTY)
+    public void testRemove() throws Exception {
+        personService.remove(predefinedPerson);
+    }
+
     @Test(expected = RuntimeException.class)
-    public void testRemoveForNullPersonShouldThrowConstraintViolationException() {
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON}, excludeColumns = {"id", "phone"})
+    public void testRemoveForNullPersonShouldThrowConstraintViolationException() throws Exception {
         try {
             personService.remove(null);
         } catch (EJBException e) {
@@ -283,6 +231,43 @@ public class PersonServiceTest {
                 throw e;
             }
         }
+    }
+
+    @Test
+    @ShouldMatchDataSet(value = DATASETS_EMPTY, excludeColumns = {"id", "phone"})
+    public void testRemoveForNotValidPersonShouldRemoveCorrectly() throws Exception {
+        PersonVO notValidPerson = new PersonVO();
+        notValidPerson.setId(predefinedPerson.getId());
+        personService.remove(notValidPerson);
+    }
+
+    @Test
+    @UsingDataSet(value = {DATASETS_PERSON, DATASETS_COURSE, DATASETS_COURSE_PERSON})
+    public void testGetCourses() {
+        Set<CourseVO> personCourses = personService.getCourses(predefinedPerson);
+        assertThat(personCourses, is(notNullValue()));
+        assertThat(personCourses.size(), is(predefinedPersonCoursesCnt));
+    }
+
+    @Test
+    @UsingDataSet(value = {DATASETS_PERSON, DATASETS_COURSE})
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON, DATASETS_COURSE, DATASETS_COURSE_PERSON})
+    public void testAddPersonToCourse() {
+        personService.addPersonToCourse(predefinedPerson, predefinedCourse);
+    }
+
+    @Test
+    @UsingDataSet(value = {DATASETS_PERSON, DATASETS_COURSE, DATASETS_COURSE_PERSON})
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON, DATASETS_COURSE})
+    public void testRemovePersonFromCourse() {
+        personService.removePersonFromCourse(predefinedPerson, predefinedCourse);
+    }
+
+    @Test
+    @UsingDataSet(value = {DATASETS_PERSON, DATASETS_COURSE, DATASETS_COURSE_PERSON})
+    @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON, DATASETS_COURSE, DATASETS_COURSE_PERSON})
+    public void testAddPersonToCourseForPersonAlreadyAddedToCourse() {
+        personService.addPersonToCourse(predefinedPerson, predefinedCourse);
     }
 
     private boolean checkNotNullArgumentViolationException(ConstraintViolationException e) {
@@ -296,7 +281,7 @@ public class PersonServiceTest {
 
     private boolean checkValidPersonViolationException(ConstraintViolationException e) {
         final int expectedViolationsCnt = 3;
-        final Set<String> expectedViolationMessages = Collections.unmodifiableSet(new HashSet(Collections.nCopies(expectedViolationsCnt, "may not be null")));
+        final Set<String> expectedViolationMessages = Collections.unmodifiableSet(new HashSet<>(Collections.nCopies(expectedViolationsCnt, "may not be null")));
         Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
         if (constraintViolations.size() != expectedViolationsCnt) {
             return false;
@@ -304,4 +289,5 @@ public class PersonServiceTest {
         Set<String> violationMessages = constraintViolations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toSet());
         return violationMessages.equals(expectedViolationMessages);
     }
+
 }
