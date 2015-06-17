@@ -271,14 +271,14 @@
             <artifactId>spring-context</artifactId>
             <version>${org.springframework.version}</version>
         </dependency>
-        <dependency>
+        <dependency
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
             <version>1.5.0-b01</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>jaf</groupId>
+            <groupId>javax.activation</groupId>
             <artifactId>activation</artifactId>
             <version>1.0.2</version>
             <scope>provided</scope>
