@@ -42,7 +42,7 @@ public class GitLabService {
     }
 
     public boolean addPerson(PersonVO personVO) {
-        Response.Status status = gitLabClient.createUser(pToken, ROOT, new PersonConverter().convertPerson(personVO));
+        Response.Status status = gitLabClient.createUser(pToken, ROOT, new PersonConverter(params.getEmail()).convertPerson(personVO));
 
         return status.getStatusCode() == 201;
     }

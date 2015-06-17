@@ -2,10 +2,13 @@ package org.javatraining.integration.gitlab.converter;
 
 import org.javatraining.integration.gitlab.api.model.GitLabUser;
 import org.javatraining.integration.gitlab.exception.UserRequiredPropertiesIsNotComparable;
+import org.javatraining.integration.gitlab.impl.GitLabNotificationServiceImpl;
 import org.javatraining.model.PersonVO;
 import org.javatraining.service.impl.PersonServiceImpl;
 
 import javax.inject.Inject;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -16,28 +19,32 @@ import java.util.stream.Collectors;
  * For more information you should send mail to codedealerb@gmail.com
  */
 public class PersonConverter {
-    @Inject//FIXME @EJB + stateless?
+    @Inject//FIXME or @EJB + stateless?
     private PersonServiceImpl personService;
+    private String rootMail;
+    private GitLabNotificationServiceImpl gitLabNotification;
 
     public PersonConverter() {
     }
 
+    public PersonConverter(String rootMail) {
+        this.rootMail = rootMail;
+    }
+
     public GitLabUser convertPerson(PersonVO personVO) {
         GitLabUser entity = new GitLabUser();
-        //FIXME OTPRAVKA NA MILO PASS
+
         entity.setEmail(personVO.getEmail());
         String userName = personVO.getEmail().split("@")[0];
         entity.setUsername(userName);
         entity.setName(personVO.getName() + "_" + personVO.getLastName());
-
-        switch (personVO.getPersonRole()) {
-            case STUDENT:
-                entity.setPassword("student" + personVO.getId());
-                break;
-            case TEACHER:
-                entity.setPassword("teacher" + personVO.getId());
-                break;
+        try {
+            String password = generatePassword(userName);
+            entity.setPassword(password);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
         }
+        gitLabNotification.sendUserProperties(rootMail, entity);
 
         return entity;
     }
@@ -67,5 +74,17 @@ public class PersonConverter {
         );
 
         return personVOs;
+    }
+
+    private String generatePassword(String userName) throws NoSuchAlgorithmException {
+        MessageDigest mDigest = MessageDigest.getInstance("SHA1");
+        byte[] result = mDigest.digest(userName.getBytes());
+        StringBuffer sb = new StringBuffer();
+
+        for (int i = 0; i < result.length; i++) {
+            sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
+        }
+
+        return sb.toString().substring(0, 10);//RETRIEVE FIRST 10 SYMBOLS FROM SHA1(USERNAME)
     }
 }
