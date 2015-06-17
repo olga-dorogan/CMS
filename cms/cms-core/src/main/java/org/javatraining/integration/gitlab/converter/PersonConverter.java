@@ -29,6 +29,7 @@ public class PersonConverter {
 
     public PersonConverter(String rootMail) {
         this.rootMail = rootMail;
+        gitLabNotification = new GitLabNotificationServiceImpl();
     }
 
     public GitLabUser convertPerson(PersonVO personVO) {
@@ -79,10 +80,10 @@ public class PersonConverter {
     private String generatePassword(String userName) throws NoSuchAlgorithmException {
         MessageDigest mDigest = MessageDigest.getInstance("SHA1");
         byte[] result = mDigest.digest(userName.getBytes());
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < result.length; i++) {
-            sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
+        for (byte aResult : result) {
+            sb.append(Integer.toString((aResult & 0xff) + 0x100, 16).substring(1));
         }
 
         return sb.toString().substring(0, 10);//RETRIEVE FIRST 10 SYMBOLS FROM SHA1(USERNAME)
