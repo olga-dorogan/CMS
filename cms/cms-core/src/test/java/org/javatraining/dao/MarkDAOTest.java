@@ -55,7 +55,7 @@ public class MarkDAOTest {
         lessonEntity.setCreateDate(Date.valueOf("2015-10-10"));
         lessonDAO.save(lessonEntity);
         markEntity.setMark((long) 7);
-        markEntity.setLessons(lessonEntity);
+//        markEntity.setLessons(lessonEntity);
         personEntity.setName("Petro");
         personEntity.setEmail("Petrovgmail.ru");
         personEntity.setLastName("Last Name");
