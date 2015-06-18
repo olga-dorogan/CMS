@@ -1,0 +1,10 @@
+{
+  "marks": [
+    {
+      "id": 1,
+      "mark": 100,
+      "person_id": 1,
+      "lesson_id": 1
+    }
+  ]
+}

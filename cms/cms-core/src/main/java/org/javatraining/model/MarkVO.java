@@ -10,16 +10,17 @@ import java.io.Serializable;
 public class MarkVO implements Serializable {
     private Long id;
     @NotNull
-    private Integer lessonId;
-    @NotNull
     private Integer mark;
 
     public MarkVO() {
     }
 
-    public MarkVO(Long id, Integer lessonId, Integer mark) {
+    public MarkVO(Integer mark) {
+        this.mark = mark;
+    }
+
+    public MarkVO(Long id, Integer mark) {
         this.id = id;
-        this.lessonId = lessonId;
         this.mark = mark;
     }
 
@@ -29,14 +30,6 @@ public class MarkVO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Integer getLessonId() {
-        return lessonId;
-    }
-
-    public void setLessonId(Integer lessonId) {
-        this.lessonId = lessonId;
     }
 
     public Integer getMark() {
@@ -54,16 +47,14 @@ public class MarkVO implements Serializable {
 
         MarkVO markVO = (MarkVO) o;
 
-        if (!id.equals(markVO.id)) return false;
-        if (!lessonId.equals(markVO.lessonId)) return false;
-        return mark.equals(markVO.mark);
+        if (id != null ? !id.equals(markVO.id) : markVO.id != null) return false;
+        return !(mark != null ? !mark.equals(markVO.mark) : markVO.mark != null);
 
     }
 
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (lessonId != null ? lessonId.hashCode() : 0);
         result = 31 * result + (mark != null ? mark.hashCode() : 0);
         return result;
     }

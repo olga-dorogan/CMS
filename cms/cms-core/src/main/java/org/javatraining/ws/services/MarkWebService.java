@@ -60,7 +60,8 @@ public class MarkWebService extends AbstractWebService<MarkVO> {
         person.setId(personId);
         try {
             MarkVO mark = deserialize(markJson);
-            personService.setMark(person, mark);
+            // FIXME: changes in PersonService
+//            personService.setMark(person, mark);
             r = Response.ok();
         } catch (JSONException e) {
             r = Response.status(Response.Status.NOT_ACCEPTABLE);
@@ -79,7 +80,8 @@ public class MarkWebService extends AbstractWebService<MarkVO> {
         try {
             MarkVO mark = deserialize(markJson);
             mark.setId(markId);
-            personService.updateMark(person, mark);
+            // FIXME: changes in PersonService
+//            personService.updateMark(person, mark);
             r = Response.ok();
         } catch (JSONException e) {
             r = Response.status(Response.Status.NOT_ACCEPTABLE);
