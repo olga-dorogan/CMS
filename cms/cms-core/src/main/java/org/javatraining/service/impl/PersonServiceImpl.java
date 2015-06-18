@@ -17,6 +17,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -81,7 +82,8 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public List<PersonVO> getPersonsByRole(@NotNull @Valid PersonRole role) {
-        throw new UnsupportedOperationException();
+        List<PersonEntity> personEntities = personDAO.getByPersonRole(role);
+        return new ArrayList<>(PersonConverter.convertEntitiesToVOs(personEntities));
     }
 
     @Override

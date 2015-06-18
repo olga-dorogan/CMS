@@ -25,6 +25,7 @@ import javax.validation.ConstraintViolationException;
 import java.sql.Date;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -146,7 +147,6 @@ public class PersonServiceTest {
     public void testSave() throws Exception {
         personService.save(personForSaving);
     }
-
 
     @Test
     @ShouldMatchDataSet(value = {DATASETS_EMPTY, DATASETS_PERSON}, excludeColumns = {"id", "phone"})
@@ -388,6 +388,26 @@ public class PersonServiceTest {
         CourseVO notExistingCourse = createNotExistingCourse();
         try {
             personService.removePersonFromCourse(predefinedPerson, notExistingCourse);
+        } catch (EJBException e) {
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                throw e;
+            }
+        }
+    }
+
+    @Test
+    public void testGetPersonsByRole() throws Exception {
+        final int predefinedPersonsCnt = 1;
+        List<PersonVO> personsByRole = personService.getPersonsByRole(predefinedPerson.getPersonRole());
+        assertThat(personsByRole, hasItem(predefinedPerson));
+        assertThat(personsByRole.size(), is(predefinedPersonsCnt));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testGetPersonsByRoleForNullAsRoleShouldThrowException() throws Exception {
+        try {
+            personService.getPersonsByRole(null);
         } catch (EJBException e) {
             assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
             if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
