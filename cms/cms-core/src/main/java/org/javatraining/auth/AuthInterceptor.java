@@ -2,6 +2,7 @@ package org.javatraining.auth;
 
 import org.javatraining.config.Config;
 import org.javatraining.integration.google.oauth.TokenVerifierService;
+import org.javatraining.integration.google.oauth.exception.AuthException;
 import org.javatraining.service.AuthService;
 
 import javax.inject.Inject;
@@ -19,15 +20,21 @@ import java.lang.reflect.Method;
 @Auth(roles = {})
 @Interceptor
 public class AuthInterceptor implements Serializable {
+    private static final long serialVersionUID = 8041440307110936046L;
     @Inject
-    private HttpServletRequest request;
+    private transient HttpServletRequest request;
     @Inject
-    private TokenVerifierService tokenVerifierService;
+    private transient TokenVerifierService tokenVerifierService;
     @Inject
-    private AuthService authService;
+    private transient AuthService authService;
 
     @AroundInvoke
     public Object invoke(final InvocationContext context) throws Exception {
+        // if the class to which interceptor is injected is not request scoped,
+        // throw exception
+        if (request == null) {
+            throw new AuthException("Unexpected usage of '@Auth' annotation");
+        }
         String[] methodAllowedRoles = getRoles(context.getMethod());
         // if the method wasn't annotated or role field in annotation is empty,
         // process request
@@ -77,8 +84,8 @@ public class AuthInterceptor implements Serializable {
     }
 
     private boolean isUserRoleAllowedForMethod(String role, String[] allowedRoles) {
-        for (int i = 0; i < allowedRoles.length; i++) {
-            if (role.equals(allowedRoles[i])) {
+        for (String allowedRole : allowedRoles) {
+            if (role.equals(allowedRole)) {
                 return true;
             }
         }
