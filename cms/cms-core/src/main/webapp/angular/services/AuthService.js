@@ -8,7 +8,6 @@ function AuthService(Restangular,$http){
                         "email": user.email,
                         "id": null,
                         "lastName": name[1],
-                        "marks": null,
                         "name": name[0],
                         "personRole": null,
                         "secondName": null

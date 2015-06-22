@@ -58,13 +58,12 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createPerson(@Context UriInfo uriInfo, @QueryParam("person_json") String personJson) {
+    public Response createPerson(@Context UriInfo uriInfo, PersonVO person) {
         Response.ResponseBuilder r;
         try {
-            PersonVO person = deserialize(personJson);
-            personService.saveStudent(person);
+            personService.save(person);
             String personUri = uriInfo.getRequestUri().toString() + "/" + person.getId();
-            r = Response.created(new URI(personUri));
+            r = Response.created(new URI(personUri)).entity(person);
         } catch (JSONException e) {
             r = Response.status(Response.Status.NOT_ACCEPTABLE);
         } catch (URISyntaxException e) {
