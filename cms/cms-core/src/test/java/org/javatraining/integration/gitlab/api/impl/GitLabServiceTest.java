@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
  * For more information you should send mail to codedealerb@gmail.com
  */
 
-@Ignore
+//@Ignore
 public class GitLabServiceTest {
     private GitLabService service;
     private PersonVO testPerson, testPerson2;

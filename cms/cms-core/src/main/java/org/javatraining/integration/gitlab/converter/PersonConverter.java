@@ -6,6 +6,8 @@ import org.javatraining.integration.gitlab.impl.GitLabNotificationServiceImpl;
 import org.javatraining.model.PersonVO;
 import org.javatraining.service.impl.PersonServiceImpl;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -18,8 +20,10 @@ import java.util.stream.Collectors;
  * Created by sergey on 12.06.15 at 21:21.
  * For more information you should send mail to codedealerb@gmail.com
  */
+@Stateless
 public class PersonConverter {
-    @Inject//FIXME or @EJB + stateless?
+    @Inject
+//    @EJB
     private PersonServiceImpl personService;
     private String rootMail;
     private GitLabNotificationServiceImpl gitLabNotification;
@@ -45,7 +49,7 @@ public class PersonConverter {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        gitLabNotification.sendUserProperties(rootMail, entity);
+//        gitLabNotification.sendUserProperties(rootMail, entity);
 
         return entity;
     }
@@ -68,13 +72,11 @@ public class PersonConverter {
     }
 
     public Collection<PersonVO> convertAllEntities(Collection<GitLabUser> entities) {
-        Collection<PersonVO> personVOs = entities.stream().map(
+        return entities.stream().map(
                 this::convertGitLabUserEntity
         ).collect(
                 Collectors.toCollection(TreeSet::new)
         );
-
-        return personVOs;
     }
 
     private String generatePassword(String userName) throws NoSuchAlgorithmException {

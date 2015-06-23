@@ -38,7 +38,9 @@ public class GitLabService {
     }
 
     public PersonVO getPerson(String email) {
-        return new PersonConverter().convertGitLabUserEntity(gitLabClient.getUser(pToken, ROOT, email));
+        GitLabUser user = gitLabClient.getUser(pToken, ROOT, email).get(0);
+
+        return new PersonConverter().convertGitLabUserEntity(user);
     }
 
     public boolean addPerson(PersonVO personVO) {
@@ -50,7 +52,7 @@ public class GitLabService {
 
     public boolean updatePerson(PersonVO personVO) {
         PersonVO person = new PersonConverter().convertGitLabUserEntity(
-                gitLabClient.getUser(pToken, ROOT, personVO.getEmail()));
+                gitLabClient.getUser(pToken, ROOT, personVO.getEmail()).get(0));
 
         try {
             person = new PersonConverter().mergePersons(person, personVO);
