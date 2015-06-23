@@ -10,14 +10,14 @@ import java.io.Serializable;
  */
 
 public abstract class GenericDAO<T extends Serializable> {
+
     private Class<T> entityClass;
+
     @PersistenceContext
     private EntityManager em;
 
     public GenericDAO() {
     }
-
-    protected EntityManager getEntityManager(){return em;}
 
     public Class<T> getEntityClass() {
         return entityClass;
@@ -28,7 +28,8 @@ public abstract class GenericDAO<T extends Serializable> {
     }
 
     public T remove(@NotNull T entity) {
-        getEntityManager().remove(entity);
+        entity = (T) getEntityManager().find(entityClass, entity);
+             getEntityManager().remove(entity);
     return entity;
     }
 
@@ -52,5 +53,7 @@ public abstract class GenericDAO<T extends Serializable> {
         getEntityManager().merge(entity);
         return entity;
     }
+
+    protected EntityManager getEntityManager(){return em;}
 
 }

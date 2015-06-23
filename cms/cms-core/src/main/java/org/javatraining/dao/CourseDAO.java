@@ -5,6 +5,7 @@ import org.javatraining.entity.CourseEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.Query;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -28,4 +29,9 @@ public class CourseDAO extends GenericDAO<CourseEntity> {
     }
 
 
+    public CourseEntity removeCourse(@NotNull CourseEntity entity) {
+
+        getEntityManager().remove(entity);
+        return entity;
+    }
 }

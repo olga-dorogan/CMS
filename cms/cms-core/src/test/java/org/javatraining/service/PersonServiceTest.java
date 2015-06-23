@@ -1,5 +1,6 @@
 package org.javatraining.service;
 
+import org.hamcrest.Matcher;
 import org.javatraining.dao.CourseDAO;
 import org.javatraining.dao.GenericDAO;
 import org.javatraining.dao.PersonDAO;
@@ -134,7 +135,7 @@ public class PersonServiceTest {
         try {
             personService.getByEmail(null);
         } catch (EJBException e) {
-            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            assertThat(e.getCause(), is((Matcher) instanceOf(ConstraintViolationException.class)));
             if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
                 throw e;
             }

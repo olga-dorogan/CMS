@@ -2,6 +2,7 @@ package org.javatraining.service;
 
 import org.javatraining.entity.PersonRole;
 import org.javatraining.model.CourseVO;
+import org.javatraining.model.NewsVO;
 import org.javatraining.model.PersonVO;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -113,7 +114,9 @@ public class CourseServiceImplTest {
     @Test
     public void testGetAllNewsFromCourse() {
         CourseVO courseVO = new CourseVO();
+        NewsVO newsVO = new NewsVO();
         courseService.save(courseVOInit(courseVO));
+      courseService.addNewsToCourse(courseVO,newsVO);
         // TODO: !!! need to use NewsService
 
     }
