@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 /**
  * Created by asudak on 5/29/15.
@@ -53,6 +54,20 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
                 r = Response.ok(serialize(person));
         }
 
+        return r.build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Auth(roles = {AuthRole.TEACHER})
+    public Response getPersonsByRole(@QueryParam("role") String role) {
+        Response.ResponseBuilder r;
+        try {
+            List<PersonVO> personsByRole = personService.getPersonsByRole(PersonRole.valueOf(role.toUpperCase()));
+            r = Response.ok(personsByRole);
+        } catch (ValidationException e) {
+            r = Response.status(422); //422 Unprocessable Entity
+        }
         return r.build();
     }
 

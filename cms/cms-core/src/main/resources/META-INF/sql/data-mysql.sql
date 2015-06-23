@@ -1,1 +1,2 @@
-INSERT INTO person(id, email, phone, name, second_name, last_name, personRole) VALUES(1, 'dorogan.olga.test@gmail.com', '123', 'teacherName', 'teacherSecondName', 'teacherSurname', 'TEACHER');
+INSERT INTO person(id, email, phone, name, second_name, last_name, personRole) VALUES(1, 'dorogan.olga.test@gmail.com', '123', 'teacherName_1', 'teacherSecondName_1', 'teacherSurname_1', 'TEACHER');
+INSERT INTO person(id, email, phone, name, second_name, last_name, personRole) VALUES(2, 'another@gmail.com', '123', 'teacherName_2', 'teacherSecondName_2', 'teacherSurname_2', 'TEACHER');

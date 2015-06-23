@@ -10,7 +10,8 @@ var myApp = angular.module('myApp', [
     'myApp.student'
 ]);
 myApp.service('sessionService', ['$window', '$rootScope', SessionService]);
-myApp.service('AuthService', ['Restangular','$http', AuthService]);
+myApp.service('PersonService', ['Restangular', PersonService]);
+myApp.service('AuthService', ['PersonService', AuthService]);
 myApp.factory('sessionInjector', ['$rootScope', 'sessionService', SessionInjector]);
 
 myApp.config(function(RestangularProvider) {
