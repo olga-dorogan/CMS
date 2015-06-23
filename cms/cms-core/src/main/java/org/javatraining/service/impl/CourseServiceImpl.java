@@ -1,6 +1,7 @@
 package org.javatraining.service.impl;
 
 import org.javatraining.dao.CourseDAO;
+import org.javatraining.dao.NewsDAO;
 import org.javatraining.entity.CourseEntity;
 import org.javatraining.entity.NewsEntity;
 import org.javatraining.entity.PersonEntity;
@@ -30,6 +31,9 @@ public class CourseServiceImpl implements CourseService {
 
     @EJB
     private CourseDAO courseDAO;
+
+    @EJB
+    private NewsDAO newsDAO;
 
     @Override
     public CourseVO save(@NotNull @Valid CourseVO courseVO) {
@@ -128,7 +132,9 @@ return NewsConverter.convertEntitiesToVOs(CourseConverter
 
     @Override
     public List<NewsVO> getAllNews() {
-
-        throw new UnsupportedOperationException();
-    }
+     return NewsConverter
+             .convertEntitiesToVOs(newsDAO.getAllNews())
+             .stream()
+             .collect(Collectors.toList());
+       }
 }

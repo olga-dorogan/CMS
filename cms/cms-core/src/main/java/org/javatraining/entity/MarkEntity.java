@@ -26,7 +26,7 @@ public class MarkEntity implements Serializable {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "lesson_id", nullable = false)
-    private LessonEntity lessons;
+    private PracticeLessonEntity lessons;
 
     public MarkEntity() {
     }
@@ -59,11 +59,11 @@ public class MarkEntity implements Serializable {
         this.persons = persons;
     }
 
-    public LessonEntity getLessons() {
+    public PracticeLessonEntity getLessons() {
         return lessons;
     }
 
-    public void setLessons(LessonEntity lessons) {
+    public void setLessons(PracticeLessonEntity lessons) {
         this.lessons = lessons;
     }
 

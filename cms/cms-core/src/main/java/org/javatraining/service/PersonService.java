@@ -4,6 +4,7 @@ import org.javatraining.entity.PersonRole;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.MarkVO;
 import org.javatraining.model.PersonVO;
+import org.javatraining.model.PracticeLessonVO;
 
 import javax.annotation.Nullable;
 import javax.validation.Valid;
@@ -51,9 +52,9 @@ public interface PersonService {
 
     //    Person --- Mark methods
 
-    void setMark(@NotNull PersonVO personVO, @NotNull MarkVO markVO);
+    void setMark(@NotNull PersonVO personVO, @NotNull PracticeLessonVO practiceLessonVO, @NotNull @Valid MarkVO markVO);
 
-    void updateMark(@NotNull PersonVO personVO, @NotNull MarkVO markVO);
+    void removeMark(@NotNull MarkVO markVO);
 
     @NotNull
     @Valid

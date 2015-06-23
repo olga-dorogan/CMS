@@ -1,19 +1,23 @@
 <ul class="nav nav-tabs">
     <li ui-sref-active="active"><a ui-sref="home"><span class="glyphicon glyphicon-home"></span> Главная</a></li>
-    <li ui-sref-active="active"><a ui-sref="news" >Новости</a></li>
+    <li ui-sref-active="active"><a ui-sref="news">Новости</a></li>
     <li ui-sref-active="active"><a ui-sref="about">О нас</a></li>
 </ul>
 <div class="sign-in">
-    <a href="" ng-if="!isLogin()"  ng-click="doLogin()" class="btn btn-default dropdown-toggle"><span class="glyphicon glyphicon-arrow-right"></span> Войти</a>
+    <a href="" ng-if="!isLogin()" ng-click="doLogin()" class="btn btn-default dropdown-toggle"><span
+            class="glyphicon glyphicon-arrow-right"></span> Войти</a>
+
     <div ng-if="isLogin()">
-        <img class="avatar" src="{{gapi.user.picture}}" />
-        <div  id="userinfo-wrapper">
-            <a ui-sref="teacher({courseId:1})">
+        <img class="avatar" src="{{gapi.user.picture}}"/>
+
+        <div id="userinfo-wrapper">
+            <a ui-sref="{{(getRole() === 'teacher') ? 'teacher({courseId:1})' : 'student({courseId:1})'}}">
                 <span>{{gapi.user.name}}</span><br>
                 <span>{{gapi.user.email}}</span>
             </a>
         </div>
-        <a href="" ng-click="doLogOut()" class="btn btn-default dropdown-toggle"><span class="glyphicon glyphicon-arrow-left"></span> Выйти</a>
+        <a href="" ng-click="doLogOut()" class="btn btn-default dropdown-toggle"><span
+                class="glyphicon glyphicon-arrow-left"></span> Выйти</a>
     </div>
 </div>
 <div class="content" ui-view="content">

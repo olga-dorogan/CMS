@@ -26,7 +26,8 @@ public class PersonDAO extends GenericDAO<PersonEntity> {
     public PersonEntity getByEmail(@NotNull String email) {
         Query query = getEntityManager().createQuery("SELECT c FROM PersonEntity c WHERE c.email =:email ").setParameter("email", email);
         List<PersonEntity> resultList = query.getResultList();
-        if(resultList.size()==0||resultList.size()>1);
+        if(resultList.size()==0||resultList.size()>1)
+         return null;
          return resultList.get(0);
     }
 

@@ -21,7 +21,6 @@ public class PersonEntity implements Serializable {
     @Column(name = "name", nullable = true, insertable = true, updatable = true, length = 255)
     private String name;
 
-    @NotNull
     @Basic
     @Column(name = "second_name", nullable = true, insertable = true, updatable = true, length = 255)
     private String secondName;
@@ -36,7 +35,6 @@ public class PersonEntity implements Serializable {
     @Column(name = "email", nullable = true, insertable = true, updatable = true, length = 255)
     private String email;
 
-    @NotNull
     @Basic
     @Column(name = "phone", nullable = true, insertable = true, updatable = true, length = 11)
     private String phone;
