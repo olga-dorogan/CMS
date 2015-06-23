@@ -1,4 +1,4 @@
-package org.javatraining.ws.services;
+package org.javatraining.ws.service;
 
 import flexjson.JSONException;
 import org.javatraining.auth.Auth;
@@ -41,6 +41,8 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
         Response.ResponseBuilder r = null;
         PersonVO client = personService.getById(clientId);
 
+        if (client == null)
+            return Response.status(Response.Status.FORBIDDEN).build();
         if (client.getPersonRole() != PersonRole.TEACHER)
             if (client.getId() != personId)
                 r = Response.status(Response.Status.FORBIDDEN);
@@ -99,6 +101,9 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
         Response.ResponseBuilder r = null;
         PersonVO client = personService.getById(clientId);
 
+        if (client == null)
+            return Response.status(Response.Status.FORBIDDEN).build();
+
         if (client.getPersonRole() != PersonRole.TEACHER)
             if (client.getId() != personId)
                 r = Response.status(Response.Status.FORBIDDEN);
@@ -118,6 +123,9 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
     public Response deletePerson(@HeaderParam(Config.REQUEST_HEADER_ID) long clientId, @PathParam("person_id") long personId) {
         Response.ResponseBuilder r = null;
         PersonVO client = personService.getById(clientId);
+
+        if (client == null)
+            return Response.status(Response.Status.FORBIDDEN).build();
 
         if (client.getPersonRole() != PersonRole.TEACHER)
             if (client.getId() != personId)

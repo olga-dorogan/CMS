@@ -1,4 +1,4 @@
-package org.javatraining.ws.services;
+package org.javatraining.ws.service;
 
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;

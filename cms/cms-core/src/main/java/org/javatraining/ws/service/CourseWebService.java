@@ -1,4 +1,4 @@
-package org.javatraining.ws.services;
+package org.javatraining.ws.service;
 
 import flexjson.JSONException;
 import org.javatraining.auth.Auth;
@@ -67,7 +67,6 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
             String courseUri = uriInfo.getRequestUri().toString() + "/" + course.getId();
             r = Response.created(new URI(courseUri));
         } catch (JSONException e) {
-            System.out.println(e);
             r = Response.status(Response.Status.NOT_ACCEPTABLE);
         } catch (URISyntaxException e) {
             //this shouldn't happen
@@ -89,7 +88,6 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
             courseService.update(course);
             r = Response.ok();
         } catch (JSONException e) {
-            System.out.println(e);
             r = Response.status(Response.Status.NOT_ACCEPTABLE);
         }
 
