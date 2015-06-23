@@ -3,6 +3,7 @@ package org.javatraining.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * Created by vika on 24.05.15.
@@ -22,6 +23,9 @@ public class PracticeLessonEntity implements Serializable {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "lesson_id", nullable = false, insertable = false, updatable = false)
     private LessonEntity lesson;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessons")
+    private Set<MarkEntity> marks;
 
     public PracticeLessonEntity() {
     }
@@ -52,6 +56,14 @@ public class PracticeLessonEntity implements Serializable {
 
     public void setLesson(LessonEntity lesson) {
         this.lesson = lesson;
+    }
+
+    public Set<MarkEntity> getMarks() {
+        return marks;
+    }
+
+    public void setMarks(Set<MarkEntity> marks) {
+        this.marks = marks;
     }
 
     @Override

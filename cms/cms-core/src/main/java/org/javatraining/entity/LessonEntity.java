@@ -51,17 +51,10 @@ public class LessonEntity implements Serializable {
     private CourseEntity courses;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessons")
-    private Set<MarkEntity> marks;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessons")
     private Set<ForumMessagesEntity> forumMessages;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "lesson")
     private Set<PracticeLessonEntity> practiceLesson;
-
-    public Set<MarkEntity> getMarks() {
-        return marks;
-    }
 
     public LessonEntity() {
     }
@@ -148,10 +141,6 @@ public class LessonEntity implements Serializable {
         this.lessonLinks = lessonLinks;
     }
 
-    public void setMarks(Set<MarkEntity> marks) {
-        this.marks = marks;
-    }
-
     public Set<ForumMessagesEntity> getForumMessages() {
         return forumMessages;
     }
@@ -175,7 +164,6 @@ public class LessonEntity implements Serializable {
             return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (lessonLinks != null ? !lessonLinks.equals(that.lessonLinks) : that.lessonLinks != null) return false;
-        if (marks != null ? !marks.equals(that.marks) : that.marks != null) return false;
         if (orderNum != null ? !orderNum.equals(that.orderNum) : that.orderNum != null) return false;
         if (practiceLesson != null ? !practiceLesson.equals(that.practiceLesson) : that.practiceLesson != null)
             return false;
@@ -196,7 +184,6 @@ public class LessonEntity implements Serializable {
         result = 31 * result + (courses != null ? courses.hashCode() : 0);
         result = 31 * result + (practiceLesson != null ? practiceLesson.hashCode() : 0);
         result = 31 * result + (lessonLinks != null ? lessonLinks.hashCode() : 0);
-        result = 31 * result + (marks != null ? marks.hashCode() : 0);
         result = 31 * result + (forumMessages != null ? forumMessages.hashCode() : 0);
         return result;
     }

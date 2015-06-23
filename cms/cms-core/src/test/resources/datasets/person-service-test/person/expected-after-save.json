@@ -2,6 +2,7 @@
   "person": [
     {
       "email": "teacher@gmail.com",
+      "phone": "01234567891",
       "name": "teacherName",
       "second_name": "teacherSecondName",
       "last_name": "teacherLastName",
@@ -9,6 +10,7 @@
     },
     {
       "email": "tested@gmail.com",
+      "phone": "01234567891",
       "name": "testedName",
       "second_name": "testedSecondName",
       "last_name": "testedLastName",

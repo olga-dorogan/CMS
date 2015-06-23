@@ -12,6 +12,7 @@ import org.javatraining.integration.google.calendar.exception.CalendarException;
 import org.javatraining.integration.google.calendar.exception.CalendarRoleAlreadyExistsException;
 import org.javatraining.integration.google.calendar.exception.CalendarRoleNotExistsException;
 import org.javatraining.model.PersonVO;
+import org.javatraining.service.PersonService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -32,6 +33,8 @@ public class CalendarServiceImpl implements CalendarService {
 
     @Inject
     private com.google.api.services.calendar.Calendar calendarService;
+    @Inject
+    private PersonService personService;
 
     @Override
     public CalendarVO addCalendar(@Valid CalendarVO calendarVO) {
@@ -111,14 +114,11 @@ public class CalendarServiceImpl implements CalendarService {
             List<AclRule> aclRules = calendarService.acl().list(calendarId).execute().getItems();
             if (aclRules != null) {
                 for (AclRule aclRule : aclRules) {
-                    // TODO: add creating the teacher (student) from email
-                    /*
                     if (aclRule.getRole() == CALENDAR_ROLE_TEACHER) {
-                        teachersList.add(aclRule.getScope().getValue());
+                        teachersList.add(personService.getByEmail(aclRule.getScope().getValue()));
                     } else if (aclRule.getRole() == CALENDAR_ROLE_STUDENT) {
-                        studentsList.add(aclRule.getScope().getValue());
+                        studentsList.add(personService.getByEmail(aclRule.getScope().getValue()));
                     }
-                    */
                 }
             }
             calendarVO.setTeachers(teachersList);

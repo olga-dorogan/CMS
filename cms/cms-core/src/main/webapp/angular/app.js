@@ -10,7 +10,8 @@ var myApp = angular.module('myApp', [
     'myApp.student'
 ]);
 myApp.service('sessionService', ['$window', '$rootScope', SessionService]);
-myApp.service('AuthService', ['Restangular','$http', AuthService]);
+myApp.service('PersonService', ['Restangular', PersonService]);
+myApp.service('AuthService', ['PersonService', AuthService]);
 myApp.factory('sessionInjector', ['$rootScope', 'sessionService', SessionInjector]);
 
 myApp.config(function(RestangularProvider) {
@@ -36,39 +37,20 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
         }
         GApi.load('AIzaSyDEVCJp5Hz_fSrHYeS24EcMM3FQV0GF8Do', 'v1', BASE);
         GAuth.setClient(CLIENT);
-        GAuth.setScope('https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar.readonly');
-
-        // FIXME: (olga) возможно, этот код не нужен, т.к. при первом входе мы запоминаем пользователя и дальше не зависим от google
-        //GAuth.checkAuth().then(
-        //    function () {
-        //        //$rootScope.role="teacher";
-        //        console.log($rootScope.role);
-        //        //Если пользовательно не новый логиним его и отправляем куда нужно
-        //    },
-        //    function () {
-        //        //Если пользовательно не залогинен отправляем его на главную страницу
-        //        $state.go('home');
-        //    }
-        //);
-
-
+        GAuth.setScope('https://www.googleapis.com/auth/userinfo.email');
 
         $rootScope.doLogin = function () {
             GAuth.login().then(function () {
-                //FIXME: (olga) add http PUT request to get user info: role and id
                 //FIXME:  (Andrey) Добавил POST запрос на сервер для получения
                 //FIXME: Раскомментировать для авторизации
-                //AuthService.goAuth(GData.getUser()).then(function(data) {
-                //    $window.localStorage['id']=data.id;
-                //    $window.localStorage['id']=data.personRole['name'];
-                //});
+                AuthService.goAuth(GData.getUser()).then(function(data) {
+                    $window.localStorage['id']=data.id;
+                    $window.localStorage['role']=data.personRole.toLowerCase();
+                    console.log("Person in role: "+$window.localStorage['role']);
+                });
                 //Заглушка для определения роли
-                $window.localStorage['role'] = "teacher";
-                $window.localStorage['id'] = 1;
-                // тест для проверки установились ли заголовки
-                $http.get("http://localhost:8080/cms-core-1.0/resources/example");
-                $http.get("http://localhost:8080/cms-core-1.0/resources/example/teacher/1");
-                $http.get("http://localhost:8080/cms-core-1.0/resources/example/student/1");
+                //$window.localStorage['role'] = "teacher";
+                //$window.localStorage['id'] = 1;
 
                 console.log('doLogin');
             }, function () {
@@ -76,14 +58,19 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
                 console.log('login fail');
             });
         };
+
         $rootScope.doLogOut = function () {
-            $rootScope.role="";
+            $window.localStorage['role'] = undefined;
+            $window.localStorage['id'] = undefined;
             GAuth.logout().then(function () {
                 $state.go("home");
             });
         };
         $rootScope.isLogin = function () {
             return GData.isLogin();
+        };
+        $rootScope.getRole = function() {
+            return $window.localStorage['role'];
         };
         // обработчик оповещения о попытке несанкционированного доступа
         $rootScope.$on('app.unauthorized', function () {

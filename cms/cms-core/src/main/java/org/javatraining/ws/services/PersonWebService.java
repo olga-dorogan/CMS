@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 /**
  * Created by asudak on 5/29/15.
@@ -56,15 +57,28 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
         return r.build();
     }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response createPerson(@Context UriInfo uriInfo, @QueryParam("person_json") String personJson) {
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Auth(roles = {AuthRole.TEACHER})
+    public Response getPersonsByRole(@QueryParam("role") String role) {
         Response.ResponseBuilder r;
         try {
-            PersonVO person = deserialize(personJson);
-            personService.saveStudent(person);
+            List<PersonVO> personsByRole = personService.getPersonsByRole(PersonRole.valueOf(role.toUpperCase()));
+            r = Response.ok(personsByRole);
+        } catch (ValidationException e) {
+            r = Response.status(422); //422 Unprocessable Entity
+        }
+        return r.build();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createPerson(@Context UriInfo uriInfo, PersonVO person) {
+        Response.ResponseBuilder r;
+        try {
+            personService.save(person);
             String personUri = uriInfo.getRequestUri().toString() + "/" + person.getId();
-            r = Response.created(new URI(personUri));
+            r = Response.created(new URI(personUri)).entity(person);
         } catch (JSONException e) {
             r = Response.status(Response.Status.NOT_ACCEPTABLE);
         } catch (URISyntaxException e) {

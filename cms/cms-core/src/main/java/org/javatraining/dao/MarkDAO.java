@@ -1,9 +1,9 @@
 package org.javatraining.dao;
 
 
-import org.javatraining.entity.LessonEntity;
 import org.javatraining.entity.MarkEntity;
 import org.javatraining.entity.PersonEntity;
+import org.javatraining.entity.PracticeLessonEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.Query;
@@ -20,7 +20,7 @@ public class MarkDAO extends GenericDAO<MarkEntity> {
         setEntityClass(MarkEntity.class);
     }
 
-    public MarkEntity save(@NotNull MarkEntity mark, @NotNull PersonEntity person, @NotNull LessonEntity lessons) {
+    public MarkEntity save(@NotNull MarkEntity mark, @NotNull PersonEntity person, @NotNull PracticeLessonEntity lessons) {
         mark.setPersons(person);
         mark.setLessons(lessons);
         super.save(mark);
