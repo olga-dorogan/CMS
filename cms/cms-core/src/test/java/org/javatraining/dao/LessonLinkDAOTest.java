@@ -42,7 +42,7 @@ public class LessonLinkDAOTest {
         courseEntity.setStartdate(Date.valueOf("2015-10-10"));
         courseEntity.setEnddate(Date.valueOf("2016-11-11"));
         courseEntity.setDescription("Java");
-        lessonEntity.setCourses(courseEntity);
+        lessonEntity.setCourse(courseEntity);
         lessonEntity.setType((long) 3234);
         lessonEntity.setCreateDate(Date.valueOf("2015-10-10"));
         lessonEntity.setOrderNum((long) 67);
