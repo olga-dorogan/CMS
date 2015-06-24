@@ -3,11 +3,13 @@ package org.javatraining.service.impl;
 import org.javatraining.dao.CourseDAO;
 import org.javatraining.dao.LessonDAO;
 import org.javatraining.entity.CourseEntity;
+import org.javatraining.entity.LessonEntity;
 import org.javatraining.model.LessonVO;
 import org.javatraining.service.LessonService;
 
 import javax.annotation.Nullable;
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -18,6 +20,7 @@ import static org.javatraining.model.conversion.LessonConverter.*;
 /**
  * Created by asudak on 6/24/15.
  */
+@Stateless
 public class LessonServiceImpl implements LessonService {
     @EJB
     private CourseDAO courseDAO;
@@ -26,7 +29,9 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public void save(@NotNull @Valid LessonVO lessonVO) {
-        lessonDAO.save(convertVOToEntity(lessonVO));
+        LessonEntity lessonEntity = convertVOToEntity(lessonVO);
+        lessonDAO.save(lessonEntity);
+        lessonVO.setId(lessonEntity.getId());
     }
 
     @Override

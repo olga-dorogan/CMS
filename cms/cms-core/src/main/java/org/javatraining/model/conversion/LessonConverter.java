@@ -1,5 +1,6 @@
 package org.javatraining.model.conversion;
 
+import org.javatraining.entity.CourseEntity;
 import org.javatraining.entity.LessonEntity;
 import org.javatraining.model.LessonVO;
 
@@ -19,6 +20,7 @@ public class LessonConverter {
         lessonVO.setDescription(lessonEntity.getDescription());
         lessonVO.setTopic(lessonEntity.getTopic());
         lessonVO.setOrderNum(lessonEntity.getOrderNum());
+        lessonVO.setCourseId(lessonEntity.getCourse().getId());
         return lessonVO;
     }
 
@@ -29,6 +31,9 @@ public class LessonConverter {
         lessonEntity.setDescription(lessonVO.getDescription());
         lessonEntity.setTopic(lessonVO.getTopic());
         lessonEntity.setOrderNum(lessonVO.getOrderNum());
+        CourseEntity courseEntity = new CourseEntity();
+        courseEntity.setId(lessonVO.getCourseId());
+        lessonEntity.setCourse(courseEntity);
         return lessonEntity;
     }
 

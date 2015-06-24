@@ -9,6 +9,7 @@ import java.util.Date;
 public class LessonVO {
     private Long id;
     private Long orderNum;
+    private Long courseId;
     private String topic;
     private String content;
     private Date createDate;
@@ -27,6 +28,14 @@ public class LessonVO {
 
     public void setOrderNum(Long orderNum) {
         this.orderNum = orderNum;
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
     }
 
     public String getTopic() {
@@ -60,10 +69,11 @@ public class LessonVO {
 
         LessonVO that = (LessonVO) o;
 
-        if (content != null ? !content.equals(that.content) : that.content != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (courseId != null ? !courseId.equals(that.courseId) : that.courseId != null) return false;
         if (orderNum != null ? !orderNum.equals(that.orderNum) : that.orderNum != null) return false;
         if (topic != null ? !topic.equals(that.topic) : that.topic != null) return false;
+        if (content != null ? !content.equals(that.content) : that.content != null) return false;
 
         return true;
     }
@@ -71,6 +81,7 @@ public class LessonVO {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (courseId != null ? courseId.hashCode() : 0);
         result = 31 * result + (orderNum != null ? orderNum.hashCode() : 0);
         result = 31 * result + (topic != null ? topic.hashCode() : 0);
         result = 31 * result + (content != null ? content.hashCode() : 0);
