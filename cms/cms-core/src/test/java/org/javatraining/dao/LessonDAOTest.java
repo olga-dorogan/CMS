@@ -46,7 +46,7 @@ public class LessonDAOTest {
         courseEntity.setStartdate(Date.valueOf("2015-11-11"));
         courseEntity.setEnddate(Date.valueOf("2016-11-11"));
         courseDAO.save(courseEntity);
-        lessonEntity.setCourses(courseEntity);
+        lessonEntity.setCourse(courseEntity);
         lessonEntity.setCreateDate(Date.valueOf("2016-08-11"));
         lessonEntity.setType((long) 675);
         lessonEntity.setOrderNum((long) 764);

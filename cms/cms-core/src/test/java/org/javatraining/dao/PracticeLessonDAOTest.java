@@ -51,7 +51,7 @@ public class PracticeLessonDAOTest {
         lessonEntity.setTopic("topic");
         lessonEntity.setCreateDate(Date.valueOf("2015-10-10"));
         lessonEntity.setDescription("description");
-        lessonEntity.setCourses(courseEntity);
+        lessonEntity.setCourse(courseEntity);
         lessonDAO.save(lessonEntity);
         practiceLessonEntity.setTask("task");
         practiceLessonEntity.setLesson(lessonEntity);
