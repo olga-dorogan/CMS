@@ -1,10 +1,10 @@
 angular.module('myApp.home', ['ui.router'])
-    .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
         $stateProvider
             .state('home', {
-                url:'/home',
+                url: '/home',
                 views: {
-                    "":{
+                    "": {
                         templateUrl: 'angular/views/home.html'
                     },
                     "content@home": {
@@ -15,8 +15,8 @@ angular.module('myApp.home', ['ui.router'])
 
             })
     }])
-    .service('CourseService',CourseService)
-    .controller('HomeCtrl',HomeCtrl);
+    .service('CourseService', CourseService)
+    .controller('HomeCtrl', HomeCtrl);
 
 
 

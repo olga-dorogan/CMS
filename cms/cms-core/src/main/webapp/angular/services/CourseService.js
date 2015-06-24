@@ -2,19 +2,16 @@ function CourseService(Restangular) {
     //Получаем все REST методы по адресу BaseUrl/rest/courses
     var Course = Restangular.all("resources/course");
     this.getCourses = function () {
-        //Запрос GET
         return Course.getList();
-
     };
-    this.createCourses = function (newCourse) {
-        //FIXME POST Запрос на сервер для добавления курса в базу
-        return Course.post({
-            "description": newCourse.description,
-            "endDate": null,
-            "id": 123,
-            "name": newCourse.name,
-            "startDate": null
-        })
+    this.createCourse = function (newCourse) {
+        // POST returns promise, in which successHandler is executed ALWAYS when response contains any text
+        // so, is's necessary to check is response status equal 2xx or not
+        // or another way --- any successfully returned object contains field 'fromServer' with value 'true'
+        return Course.post(newCourse);
+    };
+    this.isCourseReallyCreated = function(returnedObject) {
+        return (returnedObject.hasOwnProperty('fromServer') && returnedObject.fromServer);
     };
     //FIXME заглушка, для нормальной работы на без запуска WildFly
     this.getCoursesCap = function () {

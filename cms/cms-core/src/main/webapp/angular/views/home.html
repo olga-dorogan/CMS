@@ -13,7 +13,7 @@
         </div>
         <ul class="nav navbar-nav navbar-right">
             <li ui-sref-active="active"><a ui-sref="news">Новости</a></li>
-            <li ui-sref-active="active"><a ui-sref="home">Каталог курсов</a></li>
+            <li ui-sref-active="active"><a ui-sref="{{isLogin()? 'person' : 'home'}}">Каталог курсов</a></li>
             <li ng-if="!isLogin()"><a href="" ng-click="doLogin()">Войти</a></li>
             <li ng-if="isLogin()" class="dropdown">
                 <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"

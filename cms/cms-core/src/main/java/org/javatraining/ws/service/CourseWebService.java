@@ -59,13 +59,12 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
-    public Response createCourse(@Context UriInfo uriInfo, @QueryParam("course_json") String courseJson) {
+    public Response createCourse(@Context UriInfo uriInfo, CourseVO courseVO) {
         Response.ResponseBuilder r;
         try {
-            CourseVO course = deserialize(courseJson);
-            courseService.save(course);
-            String courseUri = uriInfo.getRequestUri().toString() + "/" + course.getId();
-            r = Response.created(new URI(courseUri));
+            courseService.save(courseVO);
+            String courseUri = uriInfo.getRequestUri().toString() + "/" + courseVO.getId();
+            r = Response.created(new URI(courseUri)).entity(courseVO);
         } catch (JSONException e) {
             r = Response.status(Response.Status.NOT_ACCEPTABLE);
         } catch (URISyntaxException e) {
