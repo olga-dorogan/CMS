@@ -35,6 +35,9 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
         } else {
             BASE = 'https://cloud-endpoints-gae.appspot.com/_ah/api';
         }
+        if(window.location.port == 8000) {
+            CLIENT = '696510088921-8a2u226l2dpsm4maqqlrva8h0e9ft7v1.apps.googleusercontent.com';
+        }
         GApi.load('AIzaSyDEVCJp5Hz_fSrHYeS24EcMM3FQV0GF8Do', 'v1', BASE);
         GAuth.setClient(CLIENT);
         GAuth.setScope('https://www.googleapis.com/auth/userinfo.email');
