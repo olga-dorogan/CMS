@@ -14,7 +14,7 @@ myApp.service('PersonService', ['Restangular', PersonService]);
 myApp.service('AuthService', ['PersonService', AuthService]);
 myApp.factory('sessionInjector', ['$rootScope', 'sessionService', SessionInjector]);
 
-myApp.config(function(RestangularProvider) {
+myApp.config(function (RestangularProvider) {
     //Изменяем базовый Url для REST
     RestangularProvider.setBaseUrl('http://localhost:8080/cms-core-1.0/');
 });
@@ -25,17 +25,17 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider',
         $httpProvider.interceptors.push('sessionInjector');
     }]);
 
-myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http','AuthService',
-    function (GAuth, GApi, GData, $state, $rootScope, $window, $http,AuthService) {
+myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http', 'AuthService',
+    function (GAuth, GApi, GData, $state, $rootScope, $window, $http, AuthService) {
 
         var CLIENT = '895405022160-pi238d0pi57fsmsov8khtpr4415hj5j5.apps.googleusercontent.com';
         var BASE;
-        if(window.location.hostname == 'localhost') {
+        if (window.location.hostname == 'localhost') {
             BASE = '//localhost:8080/_ah/api';
         } else {
             BASE = 'https://cloud-endpoints-gae.appspot.com/_ah/api';
         }
-        if(window.location.port == 8000) {
+        if (window.location.port == 8000) {
             CLIENT = '696510088921-8a2u226l2dpsm4maqqlrva8h0e9ft7v1.apps.googleusercontent.com';
         }
         GApi.load('AIzaSyDEVCJp5Hz_fSrHYeS24EcMM3FQV0GF8Do', 'v1', BASE);
@@ -46,14 +46,16 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
             GAuth.login().then(function () {
                 //FIXME:  (Andrey) Добавил POST запрос на сервер для получения
                 //FIXME: Раскомментировать для авторизации
-                AuthService.goAuth(GData.getUser()).then(function(data) {
-                    $window.localStorage['id']=data.id;
-                    $window.localStorage['role']=data.personRole.toLowerCase();
-                    console.log("Person in role: "+$window.localStorage['role']);
+                AuthService.goAuth(GData.getUser()).then(function (data) {
+                    $window.localStorage['id'] = data.id;
+                    $window.localStorage['role'] = data.personRole.toLowerCase();
+                    $window.localStorage['name'] = data.name + " " + data.lastName;
+                    console.log("Person in role: " + $window.localStorage['role']);
                 });
                 //Заглушка для определения роли
                 //$window.localStorage['role'] = "teacher";
                 //$window.localStorage['id'] = 1;
+                //$window.localStorage['name'] = GData.getUser().name;
 
                 console.log('doLogin');
             }, function () {
@@ -63,17 +65,19 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
         };
 
         $rootScope.doLogOut = function () {
-            $window.localStorage['role'] = undefined;
-            $window.localStorage['id'] = undefined;
+            $window.localStorage.clear();
             GAuth.logout().then(function () {
                 $state.go("home");
             });
         };
         $rootScope.isLogin = function () {
-            return GData.isLogin();
+            return !(($window.localStorage['id'] === undefined) || ($window.localStorage['id'] == null));
         };
-        $rootScope.getRole = function() {
-            return $window.localStorage['role'];
+        $rootScope.getUsername = function () {
+            return $window.localStorage['name'];
+        };
+        $rootScope.isTeacher = function () {
+            return $window.localStorage['role'] == 'teacher';
         };
         // обработчик оповещения о попытке несанкционированного доступа
         $rootScope.$on('app.unauthorized', function () {
