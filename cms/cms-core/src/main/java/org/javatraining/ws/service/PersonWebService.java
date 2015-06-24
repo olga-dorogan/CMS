@@ -67,8 +67,11 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
     public Response getPersonsByRole(@QueryParam("role") String role) {
         Response.ResponseBuilder r;
         try {
-            List<PersonVO> personsByRole = personService.getPersonsByRole(PersonRole.valueOf(role.toUpperCase()));
+            PersonRole personRole = PersonRole.valueOf(role.toUpperCase());
+            List<PersonVO> personsByRole = personService.getPersonsByRole(personRole);
             r = Response.ok(personsByRole);
+        } catch (IllegalArgumentException e) {
+            r = Response.noContent();
         } catch (ValidationException e) {
             r = Response.status(422); //422 Unprocessable Entity
         }
