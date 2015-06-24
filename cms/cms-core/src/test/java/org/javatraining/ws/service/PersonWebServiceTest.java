@@ -1,6 +1,6 @@
 package org.javatraining.ws.service;
 
-import flexjson.JSONException;
+import flexjson.JSONSerializer;
 import org.javatraining.auth.Auth;
 import org.javatraining.config.Config;
 import org.javatraining.dao.PersonDAO;
@@ -15,10 +15,11 @@ import org.javatraining.ws.config.ServiceConfig;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.persistence.*;
+import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,18 +30,16 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(Arquillian.class)
-@Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
+@UsingDataSet("datasets/person-web-service-test/initial-data.json")
 public class PersonWebServiceTest {
 
     private WebTarget target;
@@ -62,6 +61,9 @@ public class PersonWebServiceTest {
 
     @Deployment(testable = true)
     public static WebArchive createDeployment() {
+        File[] artifact = Maven.resolver().loadPomFromFile("pom.xml")
+                .resolve("net.sf.flexjson:flexjson").withoutTransitivity().asFile();
+
         return ShrinkWrap.create(WebArchive.class, "WebServicesTest.war")
                 .addPackage(PersonEntity.class.getPackage())
                 .addPackage(PersonVO.class.getPackage())
@@ -72,8 +74,9 @@ public class PersonWebServiceTest {
                 .addPackage(PersonServiceImpl.class.getPackage())
                 .addPackage(Auth.class.getPackage())
                 .addClass(ServiceConfig.class)
-                .addClasses(JSONException.class, UnsupportedOperationException.class)
-                .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml");
+                .addClass(UnsupportedOperationException.class)
+                .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
+                .addAsLibraries(artifact);
     }
 
     @ArquillianResource
@@ -95,7 +98,9 @@ public class PersonWebServiceTest {
                 .header(Config.REQUEST_HEADER_ID, teacherPerson.getId())
                 .header(Config.REQUEST_HEADER_TOKEN, TEACHER_TOKEN)
                 .get(PersonVO.class);
-        assertThat(predefinedPersonFromService, is(equalTo(teacherPerson)));
+        System.out.println(new JSONSerializer().prettyPrint(true).serialize(predefinedPersonFromService));
+        System.out.println(new JSONSerializer().prettyPrint(true).serialize(teacherPerson));
+        assertEquals(predefinedPersonFromService, teacherPerson);
     }
 
     @Test
@@ -107,7 +112,7 @@ public class PersonWebServiceTest {
                 .header(Config.REQUEST_HEADER_ID, teacherPerson.getId())
                 .header(Config.REQUEST_HEADER_TOKEN, TEACHER_TOKEN)
                 .get(PersonVO.class);
-        assertThat(predefinedPersonFromService, is(equalTo(studentPerson)));
+        assertEquals(predefinedPersonFromService, studentPerson);
     }
 
     @Test
@@ -119,7 +124,7 @@ public class PersonWebServiceTest {
                 .header(Config.REQUEST_HEADER_ID, studentPerson.getId())
                 .header(Config.REQUEST_HEADER_TOKEN, STUDENT_TOKEN)
                 .get(PersonVO.class);
-        assertThat(predefinedPersonFromService, is(equalTo(studentPerson)));
+        assertEquals(predefinedPersonFromService, studentPerson);
     }
 
     @Test
@@ -153,5 +158,38 @@ public class PersonWebServiceTest {
                         MediaType.APPLICATION_JSON
                 ));
         assertNotNull(response.getLocation());
+    }
+
+    @Test
+    @RunAsClient
+    public void getPersonsByRoleAsStudent() {
+        Response response = target.queryParam("role", "student")
+                .request(MediaType.APPLICATION_JSON)
+                .header(Config.REQUEST_HEADER_ID, studentPerson.getId())
+                .header(Config.REQUEST_HEADER_TOKEN, STUDENT_TOKEN)
+                .get();
+        assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    @RunAsClient
+    public void getPersonsByRoleAsTeacher() {
+        Response response = target.queryParam("role", "student")
+                .request(MediaType.APPLICATION_JSON)
+                .header(Config.REQUEST_HEADER_ID, teacherPerson.getId())
+                .header(Config.REQUEST_HEADER_TOKEN, TEACHER_TOKEN)
+                .get();
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    @RunAsClient
+    public void getPersonsByNonExistingRoleAsTeacher() {
+        Response response = target.queryParam("role", "adventurer")
+                .request(MediaType.APPLICATION_JSON)
+                .header(Config.REQUEST_HEADER_ID, teacherPerson.getId())
+                .header(Config.REQUEST_HEADER_TOKEN, TEACHER_TOKEN)
+                .get();
+        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 }

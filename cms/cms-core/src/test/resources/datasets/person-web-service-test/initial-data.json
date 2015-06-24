@@ -1,0 +1,20 @@
+{
+  "person": [
+    {
+      "id": 1,
+      "name": "teacherName",
+      "secondName": null,
+      "lastName": "teacherLastName",
+      "email": "teacher@gmail.com",
+      "personRole": "TEACHER"
+    },
+    {
+      "id": 2,
+      "name": "studentName",
+      "secondName": null,
+      "lastName": "studentLastName",
+      "email": "student@gmail.com",
+      "personRole": "STUDENT"
+    }
+  ]
+}
