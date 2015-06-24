@@ -40,7 +40,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCourseList() {
         List<CourseVO> courses = courseService.getAll();
-        return Response.ok(serialize(courses)).build();
+        return Response.ok(courses).build();
     }
 
     @GET

@@ -5,6 +5,7 @@ import org.javatraining.auth.Auth;
 import org.javatraining.config.AuthRole;
 import org.javatraining.config.Config;
 import org.javatraining.entity.PersonRole;
+import org.javatraining.model.CourseVO;
 import org.javatraining.model.PersonVO;
 import org.javatraining.service.PersonService;
 
@@ -19,6 +20,7 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by asudak on 5/29/15.
@@ -144,5 +146,14 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
         }
 
         return r.build();
+    }
+
+    @GET
+    @Path("{person_id}/course")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Auth(roles = {AuthRole.TEACHER, AuthRole.STUDENT})
+    public Response getCoursesForPerson(@PathParam("person_id") long personId) {
+        Set<CourseVO> courses = personService.getCourses(new PersonVO(personId));
+        return Response.ok(courses).build();
     }
 }
