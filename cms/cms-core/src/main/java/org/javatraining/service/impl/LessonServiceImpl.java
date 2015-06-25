@@ -64,9 +64,8 @@ public class LessonServiceImpl implements LessonService {
         return convertEntityToVO(lessonDAO.updateByOrderNum(courseId, orderNum, convertVOToEntity(lesson)));
     }
 
-    @Nullable
     @Override
-    public void deleteByOrderNum(@NotNull Long courseId, @NotNull Long orderNum) {
+    public void deleteByOrderNum(@NotNull @Valid Long courseId, @NotNull @Valid Long orderNum) {
         lessonDAO.removeByOrderNum(courseId, orderNum);
     }
 }
