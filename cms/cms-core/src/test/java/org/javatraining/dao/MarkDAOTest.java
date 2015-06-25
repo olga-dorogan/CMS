@@ -1,6 +1,11 @@
 package org.javatraining.dao;
 
-import org.javatraining.entity.*;
+import org.hamcrest.Matcher;
+import org.hamcrest.core.IsNull;
+import org.javatraining.dao.exception.EntityDoesNotExistException;
+import org.javatraining.entity.MarkEntity;
+import org.javatraining.entity.PersonEntity;
+import org.javatraining.entity.PracticeLessonEntity;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.*;
@@ -11,8 +16,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.ejb.EJB;
-import java.sql.Date;
+import javax.ejb.EJBException;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.Set;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -52,66 +61,43 @@ public class MarkDAOTest {
          return war;
     }
 
-    private MarkEntity markInitialization(CourseEntity courseEntity,PersonEntity personEntity,LessonEntity lessonEntity,MarkEntity markEntity){
-        courseEntity.setName("JavaEE");
-        courseEntity.setStartdate(Date.valueOf("2015-10-10"));
-        courseEntity.setEnddate(Date.valueOf("2016-11-11"));
-        courseEntity.setDescription("Java");
-        lessonEntity.setCourse(courseEntity);
-        lessonEntity.setTopic("topic");
-        lessonEntity.setType((long) 2);
-        lessonEntity.setOrderNum(((long) 5));
-        lessonEntity.setId((long) 2);
-        lessonEntity.setDescription("description");
-        lessonEntity.setCreateDate(Date.valueOf("2015-10-10"));
-
-        PracticeLessonEntity practiceLessonEntity = new PracticeLessonEntity();
-        practiceLessonEntity.setTask("task");
-        practiceLessonEntity.setLesson(lessonEntity);
-
-        personEntity.setName("Petro");
-        personEntity.setEmail("Petrovgmail.ru");
-        personEntity.setLastName("Last Name");
-        personEntity.setSecondName("Second name");
-        personEntity.setPersonRole(PersonRole.TEACHER);
-        markEntity.setPersons(personEntity);
-        markEntity.setMark((long) 7);
-        markEntity.setPracticeLesson(practiceLessonEntity);
-
-        return markEntity;
-    }
-
-    private MarkEntity predefinedMarkInitialization(MarkEntity markEntity){
-        Long predefinedPersonId = (long) 1;
-        Long predefinedMarkId = (long) 1;
-        Long predefinedPracticeLessonId = (long) 1;
-        PersonEntity predefinedPerson = personDAO.getById(predefinedPersonId);
-       PracticeLessonEntity predefinedLesson = practiceLessonDAO.getById(predefinedPracticeLessonId);
-        markEntity.setPracticeLesson(predefinedLesson);
-        markEntity.setPersons(predefinedPerson);
-        markEntity.setId(predefinedMarkId);
-        markEntity.setMark((long)80);
-
-        return markEntity;
-    }
 
     @Test
     public void testMarkDAOShouldBeInjected() throws Exception {
         assertThat(markDAO, is(notNullValue()));
     }
 
+    @Test(expected = RuntimeException.class)
+    public void testGetByIdForNotExistingIdShouldReturnEntityDoesNotExistException() {
+        Long notExistingId = 10L;
+      try{
+        MarkEntity courseWithNotExistingId = markDAO.getById(notExistingId);
+        assertThat(courseWithNotExistingId, is(IsNull.nullValue()));
+      }catch (EntityDoesNotExistException e) {
+          assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
+          if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+              throw e;
+          }
+      }
+      }
+
+    @Test(expected = EJBException.class)
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_MARK}, excludeColumns = {"id"})
+    public void testSaveForNotValidMark(){
+        markDAO.save(new MarkEntity());
+    }
 
     @Test
     public void testSaveReturnMarkEntity()
     {
-        MarkEntity markForSave = predefinedMarkInitialization(new MarkEntity());
+        MarkEntity markForSave = markInitializationForTests(new MarkEntity());
         markDAO.save(markForSave);
          }
 
     @Test
      public void testUpdateReturnMarkEntity() {
         MarkEntity markForUpdate = predefinedMarkInitialization(new MarkEntity());
-        markForUpdate.setMark((long) 85);
+        markForUpdate.setMark(85L);
         markDAO.update(markForUpdate);
         assertEquals(markDAO.update(markForUpdate), markForUpdate);
     }
@@ -127,7 +113,37 @@ public class MarkDAOTest {
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_MARK}, excludeColumns = {"id"})
     public void testGetAllMarks() {
         assertThat(markDAO.getAllMarks(), is(notNullValue()));
+    }
 
+    private boolean checkNotNullArgumentViolationException(ConstraintViolationException e) {
+        Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
+        return !(constraintViolations.size() != 1 ||
+                !constraintViolations.iterator().next().getMessage().equals("may not be null"));
+    }
+    private MarkEntity markInitializationForTests(MarkEntity markEntity){
+        Long predefinedPersonId = 1L;
+         Long predefinedPracticeLessonId = 1L;
+        PersonEntity predefinedPerson = personDAO.getById(predefinedPersonId);
+        PracticeLessonEntity predefinedLesson = practiceLessonDAO.getById(predefinedPracticeLessonId);
+        markEntity.setPracticeLesson(predefinedLesson);
+        markEntity.setPersons(predefinedPerson);
+        markEntity.setMark(80L);
+
+        return markEntity;
+    }
+
+    private MarkEntity predefinedMarkInitialization(MarkEntity markEntity){
+        Long predefinedPersonId = 1L;
+        Long predefinedMarkId = 1L;
+        Long predefinedPracticeLessonId = 1L;
+        PersonEntity predefinedPerson = personDAO.getById(predefinedPersonId);
+        PracticeLessonEntity predefinedLesson = practiceLessonDAO.getById(predefinedPracticeLessonId);
+        markEntity.setPracticeLesson(predefinedLesson);
+        markEntity.setPersons(predefinedPerson);
+        markEntity.setId(predefinedMarkId);
+        markEntity.setMark(80L);
+
+        return markEntity;
     }
 }
 

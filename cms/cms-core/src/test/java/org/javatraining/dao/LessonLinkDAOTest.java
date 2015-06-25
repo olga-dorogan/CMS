@@ -1,6 +1,9 @@
 package org.javatraining.dao;
 
-import org.javatraining.entity.CourseEntity;
+import org.hamcrest.Matcher;
+import org.hamcrest.core.IsNull;
+import org.javatraining.dao.exception.EntityDoesNotExistException;
+import org.javatraining.dao.exception.EntityIsAlreadyExistException;
 import org.javatraining.entity.LessonEntity;
 import org.javatraining.entity.LessonLinkEntity;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -12,8 +15,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.ejb.EJB;
-import java.sql.Date;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.Set;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -50,45 +56,52 @@ public class LessonLinkDAOTest {
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml");
         return war;
     }
-    public LessonLinkEntity lessonLinkEntityInit(LessonEntity lessonEntity, LessonLinkEntity lessonLinkEntity, CourseEntity courseEntity) {
-        courseEntity.setName("JavaEE");
-        courseEntity.setStartdate(Date.valueOf("2015-10-10"));
-        courseEntity.setEnddate(Date.valueOf("2016-11-11"));
-        courseEntity.setDescription("Java");
-        lessonEntity.setCourse(courseEntity);
-        lessonEntity.setType((long) 3234);
-        lessonEntity.setCreateDate(Date.valueOf("2015-10-10"));
-        lessonEntity.setOrderNum((long) 67);
-        lessonEntity.setTopic("topic");
-        lessonEntity.setDescription("Description");
-        lessonEntity.setId((long) 1);
-        lessonLinkEntity.setDescription("Description");
-        lessonLinkEntity.setLink("link");
-        lessonLinkEntity.setLesson(lessonEntity);
-        return lessonLinkEntity;
-    }
 
-    private LessonLinkEntity predefinedLessonLinkInitialization(LessonLinkEntity lessonLinkEntity){
-        Long predefinedLessonId = (long) 1;
-        Long predefinedLessonLinkId = (long) 1;
-         LessonEntity lessonEntity = lessonDAO.getById(predefinedLessonId);
-        lessonLinkEntity.setDescription("description");
-        lessonLinkEntity.setLink("someLink");
-        lessonLinkEntity.setLesson(lessonEntity);
-        lessonLinkEntity.setId(predefinedLessonLinkId);
-        return lessonLinkEntity;
-    }
 
     @Test
     public void testLessonLinkDAOShouldBeInjected() throws Exception {
         assertThat(lessonsLinksDAO, is(notNullValue()));
     }
 
+    @Test(expected = RuntimeException.class)
+    public void testGetByIdForNotExistingIdShouldReturnNull() {
+        Long notExistingId = 10L;
+       try {
+           LessonLinkEntity courseWithNotExistingId = lessonsLinksDAO.getById(notExistingId);
+           assertThat(courseWithNotExistingId, is(IsNull.nullValue()));
+       } catch (EntityDoesNotExistException e) {
+        assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
+        if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+            throw e;
+        }
+    }
+    }
+
+    @Test(expected = RuntimeException.class)
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_LESSON_LINK}, excludeColumns = {"id"})
+    public void testSaveLessonLinkThatAlreadyExistTrowEntityIsAlreadyExistException() {
+        LessonLinkEntity lessonLinkForSave = predefinedLessonLinkInitialization(new LessonLinkEntity());
+        try{
+            lessonsLinksDAO.save(lessonLinkForSave);}
+        catch (EntityIsAlreadyExistException e) {
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
+            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                throw e;
+            }
+        }
+    }
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_LESSON_LINK_AFTER_SAVE}, excludeColumns = {"id"})
+    public void testSaveLesson() {
+        LessonLinkEntity lessonLinkEntity = lessonLinkEntityInitializationForTests(new LessonLinkEntity());
+        lessonsLinksDAO.save(lessonLinkEntity);
+    }
+
 
     @Test
     public void testSaveReturnLessonEntity() {
-        LessonLinkEntity lessonLinkEntity = predefinedLessonLinkInitialization(new LessonLinkEntity());
-        lessonsLinksDAO.save(lessonLinkEntity);
+        LessonLinkEntity lessonLinkEntity = lessonLinkEntityInitializationForTests(new LessonLinkEntity());
        assertEquals(lessonsLinksDAO.save(lessonLinkEntity), lessonLinkEntity);
     }
 
@@ -97,6 +110,14 @@ public class LessonLinkDAOTest {
        LessonLinkEntity lessonLinkEntity = predefinedLessonLinkInitialization(new LessonLinkEntity());
         lessonLinkEntity.setDescription("otherDescription");
         assertEquals(lessonLinkEntity, lessonsLinksDAO.update(lessonLinkEntity));
+    }
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_LESSON_LINK_AFTER_UPDATE}, excludeColumns = {"id"})
+    public void testUpdateLesson() {
+        LessonLinkEntity lessonLinkEntity = predefinedLessonLinkInitialization(new LessonLinkEntity());
+        lessonLinkEntity.setDescription("Other description");
+       lessonsLinksDAO.update(lessonLinkEntity);
     }
 
     @Test
@@ -110,5 +131,31 @@ public class LessonLinkDAOTest {
     public void testRemoveLessonLink() {
         LessonLinkEntity lessonLinkEntity = predefinedLessonLinkInitialization(new LessonLinkEntity());
         lessonsLinksDAO.remove(lessonLinkEntity);
+    }
+
+    private LessonLinkEntity lessonLinkEntityInitializationForTests(LessonLinkEntity lessonLinkEntity) {
+        Long predefinedLessonId = 1L;
+        LessonEntity lessonEntity = lessonDAO.getById(predefinedLessonId);
+        lessonLinkEntity.setDescription("description");
+        lessonLinkEntity.setLink("otherLink");
+        lessonLinkEntity.setLesson(lessonEntity);
+          return lessonLinkEntity;
+    }
+
+    private LessonLinkEntity predefinedLessonLinkInitialization(LessonLinkEntity lessonLinkEntity){
+        Long predefinedLessonId = 1L;
+        Long predefinedLessonLinkId = 1L;
+        LessonEntity lessonEntity = lessonDAO.getById(predefinedLessonId);
+        lessonLinkEntity.setDescription("description");
+        lessonLinkEntity.setLink("someLink");
+        lessonLinkEntity.setLesson(lessonEntity);
+        lessonLinkEntity.setId(predefinedLessonLinkId);
+        return lessonLinkEntity;
+    }
+
+    private boolean checkNotNullArgumentViolationException(ConstraintViolationException e) {
+        Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
+        return !(constraintViolations.size() != 1 ||
+                !constraintViolations.iterator().next().getMessage().equals("may not be null"));
     }
 }

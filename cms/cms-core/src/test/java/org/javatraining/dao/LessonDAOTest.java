@@ -1,5 +1,8 @@
 package org.javatraining.dao;
 
+import org.hamcrest.Matcher;
+import org.hamcrest.core.IsNull;
+import org.javatraining.dao.exception.EntityDoesNotExistException;
 import org.javatraining.entity.CourseEntity;
 import org.javatraining.entity.LessonEntity;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -12,11 +15,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.ejb.EJB;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.sql.Date;
+import java.util.List;
+import java.util.Set;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -54,43 +63,36 @@ public class LessonDAOTest {
         return war;
     }
 
-    private LessonEntity predefinedLessonInitialization(LessonEntity lessonEntity) {
-        CourseEntity courseEntity = courseDAO.getById((long) 1);
-        lessonEntity.setCreateDate(Date.valueOf("2016-08-11"));
-        lessonEntity.setTopic("topic");
-        lessonEntity.setDescription("Some description");
-        lessonEntity.setType((long) 1);
-        lessonEntity.setOrderNum((long) 764);
-        lessonEntity.setId((long) 1);
-        return lessonEntity;
-    }
-
-
-    public LessonEntity lessonEntityInitialization(LessonEntity lessonEntity) {
-        CourseEntity courseEntity = courseDAO.getById((long) 1);
-        courseEntity.setDescription("Java");
-        courseEntity.setName("JavaEE");
-        courseEntity.setStartdate(Date.valueOf("2015-11-11"));
-        courseEntity.setEnddate(Date.valueOf("2016-11-11"));
-        lessonEntity.setCourse(courseEntity);
-        lessonEntity.setCreateDate(Date.valueOf("2016-08-11"));
-        lessonEntity.setTopic("topic");
-        lessonEntity.setDescription("Some description");
-        lessonEntity.setType((long) 1);
-        lessonEntity.setOrderNum((long) 764);
-
-        return lessonEntity;
-    }
 
     @Test
     public void testLessonDAOShouldBeInjected() {
         assertThat(lessonDAO, is(notNullValue()));
     }
 
+    @Test(expected = RuntimeException.class)
+    public void testGetByIdForNotExistingIdShouldReturnShouldReturnEntityDoesNotExistException() {
+        Long notExistingId = 10L;
+        try {
+            LessonEntity courseWithNotExistingId = lessonDAO.getById(notExistingId);
+            assertThat(courseWithNotExistingId, is(IsNull.nullValue()));
+        } catch (EntityDoesNotExistException e) {
+        assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
+        if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+            throw e;
+        }}}
+
+
     @Test
     public void testSaveReturnLesson() {
-        LessonEntity lessonForSave = lessonEntityInitialization(new LessonEntity());
+        LessonEntity lessonForSave = lessonInitializationForTests(new LessonEntity());
         assertEquals(lessonForSave, lessonDAO.save(lessonForSave));
+    }
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_LESSON_AFTER_SAVE}, excludeColumns = {"id"})
+    public void testSaveLesson() {
+        LessonEntity lessonForSave = lessonInitializationForTests(new LessonEntity());
+      lessonDAO.save(lessonForSave);
     }
 
     @Test
@@ -119,7 +121,50 @@ public class LessonDAOTest {
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_LESSON}, excludeColumns = {"id"})
     public void testGetAllCourses() {
-        assertThat(lessonDAO.getAllLessons(), is(notNullValue()));
+        List<LessonEntity> lessonEntities = lessonDAO.getAllLessons();
+        LessonEntity predefinedLesson = predefinedLessonInitialization(new LessonEntity());
+        predefinedLesson = lessonDAO.getById(predefinedLesson.getId());
+        assertThat(lessonEntities, hasItem(predefinedLesson));
+        assertThat(lessonEntities, is(notNullValue()));
     }
 
+
+    private LessonEntity predefinedLessonInitialization(LessonEntity lessonEntity) {
+        CourseEntity predefinedCourse = predefinedCourse();
+        lessonEntity.setCourse(predefinedCourse);
+        lessonEntity.setCreateDate(Date.valueOf("2016-08-11"));
+        lessonEntity.setTopic("topic");
+        lessonEntity.setDescription("Some description");
+        lessonEntity.setType(1L);
+        lessonEntity.setOrderNum(764L);
+        lessonEntity.setId(1L);
+        return lessonEntity;
+    }
+    public CourseEntity predefinedCourse(){
+        Long predefinedCourseId = 1L;
+        CourseEntity predefinedCourse = new CourseEntity("courseName","courseDescription",
+                Date.valueOf("2015-11-11"),
+                Date.valueOf("2015-11-11"));
+        predefinedCourse.setId(predefinedCourseId);
+        return predefinedCourse;
+    }
+
+
+    public LessonEntity lessonInitializationForTests(LessonEntity lessonEntity) {
+        CourseEntity predefinedCourse = courseDAO.getById(1L);
+
+        lessonEntity.setCourse(predefinedCourse);
+        lessonEntity.setCreateDate(Date.valueOf("2016-08-11"));
+        lessonEntity.setTopic("topic");
+        lessonEntity.setDescription("Some description");
+        lessonEntity.setType(1L);
+        lessonEntity.setOrderNum(764L);
+        return lessonEntity;
+    }
+
+    private boolean checkNotNullArgumentViolationException(ConstraintViolationException e) {
+        Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
+        return !(constraintViolations.size() != 1 ||
+                !constraintViolations.iterator().next().getMessage().equals("may not be null"));
+    }
 }

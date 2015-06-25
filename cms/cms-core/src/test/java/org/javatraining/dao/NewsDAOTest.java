@@ -1,5 +1,8 @@
 package org.javatraining.dao;
 
+import org.hamcrest.Matcher;
+import org.hamcrest.core.IsNull;
+import org.javatraining.dao.exception.EntityDoesNotExistException;
 import org.javatraining.entity.CourseEntity;
 import org.javatraining.entity.NewsEntity;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -11,9 +14,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.ejb.EJB;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -53,6 +61,85 @@ public class NewsDAOTest {
         return war;
     }
 
+    @Test
+    public void testPersonDAOShouldBeInjected() throws Exception {
+        assertThat(newsDAO, is(notNullValue()));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testGetByIdForNotExistingIdShouldReturnEntityDoesNotExistException() {
+        Long notExistingId = (long) 10;
+        try {
+            NewsEntity courseWithNotExistingId = newsDAO.getById(notExistingId);
+            assertThat(courseWithNotExistingId, is(IsNull.nullValue()));
+        }catch (EntityDoesNotExistException e) {
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
+            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                throw e;
+            }
+        }
+    }
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_NEWS_AFTER_SAVE}, excludeColumns = {"id"})
+    public void testSaveNews() {
+        NewsEntity newsForSave =newsEntityInitialization(new NewsEntity());
+        newsDAO.save(newsForSave);
+    }
+
+    @Test
+    public void testSaveReturnNewsEntity() {
+        NewsEntity newsForSave =newsEntityInitialization(new NewsEntity());
+        assertEquals(newsForSave, newsDAO.save(newsForSave));
+    }
+
+    @Test
+    @ShouldMatchDataSet(value = DS_NEWS_AFTER_REMOVE)
+    public void testRemoveNews() {
+        NewsEntity newsForRemove= predefinedNewsInitializationForTests(new NewsEntity());
+        newsDAO.remove(newsForRemove);
+      }
+
+    @Test
+    public void testRemoveReturnNewsEntity() {
+        NewsEntity newsForRemove= predefinedNewsInitializationForTests(new NewsEntity());
+        assertEquals(newsForRemove, newsDAO.remove(newsForRemove));
+         }
+
+    @Test
+    public void testUpdateReturnNewsEntity() {
+         NewsEntity newsForUpdate= predefinedNewsInitializationForTests(new NewsEntity());
+         newsForUpdate.setTitle("otherTitle");
+        assertEquals(newsForUpdate,newsDAO.update(newsForUpdate));
+    }
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_NEWS_AFTER_UPDATE}, excludeColumns = {"id"})
+    public void testUpdatePositive() {
+        NewsEntity newsForUpdate= predefinedNewsInitializationForTests(new NewsEntity());
+        newsForUpdate.setTitle("otherTitle");
+        newsDAO.update(newsForUpdate);
+    }
+
+
+    @Test
+    public void testGetReturnNewsEntity() {
+        NewsEntity newsForGet= predefinedNewsInitializationForTests(new NewsEntity());
+        assertThat(newsForGet, is(equalTo( newsDAO.getById(newsForGet.getId()))));
+      }
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_NEWS}, excludeColumns = {"id"})
+    public void testGetNewsPositive() {
+        NewsEntity newsForGet= predefinedNewsInitializationForTests(new NewsEntity());
+        newsDAO.getById(newsForGet.getId());
+    }
+
+    private boolean checkNotNullArgumentViolationException(ConstraintViolationException e) {
+        Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
+        return !(constraintViolations.size() != 1 ||
+                !constraintViolations.iterator().next().getMessage().equals("may not be null"));
+    }
 
     private NewsEntity newsEntityInitialization(NewsEntity newsEntity){
         Long predefinedCourseId = (long) 1;
@@ -64,10 +151,16 @@ public class NewsDAOTest {
         return newsEntity;
     }
 
-    private NewsEntity predefinedNewsInitialization(NewsEntity newsEntity){
-        Long predefinedCourseId = (long) 1;
-        Long predefinedNewsId = (long) 1;
-       CourseEntity courseEntity = courseDAO.getById(predefinedCourseId);
+    public CourseEntity predefinedCourse(){
+        Long predefinedCourseId = 1L;
+        CourseEntity predefinedCourse = new CourseEntity("courseName","courseDescription",Date.valueOf("2014-01-10"),Date.valueOf("2015-07-31"));
+        predefinedCourse.setId(predefinedCourseId);
+        return predefinedCourse;
+    }
+
+    private NewsEntity predefinedNewsInitializationForTests(NewsEntity newsEntity){
+        Long predefinedNewsId = 1L;
+        CourseEntity courseEntity = predefinedCourse();
         newsEntity.setId(predefinedNewsId);
         newsEntity.setCourses(courseEntity);
         newsEntity.setDescription("newsDescription");
@@ -76,63 +169,4 @@ public class NewsDAOTest {
         return newsEntity;
     }
 
-    @Test
-    public void testPersonDAOShouldBeInjected() throws Exception {
-        assertThat(newsDAO, is(notNullValue()));
-    }
-
-    @Test
-    @ShouldMatchDataSet(value = {DS_EMPTY, DS_NEWS_AFTER_SAVE}, excludeColumns = {"id"})
-    public void testSavePositive() {
-        NewsEntity newsForSave =newsEntityInitialization(new NewsEntity());
-        newsDAO.save(newsForSave);
-    }
-
-    @Test
-    public void testSaveReturnNewsEntity() {
-        NewsEntity newsForSave =predefinedNewsInitialization(new NewsEntity());
-        assertEquals(newsForSave, newsDAO.save(newsForSave));
-    }
-
-    @Test
-    @ShouldMatchDataSet(value = DS_NEWS_AFTER_REMOVE)
-    public void testRemovePositive() {
-        NewsEntity newsForRemove=predefinedNewsInitialization(new NewsEntity());
-        newsDAO.remove(newsForRemove);
-      }
-
-    @Test
-    public void testRemoveReturnNewsEntity() {
-        NewsEntity newsForRemove=predefinedNewsInitialization(new NewsEntity());
-        assertEquals(newsForRemove, newsDAO.remove(newsForRemove));
-         }
-
-    @Test
-    public void testUpdateReturnNewsEntity() {
-         NewsEntity newsForUpdate=predefinedNewsInitialization(new NewsEntity());
-         newsForUpdate.setTitle("otherTitle");
-        assertEquals(newsForUpdate,newsDAO.update(newsForUpdate));
-    }
-
-    @Test
-    @ShouldMatchDataSet(value = {DS_EMPTY, DS_NEWS_AFTER_UPDATE}, excludeColumns = {"id"})
-    public void testUpdatePositive() {
-        NewsEntity newsForUpdate=predefinedNewsInitialization(new NewsEntity());
-        newsForUpdate.setTitle("otherTitle");
-        newsDAO.update(newsForUpdate);
-    }
-
-
-    @Test
-    public void testGetReturnNewsEntity() {
-        NewsEntity newsForGet=predefinedNewsInitialization(new NewsEntity());
-        assertThat(newsForGet, is(equalTo( newsDAO.getById(newsForGet.getId()))));
-      }
-
-    @Test
-    @ShouldMatchDataSet(value = {DS_EMPTY, DS_NEWS}, excludeColumns = {"id"})
-    public void testGetNewsPositive() {
-        NewsEntity newsForGet=predefinedNewsInitialization(new NewsEntity());
-        newsDAO.getById(newsForGet.getId());
-    }
 }

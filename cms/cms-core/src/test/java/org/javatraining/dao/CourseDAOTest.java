@@ -1,6 +1,8 @@
 package org.javatraining.dao;
 
+import org.hamcrest.Matcher;
 import org.hamcrest.core.IsNull;
+import org.javatraining.dao.exception.EntityDoesNotExistException;
 import org.javatraining.entity.CourseEntity;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -12,8 +14,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.ejb.EJB;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.sql.Date;
+import java.util.Set;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -45,51 +51,46 @@ public class CourseDAOTest {
         return war;
     }
 
-    private CourseEntity courseInitialization(CourseEntity courseEntity){
-        courseEntity.setName("courseName");
-        courseEntity.setStartdate(Date.valueOf("2015-10-10"));
-        courseEntity.setEnddate(Date.valueOf("2016-11-11"));
-        courseEntity.setDescription("Java");
-        return courseEntity;
-    }
-
-    private CourseEntity predefinedCourseInitialization(CourseEntity courseEntity){
-        courseEntity.setId((long)1);
-        courseEntity.setName("courseName");
-        courseEntity.setStartdate(Date.valueOf("2015-10-10"));
-        courseEntity.setEnddate(Date.valueOf("2016-11-11"));
-        courseEntity.setDescription("courseDescription");
-        return courseEntity;
-    }
-
     @Test
     public void testCourseDAOShouldBeInjected() throws Exception {
         assertThat(courseDAO, is(notNullValue()));
     }
 
-    @Test
-    public void testGetByIdForNotExistingIdShouldReturnNull() {
-        Long notExistingId = (long) 10;
-        CourseEntity courseWithNotExistingId = courseDAO.getById(notExistingId);
-        assertThat(courseWithNotExistingId, is(IsNull.nullValue()));
-      }
+    @Test(expected = RuntimeException.class)
+    public void testGetByIdForNotExistingIdShouldReturnEntityDoesNotExistException() {
+        Long notExistingId = 10L;
+              try {
+            CourseEntity courseWithNotExistingId = courseDAO.getById(notExistingId);
+            assertThat(courseWithNotExistingId, is(IsNull.nullValue()));
+        }catch (EntityDoesNotExistException e){
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
+            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                throw e;
+            }
+      }}
 
    @Test(expected = RuntimeException.class)
     public void testGetByIdForEmptyIdShouldThrowConstraintViolationException(){
-            courseDAO.getById(null);
+         try{   courseDAO.getById(null);
+         }catch (EntityDoesNotExistException e) {
+             assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
+             if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                 throw e;
+             }
+         }
      }
 
     @Test
     public void testSaveCourseReturnCourseEntity() {
         CourseEntity courseEntity = new CourseEntity();
-        assertEquals(courseInitialization(courseEntity), courseDAO.save(courseInitialization(courseEntity)));
+        assertEquals(courseInitializationForTests(courseEntity), courseDAO.save(courseInitializationForTests(courseEntity)));
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE_AFTER_SAVE}, excludeColumns = {"id"})
     public void testSaveCourse() {
         CourseEntity courseEntity = new CourseEntity();
-        courseDAO.save(courseInitialization(courseEntity));
+        courseDAO.save(courseInitializationForTests(courseEntity));
     }
 
     @Test
@@ -102,7 +103,7 @@ public class CourseDAOTest {
 
     @Test
     public void testUpdateCourseReturnNewsEntity() {
-        CourseEntity courseEntity = courseInitialization(new CourseEntity());
+        CourseEntity courseEntity = courseInitializationForTests(new CourseEntity());
          assertEquals(courseEntity, courseDAO.update(courseEntity));
     }
     @Test
@@ -120,7 +121,7 @@ public class CourseDAOTest {
 
     @Test
     public void testGetReturnCourseEntity() {
-        CourseEntity courseEntity =  courseInitialization(new CourseEntity());
+        CourseEntity courseEntity =  courseInitializationForTests(new CourseEntity());
        courseDAO.save(courseEntity);
        assertEquals(courseEntity,courseDAO.getById(courseEntity.getId()));
     }
@@ -129,6 +130,35 @@ public class CourseDAOTest {
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE}, excludeColumns = {"id"})
     public void testGetAllCourses() {
         assertThat(courseDAO.getAllCourses(), is(notNullValue()));
+    }
+
+    @Test
+    @ShouldMatchDataSet(value = DS_EMPTY)
+    public void testClearDataBaseShouldBeEmpty(){
+        courseDAO.clear();
+    }
+
+    private CourseEntity courseInitializationForTests(CourseEntity courseEntity){
+        courseEntity.setName("courseName");
+        courseEntity.setStartdate(Date.valueOf("2015-10-10"));
+        courseEntity.setEnddate(Date.valueOf("2016-11-11"));
+        courseEntity.setDescription("Java");
+        return courseEntity;
+    }
+
+    private CourseEntity predefinedCourseInitialization(CourseEntity courseEntity){
+        courseEntity.setId((long)1);
+        courseEntity.setName("courseName");
+        courseEntity.setStartdate(Date.valueOf("2015-10-10"));
+        courseEntity.setEnddate(Date.valueOf("2016-11-11"));
+        courseEntity.setDescription("courseDescription");
+        return courseEntity;
+    }
+
+    private boolean checkNotNullArgumentViolationException(ConstraintViolationException e) {
+        Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
+        return !(constraintViolations.size() != 1 ||
+                !constraintViolations.iterator().next().getMessage().equals("may not be null"));
     }
 
 

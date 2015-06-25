@@ -1,6 +1,9 @@
 package org.javatraining.dao;
 
+import org.hamcrest.Matcher;
 import org.hamcrest.core.IsNull;
+import org.javatraining.dao.exception.EntityDoesNotExistException;
+import org.javatraining.dao.exception.EntityIsAlreadyExistException;
 import org.javatraining.entity.PersonEntity;
 import org.javatraining.entity.PersonRole;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -14,13 +17,13 @@ import org.junit.runner.RunWith;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
-import javax.ejb.EJBTransactionRolledbackException;
-import java.util.Arrays;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.List;
+import java.util.Set;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 
@@ -54,58 +57,72 @@ public class PersonDAOTest {
         return war;
     }
 
-    public PersonEntity personEntityInit(PersonEntity personEntity) {
-        personEntity.setName("Petro");
-        personEntity.setEmail("Petrovg@mail.ru");
-        personEntity.setPhone("0933122345");
-        personEntity.setLastName("Last Name");
-        personEntity.setSecondName("Second name");
-        personEntity.setPersonRole(PersonRole.TEACHER);
-        return personEntity;
-    }
-
-    public PersonEntity predefinedPersonInitialization(PersonEntity personEntity) {
-        personEntity.setId(1L);
-        personEntity.setName("teacherName");
-        personEntity.setLastName("teacherLastName");
-        personEntity.setEmail("teacher@gmail.com");
-        personEntity.setSecondName("teacherSecondName");
-        personEntity.setPersonRole(PersonRole.TEACHER);
-        return personEntity;
-    }
 
     @Test
     public void testPersonDAOShouldBeInjected() throws Exception {
         assertThat(personDAO, is(notNullValue()));
     }
 
-    @Test
-    public void testGetByIdForNotExistingIdShouldReturnNull() {
-        Long notExistingId = (long) 10;
-        PersonEntity personWithNotExistingId = personDAO.getById(notExistingId);
-        assertThat(personWithNotExistingId, is(IsNull.nullValue()));
+    @Test(expected = RuntimeException.class)
+    public void testGetByIdForNotExistingIdShouldReturnEntityDoesNotExistException() {
+        Long notExistingId = 10L;
+        try{
+            PersonEntity personWithNotExistingId = personDAO.getById(notExistingId);
+            assertThat(personWithNotExistingId, is(IsNull.nullValue()));
+        }
+        catch (EntityDoesNotExistException e) {
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
+            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                throw e;
+            }
+        }
     }
+
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON_AFTER_SAVE}, excludeColumns = {"id", "phone"})
     public void testSave() {
-        PersonEntity personForSaving = personEntityInit(new PersonEntity());
+        PersonEntity personForSaving = personEntityInitializeForTests(new PersonEntity());
         personDAO.save(personForSaving);
     }
 
-    @Test(expected = EJBTransactionRolledbackException.class)
+    @Test(expected = RuntimeException.class)
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON}, excludeColumns = {"id", "phone"})
-    public void testSavePersonThatAlreadyExistDoNothing() {
-        PersonEntity personForSaving = predefinedPersonInitialization(new PersonEntity());
-        personDAO.save(personForSaving);
+    public void testSavePersonThatAlreadyExistTrowEntityIsAlreadyExistException() {
+        PersonEntity personForSaving = predefinedPersonInitializationForTests(new PersonEntity());
+       try{
+        personDAO.save(personForSaving);}
+       catch (EntityIsAlreadyExistException e) {
+        assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
+        if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+            throw e;
+        }
+    }
     }
 
+    @Test(expected = RuntimeException.class)
+    public void testGetByIdForNullIdShouldThrowConstraintViolationException() throws Exception {
+        try {
+            personDAO.getById(null);
+        } catch (EJBException e) {
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
+            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                throw e;
+            }
+        }
+    }
 
-    @Test(expected = EJBTransactionRolledbackException.class)
+    @Test(expected = Exception.class)
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON}, excludeColumns = {"id", "phone"})
     public void testSaveForNullPerson(){
-        personDAO.save(null);
-    }
+        try {
+            personDAO.save(null);
+        }catch (EJBException e){
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
+            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                throw e;
+        }
+    }}
 
     @Test(expected = EJBException.class)
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON}, excludeColumns = {"id", "phone"})
@@ -115,17 +132,18 @@ public class PersonDAOTest {
 
     @Test
     public void testGetPersonByPersonRole() {
-        personDAO.clear();
-        PersonEntity personEntity = personEntityInit(new PersonEntity());
-        personDAO.save(personEntity);
-        assertEquals(Arrays.asList(personEntity), personDAO.getByPersonRole(PersonRole.TEACHER));
+        final int predefinedPersonsCnt = 1;
+        PersonEntity predefinedPerson = predefinedPersonInitializationForTests(new PersonEntity());
+        predefinedPerson= personDAO.getById(predefinedPerson.getId());
+        List<PersonEntity> personsByRole = personDAO.getByPersonRole(predefinedPerson.getPersonRole());
+        assertThat(personsByRole, hasItem(predefinedPerson));
+        assertThat(personsByRole.size(), is(predefinedPersonsCnt));
     }
 
     @Test
     public void testGetPersonByEmail() {
-        personDAO.clear();
-        PersonEntity personEntity = personDAO.save(personEntityInit(new PersonEntity()));
-        PersonEntity otherPersonEntity = personEntityInit(new PersonEntity());
+        PersonEntity personEntity = personDAO.save(personEntityInitializeForTests(new PersonEntity()));
+        PersonEntity otherPersonEntity = personEntityInitializeForTests(new PersonEntity());
         otherPersonEntity.setEmail("OtherEmeil@gmail.com");
         personDAO.save(otherPersonEntity);
         assertEquals(personDAO.getByEmail(personEntity.getEmail()), personEntity);
@@ -135,12 +153,12 @@ public class PersonDAOTest {
     @Test
     public void testSaveReturnPersonEntity() {
         PersonEntity personEntity = new PersonEntity();
-        assertEquals(personEntity, personDAO.save(personEntityInit(personEntity)));
+        assertEquals(personEntity, personDAO.save(personEntityInitializeForTests(personEntity)));
     }
 
     @Test
     public void testUpdateReturnPersonEntity() {
-        PersonEntity personEntity = personEntityInit(new PersonEntity());
+        PersonEntity personEntity = personEntityInitializeForTests(new PersonEntity());
         personDAO.save(personEntity);
         personEntity.setName("Student");
         assertEquals(personDAO.update(personEntity), personEntity);
@@ -149,7 +167,7 @@ public class PersonDAOTest {
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON_AFTER_UPDATE}, excludeColumns = {"id", "phone"})
   public void testUpdatePositive() {
-        PersonEntity personEntity = predefinedPersonInitialization(new PersonEntity());
+        PersonEntity personEntity = predefinedPersonInitializationForTests(new PersonEntity());
         personEntity.setName("Student");
         assertEquals(personDAO.update(personEntity), personEntity);
     }
@@ -164,26 +182,27 @@ public class PersonDAOTest {
         personDAO.update(null);
     }
 
-    @Test
-    public void testGetPersonForNotExistingIdShouldReturnNull() {
-        Long notExistingId = (long) 10;
-        PersonEntity personWithNotExistingId = personDAO.getById(notExistingId);
-        assertThat(personWithNotExistingId, is(nullValue()));
-    }
+
 
 
     @Test
     public void testGetPersonEntity() {
-        PersonEntity predefinedPerson = predefinedPersonInitialization(new PersonEntity());
+        PersonEntity predefinedPerson = predefinedPersonInitializationForTests(new PersonEntity());
        assertThat(predefinedPerson, is(equalTo(predefinedPerson)));
     }
 
     @Test
     @ShouldMatchDataSet(value = DS_EMPTY)
     public void testRemovePerson() {
-        PersonEntity personEntity = predefinedPersonInitialization(new PersonEntity());
+        PersonEntity personEntity = predefinedPersonInitializationForTests(new PersonEntity());
         personDAO.remove(personEntity);
      }
+
+    @Test
+    @ShouldMatchDataSet(value = DS_EMPTY)
+    public void testClearDataBaseShouldBeEmpty(){
+        personDAO.clear();
+    }
 
 
     @Test
@@ -192,5 +211,32 @@ public class PersonDAOTest {
         assertThat(personDAO.getAllPersons(), is(notNullValue()));
 
     }
+
+    private boolean checkNotNullArgumentViolationException(ConstraintViolationException e) {
+        Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
+        return !(constraintViolations.size() != 1 ||
+                !constraintViolations.iterator().next().getMessage().equals("may not be null"));
+    }
+
+    public PersonEntity personEntityInitializeForTests(PersonEntity personEntity) {
+        personEntity.setName("Petro");
+        personEntity.setEmail("Petrovg@mail.ru");
+        personEntity.setPhone("0933122345");
+        personEntity.setLastName("Last Name");
+        personEntity.setSecondName("Second name");
+        personEntity.setPersonRole(PersonRole.TEACHER);
+        return personEntity;
+    }
+
+    public PersonEntity predefinedPersonInitializationForTests(PersonEntity personEntity) {
+        personEntity.setId(1L);
+        personEntity.setName("teacherName");
+        personEntity.setLastName("teacherLastName");
+        personEntity.setEmail("teacher@gmail.com");
+        personEntity.setSecondName("teacherSecondName");
+        personEntity.setPersonRole(PersonRole.TEACHER);
+        return personEntity;
+    }
+
 
 }

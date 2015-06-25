@@ -27,7 +27,7 @@ public class LessonEntity implements Serializable {
 
     @NotNull
     @Basic
-    @Column(name = "type", nullable = false, insertable = false, updatable = false)
+    @Column(name = "type", nullable = true, insertable = true, updatable = true)
     private Long type;
 
     @NotNull
@@ -168,13 +168,8 @@ public class LessonEntity implements Serializable {
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (course != null ? !course.equals(that.course) : that.course != null) return false;
         if (createDate != null ? !createDate.equals(that.createDate) : that.createDate != null) return false;
-        if (forumMessages != null ? !forumMessages.equals(that.forumMessages) : that.forumMessages != null)
-            return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (lessonLinks != null ? !lessonLinks.equals(that.lessonLinks) : that.lessonLinks != null) return false;
         if (orderNum != null ? !orderNum.equals(that.orderNum) : that.orderNum != null) return false;
-        if (practiceLesson != null ? !practiceLesson.equals(that.practiceLesson) : that.practiceLesson != null)
-            return false;
         if (topic != null ? !topic.equals(that.topic) : that.topic != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
 
@@ -189,11 +184,6 @@ public class LessonEntity implements Serializable {
         result = 31 * result + (topic != null ? topic.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
-        result = 31 * result + (course != null ? course.hashCode() : 0);
-        result = 31 * result + (practiceLesson != null ? practiceLesson.hashCode() : 0);
-        result = 31 * result + (lessonLinks != null ? lessonLinks.hashCode() : 0);
-        result = 31 * result + (forumMessages != null ? forumMessages.hashCode() : 0);
-
         return result;
     }
 }
