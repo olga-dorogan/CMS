@@ -27,7 +27,7 @@ angular.module('myApp.teacher', ['ui.router'])
                 views: {
                     "content@teacher": {
                         templateUrl: 'angular/views/addTheme.html',
-                        controller: 'AddThemeCtrl'
+                        controller: 'AddLectureCtrl'
                     },
                     "uploadFile@teacher.addTheme": {
                         templateUrl: 'angular/views/addFile.html',
@@ -47,8 +47,8 @@ angular.module('myApp.teacher', ['ui.router'])
                 resolve: {teacherAccess: teacherAccess}
             })
     }])
-    .service('ThemeService', ThemeService)
-    .controller("AddThemeCtrl", AddThemeCtrl)
+    .service('CourseContentService', CourseContentService)
+    .controller("AddLectureCtrl", AddLectureCtrl)
     .controller("AddCourseCtrl", AddCourseCtrl)
     .factory('UploadManager', ["$rootScope", UploadManager])
     .controller('FileUploadCtrl', ['$scope', '$rootScope', 'UploadManager', FileUploadCtrl])

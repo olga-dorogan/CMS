@@ -54,11 +54,11 @@ public class LessonVO {
         this.createDate = topic;
     }
 
-    public String getDescription() {
+    public String getContent() {
         return content;
     }
 
-    public void setDescription(String content) {
+    public void setContent(String content) {
         this.content = content;
     }
 
