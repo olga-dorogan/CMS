@@ -50,7 +50,7 @@ public class CourseEntity implements Serializable {
 
 
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "courses")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "course")
     private Set<LessonEntity> lessons;
 
 
