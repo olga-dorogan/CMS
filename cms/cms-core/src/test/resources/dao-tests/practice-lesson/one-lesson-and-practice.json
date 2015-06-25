@@ -1,5 +1,14 @@
 {
-  "lesson": [
+    "courses": [
+        {
+            "id": 1,
+            "name": "courseName",
+            "description": "courseDescription",
+            "startdate": "2014-01-10",
+            "enddate": "2015-07-31"
+        }
+    ],
+    "lesson": [
     {
       "id": 1,
       "type": 0,

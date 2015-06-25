@@ -1,6 +1,7 @@
 package org.javatraining.dao;
 
 
+import org.javatraining.dao.exception.EntityIsAlreadyExistException;
 import org.javatraining.entity.PersonEntity;
 import org.javatraining.entity.PersonRole;
 
@@ -42,4 +43,11 @@ public class PersonDAO extends GenericDAO<PersonEntity> {
     }
 
 
+    public PersonEntity save(@NotNull PersonEntity person) {
+        if (person.getId() != null && getEntityManager().find(PersonEntity.class, person.getId()) != null) {
+            throw new EntityIsAlreadyExistException();
+        }
+        getEntityManager().persist(person);
+        return person;
+    }
 }

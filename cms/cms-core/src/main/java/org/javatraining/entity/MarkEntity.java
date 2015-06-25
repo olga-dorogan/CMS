@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by vika on 24.05.15.
  */
 @Entity
-@Table(name = "marks", schema = "")
+@Table(name = "mark", schema = "")
 public class MarkEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,7 +63,7 @@ public class MarkEntity implements Serializable {
         return lessons;
     }
 
-    public void setLessons(PracticeLessonEntity lessons) {
+    public void setPracticeLesson(PracticeLessonEntity lessons) {
         this.lessons = lessons;
     }
 

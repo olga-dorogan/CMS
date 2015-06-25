@@ -1,5 +1,7 @@
 package org.javatraining.dao;
 
+import org.javatraining.dao.exception.EntityDoesNotExistException;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.constraints.NotNull;
@@ -19,38 +21,41 @@ public abstract class GenericDAO<T extends Serializable> {
     public GenericDAO() {
     }
 
-    public Class<T> getEntityClass() {
-        return entityClass;
-    }
-
     public void setEntityClass(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
 
     public T remove(@NotNull T entity) {
-        entity = (T) getEntityManager().find(entityClass, entity);
+             entity= getEntityManager().merge(entity);
              getEntityManager().remove(entity);
     return entity;
     }
 
     public T getById(@NotNull Long id) {
-        T entity = (T) getEntityManager().find(entityClass, id);
+      T entity = getEntityManager().find(entityClass, id);
     return entity;
     }
 
     public T removeById(@NotNull Long id) {
-        T entity = (T) getEntityManager().find(entityClass, id);
+        T entity = getEntityManager().find(entityClass, id);
+        if(entity==null)
+        {throw new EntityDoesNotExistException();}
         getEntityManager().remove(entity);
         return entity;
     }
 
     public T save(@NotNull T entity) {
-        getEntityManager().persist(entity);
+        getEntityManager().merge(entity);
+
         return entity;
     }
 
     public T update(@NotNull T entity) {
-        getEntityManager().merge(entity);
+        try {
+            getEntityManager().merge(entity);
+        }catch (IllegalArgumentException e){
+            throw new EntityDoesNotExistException();
+        }
         return entity;
     }
 

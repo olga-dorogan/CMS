@@ -10,7 +10,7 @@ import java.util.Set;
  * Created by vika on 24.05.15.
  */
 @Entity
-@Table(name = "lessons", schema = "")
+@Table(name = "lesson", schema = "")
 public class LessonEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -182,9 +182,6 @@ public class LessonEntity implements Serializable {
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
         result = 31 * result + (courses != null ? courses.hashCode() : 0);
-        result = 31 * result + (practiceLesson != null ? practiceLesson.hashCode() : 0);
-        result = 31 * result + (lessonLinks != null ? lessonLinks.hashCode() : 0);
-        result = 31 * result + (forumMessages != null ? forumMessages.hashCode() : 0);
         return result;
     }
 }

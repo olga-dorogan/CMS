@@ -6,6 +6,9 @@ import org.javatraining.model.NewsVO;
 import org.javatraining.model.PersonVO;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.persistence.Cleanup;
+import org.jboss.arquillian.persistence.CleanupStrategy;
+import org.jboss.arquillian.persistence.TestExecutionPhase;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -22,7 +25,8 @@ import static org.junit.Assert.assertEquals;
  * Created by vika on 14.06.15.
  */
 @RunWith(Arquillian.class)
-public class CourseServiceImplTest {
+@Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
+public class CourseServiceTest {
     @Inject
     private CourseService courseService;
 
@@ -36,6 +40,7 @@ public class CourseServiceImplTest {
                 .addPackage("org.javatraining.service")
                 .addPackage("org.javatraining.model.conversion")
                 .addPackage("org.javatraining.service.exception")
+                .addPackage("org.javatraining.dao.exception")
                 .addPackage("org.javatraining.model")
                 .addPackage("org.javatraining.entity")
                 .addPackage("org.javatraining.dao")
@@ -116,7 +121,7 @@ public class CourseServiceImplTest {
         CourseVO courseVO = new CourseVO();
         NewsVO newsVO = new NewsVO();
         courseService.save(courseVOInit(courseVO));
-      courseService.addNewsToCourse(courseVO,newsVO);
+//      courseService.addNewsToCourse(courseVO,newsVO);
         // TODO: !!! need to use NewsService
 
     }

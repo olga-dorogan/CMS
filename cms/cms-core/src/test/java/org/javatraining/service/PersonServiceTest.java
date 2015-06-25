@@ -71,6 +71,7 @@ public class PersonServiceTest {
     private static final String notExistingEmail;
     private static final Long notExistingId;
 
+
     static {
         predefinedPerson = new PersonVO(1L, "teacherName", "teacherLastName", "teacher@gmail.com", PersonRole.TEACHER);
         predefinedPerson.setSecondName("teacherSecondName");
@@ -130,7 +131,7 @@ public class PersonServiceTest {
         try {
             personService.getById(null);
         } catch (EJBException e) {
-            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
             if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
                 throw e;
             }
@@ -179,7 +180,7 @@ public class PersonServiceTest {
         try {
             personService.save(null);
         } catch (EJBException e) {
-            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
             if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
                 throw e;
             }
@@ -192,7 +193,7 @@ public class PersonServiceTest {
         try {
             personService.save(new PersonVO());
         } catch (EJBException e) {
-            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
             if (checkValidPersonViolationException((ConstraintViolationException) e.getCause())) {
                 throw e;
             }
@@ -212,7 +213,7 @@ public class PersonServiceTest {
         try {
             personService.update(null);
         } catch (EJBException e) {
-            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
             if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
                 throw e;
             }
@@ -225,7 +226,7 @@ public class PersonServiceTest {
         try {
             personService.update(new PersonVO());
         } catch (EJBException e) {
-            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
             if (checkValidPersonViolationException((ConstraintViolationException) e.getCause())) {
                 throw e;
             }
@@ -244,7 +245,7 @@ public class PersonServiceTest {
         try {
             personService.remove(null);
         } catch (EJBException e) {
-            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
             if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
                 throw e;
             }
@@ -274,7 +275,7 @@ public class PersonServiceTest {
         try {
             personService.getCourses(notExistingPerson);
         } catch (EJBException e) {
-            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
             if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
                 throw e;
             }
@@ -303,7 +304,7 @@ public class PersonServiceTest {
             CourseVO notExistingCourse = createNotExistingCourse();
             personService.addPersonToCourse(predefinedPerson, notExistingCourse);
         } catch (EJBException e) {
-            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
             if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
                 throw e;
             }
@@ -318,7 +319,7 @@ public class PersonServiceTest {
             PersonVO notExistingPerson = createNotExistingPerson();
             personService.addPersonToCourse(notExistingPerson, predefinedCourse);
         } catch (EJBException e) {
-            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
             if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
                 throw e;
             }
@@ -332,7 +333,7 @@ public class PersonServiceTest {
         try {
             personService.addPersonToCourse(predefinedPerson, null);
         } catch (EJBException e) {
-            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
             if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
                 throw e;
             }
@@ -346,7 +347,7 @@ public class PersonServiceTest {
         try {
             personService.addPersonToCourse(null, predefinedCourse);
         } catch (EJBException e) {
-            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
             if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
                 throw e;
             }
@@ -393,7 +394,7 @@ public class PersonServiceTest {
         try {
             personService.removePersonFromCourse(notExistingPerson, predefinedCourse);
         } catch (EJBException e) {
-            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
             if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
                 throw e;
             }
@@ -408,7 +409,7 @@ public class PersonServiceTest {
         try {
             personService.removePersonFromCourse(predefinedPerson, notExistingCourse);
         } catch (EJBException e) {
-            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
             if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
                 throw e;
             }
@@ -428,7 +429,7 @@ public class PersonServiceTest {
         try {
             personService.getPersonsByRole(null);
         } catch (EJBException e) {
-            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
             if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
                 throw e;
             }
