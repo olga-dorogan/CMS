@@ -53,6 +53,7 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
                     $window.localStorage['role'] = data.personRole.toLowerCase();
                     $window.localStorage['name'] = data.name + " " + data.lastName;
                     $window.localStorage['token'] = $window.gapi.auth.getToken().access_token;
+                    $state.go("person");
                 });
                 //Заглушка для определения роли
                 //$window.localStorage['role'] = "teacher";
