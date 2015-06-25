@@ -53,4 +53,30 @@ public class LessonWebService {
         }
         return r.build();
     }
+
+    @GET
+    @Path("{course_id}/lesson/{order_num}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Auth(roles = {AuthRole.STUDENT, AuthRole.TEACHER})
+    public Response getLessonByOrderNum(@PathParam("course_id") Long courseId, @PathParam("order_num") Long orderNum) {
+        return Response.ok(lessonService.getByOrderNum(courseId, orderNum)).build();
+    }
+
+    @PUT
+    @Path("{course_id}/lesson/{order_num}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Auth(roles = {AuthRole.TEACHER})
+    public Response updateLessonByOrderNum(@PathParam("course_id") Long courseId, @PathParam("order_num") Long orderNum, LessonVO lesson) {
+        lessonService.updateByOrderNum(courseId, orderNum, lesson);
+        return Response.ok().build();
+    }
+
+    @DELETE
+    @Path("{course_id}/lesson/{order_num}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Auth(roles = {AuthRole.TEACHER})
+    public Response deleteLessonByOrderNum(@PathParam("course_id") Long courseId, @PathParam("order_num") Long orderNum) {
+        lessonService.deleteByOrderNum(courseId, orderNum);
+        return Response.ok().build();
+    }
 }

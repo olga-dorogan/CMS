@@ -34,4 +34,19 @@ public class LessonDAO extends GenericDAO<LessonEntity> {
                 .setParameter("course_id", courseId)
                 .getResultList();
     }
+
+    public LessonEntity updateByOrderNum(Long courseId, Long orderNum, LessonEntity lesson) {
+        LessonEntity lessonEntity = getByOrderNum(courseId, orderNum);
+        lessonEntity.setTopic(lesson.getTopic());
+        lessonEntity.setCreateDate(lesson.getCreateDate());
+        lessonEntity.setDescription(lesson.getDescription());
+        lessonEntity.setOrderNum(lessonEntity.getOrderNum());
+
+        return lessonEntity;
+    }
+
+    public void removeByOrderNum(Long courseId, Long orderNum) {
+        LessonEntity lessonEntity = getByOrderNum(courseId, orderNum);
+        getEntityManager().remove(lessonEntity);
+    }
 }

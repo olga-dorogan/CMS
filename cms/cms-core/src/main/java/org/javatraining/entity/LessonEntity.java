@@ -13,7 +13,7 @@ import java.util.Set;
 @Table(name = "lessons", schema = "")
 @NamedQueries({
     @NamedQuery(name = "Lesson.FindByCourseId", query = "SELECT l FROM LessonEntity l JOIN CourseEntity c WHERE c.id = :course_id"),
-    @NamedQuery(name = "Lesson.FindByCourseIdAndOrderNum", query = "SELECT l FROM LessonEntity l JOIN CourseEntity c WHERE c.id = :course_id AND l.orderNum = :order_num")
+    @NamedQuery(name = "Lesson.FindByCourseIdAndOrderNum", query = "SELECT l FROM LessonEntity l JOIN CourseEntity c WHERE c.id = :course_id AND l.orderNum = :order_num"),
 })
 public class LessonEntity implements Serializable {
     public static String FIND_BY_COURSE = "Lesson.FindByCourseId";

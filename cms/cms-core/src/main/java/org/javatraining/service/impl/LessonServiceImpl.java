@@ -57,4 +57,16 @@ public class LessonServiceImpl implements LessonService {
     public LessonVO getByOrderNum(@NotNull Long courseId, @NotNull Long orderNum) {
         return convertEntityToVO(lessonDAO.getByOrderNum(courseId, orderNum));
     }
+
+    @Nullable
+    @Override
+    public LessonVO updateByOrderNum(@NotNull Long courseId, @NotNull Long orderNum, LessonVO lesson) {
+        return convertEntityToVO(lessonDAO.updateByOrderNum(courseId, orderNum, convertVOToEntity(lesson)));
+    }
+
+    @Nullable
+    @Override
+    public void deleteByOrderNum(@NotNull Long courseId, @NotNull Long orderNum) {
+        lessonDAO.removeByOrderNum(courseId, orderNum);
+    }
 }
