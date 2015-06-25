@@ -52,14 +52,14 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
                     $window.localStorage['id'] = data.id;
                     $window.localStorage['role'] = data.personRole.toLowerCase();
                     $window.localStorage['name'] = data.name + " " + data.lastName;
-                    console.log("Person in role: " + $window.localStorage['role']);
+                    $window.localStorage['token'] = $window.gapi.auth.getToken().access_token;
                 });
                 //Заглушка для определения роли
                 //$window.localStorage['role'] = "teacher";
                 //$window.localStorage['id'] = 1;
                 //$window.localStorage['name'] = GData.getUser().name;
 
-                console.log('doLogin');
+                console.log('user is logined successfully');
             }, function () {
                 $state.go("home");
                 console.log('login fail');
