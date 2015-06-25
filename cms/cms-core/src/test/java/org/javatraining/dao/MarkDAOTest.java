@@ -57,8 +57,7 @@ public class MarkDAOTest {
         courseEntity.setStartdate(Date.valueOf("2015-10-10"));
         courseEntity.setEnddate(Date.valueOf("2016-11-11"));
         courseEntity.setDescription("Java");
-
-        lessonEntity.setCourses(courseEntity);
+        lessonEntity.setCourse(courseEntity);
         lessonEntity.setTopic("topic");
         lessonEntity.setType((long) 2);
         lessonEntity.setOrderNum(((long) 5));

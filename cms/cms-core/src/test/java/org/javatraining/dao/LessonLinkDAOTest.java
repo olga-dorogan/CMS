@@ -55,14 +55,13 @@ public class LessonLinkDAOTest {
         courseEntity.setStartdate(Date.valueOf("2015-10-10"));
         courseEntity.setEnddate(Date.valueOf("2016-11-11"));
         courseEntity.setDescription("Java");
+        lessonEntity.setCourse(courseEntity);
         lessonEntity.setType((long) 3234);
         lessonEntity.setCreateDate(Date.valueOf("2015-10-10"));
         lessonEntity.setOrderNum((long) 67);
         lessonEntity.setTopic("topic");
         lessonEntity.setDescription("Description");
         lessonEntity.setId((long) 1);
-
-        lessonEntity.setCourses(courseEntity);
         lessonLinkEntity.setDescription("Description");
         lessonLinkEntity.setLink("link");
         lessonLinkEntity.setLesson(lessonEntity);

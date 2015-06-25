@@ -40,6 +40,7 @@ public class LessonDAOTest {
     private static final String DS_LESSON_AFTER_UPDATE = DS_DIR + "lesson/expected-after-update.json";
     private static final String DS_LESSON_AFTER_SAVE = DS_DIR + "lesson/expected-after-save.json";
     private static final String DS_LESSON_AFTER_REMOVE = DS_DIR + "lesson/expected-after-remove.json";
+
     @Deployment
     public static WebArchive createDeployment() {
 
@@ -53,24 +54,25 @@ public class LessonDAOTest {
         return war;
     }
 
-    private LessonEntity predefinedLessonInitialization(LessonEntity lessonEntity){
+    private LessonEntity predefinedLessonInitialization(LessonEntity lessonEntity) {
         CourseEntity courseEntity = courseDAO.getById((long) 1);
-        lessonEntity.setCourses(courseEntity);
         lessonEntity.setCreateDate(Date.valueOf("2016-08-11"));
         lessonEntity.setTopic("topic");
         lessonEntity.setDescription("Some description");
         lessonEntity.setType((long) 1);
         lessonEntity.setOrderNum((long) 764);
-       lessonEntity.setId((long) 1);
+        lessonEntity.setId((long) 1);
         return lessonEntity;
     }
 
 
-
-    public LessonEntity lessonEntityInitialization(LessonEntity lessonEntity){
+    public LessonEntity lessonEntityInitialization(LessonEntity lessonEntity) {
         CourseEntity courseEntity = courseDAO.getById((long) 1);
-
-        lessonEntity.setCourses(courseEntity);
+        courseEntity.setDescription("Java");
+        courseEntity.setName("JavaEE");
+        courseEntity.setStartdate(Date.valueOf("2015-11-11"));
+        courseEntity.setEnddate(Date.valueOf("2016-11-11"));
+        lessonEntity.setCourse(courseEntity);
         lessonEntity.setCreateDate(Date.valueOf("2016-08-11"));
         lessonEntity.setTopic("topic");
         lessonEntity.setDescription("Some description");
@@ -81,30 +83,30 @@ public class LessonDAOTest {
     }
 
     @Test
-    public void testLessonDAOShouldBeInjected() throws Exception {
+    public void testLessonDAOShouldBeInjected() {
         assertThat(lessonDAO, is(notNullValue()));
     }
 
     @Test
     public void testSaveReturnLesson() {
         LessonEntity lessonForSave = lessonEntityInitialization(new LessonEntity());
-        assertEquals(lessonForSave,lessonDAO.save(lessonForSave));
+        assertEquals(lessonForSave, lessonDAO.save(lessonForSave));
     }
 
-     @Test
-   @ShouldMatchDataSet(value = {DS_EMPTY, DS_LESSON_AFTER_UPDATE}, excludeColumns = {"id"})
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_LESSON_AFTER_UPDATE}, excludeColumns = {"id"})
     public void testUpdateLesson() {
         LessonEntity lessonForUpdate = predefinedLessonInitialization(new LessonEntity());
         lessonForUpdate.setDescription("Other description");
         lessonDAO.update(lessonForUpdate);
-      }
+    }
 
     @Test
     public void testUpdateReturnLessonEntity() {
         LessonEntity lessonForUpdate = predefinedLessonInitialization(new LessonEntity());
         lessonForUpdate.setDescription("Other description");
         assertEquals(lessonForUpdate, lessonDAO.update(lessonForUpdate));
-     }
+    }
 
 
     @Test

@@ -18,4 +18,16 @@ function PersonService(Restangular) {
     this.getTeachers = function () {
         return Person.getList({'role': 'teacher'}).$object;
     };
+
+    this.getCoursesForPerson = function (personId) {
+        if (personId === undefined) {
+            return [];
+        }
+        return Restangular.one("resources/person", personId).all("course").getList().$object;
+    };
+
+    this.getCoursesForPersonCap = function () {
+        return [{id: 2, name: "Java SE", description: "Description for Java SE"}];
+    };
+
 }

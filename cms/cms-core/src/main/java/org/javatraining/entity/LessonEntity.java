@@ -3,15 +3,23 @@ package org.javatraining.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Set;
 
 /**
  * Created by vika on 24.05.15.
  */
 @Entity
+
 @Table(name = "lesson", schema = "")
+@NamedQueries({
+    @NamedQuery(name = "Lesson.FindByCourseId", query = "SELECT l FROM LessonEntity l WHERE l.course.id = :course_id"),
+    @NamedQuery(name = "Lesson.FindByCourseIdAndOrderNum", query = "SELECT l FROM LessonEntity l WHERE l.course.id = :course_id AND l.orderNum = :order_num")
+})
 public class LessonEntity implements Serializable {
+    public static String FIND_BY_COURSE = "Lesson.FindByCourseId";
+    public static String FIND_BY_COURSE_AND_ORDER_NUM = "Lesson.FindByCourseIdAndOrderNum";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
@@ -48,7 +56,7 @@ public class LessonEntity implements Serializable {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "course_id", nullable = false)
-    private CourseEntity courses;
+    private CourseEntity course;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessons")
     private Set<ForumMessagesEntity> forumMessages;
@@ -60,13 +68,13 @@ public class LessonEntity implements Serializable {
     }
 
     public LessonEntity(Long type, Long orderNum, String topic, String description,
-                        Date createDate, CourseEntity courses) {
+                        Date createDate, CourseEntity course) {
         this.type = type;
         this.orderNum = orderNum;
         this.topic = topic;
         this.description = description;
         this.createDate = createDate;
-        this.courses = courses;
+        this.course = course;
     }
 
     public Long getId() {
@@ -105,8 +113,8 @@ public class LessonEntity implements Serializable {
         return createDate;
     }
 
-    public void setCreateDate(Date topic) {
-        this.createDate = topic;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     public String getDescription() {
@@ -117,12 +125,12 @@ public class LessonEntity implements Serializable {
         this.description = description;
     }
 
-    public CourseEntity getCourses() {
-        return courses;
+    public CourseEntity getCourse() {
+        return course;
     }
 
-    public void setCourses(CourseEntity courses) {
-        this.courses = courses;
+    public void setCourse(CourseEntity course) {
+        this.course = course;
     }
 
     public Set<PracticeLessonEntity> getPracticeLesson() {
@@ -158,7 +166,7 @@ public class LessonEntity implements Serializable {
         LessonEntity that = (LessonEntity) o;
 
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (courses != null ? !courses.equals(that.courses) : that.courses != null) return false;
+        if (course != null ? !course.equals(that.course) : that.course != null) return false;
         if (createDate != null ? !createDate.equals(that.createDate) : that.createDate != null) return false;
         if (forumMessages != null ? !forumMessages.equals(that.forumMessages) : that.forumMessages != null)
             return false;
@@ -181,7 +189,11 @@ public class LessonEntity implements Serializable {
         result = 31 * result + (topic != null ? topic.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
-        result = 31 * result + (courses != null ? courses.hashCode() : 0);
+        result = 31 * result + (course != null ? course.hashCode() : 0);
+        result = 31 * result + (practiceLesson != null ? practiceLesson.hashCode() : 0);
+        result = 31 * result + (lessonLinks != null ? lessonLinks.hashCode() : 0);
+        result = 31 * result + (forumMessages != null ? forumMessages.hashCode() : 0);
+
         return result;
     }
 }
