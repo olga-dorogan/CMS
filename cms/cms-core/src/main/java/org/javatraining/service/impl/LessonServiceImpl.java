@@ -1,8 +1,6 @@
 package org.javatraining.service.impl;
 
-import org.javatraining.dao.CourseDAO;
 import org.javatraining.dao.LessonDAO;
-import org.javatraining.entity.CourseEntity;
 import org.javatraining.entity.LessonEntity;
 import org.javatraining.model.LessonVO;
 import org.javatraining.service.LessonService;
@@ -22,8 +20,6 @@ import static org.javatraining.model.conversion.LessonConverter.*;
  */
 @Stateless
 public class LessonServiceImpl implements LessonService {
-    @EJB
-    private CourseDAO courseDAO;
     @EJB
     private LessonDAO lessonDAO;
 
@@ -53,10 +49,12 @@ public class LessonServiceImpl implements LessonService {
     @Nullable
     @Override
     public Set<LessonVO> getByCourseId(@NotNull Long courseId) {
-        Set<LessonVO> lessonVOs = null;
-        CourseEntity courseEntity = courseDAO.getById(courseId);
-        if (courseEntity != null && courseEntity.getLessons() != null)
-            lessonVOs = convertEntitiesToVOs(courseEntity.getLessons());
-        return lessonVOs;
+        return convertEntitiesToVOs(lessonDAO.getByCourseId(courseId));
+    }
+
+    @Nullable
+    @Override
+    public LessonVO getByOrderNum(@NotNull Long courseId, @NotNull Long orderNum) {
+        return convertEntityToVO(lessonDAO.getByOrderNum(courseId, orderNum));
     }
 }

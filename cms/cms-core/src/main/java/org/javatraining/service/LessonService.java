@@ -23,5 +23,7 @@ public interface LessonService {
     @Valid
     Set<LessonVO> getByCourseId(@NotNull Long courseId);
 
-
+    @Nullable
+    @Valid
+    LessonVO getByOrderNum(@NotNull Long courseId, @NotNull Long orderNum);
 }
