@@ -7,13 +7,17 @@
             <div class="panel-body">
                 <div class="description">{{course.description}}</div>
                 <div ng-if="isLogin()" class="course-action">
-                    <a href="" ng-if=" isPersonInCourse(course)" class="go-into-course">Перейти к курсу</a>
+                    <a ui-sref="person.course({courseId:course.id})" ng-if=" isPersonInCourse(course)" class="go-into-course">
+                        Перейти к курсу
+                    </a>
                     <a href="" ng-if="!isPersonInCourse(course)" class="enroll-into-course">Подписаться</a>
                 </div>
             </div>
         </div>
     </li>
     <div class="course-action">
-        <button ng-if="isLogin() && isTeacher()" class="btn btn-default" ui-sref="person.addCourse">Добавить новый курс</button>
+        <button ng-if="isLogin() && isTeacher()" class="btn btn-default" ui-sref="person.addCourse">Добавить новый
+            курс
+        </button>
     </div>
 </ul>

@@ -6,7 +6,7 @@ function CourseService(Restangular) {
     };
     this.createCourse = function (newCourse) {
         // POST returns promise, in which successHandler is executed ALWAYS when response contains any text
-        // so, is's necessary to check is response status equal 2xx or not
+        // so, it's necessary to check is response status equal 2xx or not
         // or another way --- any successfully returned object contains field 'fromServer' with value 'true'
         return Course.post(newCourse);
     };

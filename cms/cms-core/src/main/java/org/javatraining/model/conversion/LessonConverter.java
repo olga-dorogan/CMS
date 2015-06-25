@@ -17,7 +17,7 @@ public class LessonConverter {
         LessonVO lessonVO = new LessonVO();
         lessonVO.setId(lessonEntity.getId());
         lessonVO.setCreateDate(lessonEntity.getCreateDate());
-        lessonVO.setDescription(lessonEntity.getDescription());
+        lessonVO.setContent(lessonEntity.getDescription());
         lessonVO.setTopic(lessonEntity.getTopic());
         lessonVO.setOrderNum(lessonEntity.getOrderNum());
         lessonVO.setCourseId(lessonEntity.getCourse().getId());
@@ -28,7 +28,7 @@ public class LessonConverter {
         LessonEntity lessonEntity = new LessonEntity();
         lessonEntity.setId(lessonVO.getId());
         lessonEntity.setCreateDate(lessonVO.getCreateDate());
-        lessonEntity.setDescription(lessonVO.getDescription());
+        lessonEntity.setDescription(lessonVO.getContent());
         lessonEntity.setTopic(lessonVO.getTopic());
         lessonEntity.setOrderNum(lessonVO.getOrderNum());
         CourseEntity courseEntity = new CourseEntity();

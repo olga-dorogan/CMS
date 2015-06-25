@@ -15,7 +15,6 @@ angular.module('myApp.person', ['ui.router'])
                         controller: 'PersonCtrl'
                     }
                 }
-
             })
             .state('person.addCourse', {
                 url: '/addCourse',
@@ -27,14 +26,40 @@ angular.module('myApp.person', ['ui.router'])
                         templateUrl: 'angular/views/addCourse.html',
                         controller: "AddCourseCtrl"
                     }
-                },
-                resolve: {teacherAccess: teacherAccess}
+                }
+            })
+            .state('person.course', {
+                url: '/course/:courseId',
+                views: {
+                    "": {
+                        templateUrl: 'angular/views/home.html'
+                    },
+                    "content@person": {
+                        templateUrl: 'angular/views/courseContent.html',
+                        controller: "CourseContentCtrl"
+                    }
+                }
+            })
+            .state('person.addLecture', {
+                url: '/course/:courseId/addLecture',
+                views: {
+                    "": {
+                        templateUrl: 'angular/views/home.html'
+                    },
+                    "content@person": {
+                        templateUrl: 'angular/views/addLecture.html',
+                        controller: "AddLectureCtrl"
+                    }
+                }
             })
     }])
     .service('CourseService', CourseService)
+    .service('CourseContentService', CourseContentService)
     .controller('PersonCtrl', PersonCtrl)
     .controller('AddCourseCtrl', AddCourseCtrl)
-    .controller('DatepickerCtrl', DatepickerCtrl);
+    .controller('DatepickerCtrl', DatepickerCtrl)
+    .controller('CourseContentCtrl', CourseContentCtrl)
+    .controller("AddLectureCtrl", AddLectureCtrl);
 
 
 
