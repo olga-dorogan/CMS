@@ -20,7 +20,7 @@ public class PracticeLessonEntity implements Serializable {
     @Column(name = "task", nullable = true, insertable = true, updatable = true, length = 255)
     private String task;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(cascade = {})
     @JoinColumn(name = "lesson_id", nullable = true, insertable = true, updatable = true)
     private LessonEntity lesson;
 
