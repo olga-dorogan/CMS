@@ -10,8 +10,8 @@ function CourseService(Restangular) {
         // or another way --- any successfully returned object contains field 'fromServer' with value 'true'
         return Course.post(newCourse);
     };
-    this.isCourseReallyCreated = function(returnedObject) {
-        return (returnedObject.hasOwnProperty('fromServer') && returnedObject.fromServer);
+    this.isCourseSuccessfullyCreated = function(returnedObject) {
+        return returnedObject.responseStatus == 201;
     };
     //FIXME заглушка, для нормальной работы на без запуска WildFly
     this.getCoursesCap = function () {
