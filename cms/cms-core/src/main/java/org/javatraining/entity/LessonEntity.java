@@ -25,7 +25,6 @@ public class LessonEntity implements Serializable {
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
     private Long id;
 
-    @NotNull
     @Basic
     @Column(name = "type", nullable = true, insertable = true, updatable = true)
     private Long type;
