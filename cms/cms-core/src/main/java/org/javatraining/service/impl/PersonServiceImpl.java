@@ -49,13 +49,11 @@ public class PersonServiceImpl implements PersonService {
     public void save(@NotNull @Valid PersonVO personVO) {
         PersonVO personVOFromEmail = getByEmail(personVO.getEmail());
         if (personVOFromEmail != null) {
-            personVO.setPersonRole(personVOFromEmail.getPersonRole());
-            personVO.setId(personVOFromEmail.getId());
+            updatePersonVO(personVO, personVOFromEmail);
         } else {
             saveStudent(personVO);
         }
     }
-
     @Override
     public PersonVO update(@NotNull @Valid PersonVO personVO) {
         PersonEntity entity = PersonConverter.convertVOToEntity(personVO);
@@ -136,5 +134,14 @@ public class PersonServiceImpl implements PersonService {
         PersonEntity personEntity = personDAO.getById(personVO.getId());
         Set<MarkEntity> marks = personEntity.getMarks();
         return MarkConverter.convertEntitiesToVOs(marks);
+    }
+
+    private void updatePersonVO(PersonVO personToUpdate, PersonVO personWithUpdateInfo) {
+        personToUpdate.setId(personWithUpdateInfo.getId());
+        personToUpdate.setEmail(personWithUpdateInfo.getEmail());
+        personToUpdate.setPersonRole(personWithUpdateInfo.getPersonRole());
+        personToUpdate.setName(personWithUpdateInfo.getName());
+        personToUpdate.setSecondName(personWithUpdateInfo.getSecondName());
+        personToUpdate.setLastName(personWithUpdateInfo.getLastName());
     }
 }
