@@ -5,7 +5,7 @@ import javax.ejb.ApplicationException;
 /**
  * Created by vika on 23.06.15.
  */
-@ApplicationException(rollback = true)
+@ApplicationException(rollback = false)
 public class EntityIsAlreadyExistException extends RuntimeException {
     public EntityIsAlreadyExistException() {
         super();
