@@ -4,6 +4,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.javatraining.integration.gitlab.api.interfaces.GitLabNotificationService;
 import org.javatraining.integration.gitlab.api.model.GitLabUser;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.ui.velocity.VelocityEngineUtils;
@@ -27,6 +28,8 @@ public class GitLabNotificationServiceImpl implements GitLabNotificationService 
 
     @Override
     public void sendUserProperties(String from, GitLabUser user) {
+        sender = new JavaMailSenderImpl();
+        //TODO native java mail api
         MimeMessagePreparator preparator = mimeMessage -> {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             helper.setTo(new InternetAddress(user.getEmail()));
