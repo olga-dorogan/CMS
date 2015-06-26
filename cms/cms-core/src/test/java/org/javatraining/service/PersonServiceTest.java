@@ -5,6 +5,7 @@ import org.javatraining.dao.CourseDAO;
 import org.javatraining.dao.GenericDAO;
 import org.javatraining.dao.MarkDAO;
 import org.javatraining.dao.PersonDAO;
+import org.javatraining.dao.exception.EntityDoesNotExistException;
 import org.javatraining.entity.PersonEntity;
 import org.javatraining.entity.PersonRole;
 import org.javatraining.model.CourseVO;
@@ -56,7 +57,7 @@ public class PersonServiceTest {
     private static final String DS_COURSE = DS_DIR + "/course/one-course.json";
     private static final String DS_COURSE_PERSON = DS_DIR + "/course/person-course.json";
 
-    private static final String DS_PRACTICE = DS_DIR + "/practice-lesson/one-practice-lesson.json";
+    private static final String DS_PRACTICE = DS_DIR + "/practice-lesson/one-lesson-and-practice.json";
     private static final String DS_MARK = DS_DIR + "/practice-lesson/mark.json";
 
     private static final PersonVO predefinedPerson;
@@ -101,6 +102,7 @@ public class PersonServiceTest {
                 .addPackage(PersonVO.class.getPackage())
                 .addPackage(PersonConverter.class.getPackage())
                 .addClasses(PersonDAO.class, CourseDAO.class, MarkDAO.class, GenericDAO.class)
+                .addPackage(EntityDoesNotExistException.class.getPackage())
                 .addClasses(PersonService.class, PersonServiceImpl.class, UnsupportedOperationException.class)
                 .addAsResource(DS_DIR)
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml");
