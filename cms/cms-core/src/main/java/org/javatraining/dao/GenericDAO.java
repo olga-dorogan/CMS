@@ -1,6 +1,6 @@
 package org.javatraining.dao;
 
-import org.javatraining.dao.exception.EntityDoesNotExistException;
+import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.dao.exception.EntityIsAlreadyExistException;
 
 import javax.persistence.EntityExistsException;
@@ -33,7 +33,7 @@ public abstract class GenericDAO<T extends Serializable> {
             entity = getEntityManager().merge(entity);
             getEntityManager().remove(entity);
         } catch (IllegalArgumentException e) {
-            throw new EntityDoesNotExistException();
+            throw new EntityNotExistException();
         }
 
         return entity;
@@ -42,7 +42,7 @@ public abstract class GenericDAO<T extends Serializable> {
     public T getById(@NotNull Long id) {
         T entity = getEntityManager().find(entityClass, id);
         if (entity == null) {
-            throw new EntityDoesNotExistException();
+            throw new EntityNotExistException();
         }
         return entity;
     }
@@ -50,7 +50,7 @@ public abstract class GenericDAO<T extends Serializable> {
     public T removeById(@NotNull Long id) {
         T entity = getEntityManager().find(entityClass, id);
         if (entity == null) {
-            throw new EntityDoesNotExistException();
+            throw new EntityNotExistException();
         }
         getEntityManager().remove(entity);
         return entity;
@@ -60,7 +60,7 @@ public abstract class GenericDAO<T extends Serializable> {
         try {
             getEntityManager().persist(entity);
         } catch (EntityExistsException e) {
-            throw new EntityIsAlreadyExistException();
+            throw new EntityIsAlreadyExistException("Entity already exists");
         }
         return entity;
     }
@@ -69,7 +69,7 @@ public abstract class GenericDAO<T extends Serializable> {
         try {
             getEntityManager().merge(entity);
         } catch (IllegalArgumentException e) {
-            throw new EntityDoesNotExistException();
+            throw new EntityNotExistException();
         }
         return entity;
     }

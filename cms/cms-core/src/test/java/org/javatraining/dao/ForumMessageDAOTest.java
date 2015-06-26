@@ -2,7 +2,7 @@ package org.javatraining.dao;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.core.IsNull;
-import org.javatraining.dao.exception.EntityDoesNotExistException;
+import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.entity.ForumMessagesEntity;
 import org.javatraining.entity.LessonEntity;
 import org.javatraining.entity.PersonEntity;
@@ -34,7 +34,7 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(Arquillian.class)
 @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
-@UsingDataSet(value = "dao-tests/forumMessage/one-forumMessage.json")
+@UsingDataSet(value = "dao-tests/forumMessage/forumMessage.json")
 public class ForumMessageDAOTest {
 
     @EJB
@@ -70,7 +70,7 @@ public class ForumMessageDAOTest {
        try{
         ForumMessagesEntity courseWithNotExistingId = forumMessageDAO.getById(notExistingId);
         assertThat(courseWithNotExistingId, is(IsNull.nullValue()));
-    }catch (EntityDoesNotExistException e) {
+    }catch (EntityNotExistException e) {
         assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
         if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
             throw e;

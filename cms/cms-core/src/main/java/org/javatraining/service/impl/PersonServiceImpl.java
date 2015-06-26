@@ -3,7 +3,7 @@ package org.javatraining.service.impl;
 import org.javatraining.dao.CourseDAO;
 import org.javatraining.dao.MarkDAO;
 import org.javatraining.dao.PersonDAO;
-import org.javatraining.dao.exception.EntityDoesNotExistException;
+import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.entity.*;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.MarkVO;
@@ -71,7 +71,7 @@ public class PersonServiceImpl implements PersonService {
         try {
             PersonEntity personEntity = personDAO.getById(id);
             return PersonConverter.convertEntityToVO(personEntity);
-        } catch (EntityDoesNotExistException e) {
+        } catch (EntityNotExistException e) {
             return null;
         }
     }
@@ -81,7 +81,7 @@ public class PersonServiceImpl implements PersonService {
         try {
             PersonEntity personEntity = personDAO.getByEmail(email);
             return PersonConverter.convertEntityToVO(personEntity);
-        } catch (EntityDoesNotExistException e) {
+        } catch (EntityNotExistException e) {
             return null;
         }
     }

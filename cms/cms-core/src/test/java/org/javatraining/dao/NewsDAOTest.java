@@ -2,7 +2,7 @@ package org.javatraining.dao;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.core.IsNull;
-import org.javatraining.dao.exception.EntityDoesNotExistException;
+import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.entity.CourseEntity;
 import org.javatraining.entity.NewsEntity;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -72,7 +72,7 @@ public class NewsDAOTest {
         try {
             NewsEntity courseWithNotExistingId = newsDAO.getById(notExistingId);
             assertThat(courseWithNotExistingId, is(IsNull.nullValue()));
-        }catch (EntityDoesNotExistException e) {
+        }catch (EntityNotExistException e) {
             assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
             if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
                 throw e;
