@@ -24,7 +24,7 @@ public class MarkEntity implements Serializable {
     @JoinColumn(name = "person_id", nullable = false)
     private PersonEntity persons;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(cascade = {})
     @JoinColumn(name = "lesson_id", nullable = false)
     private PracticeLessonEntity lessons;
 

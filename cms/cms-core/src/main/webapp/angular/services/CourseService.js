@@ -1,6 +1,6 @@
 function CourseService(Restangular) {
-    //Получаем все REST методы по адресу BaseUrl/rest/courses
-    var Course = Restangular.all("resources/course");
+    var restBase = 'resources/course';
+    var Course = Restangular.all(restBase);
     this.getCourses = function () {
         return Course.getList();
     };
@@ -10,8 +10,15 @@ function CourseService(Restangular) {
         // or another way --- any successfully returned object contains field 'fromServer' with value 'true'
         return Course.post(newCourse);
     };
-    this.isCourseReallyCreated = function(returnedObject) {
-        return (returnedObject.hasOwnProperty('fromServer') && returnedObject.fromServer);
+    this.isCourseSuccessfullyCreated = function(returnedObject) {
+        return returnedObject.responseStatus == 201;
+    };
+
+    this.subscribePersonToCourse = function(courseId, personId) {
+        if(courseId === undefined || personId === undefined) {
+            return {};
+        }
+        return Restangular.one(restBase, courseId).all('subscribe').put({"person_id": personId});
     };
     //FIXME заглушка, для нормальной работы на без запуска WildFly
     this.getCoursesCap = function () {

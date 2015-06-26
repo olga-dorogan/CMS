@@ -25,7 +25,6 @@ public class LessonEntity implements Serializable {
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
     private Long id;
 
-    @NotNull
     @Basic
     @Column(name = "type", nullable = true, insertable = true, updatable = true)
     private Long type;
@@ -54,7 +53,7 @@ public class LessonEntity implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "lesson")
     private Set<LessonLinkEntity> lessonLinks;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(cascade = {})
     @JoinColumn(name = "course_id", nullable = false)
     private CourseEntity course;
 

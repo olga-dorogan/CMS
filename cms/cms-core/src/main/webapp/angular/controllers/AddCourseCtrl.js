@@ -26,16 +26,16 @@ function AddCourseCtrl($scope, CourseService, PersonService) {
         CourseService.createCourse($scope.course)
             .then(
             function (createdCourse) {
-                if (CourseService.isCourseReallyCreated(createdCourse)) {
-                    $scope.messages = 'The course "' + createdCourse.name + '" has been created.';
+                if (CourseService.isCourseSuccessfullyCreated(createdCourse)) {
+                    $scope.messages = 'Курс "' + createdCourse.name + '" успешно создан.';
                     $scope.alertStatus = 'success';
                 } else {
-                    $scope.messages = 'The course has not been created: ' + createdCourse;
+                    $scope.messages = 'Курс не был создан по причине: ' + createdCourse;
                     $scope.alertStatus = 'warning';
                 }
             },
             function () {
-                $scope.messages = 'The course has not been created';
+                $scope.messages = 'Курс не был создан по неизвестной причине.';
                 $scope.alertStatus = 'warning';
             })
             .finally(
