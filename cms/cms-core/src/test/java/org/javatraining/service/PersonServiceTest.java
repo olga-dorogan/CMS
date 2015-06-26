@@ -1,6 +1,6 @@
 package org.javatraining.service;
 
-import org.hamcrest.Matcher;
+import org.hamcrest.core.IsInstanceOf;
 import org.javatraining.dao.CourseDAO;
 import org.javatraining.dao.GenericDAO;
 import org.javatraining.dao.MarkDAO;
@@ -20,7 +20,9 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.*;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import javax.ejb.EJB;
@@ -38,6 +40,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.junit.Assert.fail;
 
 /**
  * Created by olga on 15.06.15.
@@ -108,6 +111,9 @@ public class PersonServiceTest {
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml");
     }
 
+    @Rule
+    public ExpectedException thrownException = ExpectedException.none();
+
     @EJB
     PersonService personService;
 
@@ -128,16 +134,11 @@ public class PersonServiceTest {
         assertThat(personWithNotExistingId, is(nullValue()));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testGetByIdForNullIdShouldThrowConstraintViolationException() throws Exception {
-        try {
-            personService.getById(null);
-        } catch (EJBException e) {
-            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
-            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
-                throw e;
-            }
-        }
+        thrownException.expect(javax.ejb.EJBException.class);
+        thrownException.expectCause(IsInstanceOf.<Throwable>instanceOf(ConstraintViolationException.class));
+        personService.getById(null);
     }
 
     @Test
@@ -152,14 +153,15 @@ public class PersonServiceTest {
         assertThat(personWithNotExistingEmail, is(nullValue()));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testGetByEmailForNullEmailShouldThrowConstraintViolationException() throws Exception {
         try {
             personService.getByEmail(null);
+            fail("Must throw exception");
         } catch (EJBException e) {
-            assertThat(e.getCause(), is((Matcher) instanceOf(ConstraintViolationException.class)));
-            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
-                throw e;
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (!checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                fail("Unexpected exception");
             }
         }
     }
@@ -176,28 +178,30 @@ public class PersonServiceTest {
         personService.save(predefinedPerson);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON}, excludeColumns = {"id", "phone"})
     public void testSaveForNullPersonShouldThrowConstraintViolationException() throws Exception {
         try {
             personService.save(null);
+            fail("Must throw exception");
         } catch (EJBException e) {
-            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
-            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
-                throw e;
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (!checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                fail("Unexpected exception");
             }
         }
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON}, excludeColumns = {"id", "phone"})
     public void testSaveForNotValidPersonShouldThrowConstraintViolationException() throws Exception {
         try {
             personService.save(new PersonVO());
+            fail("Must throw exception");
         } catch (EJBException e) {
-            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
-            if (checkValidPersonViolationException((ConstraintViolationException) e.getCause())) {
-                throw e;
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (!checkValidPersonViolationException((ConstraintViolationException) e.getCause())) {
+                fail("Unexpected exception");
             }
         }
     }
@@ -209,28 +213,30 @@ public class PersonServiceTest {
         personService.update(predefinedPerson);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON}, excludeColumns = {"id", "phone"})
     public void testUpdateForNullPersonShouldThrowConstraintViolationException() throws Exception {
         try {
             personService.update(null);
+            fail("Must throw exception");
         } catch (EJBException e) {
-            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
-            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
-                throw e;
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (!checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                fail("Unexpected exception");
             }
         }
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON}, excludeColumns = {"id", "phone"})
     public void testUpdateForNotValidPersonShouldThrowConstraintViolationException() throws Exception {
         try {
             personService.update(new PersonVO());
+            fail("Must throw exception");
         } catch (EJBException e) {
-            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
-            if (checkValidPersonViolationException((ConstraintViolationException) e.getCause())) {
-                throw e;
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (!checkValidPersonViolationException((ConstraintViolationException) e.getCause())) {
+                fail("Unexpected exception");
             }
         }
     }
@@ -241,15 +247,16 @@ public class PersonServiceTest {
         personService.remove(predefinedPerson);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON}, excludeColumns = {"id", "phone"})
     public void testRemoveForNullPersonShouldThrowConstraintViolationException() throws Exception {
         try {
             personService.remove(null);
+            fail("Must throw exception");
         } catch (EJBException e) {
-            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
-            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
-                throw e;
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (!checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                fail("Unexpected exception");
             }
         }
     }
@@ -270,16 +277,17 @@ public class PersonServiceTest {
         assertThat(personCourses.size(), is(predefinedPersonCoursesCnt));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     @UsingDataSet(value = {DS_PERSON, DS_COURSE, DS_COURSE_PERSON})
     public void testGetCoursesForNotExistingPerson() throws Exception {
         PersonVO notExistingPerson = createNotExistingPerson();
         try {
             personService.getCourses(notExistingPerson);
+            fail("Must throw exception");
         } catch (EJBException e) {
-            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
-            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
-                throw e;
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (!checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                fail("Unexpected exception");
             }
         }
     }
@@ -298,60 +306,64 @@ public class PersonServiceTest {
         personService.addPersonToCourse(predefinedPerson, predefinedCourse);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     @UsingDataSet(value = {DS_PERSON})
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON})
     public void testAddPersonToCourseForNotExistingCourseShouldThrowException() throws Exception {
         try {
             CourseVO notExistingCourse = createNotExistingCourse();
             personService.addPersonToCourse(predefinedPerson, notExistingCourse);
+            fail("Must throw exception");
         } catch (EJBException e) {
-            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
-            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
-                throw e;
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (!checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                fail("Unexpected exception");
             }
         }
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     @UsingDataSet(value = {DS_COURSE})
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testAddPersonToCourseForNotExistingPersonShouldThrowException() throws Exception {
         try {
             PersonVO notExistingPerson = createNotExistingPerson();
             personService.addPersonToCourse(notExistingPerson, predefinedCourse);
+            fail("Must throw exception");
         } catch (EJBException e) {
-            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
-            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
-                throw e;
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (!checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                fail("Unexpected exception");
             }
         }
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     @UsingDataSet(value = {DS_PERSON})
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON})
     public void testAddPersonToCourseForNullAsCourseShouldThrowException() throws Exception {
         try {
             personService.addPersonToCourse(predefinedPerson, null);
+            fail("Must throw exception");
         } catch (EJBException e) {
-            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
-            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
-                throw e;
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (!checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                fail("Unexpected exception");
             }
         }
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     @UsingDataSet(value = {DS_COURSE})
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testAddPersonToCourseForNullAsPersonShouldThrowException() throws Exception {
         try {
             personService.addPersonToCourse(null, predefinedCourse);
+            fail("Must throw exception");
         } catch (EJBException e) {
-            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
-            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
-                throw e;
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (!checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                fail("Unexpected exception");
             }
         }
     }
@@ -388,32 +400,34 @@ public class PersonServiceTest {
         personService.removePersonFromCourse(predefinedPerson, predefinedCourse);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     @UsingDataSet(value = {DS_COURSE})
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testRemovePersonFromCourseForNotExistingPerson() throws Exception {
         PersonVO notExistingPerson = createNotExistingPerson();
         try {
             personService.removePersonFromCourse(notExistingPerson, predefinedCourse);
+            fail("Must throw exception");
         } catch (EJBException e) {
-            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
-            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
-                throw e;
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (!checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                fail("Unexpected exception");
             }
         }
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     @UsingDataSet(value = {DS_PERSON})
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON})
     public void testRemovePersonFromCourseForNotExistingCourse() throws Exception {
         CourseVO notExistingCourse = createNotExistingCourse();
         try {
             personService.removePersonFromCourse(predefinedPerson, notExistingCourse);
+            fail("Must throw exception");
         } catch (EJBException e) {
-            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
-            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
-                throw e;
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (!checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                fail("Unexpected exception");
             }
         }
     }
@@ -426,14 +440,15 @@ public class PersonServiceTest {
         assertThat(personsByRole.size(), is(predefinedPersonsCnt));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testGetPersonsByRoleForNullAsRoleShouldThrowException() throws Exception {
         try {
             personService.getPersonsByRole(null);
+            fail("Must throw exception");
         } catch (EJBException e) {
-            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
-            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
-                throw e;
+            assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));
+            if (!checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
+                fail("Unexpected exception");
             }
         }
     }
@@ -445,25 +460,27 @@ public class PersonServiceTest {
         personService.setMark(predefinedPerson, predefinedPractice, new MarkVO(predefinedMarkToSave));
     }
 
-    @Test(expected = RuntimeException.class)
-    @UsingDataSet(value = {DS_COURSE, DS_COURSE, DS_PRACTICE})
+    @Test
+    @UsingDataSet(value = {DS_COURSE, DS_PRACTICE})
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE, DS_PRACTICE})
     public void testSetMarkForNotExistingPersonShouldThrowException() throws Exception {
         try {
             personService.setMark(createNotExistingPerson(), predefinedPractice, new MarkVO(predefinedMarkToSave));
+            fail("Must throw exception");
         } catch (EJBException e) {
-            throw e;
+            return;
         }
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     @UsingDataSet(value = {DS_COURSE, DS_PERSON})
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON})
     public void testSetMarkForNotExistingPracticeShouldThrowException() throws Exception {
         try {
             personService.setMark(predefinedPerson, createNotExistingPractice(), new MarkVO(predefinedMarkToSave));
+            fail("Must throw exception");
         } catch (EJBException e) {
-            throw e;
+            return;
         }
     }
 
@@ -474,14 +491,15 @@ public class PersonServiceTest {
         personService.removeMark(predefinedMark);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     @UsingDataSet(value = {DS_PERSON, DS_COURSE, DS_COURSE_PERSON, DS_PRACTICE})
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON, DS_COURSE, DS_COURSE_PERSON, DS_PRACTICE})
     public void testRemoveMarkForNotExistingMarkShouldThrowException() throws Exception {
         try {
             personService.removeMark(createNotExistingMark());
+            fail("Must throw exception");
         } catch (EJBException e) {
-            throw e;
+            return;
         }
     }
 
@@ -493,12 +511,13 @@ public class PersonServiceTest {
         assertThat(marks, hasItem(predefinedMark));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testGetMarksForNotExistingPersonShouldThrowException() throws Exception {
         try {
             personService.getMarks(createNotExistingPerson());
+            fail("Must throw exception");
         } catch (EJBException e) {
-            throw e;
+            return;
         }
     }
 
