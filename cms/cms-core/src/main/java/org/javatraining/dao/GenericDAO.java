@@ -30,26 +30,28 @@ public abstract class GenericDAO<T extends Serializable> {
 
     public T remove(@NotNull T entity) {
         try {
-            entity= getEntityManager().merge(entity);
+            entity = getEntityManager().merge(entity);
             getEntityManager().remove(entity);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new EntityDoesNotExistException();
         }
 
-    return entity;
+        return entity;
     }
 
     public T getById(@NotNull Long id) {
-      T entity = getEntityManager().find(entityClass, id);
-        if(entity==null)
-        {throw new EntityDoesNotExistException();}
-    return entity;
+        T entity = getEntityManager().find(entityClass, id);
+        if (entity == null) {
+            throw new EntityDoesNotExistException();
+        }
+        return entity;
     }
 
     public T removeById(@NotNull Long id) {
         T entity = getEntityManager().find(entityClass, id);
-        if(entity==null)
-        {throw new EntityDoesNotExistException();}
+        if (entity == null) {
+            throw new EntityDoesNotExistException();
+        }
         getEntityManager().remove(entity);
         return entity;
     }
@@ -57,7 +59,7 @@ public abstract class GenericDAO<T extends Serializable> {
     public T save(@NotNull T entity) {
         try {
             getEntityManager().persist(entity);
-        }catch (EntityExistsException e){
+        } catch (EntityExistsException e) {
             throw new EntityIsAlreadyExistException();
         }
         return entity;
@@ -66,13 +68,15 @@ public abstract class GenericDAO<T extends Serializable> {
     public T update(@NotNull T entity) {
         try {
             getEntityManager().merge(entity);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new EntityDoesNotExistException();
         }
         return entity;
     }
 
 
-    protected EntityManager getEntityManager(){return em;}
+    protected EntityManager getEntityManager() {
+        return em;
+    }
 
 }
