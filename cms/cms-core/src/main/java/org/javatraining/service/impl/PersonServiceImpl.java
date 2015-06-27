@@ -3,8 +3,8 @@ package org.javatraining.service.impl;
 import org.javatraining.dao.CourseDAO;
 import org.javatraining.dao.MarkDAO;
 import org.javatraining.dao.PersonDAO;
+import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.dao.PracticeLessonDAO;
-import org.javatraining.dao.exception.EntityDoesNotExistException;
 import org.javatraining.entity.*;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.MarkVO;
@@ -49,13 +49,11 @@ public class PersonServiceImpl implements PersonService {
     public void save(@NotNull @Valid PersonVO personVO) {
         PersonVO personVOFromEmail = getByEmail(personVO.getEmail());
         if (personVOFromEmail != null) {
-            personVO.setPersonRole(personVOFromEmail.getPersonRole());
-            personVO.setId(personVOFromEmail.getId());
+            updatePersonVO(personVO, personVOFromEmail);
         } else {
             saveStudent(personVO);
         }
     }
-
     @Override
     public PersonVO update(@NotNull @Valid PersonVO personVO) {
         PersonEntity entity = PersonConverter.convertVOToEntity(personVO);
@@ -73,7 +71,7 @@ public class PersonServiceImpl implements PersonService {
         try {
             PersonEntity personEntity = personDAO.getById(id);
             return PersonConverter.convertEntityToVO(personEntity);
-        } catch (EntityDoesNotExistException e) {
+        } catch (EntityNotExistException e) {
             return null;
         }
     }
@@ -83,7 +81,7 @@ public class PersonServiceImpl implements PersonService {
         try {
             PersonEntity personEntity = personDAO.getByEmail(email);
             return PersonConverter.convertEntityToVO(personEntity);
-        } catch (EntityDoesNotExistException e) {
+        } catch (EntityNotExistException e) {
             return null;
         }
     }
@@ -136,5 +134,14 @@ public class PersonServiceImpl implements PersonService {
         PersonEntity personEntity = personDAO.getById(personVO.getId());
         Set<MarkEntity> marks = personEntity.getMarks();
         return MarkConverter.convertEntitiesToVOs(marks);
+    }
+
+    private void updatePersonVO(PersonVO personToUpdate, PersonVO personWithUpdateInfo) {
+        personToUpdate.setId(personWithUpdateInfo.getId());
+        personToUpdate.setEmail(personWithUpdateInfo.getEmail());
+        personToUpdate.setPersonRole(personWithUpdateInfo.getPersonRole());
+        personToUpdate.setName(personWithUpdateInfo.getName());
+        personToUpdate.setSecondName(personWithUpdateInfo.getSecondName());
+        personToUpdate.setLastName(personWithUpdateInfo.getLastName());
     }
 }

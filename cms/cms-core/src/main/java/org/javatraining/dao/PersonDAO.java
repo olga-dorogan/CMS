@@ -1,7 +1,7 @@
 package org.javatraining.dao;
 
 
-import org.javatraining.dao.exception.EntityDoesNotExistException;
+import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.entity.PersonEntity;
 import org.javatraining.entity.PersonRole;
 
@@ -29,7 +29,7 @@ public class PersonDAO extends GenericDAO<PersonEntity> {
         Query query = getEntityManager().createQuery("SELECT c FROM PersonEntity c WHERE c.email =:email ").setParameter("email", email);
         List<PersonEntity> resultList = query.getResultList();
         if (resultList.size() == 0) {
-            throw new EntityDoesNotExistException();
+            throw new EntityNotExistException();
         }
         return resultList.get(0);
     }

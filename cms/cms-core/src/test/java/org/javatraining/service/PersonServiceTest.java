@@ -1,8 +1,12 @@
 package org.javatraining.service;
 
 import org.hamcrest.core.IsInstanceOf;
+import org.javatraining.dao.CourseDAO;
+import org.javatraining.dao.GenericDAO;
+import org.javatraining.dao.MarkDAO;
+import org.javatraining.dao.PersonDAO;
+import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.dao.*;
-import org.javatraining.dao.exception.EntityDoesNotExistException;
 import org.javatraining.entity.PersonEntity;
 import org.javatraining.entity.PersonRole;
 import org.javatraining.model.CourseVO;
@@ -101,8 +105,9 @@ public class PersonServiceTest {
                 .addPackage(PersonEntity.class.getPackage())
                 .addPackage(PersonVO.class.getPackage())
                 .addPackage(PersonConverter.class.getPackage())
+                .addClasses(PersonDAO.class, CourseDAO.class, MarkDAO.class, GenericDAO.class)
+                .addPackage(EntityNotExistException.class.getPackage())
                 .addClasses(PersonDAO.class, CourseDAO.class, MarkDAO.class, PracticeLessonDAO.class, GenericDAO.class)
-                .addPackage(EntityDoesNotExistException.class.getPackage())
                 .addClasses(PersonService.class, PersonServiceImpl.class, UnsupportedOperationException.class)
                 .addAsResource(DS_DIR)
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml");

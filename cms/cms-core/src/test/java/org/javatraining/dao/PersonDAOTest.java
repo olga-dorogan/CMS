@@ -2,8 +2,8 @@ package org.javatraining.dao;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.core.IsNull;
-import org.javatraining.dao.exception.EntityDoesNotExistException;
 import org.javatraining.dao.exception.EntityIsAlreadyExistException;
+import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.entity.PersonEntity;
 import org.javatraining.entity.PersonRole;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -34,6 +34,7 @@ import static org.junit.Assert.assertEquals;
 @UsingDataSet(value = "dao-tests/person/one-person.json")
 @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
 public class PersonDAOTest {
+
     @EJB
     PersonDAO personDAO;
 
@@ -63,14 +64,14 @@ public class PersonDAOTest {
         assertThat(personDAO, is(notNullValue()));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = Exception.class)
     public void testGetByIdForNotExistingIdShouldReturnEntityDoesNotExistException() {
         Long notExistingId = 10L;
         try{
             PersonEntity personWithNotExistingId = personDAO.getById(notExistingId);
             assertThat(personWithNotExistingId, is(IsNull.nullValue()));
         }
-        catch (EntityDoesNotExistException e) {
+        catch (EntityNotExistException e) {
             assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
             if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
                 throw e;
@@ -88,10 +89,11 @@ public class PersonDAOTest {
 
     @Test(expected = RuntimeException.class)
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON}, excludeColumns = {"id", "phone"})
-    public void testSavePersonThatAlreadyExistTrowEntityIsAlreadyExistException() {
+    public void testSavePersonThatExistTrowEntityIsAlreadyExistException() {
         PersonEntity personForSaving = predefinedPersonInitializationForTests(new PersonEntity());
-       try{
-        personDAO.save(personForSaving);}
+          try{
+        personDAO.save(personForSaving);
+}
        catch (EntityIsAlreadyExistException e) {
         assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
         if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {

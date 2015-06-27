@@ -2,7 +2,7 @@ package org.javatraining.dao;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.core.IsNull;
-import org.javatraining.dao.exception.EntityDoesNotExistException;
+import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.entity.CourseEntity;
 import org.javatraining.entity.LessonEntity;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -75,7 +75,7 @@ public class LessonDAOTest {
         try {
             LessonEntity courseWithNotExistingId = lessonDAO.getById(notExistingId);
             assertThat(courseWithNotExistingId, is(IsNull.nullValue()));
-        } catch (EntityDoesNotExistException e) {
+        } catch (EntityNotExistException e) {
         assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
         if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
             throw e;
@@ -130,7 +130,7 @@ public class LessonDAOTest {
 
 
     private LessonEntity predefinedLessonInitialization(LessonEntity lessonEntity) {
-        CourseEntity predefinedCourse = predefinedCourse();
+        CourseEntity predefinedCourse =courseDAO.getById(1L);
         lessonEntity.setCourse(predefinedCourse);
         lessonEntity.setCreateDate(Date.valueOf("2016-08-11"));
         lessonEntity.setTopic("topic");
@@ -139,14 +139,6 @@ public class LessonDAOTest {
         lessonEntity.setOrderNum(764L);
         lessonEntity.setId(1L);
         return lessonEntity;
-    }
-    public CourseEntity predefinedCourse(){
-        Long predefinedCourseId = 1L;
-        CourseEntity predefinedCourse = new CourseEntity("courseName","courseDescription",
-                Date.valueOf("2015-11-11"),
-                Date.valueOf("2015-11-11"));
-        predefinedCourse.setId(predefinedCourseId);
-        return predefinedCourse;
     }
 
 
