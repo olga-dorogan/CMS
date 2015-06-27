@@ -3,6 +3,8 @@ package org.javatraining.service.impl;
 import org.javatraining.dao.CourseDAO;
 import org.javatraining.dao.MarkDAO;
 import org.javatraining.dao.PersonDAO;
+import org.javatraining.dao.PracticeLessonDAO;
+import org.javatraining.dao.exception.EntityDoesNotExistException;
 import org.javatraining.entity.*;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.MarkVO;
@@ -11,7 +13,6 @@ import org.javatraining.model.PracticeLessonVO;
 import org.javatraining.model.conversion.CourseConverter;
 import org.javatraining.model.conversion.MarkConverter;
 import org.javatraining.model.conversion.PersonConverter;
-import org.javatraining.model.conversion.PracticeLessonConverter;
 import org.javatraining.service.PersonService;
 
 import javax.ejb.EJB;
@@ -33,6 +34,8 @@ public class PersonServiceImpl implements PersonService {
     private CourseDAO courseDAO;
     @EJB
     private MarkDAO markDAO;
+    @EJB
+    private PracticeLessonDAO practiceLessonDAO;
 
     @Override
     public void saveStudent(@NotNull @Valid PersonVO personVO) {
@@ -67,20 +70,22 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public PersonVO getById(@NotNull Long id) {
-        PersonEntity personEntity = personDAO.getById(id);
-        if (personEntity == null) {
+        try {
+            PersonEntity personEntity = personDAO.getById(id);
+            return PersonConverter.convertEntityToVO(personEntity);
+        } catch (EntityDoesNotExistException e) {
             return null;
         }
-        return PersonConverter.convertEntityToVO(personEntity);
     }
 
     @Override
     public PersonVO getByEmail(@NotNull String email) {
-        PersonEntity personEntity = personDAO.getByEmail(email);
-        if (personEntity == null) {
+        try {
+            PersonEntity personEntity = personDAO.getByEmail(email);
+            return PersonConverter.convertEntityToVO(personEntity);
+        } catch (EntityDoesNotExistException e) {
             return null;
         }
-        return PersonConverter.convertEntityToVO(personEntity);
     }
 
     @Override
@@ -115,8 +120,8 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public void setMark(@NotNull PersonVO personVO, @NotNull PracticeLessonVO practiceLessonVO, @NotNull @Valid MarkVO markVO) {
-        PersonEntity personEntity = PersonConverter.convertVOToEntity(personVO);
-        PracticeLessonEntity lessonEntity = PracticeLessonConverter.convertVOToEntity(practiceLessonVO);
+        PersonEntity personEntity = personDAO.getById(personVO.getId());
+        PracticeLessonEntity lessonEntity = practiceLessonDAO.getById(practiceLessonVO.getId());
         MarkEntity markEntity = MarkConverter.convertVOToEntity(markVO);
         markDAO.save(markEntity, personEntity, lessonEntity);
     }

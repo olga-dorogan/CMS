@@ -119,9 +119,7 @@ public class ForumMessagesEntity implements Serializable {
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (lessons != null ? !lessons.equals(that.lessons) : that.lessons != null) return false;
-        if (parentId != null ? !parentId.equals(that.parentId) : that.parentId != null) return false;
-        if (persons != null ? !persons.equals(that.persons) : that.persons != null) return false;
+
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
 
         return true;
@@ -134,8 +132,7 @@ public class ForumMessagesEntity implements Serializable {
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + (lessons != null ? lessons.hashCode() : 0);
-        result = 31 * result + (persons != null ? persons.hashCode() : 0);
+
         return result;
     }
 }

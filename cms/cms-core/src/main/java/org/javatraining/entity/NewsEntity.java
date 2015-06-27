@@ -23,7 +23,7 @@ public class NewsEntity implements Serializable {
 
     @NotNull
     @Basic
-    @Column(name = "content", nullable = true, insertable = true, updatable = true, length = 16777215)
+    @Column(name = "description", nullable = true, insertable = true, updatable = true, length = 16777215)
     private String content;
 
     @NotNull

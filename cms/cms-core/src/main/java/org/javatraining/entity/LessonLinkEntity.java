@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by vika on 24.05.15.
  */
 @Entity
-@Table(name = "lesson_links", schema = "")
+@Table(name = "lesson_link", schema = "")
 public class LessonLinkEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

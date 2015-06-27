@@ -22,7 +22,7 @@ public class MarkDAO extends GenericDAO<MarkEntity> {
 
     public MarkEntity save(@NotNull MarkEntity mark, @NotNull PersonEntity person, @NotNull PracticeLessonEntity lessons) {
         mark.setPersons(person);
-        mark.setLessons(lessons);
+        mark.setPracticeLesson(lessons);
         super.save(mark);
         return mark;
     }

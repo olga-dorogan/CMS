@@ -22,6 +22,10 @@ public class PersonVO implements Serializable {
     public PersonVO() {
     }
 
+    public PersonVO(Long id) {
+        this.id = id;
+    }
+
     public PersonVO(Long id, String name, String lastName, String email, PersonRole personRole) {
         this.id = id;
         this.name = name;

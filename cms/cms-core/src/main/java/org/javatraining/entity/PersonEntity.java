@@ -67,6 +67,13 @@ public class PersonEntity implements Serializable {
         this.personRole = personRole;
     }
 
+    public PersonEntity(String name, String lastName, String email, PersonRole personRole) {
+        this.name = name;
+        this.lastName = lastName;
+        this.email = email;
+        this.personRole = personRole;
+    }
+
     public Long getId() {
         return id;
     }

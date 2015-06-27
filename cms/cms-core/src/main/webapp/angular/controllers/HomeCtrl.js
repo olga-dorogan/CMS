@@ -1,11 +1,10 @@
-function HomeCtrl($rootScope, CourseService) {
-    //FIXME заглушка, для нормальной работы на без запуска WildFly
-    if (window.location.port == 63342 && $rootScope.courses == undefined) {
-        $rootScope.courses = CourseService.getCoursesCap();
-    } else if (window.location.port == 8080) {
-        //Нормальное поведение
+function HomeCtrl($scope, CourseService) {
+    //Нормальное поведение
+    if (window.location.port == 8080) {
         CourseService.getCourses().then(function (result) {
-            $rootScope.courses = result;
+            $scope.courses = result;
         });
+    } else if (window.location.port == 8000) {
+        $scope.courses = CourseService.getCoursesCap();
     }
 }

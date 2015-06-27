@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by vika on 24.05.15.
  */
 @Entity
-@Table(name = "marks", schema = "")
+@Table(name = "mark", schema = "")
 public class MarkEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class MarkEntity implements Serializable {
     @JoinColumn(name = "person_id", nullable = false)
     private PersonEntity persons;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(cascade = {})
     @JoinColumn(name = "lesson_id", nullable = false)
     private PracticeLessonEntity lessons;
 
@@ -63,7 +63,7 @@ public class MarkEntity implements Serializable {
         return lessons;
     }
 
-    public void setLessons(PracticeLessonEntity lessons) {
+    public void setPracticeLesson(PracticeLessonEntity lessons) {
         this.lessons = lessons;
     }
 

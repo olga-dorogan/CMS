@@ -1,12 +1,10 @@
 package org.javatraining.dao;
 
 
-import org.javatraining.entity.LessonEntity;
 import org.javatraining.entity.PracticeLessonEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.Query;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -25,9 +23,5 @@ public class PracticeLessonDAO extends GenericDAO<PracticeLessonEntity> {
         Query query = getEntityManager().createQuery("SELECT c FROM PracticeLessonEntity c");
         return query.getResultList();
     }
-    public PracticeLessonEntity save(@NotNull PracticeLessonEntity practiceLessonEntity, @NotNull LessonEntity lessonEntity) {
-       practiceLessonEntity.setLesson(lessonEntity);
-        getEntityManager().persist(practiceLessonEntity);
-        return practiceLessonEntity;
-    }
+
 }

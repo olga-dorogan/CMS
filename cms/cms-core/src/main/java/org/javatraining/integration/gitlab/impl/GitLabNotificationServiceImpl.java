@@ -14,6 +14,7 @@ import javax.mail.internet.InternetAddress;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * The project name is cms.
@@ -29,6 +30,8 @@ public class GitLabNotificationServiceImpl implements GitLabNotificationService 
     @Override
     public void sendUserProperties(String from, GitLabUser user) {
         sender = new JavaMailSenderImpl();
+//        Properties p = new Properties()
+//        velocityEngine = new VelocityEngine()
         //TODO native java mail api
         MimeMessagePreparator preparator = mimeMessage -> {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");

@@ -17,11 +17,11 @@ public class PracticeLessonEntity implements Serializable {
     private Long id;
     @NotNull
     @Basic
-    @Column(name = "task", nullable = false, insertable = true, updatable = true, length = 255)
+    @Column(name = "task", nullable = true, insertable = true, updatable = true, length = 255)
     private String task;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "lesson_id", nullable = false, insertable = false, updatable = false)
+    @ManyToOne(cascade = {})
+    @JoinColumn(name = "lesson_id", nullable = true, insertable = true, updatable = true)
     private LessonEntity lesson;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessons")
