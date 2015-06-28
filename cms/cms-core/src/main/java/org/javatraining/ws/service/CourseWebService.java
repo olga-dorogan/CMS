@@ -6,6 +6,7 @@ import org.javatraining.config.AuthRole;
 import org.javatraining.config.Config;
 import org.javatraining.entity.PersonRole;
 import org.javatraining.model.CourseVO;
+import org.javatraining.model.CourseWithDetailsVO;
 import org.javatraining.model.PersonVO;
 import org.javatraining.service.CourseService;
 import org.javatraining.service.PersonService;
@@ -59,7 +60,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
-    public Response createCourse(@Context UriInfo uriInfo, CourseVO courseVO) {
+    public Response createCourse(@Context UriInfo uriInfo, CourseWithDetailsVO courseVO) {
         Response.ResponseBuilder r;
         try {
             courseService.save(courseVO);
