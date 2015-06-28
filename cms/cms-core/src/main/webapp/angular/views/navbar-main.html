@@ -1,0 +1,32 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" ui-sref="about">Java Training</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li ui-sref-active="active"><a ui-sref="news">Новости</a></li>
+            <li ui-sref-active="active"><a ui-sref="{{isLogin()? 'person' : 'home'}}">Каталог курсов</a></li>
+            <li ng-if="!isLogin()"><a href="" ng-click="doLogin()">Войти</a></li>
+            <li ng-if="isLogin()" class="dropdown">
+                <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                   aria-expanded="false">
+                    <span>{{getUsername()}}</span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="">Личная информация</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#" ng-click="doLogOut()">Выйти</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
