@@ -15,13 +15,15 @@ import java.util.Set;
 public interface PersonService {
 
     //    Person Description methods
-    void savePersonDescription(@NotNull PersonDescriptionVO personDescriptionVO);
+    boolean savePersonDescription(@NotNull PersonDescriptionVO personDescriptionVO);
 
     @Valid
     @Nullable
     PersonDescriptionVO getPersonDescription(@NotNull Long id);
 
     PersonDescriptionVO updatePersonDescription(@NotNull PersonDescriptionVO personDescriptionVO);
+
+    void removePersonDescription(Long id);
 
     //     Person methods
     void saveStudent(@NotNull @Valid PersonVO personVO);

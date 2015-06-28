@@ -82,12 +82,11 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
     @GET
     @Produces("application/json")
     @Path("{person_id}/description")
-    public Response getPersonDescription(@PathParam("person_id") long personId){
+    public Response getPersonDescription(@PathParam("person_id") long personId) {
         Response.ResponseBuilder r;
         try {
-            List<PersonVO> personsByRole = personService.getPersonsByRole(personRole);
-            PersonDescriptionVO personDescriptionVO =
-            r = Response.ok(personsByRole);
+            PersonDescriptionVO personDescriptionVO = personService.getPersonDescription(personId);
+            r = Response.ok(personDescriptionVO);
         } catch (IllegalArgumentException e) {
             r = Response.noContent();
         } catch (ValidationException e) {
@@ -116,6 +115,13 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
         return r.build();
     }
 
+    @POST
+    @Consumes("application/json")
+    @Path("description")
+    public Response createPersonDescription(PersonDescriptionVO person) {
+        return personService.savePersonDescription(person) ? Response.ok().build() : Response.status(422).build();
+    }
+
     @PUT
     @Path("{person_id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -138,6 +144,22 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
         }
 
         return r.build();
+    }
+
+    @PUT
+    @Path("{person_id}/description")
+    @Consumes("application/json")
+    public Response updatePersonDescription(@PathParam("person_id") long personId, PersonDescriptionVO personDescriptionVO) {
+        Response.ResponseBuilder r;
+        PersonDescriptionVO personDesc = personService.getPersonDescription(personId);
+
+        if (personDesc == null) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        personDesc = personService.updatePersonDescription(personDescriptionVO);
+
+        return personDesc != null ? Response.ok().build() : Response.status(422).build();
     }
 
     @DELETE
@@ -167,6 +189,19 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
         }
 
         return r.build();
+    }
+
+    @DELETE
+    @Path("{person_id}/description")
+    public Response deletePersonDescription(@PathParam("person_id") long personId) {
+        PersonDescriptionVO personDescriptionVO = personService.getPersonDescription(personId);
+
+        if (personDescriptionVO == null) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        personService.removePersonDescription(personId);
+        return Response.ok().build();
     }
 
     @GET

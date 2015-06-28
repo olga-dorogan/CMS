@@ -36,8 +36,9 @@ public class PersonServiceImpl implements PersonService {
     private PracticeLessonDAO practiceLessonDAO;
 
     @Override
-    public void savePersonDescription(@NotNull PersonDescriptionVO personDescriptionVO) {
+    public boolean savePersonDescription(@NotNull PersonDescriptionVO personDescriptionVO) {
         //FIXME add implementation after creating specified repository
+        return true;
     }
 
     @Nullable
@@ -51,6 +52,11 @@ public class PersonServiceImpl implements PersonService {
     public PersonDescriptionVO updatePersonDescription(@NotNull PersonDescriptionVO personDescriptionVO) {
         //FIXME add implementation after creating specified repository
         return null;
+    }
+
+    @Override
+    public void removePersonDescription(Long id) {
+        //FIXME add implementation after creating specified repository
     }
 
     @Override
