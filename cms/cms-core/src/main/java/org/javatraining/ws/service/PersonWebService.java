@@ -6,6 +6,7 @@ import org.javatraining.config.AuthRole;
 import org.javatraining.config.Config;
 import org.javatraining.entity.PersonRole;
 import org.javatraining.model.CourseVO;
+import org.javatraining.model.PersonDescriptionVO;
 import org.javatraining.model.PersonVO;
 import org.javatraining.service.PersonService;
 
@@ -78,6 +79,23 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
         return r.build();
     }
 
+    @GET
+    @Produces("application/json")
+    @Path("{person_id}/description")
+    public Response getPersonDescription(@PathParam("person_id") long personId){
+        Response.ResponseBuilder r;
+//        try {
+////            List<PersonVO> personsByRole = personService.getPersonsByRole(personRole);
+////            PersonDescriptionVO personDescriptionVO =
+////            r = Response.ok(personsByRole);
+//        } catch (IllegalArgumentException e) {
+//            r = Response.noContent();
+//        } catch (ValidationException e) {
+//            r = Response.status(422); //422 Unprocessable Entity
+//        }
+//        return r.build();
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createPerson(@Context UriInfo uriInfo, PersonVO person) {
@@ -121,13 +139,6 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
 
         return r.build();
     }
-
-//    @PUT
-//    @Path("{email}")
-//    @Consumes("application/json")
-//    public Response updatePerson(@PathParam("email")){
-//
-//    }
 
     @DELETE
     @Path("{person_id}")

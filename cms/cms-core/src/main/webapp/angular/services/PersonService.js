@@ -15,6 +15,8 @@ function PersonService(Restangular) {
         );
     };
 
+    //this.getPersonDescription()
+
     this.updatePerson = function (user){
         return Person.put(
             {
