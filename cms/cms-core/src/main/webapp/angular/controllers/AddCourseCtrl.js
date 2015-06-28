@@ -1,8 +1,7 @@
-//TODO: Добавить контроллер контроллирующий добавление курсов
-function AddCourseCtrl($scope, CourseService, PersonService) {
+function AddCourseCtrl($scope, CourseService, allTeachers) {
     $scope.course = $scope.course || {};
     $scope.courseTeachers = $scope.courseTeachers || [];
-    $scope.teachers = PersonService.getTeachers();
+    $scope.teachers = allTeachers;
 
     $scope.isValidDates = function () {
         if (!$scope.course.startDate && !$scope.course.endDate) {
@@ -23,8 +22,7 @@ function AddCourseCtrl($scope, CourseService, PersonService) {
     };
 
     $scope.createCourse = function () {
-        CourseService.createCourse($scope.course)
-            .then(
+        CourseService.createCourse($scope.course).then(
             function (createdCourse) {
                 if (CourseService.isCourseSuccessfullyCreated(createdCourse)) {
                     $scope.messages = 'Курс "' + createdCourse.name + '" успешно создан.';

@@ -74,7 +74,10 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
             });
         };
         $rootScope.isLogin = function () {
-            return !(($window.localStorage['id'] === undefined) || ($window.localStorage['id'] == null));
+            return !(($rootScope.getUserId() === undefined) || ($rootScope.getUserId() == null));
+        };
+        $rootScope.getUserId = function() {
+            return $window.localStorage['id'];
         };
         $rootScope.getUsername = function () {
             return $window.localStorage['name'];

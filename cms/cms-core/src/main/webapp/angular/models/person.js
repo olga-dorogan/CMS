@@ -14,6 +14,33 @@ angular.module('myApp.person', ['ui.router'])
                         templateUrl: 'angular/views/course.html',
                         controller: 'PersonCtrl'
                     }
+                },
+                resolve: {
+                    courseService: 'CourseService',
+                    personService: 'PersonService',
+                    personalizedCourses: function ($rootScope, courseService, personService) {
+                        var promise = courseService.getCourses();
+                        promise = promise.then(function (courses) {
+                            promise = personService.getCoursesForPerson($rootScope.getUserId());
+                            promise = promise.then(function (personCourses) {
+                                var personalizedCourses = courses;
+                                for (var i = 0; i < personalizedCourses.length; i++) {
+                                    personalizedCourses[i].isPersonEnrolled = false;
+                                }
+                                for (var i = 0; i < personCourses.length; i++) {
+                                    for (var j = 0; j < personalizedCourses.length; j++) {
+                                        if (personalizedCourses[i].id == personCourses[i].id) {
+                                            personalizedCourses[i].isPersonEnrolled = true;
+                                            break;
+                                        }
+                                    }
+                                };
+                                return personalizedCourses;
+                            });
+                            return promise;
+                        });
+                        return promise;
+                    }
                 }
             })
             .state('person.addCourse', {
@@ -25,6 +52,16 @@ angular.module('myApp.person', ['ui.router'])
                     "content@person": {
                         templateUrl: 'angular/views/addCourse.html',
                         controller: "AddCourseCtrl"
+                    }
+                },
+                resolve: {
+                    personService: 'PersonService',
+                    allTeachers: function (personService) {
+                        var promise = personService.getTeachers();
+                        promise = promise.then(function(teachers) {
+                            return teachers;
+                        });
+                        return promise;
                     }
                 }
             })
@@ -53,6 +90,8 @@ angular.module('myApp.person', ['ui.router'])
                 }
             })
     }])
+    .
+    service('PersonService', PersonService)
     .service('CourseService', CourseService)
     .service('CourseContentService', CourseContentService)
     .controller('PersonCtrl', PersonCtrl)

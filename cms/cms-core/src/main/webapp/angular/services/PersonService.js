@@ -16,14 +16,14 @@ function PersonService(Restangular) {
     };
 
     this.getTeachers = function () {
-        return Person.getList({'role': 'teacher'}).$object;
+        return Person.getList({'role': 'teacher'});
     };
 
     this.getCoursesForPerson = function (personId) {
         if (personId === undefined) {
             return [];
         }
-        return Restangular.one("resources/person", personId).all("course").getList().$object;
+        return Restangular.one("resources/person", personId).all("course").getList();
     };
 
     this.getCoursesForPersonCap = function () {
