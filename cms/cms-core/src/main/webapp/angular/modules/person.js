@@ -58,7 +58,7 @@ angular.module('myApp.person', ['ui.router'])
                     "": {
                         templateUrl: 'angular/views/home.html'
                     },
-                    "contetnt@person": {
+                    "content@person": {
                         templateUrl: 'angular/views/settings.html',
                         controller: "SettingCtrl"
                     }

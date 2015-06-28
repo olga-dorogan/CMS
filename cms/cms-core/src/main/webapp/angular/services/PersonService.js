@@ -15,6 +15,20 @@ function PersonService(Restangular) {
         );
     };
 
+    this.updatePerson = function (user){
+        return Person.put(
+            {
+                "id": $window.localStorage['id'],
+                "name" : user.name,
+                "surname" : user.surname,
+                "secondName" : user.seconName,
+                "experience" : user.experience,
+                "graduation" : user.graduation,
+                "phoneNumber" : user.phoneNumber
+            }
+        );
+    };
+
     this.getTeachers = function () {
         return Person.getList({'role': 'teacher'}).$object;
     };

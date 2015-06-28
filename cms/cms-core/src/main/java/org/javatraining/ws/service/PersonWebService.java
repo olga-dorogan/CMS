@@ -122,6 +122,13 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
         return r.build();
     }
 
+//    @PUT
+//    @Path("{email}")
+//    @Consumes("application/json")
+//    public Response updatePerson(@PathParam("email")){
+//
+//    }
+
     @DELETE
     @Path("{person_id}")
     @Auth(roles = {AuthRole.TEACHER, AuthRole.STUDENT})
