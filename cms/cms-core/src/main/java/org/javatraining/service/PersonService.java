@@ -1,10 +1,7 @@
 package org.javatraining.service;
 
 import org.javatraining.entity.PersonRole;
-import org.javatraining.model.CourseVO;
-import org.javatraining.model.MarkVO;
-import org.javatraining.model.PersonVO;
-import org.javatraining.model.PracticeLessonVO;
+import org.javatraining.model.*;
 
 import javax.annotation.Nullable;
 import javax.validation.Valid;
@@ -17,8 +14,16 @@ import java.util.Set;
  */
 public interface PersonService {
 
-    //     Person methods
+    //    Person Description methods
+    void savePersonDescription(@NotNull PersonDescriptionVO personDescriptionVO);
 
+    @Valid
+    @Nullable
+    PersonDescriptionVO getPersonDescription(@NotNull Long id);
+
+    PersonDescriptionVO updatePersonDescription(@NotNull PersonDescriptionVO personDescriptionVO);
+
+    //     Person methods
     void saveStudent(@NotNull @Valid PersonVO personVO);
 
     void save(@NotNull @Valid PersonVO personVO);
@@ -59,4 +64,6 @@ public interface PersonService {
     @NotNull
     @Valid
     List<MarkVO> getMarks(@NotNull PersonVO personVO);
+
+
 }

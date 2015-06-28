@@ -6,15 +6,13 @@ import org.javatraining.dao.PersonDAO;
 import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.dao.PracticeLessonDAO;
 import org.javatraining.entity.*;
-import org.javatraining.model.CourseVO;
-import org.javatraining.model.MarkVO;
-import org.javatraining.model.PersonVO;
-import org.javatraining.model.PracticeLessonVO;
+import org.javatraining.model.*;
 import org.javatraining.model.conversion.CourseConverter;
 import org.javatraining.model.conversion.MarkConverter;
 import org.javatraining.model.conversion.PersonConverter;
 import org.javatraining.service.PersonService;
 
+import javax.annotation.Nullable;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.validation.Valid;
@@ -36,6 +34,24 @@ public class PersonServiceImpl implements PersonService {
     private MarkDAO markDAO;
     @EJB
     private PracticeLessonDAO practiceLessonDAO;
+
+    @Override
+    public void savePersonDescription(@NotNull PersonDescriptionVO personDescriptionVO) {
+        //FIXME add implementation after creating specified repository
+    }
+
+    @Nullable
+    @Override
+    public PersonDescriptionVO getPersonDescription(@NotNull Long id) {
+        //FIXME add implementation after creating specified repository
+        return null;
+    }
+
+    @Override
+    public PersonDescriptionVO updatePersonDescription(@NotNull PersonDescriptionVO personDescriptionVO) {
+        //FIXME add implementation after creating specified repository
+        return null;
+    }
 
     @Override
     public void saveStudent(@NotNull @Valid PersonVO personVO) {

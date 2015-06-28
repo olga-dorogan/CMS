@@ -84,16 +84,16 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
     @Path("{person_id}/description")
     public Response getPersonDescription(@PathParam("person_id") long personId){
         Response.ResponseBuilder r;
-//        try {
-////            List<PersonVO> personsByRole = personService.getPersonsByRole(personRole);
-////            PersonDescriptionVO personDescriptionVO =
-////            r = Response.ok(personsByRole);
-//        } catch (IllegalArgumentException e) {
-//            r = Response.noContent();
-//        } catch (ValidationException e) {
-//            r = Response.status(422); //422 Unprocessable Entity
-//        }
-//        return r.build();
+        try {
+            List<PersonVO> personsByRole = personService.getPersonsByRole(personRole);
+            PersonDescriptionVO personDescriptionVO =
+            r = Response.ok(personsByRole);
+        } catch (IllegalArgumentException e) {
+            r = Response.noContent();
+        } catch (ValidationException e) {
+            r = Response.status(422); //422 Unprocessable Entity
+        }
+        return r.build();
     }
 
     @POST
