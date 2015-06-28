@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -12,10 +12,10 @@
             <a class="navbar-brand" ui-sref="about">Java Training</a>
         </div>
         <ul class="nav navbar-nav navbar-right">
-            <li ui-sref-active="active"><a ui-sref="news">Новости</a></li>
-            <li ui-sref-active="active"><a ui-sref="{{isLogin()? 'person' : 'home'}}">Каталог курсов</a></li>
-            <li ng-if="!isLogin()"><a href="" ng-click="doLogin()">Войти</a></li>
-            <li ng-if="isLogin()" class="dropdown">
+            <li><a ui-sref="news">Новости</a></li>
+            <li><a ui-sref="{{isLogin()? 'person' : 'home'}}">Каталог курсов</a></li>
+            <li ng-hide="isLogin()"><a class="person-login" ng-click="doLogin()">Войти</a></li>
+            <li ng-show="isLogin()" class="dropdown">
                 <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                    aria-expanded="false">
                     <span>{{getUsername()}}</span>

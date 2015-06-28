@@ -11,8 +11,8 @@
                         <img class="img-wait" ng-src="angular/img/wait.gif"/>
                     </div>
                     <div ng-if="course.isPersonEnrolled !== undefined">
-                        <a ui-sref="person.course({courseId:course.id})" ng-if="course.isPersonEnrolled"
-                           class="go-into-course">
+                        <a ui-sref="person.course({courseId:course.id, courseName:course.name})"
+                           ng-if="course.isPersonEnrolled" class="go-into-course">
                             Перейти к курсу
                         </a>
                         <a href="" ng-if="!course.isPersonEnrolled" class="enroll-into-course">Подписаться</a>

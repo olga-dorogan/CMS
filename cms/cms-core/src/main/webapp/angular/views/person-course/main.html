@@ -1,0 +1,17 @@
+<div ng-include src="'angular/views/navbar-main.html'"></div>
+<div class="content">
+    <div class="row">
+        <div ui-view="top">
+        </div>
+    </div>
+    <div class="row">
+        <section class="person-menubar">
+            <div ui-view="menubar">
+            </div>
+        </section>
+        <section class="person-course-content">
+            <div ui-view="content">
+            </div>
+        </section>
+    </div>
+</div>

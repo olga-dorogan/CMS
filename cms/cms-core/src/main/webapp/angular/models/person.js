@@ -34,7 +34,8 @@ angular.module('myApp.person', ['ui.router'])
                                             break;
                                         }
                                     }
-                                };
+                                }
+                                ;
                                 return personalizedCourses;
                             });
                             return promise;
@@ -50,7 +51,7 @@ angular.module('myApp.person', ['ui.router'])
                         templateUrl: 'angular/views/home.html'
                     },
                     "content@person": {
-                        templateUrl: 'angular/views/addCourse.html',
+                        templateUrl: 'angular/views/person-course/teacher/addCourse.html',
                         controller: "AddCourseCtrl"
                     }
                 },
@@ -58,7 +59,7 @@ angular.module('myApp.person', ['ui.router'])
                     personService: 'PersonService',
                     allTeachers: function (personService) {
                         var promise = personService.getTeachers();
-                        promise = promise.then(function(teachers) {
+                        promise = promise.then(function (teachers) {
                             return teachers;
                         });
                         return promise;
@@ -67,15 +68,46 @@ angular.module('myApp.person', ['ui.router'])
             })
             .state('person.course', {
                 url: '/course/:courseId',
+                params: {courseName: null},
                 views: {
-                    "": {
-                        templateUrl: 'angular/views/home.html'
+                    "@": {
+                        templateUrl: 'angular/views/person-course/main.html'
                     },
-                    "content@person": {
-                        templateUrl: 'angular/views/courseContent.html',
-                        controller: "CourseContentCtrl"
+                    "top@person.course": {
+                        templateUrl: 'angular/views/person-course/top.html',
+                        controller: function ($scope, $stateParams) {
+                            $scope.courseName = $stateParams.courseName;
+                        }
+                    },
+                    "menubar@person.course": {
+                        templateUrl: 'angular/views/person-course/menu.html'
+                    },
+                    "content@person.course": {
+                        templateUrl: 'angular/views/person-course/content.html',
+                        controller: function ($state) {
+                            $state.go('person.course.content');
+                        }
                     }
                 }
+            })
+            .state('person.course.content', {
+                url: '/content',
+                templateUrl: 'angular/views/person-course/courseContent.html',
+                controller: 'CourseContentCtrl',
+                resolve: {
+                    courseContentService: 'CourseContentService',
+                    lectures: function ($stateParams, courseContentService) {
+                        var promise = courseContentService.getLectures($stateParams.courseId);
+                        promise = promise.then(function (lectures) {
+                            return lectures;
+                        });
+                        return promise;
+                    }
+                }
+            })
+            .state('person.course.progress', {
+                url: '/progress',
+                templateUrl: 'angular/views/person-course/progressContent.html'
             })
             .state('person.addLecture', {
                 url: '/course/:courseId/addLecture',
@@ -84,14 +116,13 @@ angular.module('myApp.person', ['ui.router'])
                         templateUrl: 'angular/views/home.html'
                     },
                     "content@person": {
-                        templateUrl: 'angular/views/addLecture.html',
+                        templateUrl: 'angular/views/person-course/teacher/addLecture.html',
                         controller: "AddLectureCtrl"
                     }
                 }
-            })
+            });
     }])
-    .
-    service('PersonService', PersonService)
+    .service('PersonService', PersonService)
     .service('CourseService', CourseService)
     .service('CourseContentService', CourseContentService)
     .controller('PersonCtrl', PersonCtrl)
