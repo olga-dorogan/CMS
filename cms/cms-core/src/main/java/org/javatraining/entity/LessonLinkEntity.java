@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "lesson_link", schema = "")
-public class LessonLinkEntity implements Serializable {
+public class LessonLinkEntity implements Serializable, GenericEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
@@ -17,7 +17,7 @@ public class LessonLinkEntity implements Serializable {
 
     @NotNull
     @Basic
-    @Column(name = "description", nullable = true, insertable = true, updatable = true, length = 255)
+    @Column(name = "description", nullable = false, insertable = true, updatable = true, length = 255)
     private String description;
     @NotNull
     @Basic

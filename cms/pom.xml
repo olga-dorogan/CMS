@@ -42,6 +42,8 @@
         <wildfly.remote.version>1.0.0.Alpha5</wildfly.remote.version>
         <wildfly.managed.version>8.2.0.Final</wildfly.managed.version>
         <plugin.exec.version>1.4.0</plugin.exec.version>
+        <assertj.core.version>3.1.0</assertj.core.version>
+
     </properties>
 
     <dependencies>

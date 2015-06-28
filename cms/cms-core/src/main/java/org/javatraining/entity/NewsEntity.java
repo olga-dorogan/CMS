@@ -10,7 +10,7 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "news", schema = "")
-public class NewsEntity implements Serializable {
+public class NewsEntity implements Serializable, GenericEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
@@ -18,17 +18,17 @@ public class NewsEntity implements Serializable {
 
     @NotNull
     @Basic
-    @Column(name = "title", nullable = true, insertable = true, updatable = true, length = 255)
+    @Column(name = "title", nullable = false, insertable = true, updatable = true, length = 255)
     private String title;
 
     @NotNull
     @Basic
-    @Column(name = "description", nullable = true, insertable = true, updatable = true, length = 16777215)
+    @Column(name = "description", nullable = false, insertable = true, updatable = true, length = 16777215)
     private String content;
 
     @NotNull
     @Basic
-    @Column(name = "date", nullable = true, insertable = true, updatable = true)
+    @Column(name = "date", nullable = false, insertable = true, updatable = true)
     private Timestamp date;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})

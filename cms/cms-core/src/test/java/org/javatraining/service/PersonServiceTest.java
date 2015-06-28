@@ -8,7 +8,7 @@ import org.javatraining.dao.PersonDAO;
 import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.dao.*;
 import org.javatraining.entity.PersonEntity;
-import org.javatraining.entity.PersonRole;
+import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.MarkVO;
 import org.javatraining.model.PersonVO;
@@ -54,12 +54,12 @@ public class PersonServiceTest {
     private static final String DS_DIR = "datasets/person-service-test";
     private static final String DS_EMPTY = DS_DIR + "/empty.json";
 
-    private static final String DS_PERSON = DS_DIR + "/person/one-person.json";
+    private static final String DS_PERSON = DS_DIR + "/person/person.json";
     private static final String DS_PERSON_AFTER_UPDATE = DS_DIR + "/person/expected-after-update.json";
     private static final String DS_PERSON_AFTER_SAVE = DS_DIR + "/person/expected-after-save.json";
 
-    private static final String DS_COURSE = DS_DIR + "/course/course.json";
-    private static final String DS_COURSE_PERSON = DS_DIR + "/course/person-course.json";
+    private static final String DS_COURSE = DS_DIR + "/course/one-course.json";
+    private static final String DS_COURSE_PERSON = DS_DIR + "/course/person-one-course.json";
 
     private static final String DS_PRACTICE = DS_DIR + "/practice-lesson/one-lesson-and-practice.json";
     private static final String DS_MARK = DS_DIR + "/practice-lesson/mark.json";

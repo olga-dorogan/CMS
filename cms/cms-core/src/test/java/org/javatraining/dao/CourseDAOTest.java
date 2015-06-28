@@ -1,7 +1,5 @@
 package org.javatraining.dao;
 
-import org.hamcrest.Matcher;
-import org.hamcrest.core.IsNull;
 import org.javatraining.dao.exception.EntityIsAlreadyExistException;
 import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.entity.CourseEntity;
@@ -16,15 +14,11 @@ import org.junit.runner.RunWith;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import java.sql.Date;
-import java.util.Set;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.StrictAssertions.assertThatThrownBy;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(Arquillian.class)
 @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
@@ -43,9 +37,17 @@ public class CourseDAOTest {
     @Deployment
     public static WebArchive createDeployment() {
         WebArchive war = ShrinkWrap.create(WebArchive.class)
-                .addPackage("org.javatraining.dao")
+               .addPackage("org.javatraining.dao")
                 .addPackage("org.javatraining.entity")
+                .addPackage("org.javatraining.entity.enums")
                 .addPackage("org.javatraining.dao.exception")
+                .addPackage("org.assertj.core.api")
+                .addPackage("org.assertj.core.error")
+                .addPackage("org.assertj.core.util.introspection")
+                .addPackage("org.assertj.core.util")
+                .addPackage("org.assertj.core.groups")
+                .addPackage("org.assertj.core.presentation")
+                .addPackage("org.assertj.core.internal")
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
         return war;
@@ -56,37 +58,56 @@ public class CourseDAOTest {
         assertNotNull(courseDAO);
     }
 
-    @Test(expected = Exception.class)
-    public void testGetByIdForNotExistingIdShouldReturnEntityDoesNotExistException() throws EntityIsAlreadyExistException{
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
+    public void testGetByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException{
         Long notExistingId = 10L;
-              try {
-            CourseEntity courseWithNotExistingId = courseDAO.getById(notExistingId);
-                  fail("Test for mark should have thrown a EntityNotExistException");
-            assertThat(courseWithNotExistingId, is(IsNull.nullValue()));
-        }catch (EntityNotExistException e){
-            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
-            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
-                fail("Must throw exception");
-            }
-      }}
+                assertThatThrownBy(() -> courseDAO.getById(notExistingId))
+                .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "+notExistingId+" does not exist in database");
 
-
-    @Test(expected = Exception.class)
-    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE}, excludeColumns = {"id"})
-    public void testSaveCourseThatExistThrowsEntityIsAlreadyExistException() throws EntityIsAlreadyExistException{
-        CourseEntity courseEntity = predefinedCourseInitialization();
-        courseEntity = courseDAO.getById(courseEntity.getId());
-        try{
-            courseDAO.save(courseEntity);
-            fail("Test for mark should have thrown a EntityIsAlreadyExistException");
-        }catch (EntityIsAlreadyExistException e) {
-            assertEquals("Entity already exists", e.getMessage());
-            assertThat(e.getCause(), is((Matcher)instanceOf(ConstraintViolationException.class)));
-            if (checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
-                fail("Unexpected exception");
-            }
-        }
     }
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
+    public void testRemoveByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException{
+        Long notExistingId = 10L;
+        assertThatThrownBy(() -> courseDAO.removeById(notExistingId))
+                .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
+                +notExistingId+" does not exist in database");
+    }
+
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
+    public void testSaveCourseThatExistThrowsEntityIsAlreadyExistException() throws EntityIsAlreadyExistException{
+        CourseEntity courseThatExists = predefinedCourseInitialization();
+        assertThatThrownBy(() -> courseDAO.save(courseThatExists))
+                .isInstanceOf(EntityIsAlreadyExistException.class).hasMessage("Field with id = "
+                +courseThatExists.getId()+" already exists in database");
+    }
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
+    public void testUpdateCourseThatNotExistThrowsEntityNotExistException() throws EntityNotExistException{
+        Long notExistingId = 10L;
+        CourseEntity courseThatNotExists = courseInitializationForTests();
+        courseThatNotExists.setId(notExistingId);
+        assertThatThrownBy(() -> courseDAO.update(courseThatNotExists))
+                .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
+                +notExistingId+" does not exist in database");
+    }
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
+    public void testRemoveCourseThatNotExistThrowsEntityNotExistException() throws EntityNotExistException{
+        Long notExistingId = 10L;
+        CourseEntity courseThatNotExists = courseInitializationForTests();
+        courseThatNotExists.setId(notExistingId);
+        assertThatThrownBy(() -> courseDAO.remove(courseThatNotExists))
+                .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
+                +notExistingId+" does not exist in database");
+    }
+
 
     @Test
     public void testSaveCourseReturnCourseEntity() {
@@ -106,12 +127,6 @@ public class CourseDAOTest {
     }
 
     @Test
-    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE_AFTER_SAVE}, excludeColumns = {"id"})
-    public void testSaveCourse() {
-        courseDAO.save(courseInitializationForTests());
-    }
-
-    @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE_AFTER_UPDATE}, excludeColumns = {"id"})
     public void testUpdateCourse() {
         CourseEntity courseForUpdate = predefinedCourseInitialization();
@@ -122,47 +137,57 @@ public class CourseDAOTest {
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY})
     public void testRemoveCourse() {
-        CourseEntity courseForRemove = predefinedCourseInitialization();
-        courseDAO.remove(courseForRemove);
+      courseDAO.remove(predefinedCourseInitialization());
     }
 
     @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY})
+    public void testRemoveByIdCourse() {
+        courseDAO.removeById(predefinedCourseInitialization().getId());
+    }
+
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testSaveNullCourseTrowEJBException() throws EJBException {
-        try {
-            courseDAO.save(null);
-            fail("Test for mark should have thrown a EJBException");
-        } catch (EJBException e) {
-            assertThat(e.getCause(), is((Matcher) instanceOf(ConstraintViolationException.class)));
-            if (!checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
-                fail("Unexpected exception");
-            }
-        }
+        assertThatThrownBy(() -> courseDAO.save(null))
+                .isInstanceOf(EJBException.class);
+
     }
 
-
     @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testRemoveNullCourseTrowEJBException() throws EJBException{
-        try {
-            courseDAO.remove(null);
-           fail("Test for mark should have thrown a EJBException");
-        } catch (EJBException e) {
-            assertThat(e.getCause(), is((Matcher) instanceOf(ConstraintViolationException.class)));
-            if (!checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
-                fail("Unexpected exception");
-            }
-        }
+        assertThatThrownBy(() -> courseDAO.remove(null))
+                .isInstanceOf(EJBException.class);
     }
+
     @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testUpdateNullCourseTrowEJBException() throws EJBException {
-        try {
-            courseDAO.update(null);
-            fail("Test for mark should have thrown a EJBException");
-        } catch (EJBException e) {
-            assertThat(e.getCause(), is((Matcher) instanceOf(ConstraintViolationException.class)));
-            if (!checkNotNullArgumentViolationException((ConstraintViolationException) e.getCause())) {
-                fail("Unexpected exception");
-            }
-        }
+        assertThatThrownBy(() -> courseDAO.update(null))
+                .isInstanceOf(EJBException.class);
+    }
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
+    public void testSaveNotValidCourseTrowEJBException() throws EJBException {
+         assertThatThrownBy(() -> courseDAO.save(new CourseEntity()))
+                .isInstanceOf(EJBException.class);
+    }
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
+    public void testUpdateNotValidCourseTrowEJBException() throws EJBException {
+        assertThatThrownBy(() -> courseDAO.update(new CourseEntity()))
+                .isInstanceOf(EJBException.class);
+    }
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
+    public void testRemoveNotValidCourseTrowEJBException() throws EJBException {
+         assertThatThrownBy(() -> courseDAO.remove(new CourseEntity()))
+                .isInstanceOf(EJBException.class);
     }
 
 
@@ -206,11 +231,7 @@ public class CourseDAOTest {
         return predefinedCourse;
     }
 
-    private boolean checkNotNullArgumentViolationException(ConstraintViolationException e) {
-        Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
-        return !(constraintViolations.size() != 1 ||
-                !constraintViolations.iterator().next().getMessage().equals("may not be null"));
-    }
+
 
 
 }

@@ -5,7 +5,7 @@ import org.javatraining.auth.Auth;
 import org.javatraining.config.Config;
 import org.javatraining.dao.PersonDAO;
 import org.javatraining.entity.PersonEntity;
-import org.javatraining.entity.PersonRole;
+import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.model.PersonVO;
 import org.javatraining.model.conversion.PersonConverter;
 import org.javatraining.service.PersonService;
@@ -47,6 +47,7 @@ public class PersonWebServiceTest {
     private static PersonVO teacherPerson;
     private static PersonVO studentPerson;
     private static PersonVO newPerson;
+
     static {
         teacherPerson = new PersonVO(1L, "teacherName", "teacherLastName", "teacher@gmail.com", PersonRole.TEACHER);
         studentPerson = new PersonVO(2L, "studentName", "studentLastName", "student@gmail.com", PersonRole.STUDENT);
