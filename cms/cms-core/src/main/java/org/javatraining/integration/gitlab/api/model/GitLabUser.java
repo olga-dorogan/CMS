@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * The project name is cms.
@@ -48,7 +47,6 @@ public class GitLabUser implements Serializable {
     protected String avatarUrl;
     @JsonProperty("created_at")
     protected String createdAt;
-    protected List identities;
 
     public GitLabUser() {
 
@@ -239,11 +237,4 @@ public class GitLabUser implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public List getIdentities() {
-        return identities;
-    }
-
-    public void setIdentities(List identities) {
-        this.identities = identities;
-    }
 }

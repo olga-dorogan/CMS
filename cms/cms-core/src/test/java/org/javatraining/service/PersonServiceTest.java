@@ -59,8 +59,7 @@ public class PersonServiceTest {
     private static final String DS_PERSON_AFTER_SAVE = DS_DIR + "/person/expected-after-save.json";
 
     private static final String DS_COURSE = DS_DIR + "/course/one-course.json";
-    private static final String DS_COURSE_PERSON = DS_DIR + "/course/person-one-course.json";
-
+    private static final String DS_COURSE_PERSON = DS_DIR + "/course/person-course.json";
     private static final String DS_PRACTICE = DS_DIR + "/practice-lesson/one-lesson-and-practice.json";
     private static final String DS_MARK = DS_DIR + "/practice-lesson/mark.json";
 

@@ -5,6 +5,7 @@ import org.javatraining.integration.gitlab.api.model.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * The project name is cms.
@@ -23,7 +24,7 @@ public interface GitLabAPIClient {
     @GET
     @Path("/users")
     @Produces("application/json")
-    GitLabUser getUser(@QueryParam("private_token") String privateToken,
+    List<GitLabUser> getUser(@QueryParam("private_token") String privateToken,
                        @QueryParam("sudo") String sudo,
                        @QueryParam("search") String email);
 

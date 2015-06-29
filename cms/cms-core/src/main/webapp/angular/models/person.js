@@ -52,6 +52,18 @@ angular.module('myApp.person', ['ui.router'])
                     }
                 }
             })
+            .state('person.settings', {
+                url: '/settings',
+                views: {
+                    "": {
+                        templateUrl: 'angular/views/home.html'
+                    },
+                    "contetnt@person": {
+                        templateUrl: 'angular/views/settings.html',
+                        controller: "SettingCtrl"
+                    }
+                }
+            })
     }])
     .service('CourseService', CourseService)
     .service('CourseContentService', CourseContentService)
@@ -59,7 +71,8 @@ angular.module('myApp.person', ['ui.router'])
     .controller('AddCourseCtrl', AddCourseCtrl)
     .controller('DatepickerCtrl', DatepickerCtrl)
     .controller('CourseContentCtrl', CourseContentCtrl)
-    .controller("AddLectureCtrl", AddLectureCtrl);
+    .controller("AddLectureCtrl", AddLectureCtrl)
+    .controller("SettingCtrl", SettingCtrl);
 
 
 

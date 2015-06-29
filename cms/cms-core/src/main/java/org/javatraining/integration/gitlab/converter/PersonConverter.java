@@ -19,7 +19,8 @@ import java.util.stream.Collectors;
  * For more information you should send mail to codedealerb@gmail.com
  */
 public class PersonConverter {
-    @Inject//FIXME or @EJB + stateless?
+    @Inject
+//    @EJB
     private PersonServiceImpl personService;
     private String rootMail;
     private GitLabNotificationServiceImpl gitLabNotification;
@@ -45,7 +46,7 @@ public class PersonConverter {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        gitLabNotification.sendUserProperties(rootMail, entity);
+//        gitLabNotification.sendUserProperties(rootMail, entity);
 
         return entity;
     }
@@ -68,13 +69,11 @@ public class PersonConverter {
     }
 
     public Collection<PersonVO> convertAllEntities(Collection<GitLabUser> entities) {
-        Collection<PersonVO> personVOs = entities.stream().map(
+        return entities.stream().map(
                 this::convertGitLabUserEntity
         ).collect(
                 Collectors.toCollection(TreeSet::new)
         );
-
-        return personVOs;
     }
 
     private String generatePassword(String userName) throws NoSuchAlgorithmException {
