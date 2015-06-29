@@ -13,6 +13,8 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -30,7 +32,8 @@ public class MockUploadFileRestService {
 
     @POST
     @Path("/upload")
-    @Consumes("multipart/form-data")
+    @Consumes("multipart/form-data;charset=UTF-8")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public Response uploadFile(MultipartFormDataInput input) {
         String fileName = "";
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
@@ -45,7 +48,7 @@ public class MockUploadFileRestService {
                 // add the file
                 FileVO addedFileVO = driveService.addFile(new FileVO(fileName, content, mimetypesFileTypeMap.getContentType(fileName)));
                 return Response.status(200)
-                        .entity(String.format("uploadFile is called, <a href=\"%s\">uploaded file</a>", addedFileVO.getLink()))
+                        .entity(addedFileVO)
                         .build();
             } catch (IOException ignore) {
             }

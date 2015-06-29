@@ -51,6 +51,16 @@ body {
     cursor: pointer;
 }
 
+.person-course-file {
+    table-layout: fixed;
+}
+
+.person-course-file tbody tr td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .img-wait {
     width: 32px;
     height: 32px;
@@ -59,18 +69,17 @@ body {
 .person-menubar {
     position: fixed;
     border-width: 0;
-    z-index: 1030;
     min-height: 5px;
     min-width: 5px;
     max-width: 200px;
     width: 200px;
     margin-bottom: 0;
-    border-right: solid lavender 2px;
 }
 
 .person-course-content {
     margin-left: 200px;
-    border-right: solid lavender 2px;
+    padding-left: 50px;
+    border-left: solid lavender 2px;
 }
 
 .person-main-top {
@@ -83,6 +92,30 @@ ul#person-menu.nav-pills > li.active > a:focus {
     color: darkblue;
     background-color: linen;
     border: solid linen 1px;
+}
+
+.person-course-add-files {
+    outline: solid lavender 1px;
+    padding: 5px;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 20px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
 }
 
 .person-menu-icon {

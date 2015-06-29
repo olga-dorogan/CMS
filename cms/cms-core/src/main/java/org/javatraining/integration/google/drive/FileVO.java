@@ -27,6 +27,12 @@ public class FileVO {
         this.link = link;
     }
 
+    public FileVO(@NotNull String id, @NotNull String title, @NotNull String link) {
+        this.id = id;
+        this.title = title;
+        this.link = link;
+    }
+
 
     public String getId() {
         return id;

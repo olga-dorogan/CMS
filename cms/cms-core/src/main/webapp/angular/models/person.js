@@ -109,13 +109,10 @@ angular.module('myApp.person', ['ui.router'])
                 url: '/progress',
                 templateUrl: 'angular/views/person-course/progressContent.html'
             })
-            .state('person.addLecture', {
-                url: '/course/:courseId/addLecture',
+            .state('person.course.addLecture', {
+                url: '/addLecture',
                 views: {
                     "": {
-                        templateUrl: 'angular/views/home.html'
-                    },
-                    "content@person": {
                         templateUrl: 'angular/views/person-course/teacher/addLecture.html',
                         controller: "AddLectureCtrl"
                     }

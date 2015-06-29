@@ -4,6 +4,7 @@ var myApp = angular.module('myApp', [
     'restangular',
     'angular-google-gapi',
     'ui.bootstrap',
+    'angularFileUpload',
     'myApp.home',
     'myApp.person',
     'myApp.news',
