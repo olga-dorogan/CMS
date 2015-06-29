@@ -47,9 +47,47 @@ body {
     cursor: pointer;
 }
 
+.person-login {
+    cursor: pointer;
+}
+
 .img-wait {
     width: 32px;
     height: 32px;
+}
+
+.person-menubar {
+    position: fixed;
+    border-width: 0;
+    z-index: 1030;
+    min-height: 5px;
+    min-width: 5px;
+    max-width: 200px;
+    width: 200px;
+    margin-bottom: 0;
+    border-right: solid lavender 2px;
+}
+
+.person-course-content {
+    margin-left: 200px;
+    border-right: solid lavender 2px;
+}
+
+.person-main-top {
+    border-bottom: solid lavender 2px;
+}
+
+ul#person-menu.nav-pills > li.active > a,
+ul#person-menu.nav-pills > li.active > a:hover,
+ul#person-menu.nav-pills > li.active > a:focus {
+    color: darkblue;
+    background-color: linen;
+    border: solid linen 1px;
+}
+
+.person-menu-icon {
+    width: 16px;
+    height: 16px;
 }
 
 .content {
