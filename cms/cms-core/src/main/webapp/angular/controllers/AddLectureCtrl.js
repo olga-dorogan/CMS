@@ -1,10 +1,12 @@
-function AddLectureCtrl($scope, $stateParams, CourseContentService, FileUploader) {
+function AddLectureCtrl($scope, $stateParams, $modalInstance, CourseContentService, FileUploader) {
+    var BASE_URL_FILE_TO_STORAGE = 'resources/file/upload';
+
     $scope.lecture = $scope.lecture || {};
 
     $scope.isValidLecture = function (lectureForm) {
         return !lectureForm.$invalid;
     };
-    $scope.createLecture = function () {
+    var createLecture = function () {
         $scope.lecture.createDate = new Date();
         $scope.lecture.orderNum = 1;
         $scope.lecture.courseId = $stateParams.courseId;
@@ -12,9 +14,17 @@ function AddLectureCtrl($scope, $stateParams, CourseContentService, FileUploader
     };
 
 
+    $scope.ok = function () {
+        createLecture();
+        $modalInstance.close($scope.lecture);
+    };
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    };
+
     // file uploading
     var uploader = $scope.uploader = new FileUploader({
-        url: 'resources/file/upload'
+        url: BASE_URL_FILE_TO_STORAGE
     });
     // filters
     uploader.filters.push({
@@ -42,14 +52,11 @@ function AddLectureCtrl($scope, $stateParams, CourseContentService, FileUploader
     $scope.lectureLinks = $scope.lectureLinks || [];
     $scope.newLink = $scope.newLink || {};
     $scope.addLink = function () {
-        console.log("newLink: " + JSON.stringify($scope.newLink));
-        console.log("copy of new link: " + JSON.stringify(angular.copy($scope.newLink)));
         $scope.lectureLinks.push(angular.copy($scope.newLink));
-        console.log("array: " + JSON.stringify($scope.lectureLinks));
     };
-    $scope.removeLink = function(linkToRemove) {
-        for(var i=0; i<$scope.lectureLinks.length; i++) {
-            if(angular.equals($scope.lectureLinks[i], linkToRemove)){
+    $scope.removeLink = function (linkToRemove) {
+        for (var i = 0; i < $scope.lectureLinks.length; i++) {
+            if (angular.equals($scope.lectureLinks[i], linkToRemove)) {
                 $scope.lectureLinks.splice(i, 1);
             }
         }

@@ -4,5 +4,7 @@
         {{lecture.topic}}
     </li>
 </ol>
-    <button ng-show="isTeacher()" ui-sref="person.course.addLecture">Добавить лекцию</button>
+    <button ng-show="isTeacher()" class="btn btn-default" ng-click="createLecture()">Добавить лекцию</button>
+    <div ng-include="'angular/templates/add-lecture.html'"></div>
+
 </div>

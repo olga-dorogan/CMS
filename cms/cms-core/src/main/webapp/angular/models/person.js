@@ -108,15 +108,6 @@ angular.module('myApp.person', ['ui.router'])
             .state('person.course.progress', {
                 url: '/progress',
                 templateUrl: 'angular/views/person-course/progressContent.html'
-            })
-            .state('person.course.addLecture', {
-                url: '/addLecture',
-                views: {
-                    "": {
-                        templateUrl: 'angular/views/person-course/teacher/addLecture.html',
-                        controller: "AddLectureCtrl"
-                    }
-                }
             });
     }])
     .service('PersonService', PersonService)
