@@ -128,7 +128,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
         person.setId(personId);
         CourseVO course = new CourseVO();
         course.setId(courseId);
-        personService.addPersonToCourse(person, course);
+        personService.addPersonRequestForCourse(person, course);
         return Response.accepted().build();
     }
 
@@ -140,7 +140,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
         person.setId(userId);
         CourseVO course = new CourseVO();
         course.setId(courseId);
-        personService.removePersonFromCourse(person, course);
+        personService.removePersonRequestForCourse(person, course);
         return Response.accepted().build();
     }
 }

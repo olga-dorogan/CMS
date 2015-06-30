@@ -1,16 +1,12 @@
 package org.javatraining.service;
 
 import org.javatraining.entity.enums.PersonRole;
-import org.javatraining.model.CourseVO;
-import org.javatraining.model.MarkVO;
-import org.javatraining.model.PersonVO;
-import org.javatraining.model.PracticeLessonVO;
+import org.javatraining.model.*;
 
 import javax.annotation.Nullable;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by olga on 07.06.15.
@@ -42,13 +38,17 @@ public interface PersonService {
 
     //     Person --- Course methods
 
-    void addPersonToCourse(@NotNull PersonVO personVO, @NotNull CourseVO courseVO);
+    void addPersonRequestForCourse(@NotNull PersonVO personVO, @NotNull CourseVO courseVO);
 
-    void removePersonFromCourse(@NotNull PersonVO personVO, @NotNull CourseVO courseVO);
+    void removePersonRequestForCourse(@NotNull PersonVO personVO, @NotNull CourseVO courseVO);
+
+    void approvePersonRequestForCourse(@NotNull CoursePersonStatusVO coursePersonStatusVO);
+
+    void rejectPersonRequestForCourse(@NotNull CoursePersonStatusVO coursePersonStatusVO);
 
     @NotNull
     @Valid
-    Set<CourseVO> getCourses(@NotNull PersonVO personVO);
+    List<CoursePersonStatusVO> getPersonCourseStatuses(@NotNull PersonVO personVO);
 
     //    Person --- Mark methods
 

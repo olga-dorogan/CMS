@@ -2,20 +2,28 @@ package org.javatraining.model;
 
 import org.javatraining.entity.enums.CourseStatus;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by vika on 27.06.15.
  */
 public class CoursePersonStatusVO {
 
     private Long id;
-
+    @NotNull
     private CourseStatus courseStatus;
-
-    private CourseVO course;
-
-    private PersonVO person;
+    @NotNull
+    private Long courseId;
+    @NotNull
+    private Long personId;
 
     public CoursePersonStatusVO() {
+    }
+
+    public CoursePersonStatusVO(CourseStatus courseStatus, Long courseId, Long personId) {
+        this.courseStatus = courseStatus;
+        this.courseId = courseId;
+        this.personId = personId;
     }
 
     public Long getId() {
@@ -34,19 +42,19 @@ public class CoursePersonStatusVO {
         this.courseStatus = courseStatus;
     }
 
-    public CourseVO getCourse() {
-        return course;
+    public Long getCourseId() {
+        return courseId;
     }
 
-    public void setCourse(CourseVO course) {
-        this.course = course;
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
     }
 
-    public PersonVO getPerson() {
-        return person;
+    public Long getPersonId() {
+        return personId;
     }
 
-    public void setPerson(PersonVO person) {
-        this.person = person;
+    public void setPersonId(Long personId) {
+        this.personId = personId;
     }
 }
