@@ -18,7 +18,7 @@ public class CoursePersonStatusDAO extends GenericDAO<CoursePersonStatusEntity> 
 
     public List<CoursePersonStatusEntity> getCourseStatusesForPerson(@NotNull Long personId) {
         TypedQuery<CoursePersonStatusEntity> query = getEntityManager().createQuery(
-                "SELECT status FROM CoursePersonStatusEntity status WHERE PersonEntity .id = :personId",
+                "SELECT status FROM CoursePersonStatusEntity status WHERE PersonEntity.id = :personId",
                 CoursePersonStatusEntity.class);
         query.setParameter("personId", personId);
         return query.getResultList();
