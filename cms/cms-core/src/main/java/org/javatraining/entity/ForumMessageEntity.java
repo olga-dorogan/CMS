@@ -1,5 +1,6 @@
 package org.javatraining.entity;
 
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "forum_messages", schema = "")
-public class ForumMessagesEntity implements Serializable {
+public class ForumMessageEntity implements Serializable, GenericEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
@@ -18,25 +19,25 @@ public class ForumMessagesEntity implements Serializable {
 
     @NotNull
     @Basic
-    @Column(name = "parent_id", nullable = true, insertable = true, updatable = true)
+    @Column(name = "parent_id", nullable = false, insertable = true, updatable = true)
     private Long parentId;
 
     @NotNull
     @Basic
-    @Column(name = "title", nullable = true, insertable = true, updatable = true, length = 255)
+    @Column(name = "title", nullable = false, insertable = true, updatable = true, length = 255)
     private String title;
 
     @NotNull
     @Basic
-    @Column(name = "description", nullable = true, insertable = true, updatable = true, length = 16777215)
+    @Column(name = "description", nullable = false, insertable = true, updatable = true, length = 16777215)
     private String description;
 
     @NotNull
     @Basic
-    @Column(name = "date", nullable = true, insertable = true, updatable = true)
+    @Column(name = "date", nullable = false, insertable = true, updatable = true)
     private Timestamp date;
 
-    public ForumMessagesEntity() {
+    public ForumMessageEntity() {
     }
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "lesson_id", nullable = false)
@@ -46,7 +47,7 @@ public class ForumMessagesEntity implements Serializable {
     @JoinColumn(name = "author", nullable = false)
     private PersonEntity persons;
 
-    public ForumMessagesEntity(Long parentId, String title, String description, Timestamp date) {
+    public ForumMessageEntity(Long parentId, String title, String description, Timestamp date) {
         this.parentId = parentId;
         this.title = title;
         this.description = description;
@@ -112,9 +113,9 @@ public class ForumMessagesEntity implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ForumMessagesEntity)) return false;
+        if (!(o instanceof ForumMessageEntity)) return false;
 
-        ForumMessagesEntity that = (ForumMessagesEntity) o;
+        ForumMessageEntity that = (ForumMessageEntity) o;
 
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;

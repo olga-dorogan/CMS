@@ -1,5 +1,6 @@
 package org.javatraining.entity;
 
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -9,7 +10,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "mark", schema = "")
-public class MarkEntity implements Serializable {
+public class MarkEntity implements Serializable, GenericEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
@@ -17,7 +18,7 @@ public class MarkEntity implements Serializable {
 
     @NotNull
     @Basic
-    @Column(name = "mark", nullable = true, insertable = true, updatable = true)
+    @Column(name = "mark", nullable = false, insertable = true, updatable = true)
     private Long mark;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})

@@ -1,6 +1,6 @@
 package org.javatraining.integration.gitlab.api.impl;
 
-import org.javatraining.entity.PersonRole;
+import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.integration.gitlab.api.model.GitLabProject;
 import org.javatraining.integration.gitlab.exception.ResourceNotFoundException;
 import org.javatraining.integration.gitlab.impl.GitLabService;

@@ -3,14 +3,17 @@ package org.javatraining.service.impl;
 import org.javatraining.dao.CourseDAO;
 import org.javatraining.dao.MarkDAO;
 import org.javatraining.dao.PersonDAO;
-import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.dao.PracticeLessonDAO;
-import org.javatraining.entity.*;
+import org.javatraining.dao.exception.EntityNotExistException;
+import org.javatraining.entity.CourseEntity;
+import org.javatraining.entity.MarkEntity;
+import org.javatraining.entity.PersonEntity;
+import org.javatraining.entity.PracticeLessonEntity;
+import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.MarkVO;
 import org.javatraining.model.PersonVO;
 import org.javatraining.model.PracticeLessonVO;
-import org.javatraining.model.conversion.CourseConverter;
 import org.javatraining.model.conversion.MarkConverter;
 import org.javatraining.model.conversion.PersonConverter;
 import org.javatraining.service.PersonService;
@@ -97,7 +100,7 @@ public class PersonServiceImpl implements PersonService {
         // owning side is CourseEntity, so all operations need to be from CourseEntity
         PersonEntity personEntity = personDAO.getById(personVO.getId());
         CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
-        courseEntity.getPersons().add(personEntity);
+//        courseEntity.getPersons().add(personEntity);
         courseDAO.update(courseEntity);
     }
 
@@ -106,14 +109,15 @@ public class PersonServiceImpl implements PersonService {
         // owning side is CourseEntity, so all operations need to be from CourseEntity
         PersonEntity personEntity = personDAO.getById(personVO.getId());
         CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
-        courseEntity.getPersons().remove(personEntity);
+//        courseEntity.getPersons().remove(personEntity);
         courseDAO.update(courseEntity);
     }
 
     @Override
     public Set<CourseVO> getCourses(@NotNull PersonVO personVO) {
         PersonEntity personEntity = personDAO.getById(personVO.getId());
-        return CourseConverter.convertEntitiesToVOs(personEntity.getCourse());
+//        return CourseConverter.convertEntitiesToVOs(personEntity.getCourse());
+     throw new UnsupportedOperationException();
     }
 
     @Override

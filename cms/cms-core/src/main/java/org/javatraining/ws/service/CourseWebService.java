@@ -4,7 +4,7 @@ import flexjson.JSONException;
 import org.javatraining.auth.Auth;
 import org.javatraining.config.AuthRole;
 import org.javatraining.config.Config;
-import org.javatraining.entity.PersonRole;
+import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.CourseWithDetailsVO;
 import org.javatraining.model.PersonVO;

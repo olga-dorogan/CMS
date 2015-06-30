@@ -108,7 +108,19 @@ angular.module('myApp.person', ['ui.router'])
             .state('person.course.progress', {
                 url: '/progress',
                 templateUrl: 'angular/views/person-course/progressContent.html'
-            });
+            })
+            .state('person.settings', {
+                url: '/settings',
+                views: {
+                    "": {
+                        templateUrl: 'angular/views/home.html'
+                    },
+                    "contetnt@person": {
+                        templateUrl: 'angular/views/settings.html',
+                        controller: "SettingCtrl"
+                    }
+                }
+            })
     }])
     .service('PersonService', PersonService)
     .service('CourseService', CourseService)
@@ -117,7 +129,8 @@ angular.module('myApp.person', ['ui.router'])
     .controller('AddCourseCtrl', AddCourseCtrl)
     .controller('DatepickerCtrl', DatepickerCtrl)
     .controller('CourseContentCtrl', CourseContentCtrl)
-    .controller("AddLectureCtrl", AddLectureCtrl);
+    .controller("AddLectureCtrl", AddLectureCtrl)
+    .controller("SettingCtrl", SettingCtrl);
 
 
 

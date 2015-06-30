@@ -27,5 +27,4 @@ public class CourseDAO extends GenericDAO<CourseEntity> {
         getEntityManager().createQuery("delete from CourseEntity").executeUpdate();
     }
 
-
 }

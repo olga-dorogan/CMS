@@ -5,7 +5,7 @@ import org.javatraining.dao.NewsDAO;
 import org.javatraining.entity.CourseEntity;
 import org.javatraining.entity.NewsEntity;
 import org.javatraining.entity.PersonEntity;
-import org.javatraining.entity.PersonRole;
+import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.NewsVO;
 import org.javatraining.model.PersonVO;
@@ -43,16 +43,16 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void clear(){
+    public void clear() {
         courseDAO.clear();
     }
 
     @Override
     public CourseVO update(@NotNull @Valid CourseVO courseVO) {
-       courseVO.setId(courseDAO
+        courseVO.setId(courseDAO
                 .update(CourseConverter
-                .convertVOToEntity(courseVO))
-               .getId());
+                        .convertVOToEntity(courseVO))
+                .getId());
         return courseVO;
     }
 
@@ -76,30 +76,31 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseVO addPersonsToCourse(@NotNull CourseVO courseVO, @NotNull @Valid List<PersonVO> persons) {
-        CourseEntity courseEntity =CourseConverter.convertVOToEntity(courseVO);
-        courseEntity.setPersons(PersonConverter.convertVOsToEntities(persons));
+        CourseEntity courseEntity = CourseConverter.convertVOToEntity(courseVO);
+//        courseEntity.setPersons(PersonConverter.convertVOsToEntities(persons));
         return courseVO;
     }
 
     @Override
     public CourseVO removePersonsFromCourse(@NotNull CourseVO courseVO, @NotNull @Valid List<PersonVO> persons) {
-        CourseEntity courseEntity =CourseConverter.convertVOToEntity(courseVO);
+        CourseEntity courseEntity = CourseConverter.convertVOToEntity(courseVO);
         Set<PersonEntity> personEntities = PersonConverter.convertVOsToEntities(persons);
-        courseEntity.getPersons().remove(personEntities);
-       return CourseConverter.convertEntityToVO(courseDAO.update(courseEntity));
+//        courseEntity.getPersons().remove(personEntities);
+        return CourseConverter.convertEntityToVO(courseDAO.update(courseEntity));
 
     }
 
     @Override
     public List<PersonVO> getAllPersonsFromCourseByRole(@NotNull CourseVO courseVO, @NotNull PersonRole role) {
-        CourseEntity courseEntity =CourseConverter.convertVOToEntity(courseVO);
-        return PersonConverter.convertEntitiesToVOs(courseEntity.getPersons()).
-                stream().filter(person -> person.getPersonRole() == role).collect(Collectors.toList());
+//        CourseEntity courseEntity =CourseConverter.convertVOToEntity(courseVO);
+//        return PersonConverter.convertEntitiesToVOs(courseEntity.getPersons()).
+//                stream().filter(person -> person.getPersonRole() == role).collect(Collectors.toList());
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public NewsVO addNewsToCourse(@NotNull CourseVO courseVO, @NotNull @Valid NewsVO newsVO) {
-        CourseEntity courseEntity =CourseConverter.convertVOToEntity(courseVO);
+        CourseEntity courseEntity = CourseConverter.convertVOToEntity(courseVO);
         NewsEntity newsEntity = NewsConverter.convertVOToEntity(newsVO);
         courseEntity.getNews().add(newsEntity);
         courseDAO.update(courseEntity);
@@ -123,18 +124,18 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<NewsVO> getAllNewsFromCourse(@NotNull CourseVO courseVO) {
-return NewsConverter.convertEntitiesToVOs(CourseConverter
-           .convertVOToEntity(courseVO)
-           .getNews())
-           .stream().
-           collect(Collectors.toList());
- }
+        return NewsConverter.convertEntitiesToVOs(CourseConverter
+                .convertVOToEntity(courseVO)
+                .getNews())
+                .stream().
+                        collect(Collectors.toList());
+    }
 
     @Override
     public List<NewsVO> getAllNews() {
-     return NewsConverter
-             .convertEntitiesToVOs(newsDAO.getAllNews())
-             .stream()
-             .collect(Collectors.toList());
-       }
+        return NewsConverter
+                .convertEntitiesToVOs(newsDAO.getAllNews())
+                .stream()
+                .collect(Collectors.toList());
+    }
 }

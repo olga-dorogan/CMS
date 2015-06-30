@@ -1,6 +1,6 @@
 package org.javatraining.model;
 
-import org.javatraining.entity.PersonRole;
+import org.javatraining.entity.enums.PersonRole;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;

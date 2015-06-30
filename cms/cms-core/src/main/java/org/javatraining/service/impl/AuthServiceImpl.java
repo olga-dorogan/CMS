@@ -3,7 +3,7 @@ package org.javatraining.service.impl;
 import org.javatraining.config.AuthRole;
 import org.javatraining.dao.PersonDAO;
 import org.javatraining.entity.PersonEntity;
-import org.javatraining.entity.PersonRole;
+import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.integration.google.oauth.GoogleUserinfoService;
 import org.javatraining.integration.google.oauth.exception.AuthException;
 import org.javatraining.service.AuthService;
