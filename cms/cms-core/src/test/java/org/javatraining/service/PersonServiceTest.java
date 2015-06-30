@@ -2,6 +2,7 @@ package org.javatraining.service;
 
 import org.hamcrest.core.IsInstanceOf;
 import org.javatraining.dao.*;
+import org.javatraining.dao.exception.EntityIsAlreadyExistException;
 import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.entity.PersonEntity;
 import org.javatraining.entity.enums.PersonRole;
@@ -50,7 +51,7 @@ public class PersonServiceTest {
     private static final String DS_DIR = "datasets/person-service-test";
     private static final String DS_EMPTY = DS_DIR + "/empty.json";
 
-    private static final String DS_PERSON = DS_DIR + "/person/person.json";
+    private static final String DS_PERSON = DS_DIR + "/person/one-person.json";
     private static final String DS_PERSON_AFTER_UPDATE = DS_DIR + "/person/expected-after-update.json";
     private static final String DS_PERSON_AFTER_SAVE = DS_DIR + "/person/expected-after-save.json";
 
@@ -100,9 +101,10 @@ public class PersonServiceTest {
                 .addPackage(PersonEntity.class.getPackage())
                 .addPackage(PersonVO.class.getPackage())
                 .addPackage(PersonConverter.class.getPackage())
-                .addClasses(PersonDAO.class, CourseDAO.class, MarkDAO.class, GenericDAO.class)
                 .addPackage(EntityNotExistException.class.getPackage())
-                .addClasses(PersonDAO.class, CourseDAO.class, MarkDAO.class, PracticeLessonDAO.class, GenericDAO.class)
+                .addPackage(PersonRole.class.getPackage())
+                .addClasses(PersonDAO.class, CourseDAO.class, MarkDAO.class,
+                        PracticeLessonDAO.class, CoursePersonStatusDAO.class, GenericDAO.class)
                 .addClasses(PersonService.class, PersonServiceImpl.class, UnsupportedOperationException.class)
                 .addAsResource(DS_DIR)
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml");
@@ -288,7 +290,7 @@ public class PersonServiceTest {
         personService.addPersonRequestForCourse(predefinedPerson, predefinedCourse);
     }
 
-    @Test
+    @Test(expected = EntityIsAlreadyExistException.class)
     @UsingDataSet(value = {DS_PERSON, DS_COURSE, DS_COURSE_PERSON})
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON, DS_COURSE, DS_COURSE_PERSON})
     public void testAddPersonToCourseForPersonAlreadyAddedToCourse() throws Exception {

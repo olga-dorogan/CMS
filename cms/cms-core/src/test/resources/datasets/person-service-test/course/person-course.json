@@ -1,8 +1,9 @@
 {
-  "person_course": [
+  "course_person_status": [
     {
       "course_id": 1,
-      "person_id": 1
+      "person_id": 1,
+      "course_status": "REQUESTED"
     }
   ]
 }

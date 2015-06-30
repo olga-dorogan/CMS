@@ -94,17 +94,18 @@ public class PersonServiceImpl implements PersonService {
     public void addPersonRequestForCourse(@NotNull PersonVO personVO, @NotNull CourseVO courseVO) {
         CoursePersonStatusEntity entity = new CoursePersonStatusEntity(CourseStatus.REQUESTED);
         PersonEntity personEntity = personDAO.getById(personVO.getId());
-        CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
         entity.setPerson(personEntity);
+        CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
         entity.setCourse(courseEntity);
         coursePersonStatusDAO.save(entity);
     }
 
     @Override
     public void removePersonRequestForCourse(@NotNull PersonVO personVO, @NotNull CourseVO courseVO) {
-        PersonEntity personEntity = personDAO.getById(personVO.getId());
-        CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
-        // TODO: do method to remove person request
+        CoursePersonStatusEntity existingStatus = coursePersonStatusDAO.getStatusByPersonIdAndCourseId(personVO.getId(), courseVO.getId());
+        if (existingStatus != null) {
+            coursePersonStatusDAO.removeById(existingStatus.getId());
+        }
     }
 
     @Override
