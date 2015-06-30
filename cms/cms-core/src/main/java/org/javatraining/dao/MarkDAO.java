@@ -23,7 +23,8 @@ public class MarkDAO extends GenericDAO<MarkEntity> {
     public MarkEntity save(@NotNull MarkEntity mark, @NotNull PersonEntity person, @NotNull PracticeLessonEntity lessons) {
         mark.setPersons(person);
         mark.setPracticeLesson(lessons);
-        return mark;
+        MarkEntity savedEntity = super.save(mark);
+        return savedEntity;
     }
     public List<MarkEntity> getAllMarks() {
         Query query = getEntityManager().createQuery("SELECT c FROM MarkEntity c");
