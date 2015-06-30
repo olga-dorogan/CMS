@@ -9,8 +9,6 @@ import javax.persistence.PersistenceContext;
 import javax.validation.constraints.NotNull;
 
 
-//interface GenericEntity1<ID> extends AttributeReadId<ID>, Entity {}
-////class GenericDAO<ENTITY extends GenericEntity<ID>>
 
 public abstract class GenericDAO <ENTITY extends GenericEntity> {
 

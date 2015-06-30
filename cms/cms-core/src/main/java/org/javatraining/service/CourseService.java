@@ -28,7 +28,7 @@ public interface CourseService {
 
     void clear();
     @Valid
-    CourseVO getById(@NotNull Long id);
+    CourseVO getCourseById(@NotNull Long id);
 
     //  Course --- Person methods
 
@@ -46,7 +46,7 @@ public interface CourseService {
 
     NewsVO addNewsToCourse(@NotNull CourseVO courseVO, @NotNull @Valid NewsVO newsVO);
 
-    void removeNewsFromCourse(@NotNull CourseVO courseVO, @NotNull NewsVO newsVO);
+    NewsVO removeNewsFromCourse(@NotNull CourseVO courseVO, @NotNull NewsVO newsVO);
 
     NewsVO updateNews(@NotNull @Valid NewsVO newsVO);
 

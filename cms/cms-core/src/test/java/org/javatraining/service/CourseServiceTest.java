@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 import javax.ejb.EJBException;
 import javax.inject.Inject;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import static org.assertj.core.api.StrictAssertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
@@ -32,6 +33,7 @@ public class CourseServiceTest {
     private static final String DS_DIR = "course-service-test/";
     private static final String DS_EMPTY = DS_DIR + "empty.json";
     private static final String DS_COURSE = DS_DIR + "course/one-course.json";
+    private static final String DS_COURSE_AFTER_REMOVE = DS_DIR + "course/course-after-remove.json";
 
     @Inject
     private CourseService courseService;
@@ -84,17 +86,27 @@ public class CourseServiceTest {
         assertEquals(courseVO,courseService.remove(courseVO));
     }
     @Test
-    @ShouldMatchDataSet(value = DS_EMPTY)
+    @ShouldMatchDataSet(value = {DS_EMPTY,DS_COURSE_AFTER_REMOVE})
     public void testRemoveCourse() {
         CourseVO courseVO = predefinedCourseVO();
        courseService.remove(courseVO);
     }
 
     @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY,DS_COURSE})
+    public void testGetNewsById() {
+       NewsVO newsVO = predefinedNewsInitialization();
+         assertEquals(newsVO,courseService.getNewsById(newsVO.getId()));
+    }
+
+
+
+
+    @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE}, excludeColumns = {"id"})
     public void testGetReturnCourseVO() {
         CourseVO predefinedCourseVO = predefinedCourseVO();
-        CourseVO courseVO = courseService.getById(predefinedCourseVO.getId());
+        CourseVO courseVO = courseService.getCourseById(predefinedCourseVO.getId());
         assertNotNull(courseVO);
         }
 
@@ -154,13 +166,18 @@ public class CourseServiceTest {
 
 
 
-        @Test
+     @Test
+     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testGetAllNewsFromCourse() {
-        CourseVO courseVO = new CourseVO();
-        NewsVO newsVO = new NewsVO();
-        courseService.save(courseVOInitialization());
-//      courseService.addNewsToCourse(courseVO,newsVO);
-        // TODO: !!!
+        CourseVO courseVO = predefinedCourseVO();
+       assertNotNull(courseService.getAllNewsFromCourse(courseVO));
+
+    }
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
+    public void testGetAllNews() {
+        assertNotNull(courseService.getAllNews());
 
     }
 
@@ -191,6 +208,16 @@ public class CourseServiceTest {
         personVO.setSecondName("Second name");
         personVO.setPersonRole(PersonRole.TEACHER);
         return personVO;
+    }
+
+    private NewsVO predefinedNewsInitialization(){
+        Long predefinedNewsId = 1L;
+        NewsVO newsVO = new NewsVO();
+        newsVO.setId(predefinedNewsId);
+        newsVO.setContent("newsDescription");
+        newsVO.setTitle("title");
+        newsVO.setDate(Timestamp.valueOf("2015-10-02 18:48:05"));
+        return newsVO;
     }
 
 }

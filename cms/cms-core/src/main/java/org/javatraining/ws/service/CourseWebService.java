@@ -48,7 +48,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{course_id}")
     public Response getCourse(@PathParam("course_id") long courseId) {
-        CourseVO course =courseService.getById(courseId);
+        CourseVO course =courseService.getCourseById(courseId);
         Response.ResponseBuilder r;
         if (course == null)
             r = Response.noContent();

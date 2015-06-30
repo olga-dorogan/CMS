@@ -99,14 +99,13 @@ public class CoursePersonStatusDAOTest {
     @Test
     public void testSaveReturnCoursePersonStatusEntity() {
         CoursePersonStatusEntity coursePersonStatusForSave = coursePersonStatusInitializationForTests();
-        assertEquals(coursePersonStatusForSave, coursePersonStatusDAO.update(coursePersonStatusForSave));
+        assertEquals(coursePersonStatusForSave, coursePersonStatusDAO.save(coursePersonStatusForSave));
     }
 
     @Test
     public void testGetReturnCoursePersonEntity() {
-        CoursePersonStatusEntity coursePersonStatusForSave = coursePersonStatusInitializationForTests();
-        coursePersonStatusDAO.save(coursePersonStatusForSave);
-        assertEquals(coursePersonStatusForSave, coursePersonStatusDAO.getById(coursePersonStatusForSave.getId()));
+        CoursePersonStatusEntity coursePersonStatusForGet = predefinedCoursePersonStatusInitialization();
+        assertEquals(coursePersonStatusForGet, coursePersonStatusDAO.getById(coursePersonStatusForGet.getId()));
     }
 
     @Test
@@ -138,8 +137,8 @@ public class CoursePersonStatusDAOTest {
     public void testSaveCoursePersonStatusThatExistThrowsEntityIsAlreadyExistException() throws EntityIsAlreadyExistException {
         CoursePersonStatusEntity coursePersonStatusThatExists = predefinedCoursePersonStatusInitialization();
         assertThatThrownBy(() -> coursePersonStatusDAO.save(coursePersonStatusThatExists))
-                .isInstanceOf(EntityIsAlreadyExistException.class).hasMessage("Field with id = "
-                + coursePersonStatusThatExists.getId() + " already exists in database");
+                .isInstanceOf(EntityIsAlreadyExistException.class).hasMessage(String.format("Status for %s and %s is already set",
+                coursePersonStatusThatExists.getPerson(), coursePersonStatusThatExists.getCourse()));
     }
 
     @Test
@@ -176,8 +175,8 @@ public class CoursePersonStatusDAOTest {
 
     private CoursePersonStatusEntity coursePersonStatusInitializationForTests() {
         CoursePersonStatusEntity coursePersonStatusEntity = new CoursePersonStatusEntity(CourseStatus.UNSIGNED);
-        coursePersonStatusEntity.setCourse(courseDAO.getById(1L));
-        coursePersonStatusEntity.setPerson(personDAO.getById(1L));
+         coursePersonStatusEntity.setCourse(courseDAO.getById(1L));
+        coursePersonStatusEntity.setPerson(personDAO.getById(2L));
 
         return coursePersonStatusEntity;
     }
