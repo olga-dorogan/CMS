@@ -77,6 +77,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public CourseVO addPersonsToCourse(@NotNull CourseVO courseVO, @NotNull @Valid List<PersonVO> persons) {
         CourseEntity courseEntity = CourseConverter.convertVOToEntity(courseVO);
+
 //        courseEntity.setPersons(PersonConverter.convertVOsToEntities(persons));
         return courseVO;
     }
