@@ -7,10 +7,16 @@
             <div class="panel-body">
                 <div class="description">{{course.description}}</div>
                 <div ng-if="isLogin()" class="course-action">
-                    <a ui-sref="person.course({courseId:course.id})" ng-if=" isPersonInCourse(course)" class="go-into-course">
-                        Перейти к курсу
-                    </a>
-                    <a ui-sref="person.subscribe" ng-if="!isPersonInCourse(course)" class="enroll-into-course">Подписаться</a>
+                    <div ng-if="course.isPersonEnrolled === undefined">
+                        <img class="img-wait" ng-src="angular/img/wait.gif"/>
+                    </div>
+                    <div ng-if="course.isPersonEnrolled !== undefined">
+                        <a ui-sref="person.course({courseId:course.id, courseName:course.name})"
+                           ng-if="course.isPersonEnrolled" class="go-into-course">
+                            {{course.courseActionMsg}}
+                        </a>
+                        <a href="" ng-if="!course.isPersonEnrolled" class="enroll-into-course">Подписаться</a>
+                    </div>
                 </div>
             </div>
         </div>

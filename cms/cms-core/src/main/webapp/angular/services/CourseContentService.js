@@ -10,7 +10,7 @@ function CourseContentService(Restangular) {
         if (courseId === undefined) {
             return [];
         }
-        return createLectureRest(courseId).getList().$object;
+        return createLectureRest(courseId).getList();
     };
 
     this.createLecture = function (newLecture) {

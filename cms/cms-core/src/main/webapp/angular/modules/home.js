@@ -1,18 +1,23 @@
 angular.module('myApp.home', ['ui.router'])
-    .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+    .config(['$stateProvider', function ($stateProvider) {
         $stateProvider
             .state('home', {
+                parent: 'main',
                 url: '/home',
                 views: {
-                    "": {
-                        templateUrl: 'angular/views/home.html'
-                    },
-                    "content@home": {
+                    "body@main": {
                         templateUrl: 'angular/views/course.html',
                         controller: 'HomeCtrl'
                     }
+                },
+                resolve: {
+                    courseService: 'CourseService',
+                    courses: function (courseService) {
+                        return courseService.getCourses().then(function (result) {
+                            return result;
+                        });
+                    }
                 }
-
             })
     }])
     .service('CourseService', CourseService)

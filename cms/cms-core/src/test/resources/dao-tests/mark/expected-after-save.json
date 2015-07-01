@@ -39,7 +39,11 @@
   ],
     "mark": [
         {
-            "id": 1,
+            "mark": 85,
+            "lesson_id": 1,
+            "person_id":1
+        },
+        {
             "mark": 80,
             "lesson_id": 1,
             "person_id":1

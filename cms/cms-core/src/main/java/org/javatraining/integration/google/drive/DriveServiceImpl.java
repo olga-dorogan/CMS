@@ -72,7 +72,7 @@ public class DriveServiceImpl implements DriveService {
                     .insert(addedFile.getId(), new ParentReference().setId(parentFolderId))
                     .execute();
             log.debug("Link to added file: {}", addedFile.getAlternateLink());
-            return new FileVO(addedFile.getId(), addedFile.getAlternateLink());
+            return new FileVO(addedFile.getId(), fileVO.getTitle(), addedFile.getAlternateLink());
         } catch (IOException e) {
             throw new DriveException(e);
         }

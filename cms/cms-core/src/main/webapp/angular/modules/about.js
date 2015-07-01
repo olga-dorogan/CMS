@@ -1,19 +1,15 @@
 angular.module('myApp.about', ['ui.router'])
-    .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    .config(['$stateProvider', function ($stateProvider) {
         $stateProvider
             .state('about', {
-                url:'/about',
+                parent: 'main',
+                url: '/about',
                 views: {
-                    "":{
-                        templateUrl: 'angular/views/home.html'
-                    },
-                    "content@about": {
+                    "body@main": {
                         templateUrl: 'angular/views/about.html'
                     }
                 }
-
             })
-
     }]);
 
 

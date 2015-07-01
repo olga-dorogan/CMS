@@ -1,17 +1,6 @@
-<div ng-controller="AddLectureCtrl">
+<div>
     <div class="row">
-        <div class="col-lg-12">
-            <div id="messages" class="alert alert-{{alertStatus}}" ng-show="messages">
-                <span ng-bind="messages"></span>
-                <i class="dismiss-messages pull-right glyphicon glyphicon-remove" ng-click="messages = ''"
-                   ng-show="messages"></i>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-8">
-            <h3>Добавление лекции</h3>
-
+        <div class="col-md-12">
             <form name="lectureForm" novalidate role="form">
                 <div class="form-group">
                     <label for="name">Тема <span class="required">*</span></label>
@@ -26,8 +15,19 @@
                           ng-required="true"></textarea>
                 </div>
 
+                <label>Файлы для загрузки</label>
+                <div ng-include src="'angular/views/person-course/teacher/addFile.html'"></div>
+                <br>
+
+                <label>Дополнительные ссылки</label>
+                <div ng-include src="'angular/views/person-course/teacher/addLinks.html'"></div>
+                <br>
+
                 <button type="button" class="btn btn-success  trench_out full_screen"
-                        ng-disabled="!isValidLecture(lectureForm)" ng-click="createLecture()"> Добавить лекцию
+                        ng-disabled="!isValidLecture(lectureForm)" ng-click="ok()"> Добавить лекцию
+                </button>
+                <button type="button" class="btn btn-warning trench_out full_screen"
+                        ng-click="cancel()">Отмена
                 </button>
             </form>
         </div>

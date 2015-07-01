@@ -3,12 +3,12 @@
         <div class="controls">
             <span class="btn btn-success fileinput-button btn-file">
                 <i class="icon-plus icon-white"></i>
-                <input type="file" name="file" id="uploadFile" multiple upload=><span>Add files...</span>
+                <input type="file" name="file" id="uploadFile" multiple upload=><span>Выберите файлы...</span>
             </span>
         </div>
     </div>
     <div>
-        <span ng-show="!files.length">No files selected</span>
+        <span ng-show="!files.length">Файлы не выбраны</span>
         <ul>
             <li ng-repeat="file in files">{{file}}</li>
         </ul>
@@ -17,6 +17,6 @@
         <div class="progress-bar progress-bar-success" style="width:{{percentage}}%;"></div>
     </div>
     <div class="form-actions" ng-show="files.length">
-        <button type="submit" class="btn btn-primary pull-left" ng-click="upload()">Upload</button>
+        <button type="submit" class="btn btn-primary pull-left" ng-click="upload()">Загрузить в хранилище</button>
     </div>
 </div>

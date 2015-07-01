@@ -1,5 +1,6 @@
 package org.javatraining.entity;
 
+import org.javatraining.dao.GenericDAO;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "courses", schema = "")
-public class CourseEntity implements Serializable {
+public class CourseEntity  implements Serializable, GenericEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
@@ -19,36 +20,23 @@ public class CourseEntity implements Serializable {
 
     @NotNull
     @Basic
-    @Column(name = "name", nullable = true, insertable = true, updatable = true, length = 255)
+    @Column(name = "name", nullable = false, insertable = true, updatable = true, length = 255)
     private String name;
-
 
     @NotNull
     @Basic
-    @Column(name = "description", nullable = true, insertable = true, updatable = true, length = 16777215)
+    @Column(name = "description", nullable = false, insertable = true, updatable = true, length = 16777215)
     private String description;
 
     @NotNull
     @Basic
-    @Column(name = "startdate", nullable = true, insertable = true, updatable = true)
+    @Column(name = "startdate", nullable = false, insertable = true, updatable = true)
     private Date startdate;
 
     @NotNull
     @Basic
-    @Column(name = "enddate", nullable = true, insertable = true, updatable = true)
+    @Column(name = "enddate", nullable = false, insertable = true, updatable = true)
     private Date enddate;
-
-    @ManyToMany(fetch = FetchType.EAGER,
-            targetEntity=PersonEntity.class,
-            cascade=CascadeType.ALL)
-    @JoinTable(
-            name="person_course",
-            joinColumns=@JoinColumn(name="course_id"),
-            inverseJoinColumns=@JoinColumn(name="person_id")
-    )
-    private Set<PersonEntity> person;
-
-
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "course")
     private Set<LessonEntity> lessons;
@@ -56,6 +44,10 @@ public class CourseEntity implements Serializable {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "courses")
     private Set<NewsEntity> news;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "course")
+    private Set<CoursePersonStatusEntity> coursePersonEntities;
+
 
     public CourseEntity() {
     }
@@ -107,14 +99,6 @@ public class CourseEntity implements Serializable {
         this.enddate = enddate;
     }
 
-    public Set<PersonEntity> getPersons() {
-        return person;
-    }
-
-    public void setPersons(Set<PersonEntity> person) {
-        this.person = person;
-    }
-
     public Set<NewsEntity> getNews() {
         return news;
     }
@@ -131,6 +115,14 @@ public class CourseEntity implements Serializable {
         this.lessons = lessons;
     }
 
+    public Set<CoursePersonStatusEntity> getCoursePersonEntities() {
+        return coursePersonEntities;
+    }
+
+    public void setCoursePersonEntities(Set<CoursePersonStatusEntity> coursePersonEntities) {
+        this.coursePersonEntities = coursePersonEntities;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -143,8 +135,7 @@ public class CourseEntity implements Serializable {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (startdate != null ? !startdate.equals(that.startdate) : that.startdate != null) return false;
-
-        return true;
+         return true;
     }
 
     @Override

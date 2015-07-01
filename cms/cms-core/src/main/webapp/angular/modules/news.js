@@ -1,20 +1,16 @@
 angular.module('myApp.news', ['ui.router'])
-
-    .config(['$stateProvider', '$urlRouterProvider', function($stateProvider) {
+    .config(['$stateProvider', function ($stateProvider) {
         $stateProvider.state('news', {
-            url:'/news',
-            views:{
-                "":{
-                    templateUrl: 'angular/views/home.html'
-                },
-                "content@news":{
+            parent: 'main',
+            url: '/news',
+            views: {
+                "body@main": {
                     templateUrl: 'angular/views/news.html',
                     controller: 'NewsCtrl'
                 }
             }
-
         })
     }])
-    .service('NewsService',NewsService);
+    .service('NewsService', NewsService);
 
 

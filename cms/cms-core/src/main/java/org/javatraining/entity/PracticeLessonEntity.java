@@ -1,5 +1,7 @@
 package org.javatraining.entity;
 
+
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -10,18 +12,18 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "practice_lesson", schema = "")
-public class PracticeLessonEntity implements Serializable {
+public class PracticeLessonEntity implements Serializable, GenericEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
     private Long id;
     @NotNull
     @Basic
-    @Column(name = "task", nullable = true, insertable = true, updatable = true, length = 255)
+    @Column(name = "task", nullable = false, insertable = true, updatable = true, length = 255)
     private String task;
 
     @ManyToOne(cascade = {})
-    @JoinColumn(name = "lesson_id", nullable = true, insertable = true, updatable = true)
+    @JoinColumn(name = "lesson_id", nullable = false, insertable = true, updatable = true)
     private LessonEntity lesson;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessons")
@@ -70,13 +72,11 @@ public class PracticeLessonEntity implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof PracticeLessonEntity)) return false;
-
-        PracticeLessonEntity that = (PracticeLessonEntity) o;
+          PracticeLessonEntity that = (PracticeLessonEntity) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (lesson != null ? !lesson.equals(that.lesson) : that.lesson != null) return false;
         if (task != null ? !task.equals(that.task) : that.task != null) return false;
-
         return true;
     }
 
@@ -87,4 +87,5 @@ public class PracticeLessonEntity implements Serializable {
         result = 31 * result + (lesson != null ? lesson.hashCode() : 0);
         return result;
     }
+
 }

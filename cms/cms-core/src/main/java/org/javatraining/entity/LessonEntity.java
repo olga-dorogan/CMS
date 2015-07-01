@@ -16,7 +16,7 @@ import java.util.Set;
     @NamedQuery(name = "Lesson.FindByCourseId", query = "SELECT l FROM LessonEntity l WHERE l.course.id = :course_id"),
     @NamedQuery(name = "Lesson.FindByCourseIdAndOrderNum", query = "SELECT l FROM LessonEntity l WHERE l.course.id = :course_id AND l.orderNum = :order_num")
 })
-public class LessonEntity implements Serializable {
+public class LessonEntity implements Serializable, GenericEntity {
     public static String FIND_BY_COURSE = "Lesson.FindByCourseId";
     public static String FIND_BY_COURSE_AND_ORDER_NUM = "Lesson.FindByCourseIdAndOrderNum";
 
@@ -26,28 +26,28 @@ public class LessonEntity implements Serializable {
     private Long id;
 
     @Basic
-    @Column(name = "type", nullable = true, insertable = true, updatable = true)
+    @Column(name = "type", nullable = false, insertable = true, updatable = true)
     private Long type;
 
     @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic
-    @Column(name = "order_num", nullable = true, insertable = true, updatable = true)
+    @Column(name = "order_num", nullable = false, insertable = true, updatable = true)
     private Long orderNum;
 
     @NotNull
     @Basic
-    @Column(name = "topic", nullable = true, insertable = true, updatable = true, length = 255)
+    @Column(name = "topic", nullable = false, insertable = true, updatable = true, length = 255)
     private String topic;
 
     @NotNull
     @Basic
-    @Column(name = "description", nullable = true, insertable = true, updatable = true, length = 16777215)
+    @Column(name = "description", nullable = false, insertable = true, updatable = true, length = 16777215)
     private String description;
 
     @NotNull
     @Basic
-    @Column(name = "date", nullable = true, insertable = true, updatable = true, length = 255)
+    @Column(name = "date", nullable = false, insertable = true, updatable = true, length = 255)
     private Date createDate;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "lesson")
@@ -58,7 +58,7 @@ public class LessonEntity implements Serializable {
     private CourseEntity course;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessons")
-    private Set<ForumMessagesEntity> forumMessages;
+    private Set<ForumMessageEntity> forumMessages;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "lesson")
     private Set<PracticeLessonEntity> practiceLesson;
@@ -148,11 +148,11 @@ public class LessonEntity implements Serializable {
         this.lessonLinks = lessonLinks;
     }
 
-    public Set<ForumMessagesEntity> getForumMessages() {
+    public Set<ForumMessageEntity> getForumMessages() {
         return forumMessages;
     }
 
-    public void setForumMessages(Set<ForumMessagesEntity> forumMessages) {
+    public void setForumMessages(Set<ForumMessageEntity> forumMessages) {
         this.forumMessages = forumMessages;
     }
 

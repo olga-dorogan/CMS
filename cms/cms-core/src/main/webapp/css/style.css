@@ -1,24 +1,28 @@
 
-body{
+body {
     margin: 0;
     padding: 10px;
 }
-.wrapper{
+
+.wrapper {
     width: 1100px;
     margin: 0 auto;
 }
-.sign-in{
-    float:right;
+
+.sign-in {
+    float: right;
     display: inline-block;
-    font-size:16px;
-    margin:10px 0;
+    font-size: 16px;
+    margin: 10px 0;
 }
-.info-list{
+
+.info-list {
     font-size: 20px;
     list-style: none;
 }
-.info-list .description{
-    margin-left:25px;
+
+.info-list .description {
+    margin-left: 25px;
     font-size: 16px;
 }
 
@@ -34,6 +38,7 @@ body{
 .info-list .go-into-course {
     color: #374e0c;
 }
+
 .required {
     color: red;
 }
@@ -42,36 +47,116 @@ body{
     cursor: pointer;
 }
 
-.content{
-    margin:50px;
+.person-login {
+    cursor: pointer;
 }
-.avatar{
+
+.person-course-file {
+    table-layout: fixed;
+}
+
+.person-course-file tbody tr td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.img-wait {
+    width: 32px;
+    height: 32px;
+}
+
+.person-menubar {
+    border-right: solid lavender 2px;
+}
+
+.person-course-content {
+    padding-left: 20px;
+}
+
+.person-main-top {
+    border-bottom: solid lavender 2px;
+}
+
+ul#person-menu {
+    list-style-type: none;
+}
+ul#person-menu > li {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+ul#person-menu > li.active > a,
+ul#person-menu > li.active > a:hover,
+ul#person-menu > li.active > a:focus {
+    color: darkblue;
+    font-weight: bolder;
+}
+
+.person-course-add-files {
+    outline: solid lavender 1px;
+    padding: 5px;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 20px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.person-menu-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.content {
+    margin: 50px;
+}
+
+.avatar {
     width: 35px;
     height: 35px;
 }
-#userinfo-wrapper{
+
+#userinfo-wrapper {
     float: none;
     vertical-align: middle;
     display: inline-block;
-    font-size:15px;
+    font-size: 15px;
 }
 
-.trench{
+.trench {
     padding: 10px;
     margin: 5px;
 }
-.trench_out{
+
+.trench_out {
     margin: 5px;
 
 }
 
-.third_screen{
+.third_screen {
     width: 30%;
 }
-.half_screen{
+
+.half_screen {
     width: 50%;
 }
-.full_screen{
+
+.full_screen {
     width: 100%;
 }
 
@@ -80,9 +165,11 @@ body{
     float: none;
     vertical-align: middle;
 }
-#git-id{
-    padding-top:45px;
+
+#git-id {
+    padding-top: 45px;
 }
+
 .btn-custom {
     background-color: hsl(188, 83%, 75%) !important;
     background-repeat: repeat-x;
@@ -99,10 +186,12 @@ body{
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.39);
     -webkit-font-smoothing: antialiased;
 }
+
 .btn-file {
     position: relative;
     overflow: hidden;
 }
+
 .btn-file input[type=file] {
     position: absolute;
     top: 0;

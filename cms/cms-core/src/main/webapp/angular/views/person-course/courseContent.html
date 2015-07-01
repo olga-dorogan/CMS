@@ -1,0 +1,10 @@
+<div>
+<ol>
+    <li ng-repeat="lecture in lectures">
+        {{lecture.topic}}
+    </li>
+</ol>
+    <button ng-show="isTeacher()" class="btn btn-default" ng-click="createLecture()">Добавить лекцию</button>
+    <div ng-include="'angular/templates/add-lecture.html'"></div>
+
+</div>

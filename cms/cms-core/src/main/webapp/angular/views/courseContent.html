@@ -1,8 +1,0 @@
-<div ng-controller="CourseContentCtrl">
-<ol>
-    <li ng-repeat="lecture in lectures">
-        {{lecture.topic}}
-    </li>
-</ol>
-    <button ng-show="isTeacher()" ui-sref="person.addLecture({courseId:courseId})">Добавить лекцию</button>
-</div>

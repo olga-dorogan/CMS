@@ -1,4 +1,4 @@
-<div ng-controller="AddCourseCtrl">
+<div>
     <div class="row">
         <div class="col-lg-12">
             <div id="messages" class="alert alert-{{alertStatus}}" ng-show="messages">
@@ -27,7 +27,7 @@
 
                 <div class="form-group">
                     <label for="teachers"> Преподаватели курса<span class="required">*</span></label>
-                    <select id="teachers" name="teachers"
+                    <select id="teachers"
                             ng-model="courseTeachers"
                             ng-options="teacher.name+' '+teacher.lastName for teacher in teachers"
                             class="form-control" multiple>

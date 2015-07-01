@@ -3,7 +3,7 @@ package org.javatraining.dao;
 
 import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.entity.PersonEntity;
-import org.javatraining.entity.PersonRole;
+import org.javatraining.entity.enums.PersonRole;
 
 import javax.ejb.Stateless;
 import javax.persistence.Query;

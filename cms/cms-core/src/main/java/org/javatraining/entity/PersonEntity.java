@@ -1,5 +1,8 @@
 package org.javatraining.entity;
 
+
+import org.javatraining.entity.enums.PersonRole;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -10,7 +13,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "person", schema = "")
-public class PersonEntity implements Serializable {
+public class PersonEntity implements Serializable, GenericEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
@@ -18,21 +21,21 @@ public class PersonEntity implements Serializable {
 
     @NotNull
     @Basic
-    @Column(name = "name", nullable = true, insertable = true, updatable = true, length = 255)
+    @Column(name = "name", nullable = false, insertable = true, updatable = true, length = 255)
     private String name;
 
     @Basic
-    @Column(name = "second_name", nullable = true, insertable = true, updatable = true, length = 255)
+    @Column(name = "second_name", nullable = false, insertable = true, updatable = true, length = 255)
     private String secondName;
 
     @NotNull
     @Basic
-    @Column(name = "last_name", nullable = true, insertable = true, updatable = true, length = 255)
+    @Column(name = "last_name", nullable = false, insertable = true, updatable = true, length = 255)
     private String lastName;
 
     @NotNull
     @Basic
-    @Column(name = "email", nullable = true, insertable = true, updatable = true, length = 255)
+    @Column(name = "email", nullable = false, insertable = true, updatable = true, length = 255)
     private String email;
 
     @Basic
@@ -40,18 +43,23 @@ public class PersonEntity implements Serializable {
     private String phone;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "personRole", nullable = true, insertable = true, updatable = true, length = 255)
+    @Column(name = "personRole", nullable = false, insertable = true, updatable = true, length = 255)
     private PersonRole personRole;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "persons")
-    private Set<ForumMessagesEntity> forumMassages;
+    private Set<ForumMessageEntity> forumMassages;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "persons")
     private Set<MarkEntity> marks;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "person")
+    private Set<CoursePersonStatusEntity> coursePersonEntities;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "person")
-    private Set<CourseEntity> course;
+
+
+
+//    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "person")
+//    private Set<CourseEntity> course;
 
 
 
@@ -106,10 +114,10 @@ public class PersonEntity implements Serializable {
         this.lastName = lastName;
     }
 
-    public void setForumMassages(Set<ForumMessagesEntity> forumMassages) {
+    public void setForumMassages(Set<ForumMessageEntity> forumMassages) {
         this.forumMassages = forumMassages;
     }
-    public Set<ForumMessagesEntity> getForumMassages() {
+    public Set<ForumMessageEntity> getForumMassages() {
         return forumMassages;
     }
 
@@ -129,13 +137,13 @@ public class PersonEntity implements Serializable {
         this.marks = marks;
     }
 
-    public Set<CourseEntity> getCourse() {
-        return course;
-    }
+//    public Set<CourseEntity> getCourse() {
+//        return course;
+//    }
 
-    public void setCourse(Set<CourseEntity> course) {
-        this.course = course;
-    }
+//    public void setCourse(Set<CourseEntity> course) {
+//        this.course = course;
+//    }
 
     public String getEmail() {
         return email;
@@ -151,6 +159,14 @@ public class PersonEntity implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public Set<CoursePersonStatusEntity> getCoursePersonEntities() {
+        return coursePersonEntities;
+    }
+
+    public void setCoursePersonEntities(Set<CoursePersonStatusEntity> coursePersonEntities) {
+        this.coursePersonEntities = coursePersonEntities;
     }
 
     @Override

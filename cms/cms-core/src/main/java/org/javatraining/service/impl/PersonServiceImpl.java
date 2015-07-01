@@ -1,13 +1,14 @@
 package org.javatraining.service.impl;
 
-import org.javatraining.dao.CourseDAO;
-import org.javatraining.dao.MarkDAO;
-import org.javatraining.dao.PersonDAO;
+import org.javatraining.dao.*;
 import org.javatraining.dao.exception.EntityNotExistException;
-import org.javatraining.dao.PracticeLessonDAO;
 import org.javatraining.entity.*;
 import org.javatraining.model.*;
 import org.javatraining.model.conversion.CourseConverter;
+import org.javatraining.entity.enums.CourseStatus;
+import org.javatraining.entity.enums.PersonRole;
+import org.javatraining.model.*;
+import org.javatraining.model.conversion.CoursePersonStatusConverter;
 import org.javatraining.model.conversion.MarkConverter;
 import org.javatraining.model.conversion.PersonConverter;
 import org.javatraining.service.PersonService;
@@ -58,6 +59,8 @@ public class PersonServiceImpl implements PersonService {
     public void removePersonDescription(Long id) {
         //FIXME add implementation after creating specified repository
     }
+    @EJB
+    private CoursePersonStatusDAO coursePersonStatusDAO;
 
     @Override
     public void saveStudent(@NotNull @Valid PersonVO personVO) {
@@ -115,27 +118,43 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void addPersonToCourse(@NotNull PersonVO personVO, @NotNull CourseVO courseVO) {
-        // owning side is CourseEntity, so all operations need to be from CourseEntity
+    public void addPersonRequestForCourse(@NotNull PersonVO personVO, @NotNull CourseVO courseVO) {
+        CoursePersonStatusEntity entity = new CoursePersonStatusEntity(CourseStatus.REQUESTED);
         PersonEntity personEntity = personDAO.getById(personVO.getId());
+        entity.setPerson(personEntity);
         CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
-        courseEntity.getPersons().add(personEntity);
-        courseDAO.update(courseEntity);
+        entity.setCourse(courseEntity);
+        coursePersonStatusDAO.save(entity);
     }
 
     @Override
-    public void removePersonFromCourse(@NotNull PersonVO personVO, @NotNull CourseVO courseVO) {
-        // owning side is CourseEntity, so all operations need to be from CourseEntity
-        PersonEntity personEntity = personDAO.getById(personVO.getId());
-        CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
-        courseEntity.getPersons().remove(personEntity);
-        courseDAO.update(courseEntity);
+    public void removePersonRequestForCourse(@NotNull PersonVO personVO, @NotNull CourseVO courseVO) {
+        CoursePersonStatusEntity existingStatus = coursePersonStatusDAO.getStatusByPersonIdAndCourseId(personVO.getId(), courseVO.getId());
+        if (existingStatus != null) {
+            coursePersonStatusDAO.removeById(existingStatus.getId());
+        }
     }
 
     @Override
-    public Set<CourseVO> getCourses(@NotNull PersonVO personVO) {
-        PersonEntity personEntity = personDAO.getById(personVO.getId());
-        return CourseConverter.convertEntitiesToVOs(personEntity.getCourse());
+    public void approvePersonRequestForCourse(@NotNull CoursePersonStatusVO coursePersonStatusVO) {
+        CoursePersonStatusEntity entity = coursePersonStatusDAO.getById(coursePersonStatusVO.getId());
+        entity.setCourseStatus(CourseStatus.SIGNED);
+        coursePersonStatusDAO.update(entity);
+        coursePersonStatusVO.setCourseStatus(CourseStatus.SIGNED);
+    }
+
+    @Override
+    public void rejectPersonRequestForCourse(@NotNull CoursePersonStatusVO coursePersonStatusVO) {
+        CoursePersonStatusEntity entity = coursePersonStatusDAO.getById(coursePersonStatusVO.getId());
+        entity.setCourseStatus(CourseStatus.UNSIGNED);
+        coursePersonStatusDAO.update(entity);
+        coursePersonStatusVO.setCourseStatus(CourseStatus.UNSIGNED);
+    }
+
+    @Override
+    public List<CoursePersonStatusVO> getPersonCourseStatuses(@NotNull PersonVO personVO) {
+        List<CoursePersonStatusEntity> entities = coursePersonStatusDAO.getCourseStatusesForPerson(personVO.getId());
+        return CoursePersonStatusConverter.convertEntitiesToVOs(entities);
     }
 
     @Override

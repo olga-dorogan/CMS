@@ -1,21 +1,19 @@
 package org.javatraining.dao;
 
-import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.dao.exception.EntityIsAlreadyExistException;
+import org.javatraining.dao.exception.EntityNotExistException;
+import org.javatraining.entity.GenericEntity;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
-/**
- * Created by vika on 26.05.15.
- */
 
-public abstract class GenericDAO<T extends Serializable> {
 
-    private Class<T> entityClass;
+public abstract class GenericDAO <ENTITY extends GenericEntity> {
+
+
+    Class<ENTITY> entityClass ;
 
     @PersistenceContext
     private EntityManager em;
@@ -23,53 +21,55 @@ public abstract class GenericDAO<T extends Serializable> {
     public GenericDAO() {
     }
 
-    public void setEntityClass(Class<T> entityClass) {
+    public void setEntityClass(Class<ENTITY> entityClass) {
         this.entityClass = entityClass;
     }
 
 
-    public T remove(@NotNull T entity) {
-        try {
+    public ENTITY remove(@NotNull ENTITY entity) {
+        if (getEntityManager().find(entityClass, entity.getId()) == null) {
+            throw new EntityNotExistException("Field with "+entity.getId()+" does not exist in database");
+        }else {
+
             entity = getEntityManager().merge(entity);
             getEntityManager().remove(entity);
-        } catch (IllegalArgumentException e) {
-            throw new EntityNotExistException();
-        }
-
-        return entity;
-    }
-
-    public T getById(@NotNull Long id) {
-        T entity = getEntityManager().find(entityClass, id);
-        if (entity == null) {
-            throw new EntityNotExistException();
         }
         return entity;
     }
 
-    public T removeById(@NotNull Long id) {
-        T entity = getEntityManager().find(entityClass, id);
+    public ENTITY getById(@NotNull Long id) {
+        ENTITY entity = getEntityManager().find(entityClass, id);
         if (entity == null) {
-            throw new EntityNotExistException();
+            throw new EntityNotExistException("Field with "+id+" does not exist in database");
+        }
+        return entity;
+    }
+
+    public ENTITY removeById(@NotNull Long id) {
+        ENTITY entity = getEntityManager().find(entityClass, id);
+        if (entity == null) {
+            throw new EntityNotExistException("Field with "+id+" does not exist in database");
         }
         getEntityManager().remove(entity);
         return entity;
     }
 
-    public T save(@NotNull T entity) {
-        try {
+    public ENTITY save(@NotNull ENTITY entity) {
+        if (entity.getId() != null && getEntityManager().find(entityClass, entity.getId()) != null) {
+            throw new EntityIsAlreadyExistException("Field with id = "
+                    + entity.getId()
+                    + " already exists in database");
+        }else {
             getEntityManager().persist(entity);
-        } catch (EntityExistsException e) {
-            throw new EntityIsAlreadyExistException("Entity already exists");
         }
         return entity;
     }
 
-    public T update(@NotNull T entity) {
-        try {
-            getEntityManager().merge(entity);
-        } catch (IllegalArgumentException e) {
-            throw new EntityNotExistException();
+    public ENTITY update(@NotNull ENTITY entity) {
+        if (entity.getId() != null && getEntityManager().find(entityClass, entity.getId()) == null) {
+            throw new EntityNotExistException("Field with "+entity.getId()+" does not exist in database");
+        }else {
+           getEntityManager().merge(entity);
         }
         return entity;
     }
@@ -78,5 +78,6 @@ public abstract class GenericDAO<T extends Serializable> {
     protected EntityManager getEntityManager() {
         return em;
     }
+
 
 }

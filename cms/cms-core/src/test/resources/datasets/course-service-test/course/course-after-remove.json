@@ -1,0 +1,12 @@
+{
+  "courses": [],
+    "news": [
+    {
+        "id": 1,
+        "title": "title",
+        "description": "newsDescription",
+        "date": "2015-10-02 18:48:05",
+        "course_id": 1
+
+}]
+}

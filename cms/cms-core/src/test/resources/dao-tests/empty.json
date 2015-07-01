@@ -1,7 +1,7 @@
 {
   "courses" : [],
   "person":[],
-  "person_course": [],
+  "course_person_status": [],
    "news": [],
    "mark":[],
    "lesson":[],

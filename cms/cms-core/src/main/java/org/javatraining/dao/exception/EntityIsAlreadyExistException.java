@@ -22,4 +22,8 @@ public class EntityIsAlreadyExistException extends RuntimeException {
     public EntityIsAlreadyExistException(String message, Throwable cause) {
         super(message, cause);
     }
+
+    public Exception getCausedByException() {
+        return (Exception) getCause();
+    }
 }

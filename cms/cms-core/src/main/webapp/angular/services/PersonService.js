@@ -43,14 +43,32 @@ function PersonService(Restangular) {
     };//FIXME проверка этого метода на правильность урлов
 
     this.getTeachers = function () {
-        return Person.getList({'role': 'teacher'}).$object;
+        return Person.getList({'role': 'teacher'});
     };
 
-    this.getCoursesForPerson = function (personId) {
+    this.getCoursesStatusesForPerson = function (personId) {
         if (personId === undefined) {
             return [];
         }
-        return Restangular.one("resources/person", personId).all("course").getList().$object;
+        return Restangular.one("resources/person", personId).all("course").getList();
+    };
+
+    this.getLinkNameForStatus = function (status) {
+        var msg = 'Подписаться';
+        switch (status) {
+            case "REQUESTED":
+                msg = 'Перейти к курсу';
+                break;
+            case "SIGNED":
+                msg = 'Перейти к курсу';
+                break;
+            case "UNSIGNED":
+                msg = 'Подписаться';
+                break;
+            default:
+                msg = 'Действия запрещены';
+        }
+        return msg;
     };
 
     this.getCoursesForPersonCap = function () {

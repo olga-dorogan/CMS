@@ -4,8 +4,9 @@ import flexjson.JSONException;
 import org.javatraining.auth.Auth;
 import org.javatraining.config.AuthRole;
 import org.javatraining.config.Config;
-import org.javatraining.entity.PersonRole;
+import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.model.CourseVO;
+import org.javatraining.model.CourseWithDetailsVO;
 import org.javatraining.model.PersonVO;
 import org.javatraining.service.CourseService;
 import org.javatraining.service.PersonService;
@@ -47,7 +48,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{course_id}")
     public Response getCourse(@PathParam("course_id") long courseId) {
-        CourseVO course =courseService.getById(courseId);
+        CourseVO course =courseService.getCourseById(courseId);
         Response.ResponseBuilder r;
         if (course == null)
             r = Response.noContent();
@@ -59,7 +60,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
-    public Response createCourse(@Context UriInfo uriInfo, CourseVO courseVO) {
+    public Response createCourse(@Context UriInfo uriInfo, CourseWithDetailsVO courseVO) {
         Response.ResponseBuilder r;
         try {
             courseService.save(courseVO);
@@ -127,7 +128,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
         person.setId(personId);
         CourseVO course = new CourseVO();
         course.setId(courseId);
-        personService.addPersonToCourse(person, course);
+        personService.addPersonRequestForCourse(person, course);
         return Response.accepted().build();
     }
 
@@ -139,7 +140,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
         person.setId(userId);
         CourseVO course = new CourseVO();
         course.setId(courseId);
-        personService.removePersonFromCourse(person, course);
+        personService.removePersonRequestForCourse(person, course);
         return Response.accepted().build();
     }
 }
