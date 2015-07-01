@@ -19,21 +19,24 @@ angular.module('myApp.person', ['ui.router'])
                     personalizedCourses: function ($rootScope, courseService, personService) {
                         var promise = courseService.getCourses();
                         promise = promise.then(function (courses) {
-                            promise = personService.getCoursesForPerson($rootScope.getUserId());
-                            promise = promise.then(function (personCourses) {
+                            promise = personService.getCoursesStatusesForPerson($rootScope.getUserId());
+                            promise = promise.then(function (personCourseStatuses) {
                                 var personalizedCourses = courses;
                                 for (var i = 0; i < personalizedCourses.length; i++) {
-                                    personalizedCourses[i].isPersonEnrolled = false;
-                                }
-                                for (var i = 0; i < personCourses.length; i++) {
-                                    for (var j = 0; j < personalizedCourses.length; j++) {
-                                        if (personalizedCourses[i].id == personCourses[i].id) {
+                                    var isExistCourseStatus = false;
+                                    for (var j = 0; j < personCourseStatuses.length; j++) {
+                                        if(personalizedCourses[i].id == personCourseStatuses[j].courseId) {
+                                            personalizedCourses[i].courseActionMsg =
+                                                personService.getLinkNameForStatus(personCourseStatuses[j].courseStatus);
                                             personalizedCourses[i].isPersonEnrolled = true;
-                                            break;
+                                            isExistCourseStatus = true;
                                         }
                                     }
+                                    if(!isExistCourseStatus) {
+                                        personalizedCourses[i].courseActionMsg = 'Undefined action';
+                                        personalizedCourses[i].isPersonEnrolled = false;
+                                    }
                                 }
-                                ;
                                 return personalizedCourses;
                             });
                             return promise;

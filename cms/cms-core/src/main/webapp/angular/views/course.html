@@ -13,7 +13,7 @@
                     <div ng-if="course.isPersonEnrolled !== undefined">
                         <a ui-sref="person.course({courseId:course.id, courseName:course.name})"
                            ng-if="course.isPersonEnrolled" class="go-into-course">
-                            Перейти к курсу
+                            {{course.courseActionMsg}}
                         </a>
                         <a href="" ng-if="!course.isPersonEnrolled" class="enroll-into-course">Подписаться</a>
                     </div>

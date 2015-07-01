@@ -67,31 +67,30 @@ body {
 }
 
 .person-menubar {
-    position: fixed;
-    border-width: 0;
-    min-height: 5px;
-    min-width: 5px;
-    max-width: 200px;
-    width: 200px;
-    margin-bottom: 0;
+    border-right: solid lavender 2px;
 }
 
 .person-course-content {
-    margin-left: 200px;
-    padding-left: 50px;
-    border-left: solid lavender 2px;
+    padding-left: 20px;
 }
 
 .person-main-top {
     border-bottom: solid lavender 2px;
 }
 
-ul#person-menu.nav-pills > li.active > a,
-ul#person-menu.nav-pills > li.active > a:hover,
-ul#person-menu.nav-pills > li.active > a:focus {
+ul#person-menu {
+    list-style-type: none;
+}
+ul#person-menu > li {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+ul#person-menu > li.active > a,
+ul#person-menu > li.active > a:hover,
+ul#person-menu > li.active > a:focus {
     color: darkblue;
-    background-color: linen;
-    border: solid linen 1px;
+    font-weight: bolder;
 }
 
 .person-course-add-files {
