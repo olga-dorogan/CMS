@@ -26,4 +26,15 @@ function SettingCtrl($scope, $window, PersonService) {
     $scope.updatePerson = function () {
         PersonService.updatePerson($scope.person);//FIXME finally refresh fields of person
     }
+
+    $scope.addImage = function () {//FIXME check read file for image extension
+        var f = document.getElementById('image').files[0],
+            r = new FileReader();
+        r.onloadend = function (e) {
+            $scope.person.avatar =  e.target.result;
+        };
+        r.readAsBinaryString(f);
+
+        PersonService.updatePicture($scope.person.avatar);
+    }
 }
