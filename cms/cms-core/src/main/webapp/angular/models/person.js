@@ -5,12 +5,10 @@ angular.module('myApp.person', ['ui.router'])
     .config(['$stateProvider', function ($stateProvider) {
         $stateProvider
             .state('person', {
+                parent: 'main',
                 url: '/person',
                 views: {
-                    "": {
-                        templateUrl: 'angular/views/home.html'
-                    },
-                    "content@person": {
+                    "body@main": {
                         templateUrl: 'angular/views/course.html',
                         controller: 'PersonCtrl'
                     }
@@ -47,10 +45,7 @@ angular.module('myApp.person', ['ui.router'])
             .state('person.addCourse', {
                 url: '/addCourse',
                 views: {
-                    "": {
-                        templateUrl: 'angular/views/home.html'
-                    },
-                    "content@person": {
+                    "body@main": {
                         templateUrl: 'angular/views/person-course/teacher/addCourse.html',
                         controller: "AddCourseCtrl"
                     }
@@ -70,7 +65,7 @@ angular.module('myApp.person', ['ui.router'])
                 url: '/course/:courseId',
                 params: {courseName: null},
                 views: {
-                    "@": {
+                    "body@main": {
                         templateUrl: 'angular/views/person-course/main.html'
                     },
                     "top@person.course": {
