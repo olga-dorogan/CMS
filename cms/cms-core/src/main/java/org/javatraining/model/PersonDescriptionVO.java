@@ -7,21 +7,21 @@ package org.javatraining.model;
  */
 public class PersonDescriptionVO {
     private Long id;
-    private Image personalLogo;
+    private Image avatar;
     private String graduation;
     private String experience;
-    private String phoneNubmer;
+    private String phoneNumber;
 
     public PersonDescriptionVO() {
 
     }
 
-    public PersonDescriptionVO(Long id, Image personalLogo, String graduation, String experience, String phoneNubmer) {
+    public PersonDescriptionVO(Long id, Image avatar, String graduation, String experience, String phoneNumber) {
         this.id = id;
-        this.personalLogo = personalLogo;
+        this.avatar = avatar;
         this.graduation = graduation;
         this.experience = experience;
-        this.phoneNubmer = phoneNubmer;
+        this.phoneNumber = phoneNumber;
     }
 
     public Long getId() {
@@ -32,12 +32,12 @@ public class PersonDescriptionVO {
         this.id = id;
     }
 
-    public Image getPersonalLogo() {
-        return personalLogo;
+    public Image getAvatar() {
+        return avatar;
     }
 
-    public void setPersonalLogo(Image personalLogo) {
-        this.personalLogo = personalLogo;
+    public void setAvatar(Image avatar) {
+        this.avatar = avatar;
     }
 
     public String getGraduation() {
@@ -56,11 +56,11 @@ public class PersonDescriptionVO {
         this.experience = experience;
     }
 
-    public String getPhoneNubmer() {
-        return phoneNubmer;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhoneNubmer(String phoneNubmer) {
-        this.phoneNubmer = phoneNubmer;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

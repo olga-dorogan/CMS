@@ -6,21 +6,21 @@ package org.javatraining.model;
  * For more information you should send mail to codedealerb@gmail.com
  */
 public class Image {
-    private byte[] imagebytes;
+    private byte[] imageBytes;
 
     public Image(){
 
     }
 
-    public Image(byte[] imagebytes){
-        this.imagebytes = imagebytes;
+    public Image(byte[] imageBytes){
+        this.imageBytes = imageBytes;
     }
 
-    public byte[] getImagebytes() {
-        return imagebytes;
+    public byte[] getImageBytes() {
+        return imageBytes;
     }
 
-    public void setImagebytes(byte[] imagebytes) {
-        this.imagebytes = imagebytes;
+    public void setImageBytes(byte[] imageBytes) {
+        this.imageBytes = imageBytes;
     }
 }
