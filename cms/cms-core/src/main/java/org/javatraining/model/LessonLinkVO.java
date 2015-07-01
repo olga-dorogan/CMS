@@ -16,13 +16,13 @@ public class LessonLinkVO implements Serializable {
     @NotNull
     private Long id;
     @NotNull
+    private Long orderNum;
+    @NotNull
     private Long lessonId;
     @NotNull
     private String description;
     @NotNull
     private String link;
-
-    private LessonEntity lesson;
 
     public Long getId() {
         return id;
@@ -30,6 +30,14 @@ public class LessonLinkVO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Long orderNum) {
+        this.orderNum = orderNum;
     }
 
     public Long getLessonId() {
@@ -56,14 +64,6 @@ public class LessonLinkVO implements Serializable {
         this.link = link;
     }
 
-    public LessonEntity getLesson() {
-        return lesson;
-    }
-
-    public void setLesson(LessonEntity lesson) {
-        this.lesson = lesson;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,7 +73,7 @@ public class LessonLinkVO implements Serializable {
 
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (lesson != null ? !lesson.equals(that.lesson) : that.lesson != null) return false;
+        if (orderNum != null ? !orderNum.equals(that.id) : that.orderNum != null) return false;
         if (lessonId != null ? !lessonId.equals(that.lessonId) : that.lessonId != null) return false;
         if (link != null ? !link.equals(that.link) : that.link != null) return false;
 
@@ -83,11 +83,10 @@ public class LessonLinkVO implements Serializable {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (orderNum != null ? orderNum.hashCode() : 0);
         result = 31 * result + (lessonId != null ? lessonId.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (link != null ? link.hashCode() : 0);
-        result = 31 * result + (lesson != null ? lesson.hashCode() : 0);
         return result;
     }
-
 }
