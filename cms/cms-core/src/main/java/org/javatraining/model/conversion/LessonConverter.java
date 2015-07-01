@@ -47,8 +47,8 @@ public class LessonConverter {
 
     public static Set<LessonEntity> convertVOsToEntities(@NotNull Collection<LessonVO> lessonVOs) {
         Set<LessonEntity> lessonEntities = new HashSet<>();
-        for(LessonVO LessonVOs : lessonVOs) {
-            lessonEntities.add(convertVOToEntity(LessonVOs));
+        for(LessonVO LessonVO : lessonVOs) {
+            lessonEntities.add(convertVOToEntity(LessonVO));
         }
         return lessonEntities;
     }
