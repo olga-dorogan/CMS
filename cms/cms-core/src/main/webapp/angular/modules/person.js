@@ -28,6 +28,22 @@ angular.module('myApp.person', ['ui.router'])
                     }
                 }
             })
+            .state('person.subcribe', {
+                url: "/person",
+                views: {
+                    "": {
+                        templateUrl: 'angular/views/home.html'
+                    },
+                    "content@person": {
+                        templateUrl: 'angular/views/course.html',
+                        controller: 'PersonCtrl'//FIXME KAK PROHODIT VSE?
+                    },
+                    "avalaible@person": {
+                        templateUrl: 'angular/views/settings',
+                        controller: 'PersonCtrl'
+                    }
+                }
+            })
             .state('person.course', {
                 url: '/course/:courseId',
                 views: {

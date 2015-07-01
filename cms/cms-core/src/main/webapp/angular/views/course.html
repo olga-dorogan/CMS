@@ -10,7 +10,7 @@
                     <a ui-sref="person.course({courseId:course.id})" ng-if=" isPersonInCourse(course)" class="go-into-course">
                         Перейти к курсу
                     </a>
-                    <a href="" ng-if="!isPersonInCourse(course)" class="enroll-into-course">Подписаться</a>
+                    <a ui-sref="person.subscribe" ng-if="!isPersonInCourse(course)" class="enroll-into-course">Подписаться</a>
                 </div>
             </div>
         </div>

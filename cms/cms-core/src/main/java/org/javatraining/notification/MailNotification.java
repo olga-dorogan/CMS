@@ -1,9 +1,7 @@
-package org.javatraining.integration.gitlab.impl;
+package org.javatraining.notification;
 
 import org.apache.velocity.app.VelocityEngine;
-import org.javatraining.integration.gitlab.api.model.GitLabUser;
-import org.javatraining.notification.NotificationService;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.javatraining.model.PersonVO;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -17,10 +15,10 @@ import java.util.Properties;
 
 /**
  * The project name is cms.
- * Created by sergey on 17.06.15 at 13:26.
+ * Created by sergey on 30.06.15 at 18:06.
  * For more information you should send mail to codedealerb@gmail.com
  */
-public class GitLabNotificationServiceImpl implements NotificationService<GitLabUser> {
+public class MailNotification implements NotificationService<PersonVO> {
     private JavaMailSenderImpl sender;
     private VelocityEngine velocityEngine;
 
@@ -34,7 +32,7 @@ public class GitLabNotificationServiceImpl implements NotificationService<GitLab
     }
 
     @Override
-    public void sendUserProperties(String from, GitLabUser user) {
+    public void sendUserProperties(String from, PersonVO user) {
         sender = new JavaMailSenderImpl();
         sender.setHost("smtp.gmail.com");
         sender.setUsername("codedealerb");
@@ -49,12 +47,12 @@ public class GitLabNotificationServiceImpl implements NotificationService<GitLab
             helper.setTo(new InternetAddress(user.getEmail()));
             helper.setFrom(new InternetAddress(from));
             helper.setSentDate(new Date());
-            helper.setSubject("GitLab Properties");
+            helper.setSubject("");//set subject
             Map model = new HashMap();
-            model.put("gitlabProperties", user);
+            model.put("personProperties", user);
 
             String text = VelocityEngineUtils.mergeTemplateIntoString(
-                    velocityEngine, "../resources/velocity/gitlab-mail-template.html", "UTF-8", model);
+                    velocityEngine, "../resources/velocity/mail.html", "UTF-8", model);
             helper.setText(text, true);
         };
         sender.send(preparator);

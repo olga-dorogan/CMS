@@ -25,7 +25,7 @@ function SettingCtrl($scope, $window, PersonService) {
 
     $scope.updatePerson = function () {
         PersonService.updatePerson($scope.person);//FIXME finally refresh fields of person
-    }
+    };
 
     $scope.addImage = function () {//FIXME check read file for image extension
         var f = document.getElementById('image').files[0],
@@ -36,5 +36,5 @@ function SettingCtrl($scope, $window, PersonService) {
         r.readAsBinaryString(f);
 
         PersonService.updatePicture($scope.person.avatar);
-    }
+    };
 }
