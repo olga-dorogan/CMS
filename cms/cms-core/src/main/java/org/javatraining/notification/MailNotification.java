@@ -2,13 +2,15 @@ package org.javatraining.notification;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.javatraining.model.PersonVO;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
+import javax.mail.*;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import java.util.Date;
+import javax.mail.internet.MimeMessage;
+import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -19,10 +21,8 @@ import java.util.Properties;
  * For more information you should send mail to codedealerb@gmail.com
  */
 public class MailNotification implements NotificationService<PersonVO> {
-    private JavaMailSenderImpl sender;
-    private VelocityEngine velocityEngine;
 
-    private static VelocityEngine createEngine() throws Exception {
+    public static VelocityEngine createEngine() throws Exception {
         VelocityEngine ve = new VelocityEngine();
         Properties p = new Properties();
         p.setProperty("resource.loader", "class");
@@ -32,29 +32,57 @@ public class MailNotification implements NotificationService<PersonVO> {
     }
 
     @Override
-    public void sendUserProperties(String from, PersonVO user) {
-        sender = new JavaMailSenderImpl();
-        sender.setHost("smtp.gmail.com");
-        sender.setUsername("codedealerb");
-        sender.setPassword("");//insert pass
+    public void sendUserProperties(String subject, PersonVO user) {
+        Properties props = new Properties();
+        JSONParser parser = new JSONParser();
         try {
-            velocityEngine = createEngine();
+            JSONObject propertiesMarshaler = (JSONObject) parser.parse(new FileReader(
+                    "../resources/mail/mail_properties.json"));
+
+            props.put("mail.transport.protocol", propertiesMarshaler.get("mail.transport.protocol"));
+            props.put("mail.host", propertiesMarshaler.get("mail.host"));
+            props.put("mail.smtp.auth", propertiesMarshaler.get("mail.smtp.auth"));
+            props.put("mail.smtp.port", propertiesMarshaler.get("mail.smtp.port"));
+            props.put("mail.debug", propertiesMarshaler.get("mail.debug"));
+            props.put("mail.smtp.socketFactory.port", propertiesMarshaler.get("mail.smtp.socketFactory.port"));
+            props.put("mail.smtp.socketFactory.class", propertiesMarshaler.get("mail.smtp.socketFactory.class"));
+            props.put("mail.smtp.socketFactory.fallback", propertiesMarshaler.get("mail.smtp.socketFactory.fallback"));
+
+            propertiesMarshaler = (JSONObject) parser.parse(new FileReader(
+                    "../resources/mail/account_properties.json"));
+
+            String from = (String) propertiesMarshaler.get("email_for_notification");
+            String password = (String) propertiesMarshaler.get("password_for_notification");
+
+            Session session = Session.getDefaultInstance(props,
+                    new Authenticator() {
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(from, password);
+                        }
+                    });
+
+            Transport transport = session.getTransport();
+            InternetAddress addressFrom = new InternetAddress(from);
+
+            VelocityEngine velocityEngine = createEngine();
+
+            MimeMessage message = new MimeMessage(session);
+            message.setSender(addressFrom);
+            message.setSubject(subject);
+
+            Map model = new HashMap<>();
+            model.put("person.Properties", user);
+
+            message.setContent(VelocityEngineUtils.mergeTemplateIntoString(
+                            velocityEngine, "../resources/velocity/mail.html", "UTF-8", model),
+                    "text/html; charset=UTF-8");
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
+
+            transport.connect();
+            Transport.send(message);
+            transport.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        MimeMessagePreparator preparator = mimeMessage -> {
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            helper.setTo(new InternetAddress(user.getEmail()));
-            helper.setFrom(new InternetAddress(from));
-            helper.setSentDate(new Date());
-            helper.setSubject("");//set subject
-            Map model = new HashMap();
-            model.put("personProperties", user);
-
-            String text = VelocityEngineUtils.mergeTemplateIntoString(
-                    velocityEngine, "../resources/velocity/mail.html", "UTF-8", model);
-            helper.setText(text, true);
-        };
-        sender.send(preparator);
     }
 }

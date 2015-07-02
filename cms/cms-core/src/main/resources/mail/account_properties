@@ -1,0 +1,6 @@
+{
+  "email_for_notification": "codedealerb@gmail.com",
+  "password_for_notification": "",//insert pass here
+  "email_for_gitlab_notification": "",
+  "password_for_gitlab_notification": ""
+}
