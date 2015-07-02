@@ -5,8 +5,7 @@ package org.javatraining.model;
  * Created by sergey on 28.06.15 at 17:26.
  * For more information you should send mail to codedealerb@gmail.com
  */
-public class PersonDescriptionVO {
-    private Long id;
+public class PersonDescriptionVO extends PersonVO {
     private Image avatar;
     private String graduation;
     private String experience;
@@ -17,19 +16,10 @@ public class PersonDescriptionVO {
     }
 
     public PersonDescriptionVO(Long id, Image avatar, String graduation, String experience, String phoneNumber) {
-        this.id = id;
         this.avatar = avatar;
         this.graduation = graduation;
         this.experience = experience;
         this.phoneNumber = phoneNumber;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Image getAvatar() {

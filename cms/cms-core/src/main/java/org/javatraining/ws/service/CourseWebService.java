@@ -8,6 +8,9 @@ import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.CourseWithDetailsVO;
 import org.javatraining.model.PersonVO;
+import org.javatraining.notification.email.impl.MailNotification;
+import org.javatraining.notification.email.interfaces.NotificationService;
+import org.javatraining.notification.sms.SMSNotificationService;
 import org.javatraining.service.CourseService;
 import org.javatraining.service.PersonService;
 
@@ -48,7 +51,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{course_id}")
     public Response getCourse(@PathParam("course_id") long courseId) {
-        CourseVO course =courseService.getCourseById(courseId);
+        CourseVO course = courseService.getCourseById(courseId);
         Response.ResponseBuilder r;
         if (course == null)
             r = Response.noContent();
@@ -71,6 +74,51 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
         } catch (URISyntaxException e) {
             //this shouldn't happen
             r = Response.serverError();
+        }
+
+        return r.build();
+    }
+
+    @POST
+    @Path("{course_id}/notification/sms")
+    @Consumes("application/json")
+    public Response sendSmsNotification(@PathParam("course_id") long id, String text) {
+        Response.ResponseBuilder r;
+        try {
+            List<PersonVO> students = courseService.getAllPersonsFromCourseByRole(
+                    courseService.getCourseById(id), PersonRole.STUDENT);
+            SMSNotificationService smsService = new SMSNotificationService();
+            if (smsService.connectAndAuthToService()) {
+                students.stream().map(
+                        s -> personService.getPersonDescription(s.getId())
+                ).forEach(s -> smsService.sendNotificationToEndPoint(text, s));
+            } else {
+                r = Response.status(Response.Status.BAD_GATEWAY);
+            }
+            r = Response.ok();
+        } catch (JSONException e) {
+            r = Response.status(Response.Status.NOT_ACCEPTABLE);
+        }
+
+        return r.build();
+    }
+
+    @POST
+    @Path("{course_id}/notification/email")
+    @Consumes("application/json")
+    public Response sendEmailNotification(@PathParam("course_id") long id, String subject) {
+        Response.ResponseBuilder r;
+        try {
+            List<PersonVO> students = courseService.getAllPersonsFromCourseByRole(
+                    courseService.getCourseById(id), PersonRole.STUDENT);
+            SMSNotificationService smsService = new SMSNotificationService();
+            NotificationService<PersonVO> emailService = new MailNotification();
+            students.parallelStream().forEach(
+                    s -> emailService.sendNotificationToEndPoint(subject, s)
+            );
+            r = Response.ok();
+        } catch (JSONException e) {
+            r = Response.status(Response.Status.NOT_ACCEPTABLE);
         }
 
         return r.build();

@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by vika on 30.05.15.
  */
 public class PersonVO implements Serializable {
-    private Long id;
+    protected Long id;
     @NotNull
     private String name;
     private String secondName;

@@ -46,7 +46,7 @@ public class PersonConverter {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-//        gitLabNotification.sendUserProperties(rootMail, entity);
+//        gitLabNotification.sendNotificationToEndPoint(rootMail, entity);
 
         return entity;
     }
