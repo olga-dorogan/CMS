@@ -57,11 +57,6 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
                     $window.localStorage['token'] = $window.gapi.auth.getToken().access_token;
                     $state.go("person");
                 });
-                //Заглушка для определения роли
-                //$window.localStorage['role'] = "teacher";
-                //$window.localStorage['id'] = 1;
-                //$window.localStorage['name'] = GData.getUser().name;
-
                 console.log('user is logined successfully');
             }, function () {
                 $state.go("home");
