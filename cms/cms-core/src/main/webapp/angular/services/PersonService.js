@@ -27,6 +27,19 @@ function PersonService(Restangular) {
             });
     };
 
+    this.createPersonForAuth = function (user) {
+        var name = user.name.split(" ");
+        return Person.post(
+            {
+                "email": user.email,
+                "id": null,
+                "lastName": name[1],
+                "name": name[0],
+                "personRole": null,
+                "secondName": null
+            })
+    };
+
     this.updatePerson = function (user) {
         var PersonDescription = Person.get($window.localStorage['id']).one("description");
         return Person.get($window.localStorage['id']).put(
@@ -82,7 +95,7 @@ function PersonService(Restangular) {
         });
     };
 
-    this.removePicture = function(){
+    this.removePicture = function () {
         var PersonDescription = Person.get($window.localStorage['id']).one("description");
         return PersonDescription.put({
             "personalLogo": null

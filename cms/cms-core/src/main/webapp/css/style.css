@@ -66,6 +66,11 @@ body {
     height: 32px;
 }
 
+.img-wait-file {
+    width: 24px;
+    height: 24px;
+}
+
 .person-menubar {
     border-right: solid lavender 2px;
 }
@@ -81,6 +86,7 @@ body {
 ul#person-menu {
     list-style-type: none;
 }
+
 ul#person-menu > li {
     padding-top: 10px;
     padding-bottom: 10px;
@@ -96,6 +102,14 @@ ul#person-menu > li.active > a:focus {
 .person-course-add-files {
     outline: solid lavender 1px;
     padding: 5px;
+}
+
+.person-course-add-files-xs-btn {
+    width: 40%;
+}
+
+.person-add-files-input {
+    margin: 3px;
 }
 
 .btn-file {
