@@ -23,6 +23,10 @@ public class CourseEntity  implements Serializable, GenericEntity {
     @Column(name = "name", nullable = false, insertable = true, updatable = true, length = 255)
     private String name;
 
+    @Basic
+    @Column(name = "calendar_id", nullable = true, insertable = true, updatable = true, length = 255)
+    private String calendar_id;
+
     @NotNull
     @Basic
     @Column(name = "description", nullable = false, insertable = true, updatable = true, length = 16777215)
@@ -75,6 +79,14 @@ public class CourseEntity  implements Serializable, GenericEntity {
         this.name = name;
     }
 
+    public String getCalendar_id() {
+        return calendar_id;
+    }
+
+    public void setCalendar_id(String calendar_id) {
+        this.calendar_id = calendar_id;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -87,7 +99,7 @@ public class CourseEntity  implements Serializable, GenericEntity {
         return startdate;
     }
 
-    public void setStartdate(Date startdate) {
+    public void setStartDate(Date startdate) {
         this.startdate = startdate;
     }
 
@@ -95,7 +107,7 @@ public class CourseEntity  implements Serializable, GenericEntity {
         return enddate;
     }
 
-    public void setEnddate(Date enddate) {
+    public void setEndDate(Date enddate) {
         this.enddate = enddate;
     }
 

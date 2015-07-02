@@ -108,11 +108,17 @@ public class CourseDAOTest {
                 +notExistingId+" does not exist in database");
     }
 
-
     @Test
     public void testSaveCourseReturnCourseEntity() {
         CourseEntity predefinedCourse =courseInitializationForTests();
         assertEquals(predefinedCourse, courseDAO.save(predefinedCourse));
+    }
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE_AFTER_SAVE})
+    public void testSaveCourse() {
+        CourseEntity courseForSave =courseInitializationForTests();
+         courseDAO.save(courseForSave);
     }
 
     @Test
@@ -215,8 +221,8 @@ public class CourseDAOTest {
     private CourseEntity courseInitializationForTests(){
         CourseEntity courseEntity = new CourseEntity();
         courseEntity.setName("courseName");
-        courseEntity.setStartdate(Date.valueOf("2015-10-10"));
-        courseEntity.setEnddate(Date.valueOf("2016-11-11"));
+        courseEntity.setStartDate(Date.valueOf("2015-10-10"));
+        courseEntity.setEndDate(Date.valueOf("2016-11-11"));
         courseEntity.setDescription("Java");
         return courseEntity;
     }
@@ -225,8 +231,8 @@ public class CourseDAOTest {
         CourseEntity predefinedCourse = new CourseEntity();
         predefinedCourse.setId((long) 1);
         predefinedCourse.setName("courseName");
-        predefinedCourse.setStartdate(Date.valueOf("2015-10-10"));
-        predefinedCourse.setEnddate(Date.valueOf("2016-11-11"));
+        predefinedCourse.setStartDate(Date.valueOf("2015-10-10"));
+        predefinedCourse.setEndDate(Date.valueOf("2016-11-11"));
         predefinedCourse.setDescription("courseDescription");
         return predefinedCourse;
     }

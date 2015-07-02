@@ -1,9 +1,11 @@
 package org.javatraining.service;
 
+import org.javatraining.dao.CourseDAO;
+import org.javatraining.dao.NewsDAO;
+import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.NewsVO;
-import org.javatraining.model.PersonVO;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.*;
@@ -13,8 +15,8 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.ejb.EJB;
 import javax.ejb.EJBException;
-import javax.inject.Inject;
 import java.sql.Date;
 import java.sql.Timestamp;
 
@@ -34,11 +36,20 @@ public class CourseServiceTest {
     private static final String DS_EMPTY = DS_DIR + "empty.json";
     private static final String DS_COURSE = DS_DIR + "course/one-course.json";
     private static final String DS_COURSE_AFTER_REMOVE = DS_DIR + "course/course-after-remove.json";
+    private static final String DS_COURSE_AFTER_SAVE = DS_DIR + "course/course-expected-after-save.json";
+    private static final String DS_NEWS_AFTER_UPDATE = DS_DIR + "course/news-after-update.json";
 
-    @Inject
+    @EJB
     private CourseService courseService;
 
-    @Inject
+    @EJB
+    private CourseDAO courseDAO;
+
+    @EJB
+    private NewsDAO newsDAO;
+
+
+    @EJB
     private PersonService personService;
 
     @Deployment
@@ -69,7 +80,14 @@ public class CourseServiceTest {
     @Test
     public void testSaveReturnCourseVO() {
         CourseVO courseVO = courseVOInitialization();
-        assertEquals(courseVO,courseService.save(courseVO));
+        assertEquals(courseVO,courseService.saveCourse(courseVO));
+    }
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY,DS_COURSE_AFTER_SAVE}, excludeColumns = {"id"})
+    public void testSaveCourseVO() {
+        CourseVO courseVO = courseVOInitialization();
+       courseService.saveCourse(courseVO);
     }
 
 
@@ -77,29 +95,38 @@ public class CourseServiceTest {
     public void testUpdateReturnCourseVO() {
         CourseVO courseVO = courseVOInitialization();
         courseVO.setName("Other name");
-        assertEquals(courseVO, courseService.update(courseVO));
+        assertEquals(courseVO, courseService.updateCourse(courseVO));
     }
+
+
 
     @Test
     public void testRemoveReturnCourseVO() {
         CourseVO courseVO = predefinedCourseVO();
-        assertEquals(courseVO,courseService.remove(courseVO));
+        assertEquals(courseVO,courseService.removeCourse(courseVO));
     }
+
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY,DS_COURSE_AFTER_REMOVE})
     public void testRemoveCourse() {
         CourseVO courseVO = predefinedCourseVO();
-       courseService.remove(courseVO);
+
+        courseService.removeCourse(courseVO);
+    }
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY,DS_NEWS_AFTER_UPDATE}, excludeColumns = {"id"})
+    public void testUpdateNews() {
+        NewsVO newsVO = predefinedNewsVOInitialization();
+        courseService.updateNews(newsVO);
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY,DS_COURSE})
     public void testGetNewsById() {
-       NewsVO newsVO = predefinedNewsInitialization();
+       NewsVO newsVO = predefinedNewsVOInitialization();
          assertEquals(newsVO,courseService.getNewsById(newsVO.getId()));
     }
-
-
 
 
     @Test
@@ -123,29 +150,28 @@ public class CourseServiceTest {
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testUpdateNotValidCourseTrowEJBException() throws EJBException {
-        assertThatThrownBy(() -> courseService.update(new CourseVO()))
+        assertThatThrownBy(() -> courseService.updateCourse(new CourseVO()))
                 .isInstanceOf(EJBException.class);
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testRemoveNotValidCourseTrowEJBException() throws EJBException {
-        assertThatThrownBy(() -> courseService.remove(new CourseVO()))
+        assertThatThrownBy(() -> courseService.removeCourse(new CourseVO()))
                 .isInstanceOf(EJBException.class);
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testSaveNotValidCourseTrowEJBException() throws EJBException {
-        assertThatThrownBy(() -> courseService.save(new CourseVO()))
+        assertThatThrownBy(() -> courseService.saveCourse(new CourseVO()))
                 .isInstanceOf(EJBException.class);
-
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testSaveNullCourseTrowEJBException() throws EJBException {
-        assertThatThrownBy(() -> courseService.save(null))
+        assertThatThrownBy(() -> courseService.saveCourse(null))
                 .isInstanceOf(EJBException.class);
 
     }
@@ -153,26 +179,23 @@ public class CourseServiceTest {
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testRemoveNullCourseTrowEJBException() throws EJBException{
-        assertThatThrownBy(() -> courseService.remove(null))
+        assertThatThrownBy(() -> courseService.removeCourse(null))
                 .isInstanceOf(EJBException.class);
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testUpdateNullCourseTrowEJBException() throws EJBException {
-        assertThatThrownBy(() -> courseService.update(null))
+        assertThatThrownBy(() -> courseService.updateCourse(null))
                 .isInstanceOf(EJBException.class);
     }
-
-
 
      @Test
      @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testGetAllNewsFromCourse() {
         CourseVO courseVO = predefinedCourseVO();
-       assertNotNull(courseService.getAllNewsFromCourse(courseVO));
-
-    }
+         assertNotNull(courseService.getAllNewsFromCourse(courseVO));
+   }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
@@ -181,6 +204,32 @@ public class CourseServiceTest {
 
     }
 
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
+    public void testGetCourseByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException {
+        Long notExistingId = 10L;
+        assertThatThrownBy(() -> courseService.getCourseById(notExistingId))
+                .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "+notExistingId+" does not exist in database");
+
+    }
+
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
+    public void testGetNewsByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException{
+        Long notExistingId = 10L;
+        assertThatThrownBy(() -> courseService.getNewsById(notExistingId))
+                .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
+                +notExistingId+" does not exist in database");
+    }
+
+
+    @Test
+    public void testAddNewsToCourse() {
+        CourseVO courseVO = predefinedCourseVO();
+        NewsVO newsVOForSave = newsVOInitializationForTests();
+     assertEquals(newsVOForSave,courseService.addNewsToCourse(courseVO,newsVOForSave));
+          }
 
     private CourseVO courseVOInitialization(){
         CourseVO courseVO = new CourseVO();
@@ -194,26 +243,26 @@ public class CourseServiceTest {
     private CourseVO predefinedCourseVO(){
         CourseVO courseVO = new CourseVO();
         courseVO.setId(1L);
-        courseVO.setName("JavaEE");
-        courseVO.setStartDate(Date.valueOf("2015-10-10"));
-        courseVO.setEndDate(Date.valueOf("2016-11-11"));
-        courseVO.setDescription("Java");
+        courseVO.setName("courseName");
+        courseVO.setStartDate(Date.valueOf("2014-01-10"));
+        courseVO.setEndDate(Date.valueOf("2015-07-31"));
+        courseVO.setDescription("courseDescription");
+
         return courseVO;
     }
-    private PersonVO personVOInitializationForTests(){
-        PersonVO personVO = new PersonVO();
-        personVO.setName("Petro");
-        personVO.setEmail("Petrovg@mail.ru");
-        personVO.setLastName("Last Name");
-        personVO.setSecondName("Second name");
-        personVO.setPersonRole(PersonRole.TEACHER);
-        return personVO;
-    }
 
-    private NewsVO predefinedNewsInitialization(){
+    private NewsVO predefinedNewsVOInitialization(){
         Long predefinedNewsId = 1L;
         NewsVO newsVO = new NewsVO();
         newsVO.setId(predefinedNewsId);
+        newsVO.setContent("newsDescription");
+        newsVO.setTitle("title");
+        newsVO.setDate(Timestamp.valueOf("2015-10-02 18:48:05"));
+        return newsVO;
+    }
+
+    private NewsVO newsVOInitializationForTests(){
+        NewsVO newsVO = new NewsVO();
         newsVO.setContent("newsDescription");
         newsVO.setTitle("title");
         newsVO.setDate(Timestamp.valueOf("2015-10-02 18:48:05"));
