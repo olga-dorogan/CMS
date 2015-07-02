@@ -3,30 +3,37 @@
         <table class="table person-course-file">
             <thead>
             <tr>
+                <th class="col-md-1">N</th>
                 <th class="col-md-3">Название</th>
-                <th class="col-md-3">Ссылка</th>
-                <th class="col-md-3 text-center">Действия</th>
+                <th class="col-md-2">Ссылка</th>
+                <th class="col-md-4 text-center">Действия</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="lectLink in lectureLinks">
-                <td><strong>{{ lectLink.title }}</strong></td>
-                <td><a href="{{ lectLink.link }}">link</a></td>
+                <td class="text-center"><input type="text" value="{{ lectLink.orderNum }}"  class="person-add-files-input"></td>
+                <td><input type="text" value="{{ lectLink.description }}" class="person-add-files-input"></td>
+                <td class="text-center"><a href="{{ lectLink.link }}">go to</a></td>
                 <td nowrap class="text-right">
-                        <button type="button" class="btn btn-danger btn-xs" ng-click="removeLink(lectLink)">
-                            <span class="glyphicon glyphicon-trash"></span> Удалить
-                        </button>
+                    <button type="button" class="btn btn-danger btn-xs person-course-add-files-xs-btn"
+                            ng-click="removeLink(lectLink)">
+                        <span class="glyphicon glyphicon-trash"></span> Удалить
+                    </button>
                 </td>
             </tr>
             <tr>
-                <td>
-                    <input type="text" ng-model="newLink.title">
+                <td class="text-center">
+                    <input type="text" ng-model="newLink.orderNum" size="2" class="person-add-files-input">
                 </td>
                 <td>
-                    <input type="text" ng-model="newLink.link">
+                    <input type="text" ng-model="newLink.description" class="person-add-files-input">
+                </td>
+                <td>
+                    <input type="text" ng-model="newLink.link" class="person-add-files-input">
                 </td>
                 <td nowrap class="text-right">
-                    <button type="button" class="btn btn-success btn-xs" ng-click="addLink()">
+                    <button type="button" class="btn btn-success btn-xs person-course-add-files-xs-btn"
+                            ng-click="addLink()">
                         <span class="glyphicon glyphicon-plus"></span> Добавить
                     </button>
                 </td>

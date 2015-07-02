@@ -3,6 +3,7 @@ package org.javatraining.integration.google.drive.mocks;
 import org.apache.commons.io.IOUtils;
 import org.javatraining.integration.google.drive.DriveService;
 import org.javatraining.integration.google.drive.FileVO;
+import org.javatraining.model.LessonLinkVO;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.slf4j.Logger;
@@ -47,8 +48,11 @@ public class MockUploadFileRestService {
                 byte[] content = IOUtils.toByteArray(inputStream);
                 // add the file
                 FileVO addedFileVO = driveService.addFile(new FileVO(fileName, content, mimetypesFileTypeMap.getContentType(fileName)));
+                LessonLinkVO linkVO = new LessonLinkVO();
+                linkVO.setDescription(addedFileVO.getTitle());
+                linkVO.setLink(addedFileVO.getLink());
                 return Response.status(200)
-                        .entity(addedFileVO)
+                        .entity(linkVO)
                         .build();
             } catch (IOException ignore) {
             }

@@ -63,7 +63,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     public Response createCourse(@Context UriInfo uriInfo, CourseWithDetailsVO courseVO) {
         Response.ResponseBuilder r;
         try {
-            courseService.save(courseVO);
+            courseService.saveCourse(courseVO);
             String courseUri = uriInfo.getRequestUri().toString() + "/" + courseVO.getId();
             r = Response.created(new URI(courseUri)).entity(courseVO);
         } catch (JSONException e) {
@@ -85,7 +85,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
         try {
             CourseVO course = deserialize(courseJson);
             course.setId(courseId);
-            courseService.update(course);
+            courseService.updateCourse(course);
             r = Response.ok();
         } catch (JSONException e) {
             r = Response.status(Response.Status.NOT_ACCEPTABLE);
@@ -102,7 +102,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
         CourseVO course = new CourseVO();
         course.setId(courseId);
         try {
-            courseService.remove(course);
+            courseService.removeCourse(course);
             r = Response.ok();
         } catch (Exception e) {
             r = Response.noContent();

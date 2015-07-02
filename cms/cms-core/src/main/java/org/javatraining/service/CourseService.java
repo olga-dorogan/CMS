@@ -16,11 +16,11 @@ public interface CourseService {
 
     //  Course methods
 
-    CourseVO save(@NotNull @Valid CourseVO courseVO);
+    CourseVO saveCourse(@NotNull @Valid CourseVO courseVO);
 
-    CourseVO update(@NotNull @Valid CourseVO courseVO);
+    CourseVO updateCourse(@NotNull @Valid CourseVO courseVO);
 
-    CourseVO remove(@NotNull CourseVO courseVO);
+    CourseVO removeCourse(@NotNull CourseVO courseVO);
 
     @NotNull
     @Valid

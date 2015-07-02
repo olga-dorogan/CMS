@@ -4,6 +4,7 @@ import org.javatraining.entity.CourseEntity;
 import org.javatraining.model.CourseVO;
 
 import javax.validation.constraints.NotNull;
+import java.sql.Date;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,10 +31,10 @@ public class CourseConverter {
             courseEntity.setDescription(courseVO.getDescription());
         }
         if (courseVO.getStartDate() != null) {
-            courseEntity.setStartdate(new java.sql.Date(courseVO.getStartDate().getTime()));
+            courseEntity.setStartDate(new Date(courseVO.getStartDate().getTime()));
         }
         if (courseVO.getEndDate() != null) {
-            courseEntity.setEnddate(new java.sql.Date(courseVO.getEndDate().getTime()));
+            courseEntity.setEndDate(new Date(courseVO.getEndDate().getTime()));
         }
         return courseEntity;
     }

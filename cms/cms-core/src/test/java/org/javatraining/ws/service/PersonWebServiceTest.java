@@ -4,6 +4,7 @@ import flexjson.JSONSerializer;
 import org.javatraining.auth.Auth;
 import org.javatraining.config.Config;
 import org.javatraining.dao.PersonDAO;
+import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.entity.PersonEntity;
 import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.model.PersonVO;
@@ -15,6 +16,10 @@ import org.javatraining.ws.config.ServiceConfig;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.junit.InSequence;
+import org.jboss.arquillian.persistence.Cleanup;
+import org.jboss.arquillian.persistence.CleanupStrategy;
+import org.jboss.arquillian.persistence.TestExecutionPhase;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -39,7 +44,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(Arquillian.class)
-@UsingDataSet("datasets/person-web-service-test/initial-data.json")
 public class PersonWebServiceTest {
 
     private WebTarget target;
@@ -50,9 +54,12 @@ public class PersonWebServiceTest {
 
     static {
         teacherPerson = new PersonVO(1L, "teacherName", "teacherLastName", "teacher@gmail.com", PersonRole.TEACHER);
+        teacherPerson.setSecondName("teacherSecondName");
         studentPerson = new PersonVO(2L, "studentName", "studentLastName", "student@gmail.com", PersonRole.STUDENT);
+        studentPerson.setSecondName("studentSecondName");
         newPerson = new PersonVO();
         newPerson.setName("newName");
+        newPerson.setSecondName("newSecondName");
         newPerson.setLastName("newLastName");
         newPerson.setEmail("new@gmail.com");
     }
@@ -74,6 +81,8 @@ public class PersonWebServiceTest {
                 .addPackage(PersonService.class.getPackage())
                 .addPackage(PersonServiceImpl.class.getPackage())
                 .addPackage(Auth.class.getPackage())
+                .addPackage(EntityNotExistException.class.getPackage())
+                .addPackage(PersonRole.class.getPackage())
                 .addClass(ServiceConfig.class)
                 .addClass(UnsupportedOperationException.class)
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
@@ -91,7 +100,16 @@ public class PersonWebServiceTest {
     }
 
     @Test
+    @UsingDataSet("datasets/person-web-service-test/initial-data.json")
+    @InSequence(1)
+    public void setupDB_ARQ1077_Workaround()
+    {
+        //ugly hack to fill db from dataset. for more information see https://issues.jboss.org/browse/ARQ-1077
+    }
+
+    @Test
     @RunAsClient
+    @InSequence(2)
     public void testGetSamePersonByIdAsTeacher() {
         PersonVO predefinedPersonFromService = target.path("{id}")
                 .resolveTemplate("id", teacherPerson.getId())
@@ -106,6 +124,7 @@ public class PersonWebServiceTest {
 
     @Test
     @RunAsClient
+    @InSequence(2)
     public void testGetAnotherPersonByIdAsTeacher() {
         PersonVO predefinedPersonFromService = target.path("{id}")
                 .resolveTemplate("id", studentPerson.getId())
@@ -118,6 +137,7 @@ public class PersonWebServiceTest {
 
     @Test
     @RunAsClient
+    @InSequence(2)
     public void testGetSamePersonByIdAsStudent() {
         PersonVO predefinedPersonFromService = target.path("{id}")
                 .resolveTemplate("id", studentPerson.getId())
@@ -130,6 +150,7 @@ public class PersonWebServiceTest {
 
     @Test
     @RunAsClient
+    @InSequence(2)
     public void testGetAnotherPersonByIdAsStudent() {
         Response response = target.path("{id}")
                 .resolveTemplate("id", teacherPerson.getId())
@@ -142,6 +163,7 @@ public class PersonWebServiceTest {
 
     @Test
     @RunAsClient
+    @InSequence(2)
     public void testGetPersonByIdAsGuest() {
         Response response = target.path("{id}")
                 .resolveTemplate("id", teacherPerson.getId())
@@ -152,6 +174,7 @@ public class PersonWebServiceTest {
 
     @Test
     @RunAsClient
+    @InSequence(2)
     public void testCreatePerson() {
         Response response = target.request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity(
@@ -163,6 +186,7 @@ public class PersonWebServiceTest {
 
     @Test
     @RunAsClient
+    @InSequence(2)
     public void getPersonsByRoleAsStudent() {
         Response response = target.queryParam("role", "student")
                 .request(MediaType.APPLICATION_JSON)
@@ -174,6 +198,7 @@ public class PersonWebServiceTest {
 
     @Test
     @RunAsClient
+    @InSequence(2)
     public void getPersonsByRoleAsTeacher() {
         Response response = target.queryParam("role", "student")
                 .request(MediaType.APPLICATION_JSON)
@@ -185,6 +210,7 @@ public class PersonWebServiceTest {
 
     @Test
     @RunAsClient
+    @InSequence(2)
     public void getPersonsByNonExistingRoleAsTeacher() {
         Response response = target.queryParam("role", "adventurer")
                 .request(MediaType.APPLICATION_JSON)

@@ -16,19 +16,23 @@
                 </div>
 
                 <label>Файлы для загрузки</label>
+
                 <div ng-include src="'angular/views/person-course/teacher/addFile.html'"></div>
                 <br>
 
                 <label>Дополнительные ссылки</label>
+
                 <div ng-include src="'angular/views/person-course/teacher/addLinks.html'"></div>
                 <br>
 
-                <button type="button" class="btn btn-success  trench_out full_screen"
-                        ng-disabled="!isValidLecture(lectureForm)" ng-click="ok()"> Добавить лекцию
-                </button>
-                <button type="button" class="btn btn-warning trench_out full_screen"
-                        ng-click="cancel()">Отмена
-                </button>
+                <div class="pull-right">
+                    <button type="button" class="btn btn-success btn-s"
+                            ng-disabled="!isValidLecture(lectureForm)" ng-click="ok()"> Добавить лекцию
+                    </button>
+                    <button type="button" class="btn btn-warning btn-s"
+                            ng-click="cancel()">Отмена
+                    </button>
+                </div>
             </form>
         </div>
     </div>

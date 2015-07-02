@@ -1,3 +1,3 @@
 function AuthService(PersonService) {
-    this.goAuth = PersonService.createPerson;
+    this.goAuth = PersonService.createPersonForAuth;
 }
