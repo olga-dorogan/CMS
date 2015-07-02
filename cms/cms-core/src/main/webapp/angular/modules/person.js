@@ -119,6 +119,11 @@ angular.module('myApp.person', ['ui.router'])
                     }
                 }
             })
+            .state('person.course.addLecture', {
+                url: '/addLecture',
+                templateUrl: 'angular/views/person-course/teacher/addLecture.html',
+                controller: 'AddLectureCtrl'
+            })
             .state('person.course.progress', {
                 url: '/progress',
                 templateUrl: 'angular/views/person-course/progressContent.html'

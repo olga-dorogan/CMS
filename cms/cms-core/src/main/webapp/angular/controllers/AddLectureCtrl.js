@@ -1,4 +1,4 @@
-function AddLectureCtrl($scope, $stateParams, $modalInstance, CourseContentService, FileUploader) {
+function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentService, FileUploader) {
     var BASE_URL_FILE_TO_STORAGE = 'resources/file/upload';
 
     $scope.lecture = $scope.lecture || {};
@@ -10,16 +10,55 @@ function AddLectureCtrl($scope, $stateParams, $modalInstance, CourseContentServi
         $scope.lecture.createDate = new Date();
         $scope.lecture.orderNum = 1;
         $scope.lecture.courseId = $stateParams.courseId;
-        CourseContentService.createLecture($scope.lecture);
+        return CourseContentService.createLecture($scope.lecture);
     };
 
+    $scope.alertData = {
+        boldTextTitle: "Ошибка",
+        mode: 'danger'
+    };
 
     $scope.ok = function () {
-        createLecture();
-        $modalInstance.close($scope.lecture);
+        createLecture().then(
+            function (successResult) {
+                if (successResult.status == 200 || successResult.status == 201) {
+                    $state.go('person.course.content');
+                } else {
+                    $scope.alertData.textAlert = successResult;
+                    $scope.showAlertWithError();
+                }
+            },
+            function (fail) {
+                $scope.alertData.textAlert = fail;
+            }
+        );
     };
+
     $scope.cancel = function () {
-        $modalInstance.dismiss();
+        $state.go('person.course.content');
+    };
+
+    $scope.showAlertWithError = function () {
+
+        var modalInstance = $modal.open(
+            {
+                templateUrl: 'angular/templates/alertModal.html',
+                controller: function ($scope, $modalInstance, data) {
+                    $scope.data = data;
+                    $scope.close = function () {
+                        $modalInstance.close(data);
+                    }
+                },
+                backdrop: true,
+                keyboard: true,
+                backdropClick: true,
+                size: 'lg',
+                resolve: {
+                    data: function () {
+                        return $scope.alertData;
+                    }
+                }
+            });
     };
 
     // file uploading
@@ -34,11 +73,19 @@ function AddLectureCtrl($scope, $stateParams, $modalInstance, CourseContentServi
         }
     });
     // callbacks
+    uploader.onBeforeUploadItem = function (item) {
+        item.isUploaded = true;
+        console.info('onBeforeUploadItem', item);
+    };
     uploader.onSuccessItem = function (fileItem, response, status, headers) {
         console.info('onSuccessItem', fileItem, response, status, headers);
+        fileItem.isUploaded = false;
+        response.orderNum = $scope.lectureLinks.length + 1;
         $scope.lectureLinks.push(response);
+        $scope.newLink.orderNum = $scope.newLink.orderNum + 1;
     };
     uploader.onErrorItem = function (fileItem, response, status, headers) {
+        fileItem.isUploaded = false;
         console.info('onErrorItem', fileItem, response, status, headers);
     };
     uploader.onCompleteItem = function (fileItem, response, status, headers) {
@@ -50,9 +97,12 @@ function AddLectureCtrl($scope, $stateParams, $modalInstance, CourseContentServi
 
     // lecture links operations
     $scope.lectureLinks = $scope.lectureLinks || [];
-    $scope.newLink = $scope.newLink || {};
+    $scope.newLink = $scope.newLink || {'orderNum': $scope.lectureLinks.length + 1};
     $scope.addLink = function () {
         $scope.lectureLinks.push(angular.copy($scope.newLink));
+        $scope.newLink.orderNum = $scope.lectureLinks.length + 1;
+        $scope.newLink.description = '';
+        $scope.newLink.link = '';
     };
     $scope.removeLink = function (linkToRemove) {
         for (var i = 0; i < $scope.lectureLinks.length; i++) {
