@@ -16,14 +16,12 @@ import org.javatraining.model.conversion.CoursePersonStatusConverter;
 import org.javatraining.model.conversion.NewsConverter;
 import org.javatraining.model.conversion.PersonConverter;
 import org.javatraining.service.CourseService;
-import org.javatraining.service.exception.UnsupportedOperationException;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -45,7 +43,7 @@ public class CourseServiceImpl implements CourseService {
     private PersonDAO personDAO;
 
     @Override
-    public CourseVO save(@NotNull @Valid CourseVO courseVO) {
+    public CourseVO saveCourse(@NotNull @Valid CourseVO courseVO) {
         CourseEntity courseEntity = CourseConverter.convertVOToEntity(courseVO);
         courseVO.setId(courseDAO.save(courseEntity).getId());
         return courseVO;
@@ -57,17 +55,10 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public CourseVO update(@NotNull @Valid CourseVO courseVO) {
+    public CourseVO updateCourse(@NotNull @Valid CourseVO courseVO) {
         courseVO.setId(courseDAO
-                .update(CourseConverter
-                        .convertVOToEntity(courseVO))
+                .update(CourseConverter.convertVOToEntity(courseVO))
                 .getId());
-        return courseVO;
-    }
-
-    @Override
-    public CourseVO remove(@NotNull CourseVO courseVO) {
-        courseDAO.removeById(courseVO.getId());
         return courseVO;
     }
 
@@ -76,7 +67,7 @@ public class CourseServiceImpl implements CourseService {
         CourseEntity courseEntity = CourseConverter.convertVOToEntity(courseVO);
         courseDAO.save(courseEntity);
         courseVO.setId(courseEntity.getId());
-        for (PersonVO teacherVO: courseVO.getTeachers()) {
+        for (PersonVO teacherVO : courseVO.getTeachers()) {
             CoursePersonStatusVO statusVO =
                     new CoursePersonStatusVO(CourseStatus.SIGNED, courseVO.getId(), teacherVO.getId());
             CoursePersonStatusEntity statusEntity =
@@ -89,9 +80,17 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public CourseVO removeCourse(@NotNull CourseVO courseVO) {
+        CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
+        newsDAO.removeById(courseEntity.getNews().iterator().next().getId());
+        courseDAO.removeById(courseEntity.getId());
+        return courseVO;
+    }
+
+    @Override
     public List<CourseVO> getAll() {
-        return CourseConverter.convertEntitiesToVOs(courseDAO.getAllCourses()).
-                stream()
+        return CourseConverter.convertEntitiesToVOs(courseDAO.getAllCourses())
+                .stream()
                 .collect(Collectors.toList());
     }
 
@@ -102,32 +101,50 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseVO addPersonsToCourse(@NotNull CourseVO courseVO, @NotNull @Valid List<PersonVO> persons) {
-
-//        courseEntity.setPersons(PersonConverter.convertVOsToEntities(persons));
+        CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
+        courseEntity
+                .getCoursePersonEntities()
+                .stream()
+                .map(CoursePersonStatusEntity::getPerson)
+                .collect(Collectors.toList())
+                .add(PersonConverter
+                        .convertVOsToEntities(persons)
+                        .iterator().next());
+        courseDAO.update(courseEntity);
         return courseVO;
     }
 
     @Override
     public CourseVO removePersonsFromCourse(@NotNull CourseVO courseVO, @NotNull @Valid List<PersonVO> persons) {
-        CourseEntity courseEntity = CourseConverter.convertVOToEntity(courseVO);
-        Set<PersonEntity> personEntities = PersonConverter.convertVOsToEntities(persons);
-
-//        courseEntity.getPersons().remove(personEntities);
-        return CourseConverter.convertEntityToVO(courseDAO.update(courseEntity));
-
+        CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
+        courseEntity
+                .getCoursePersonEntities()
+                .stream()
+                .map(CoursePersonStatusEntity::getPerson)
+                .collect(Collectors.toList())
+                .remove(PersonConverter
+                        .convertVOsToEntities(persons)
+                        .iterator().next());
+        courseDAO.update(courseEntity);
+        return courseVO;
     }
 
     @Override
     public List<PersonVO> getAllPersonsFromCourseByRole(@NotNull CourseVO courseVO, @NotNull PersonRole role) {
-        CourseEntity courseEntity = CourseConverter.convertVOToEntity(courseVO);
-        //                stream().filter(person -> person.getPersonRole() == role)
-        // .collect(Collectors.toList());
-        throw new UnsupportedOperationException();
+        return PersonConverter.convertEntitiesToVOs(courseDAO.getById(courseVO.getId())
+                .getCoursePersonEntities()
+                .stream()
+                .filter(coursePersonStatus -> coursePersonStatus.getPerson()
+                        .getPersonRole() == role)
+                .map(CoursePersonStatusEntity::getPerson)
+                .collect(Collectors.toList()))
+                .stream()
+                .collect(Collectors.toList());
     }
 
     @Override
     public NewsVO addNewsToCourse(@NotNull CourseVO courseVO, @NotNull @Valid NewsVO newsVO) {
-        CourseEntity courseEntity = CourseConverter.convertVOToEntity(courseVO);
+        CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
         NewsEntity newsEntity = NewsConverter.convertVOToEntity(newsVO);
         courseEntity.getNews().add(newsEntity);
         courseDAO.update(courseEntity);
@@ -161,9 +178,11 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<NewsVO> getAllNewsFromCourse(@NotNull CourseVO courseVO) {
-        return NewsConverter.convertEntitiesToVOs(CourseConverter
-                .convertVOToEntity(courseVO)
-                .getNews())
+
+        return NewsConverter.convertEntitiesToVOs(courseDAO.getById(courseVO.getId())
+                .getNews()
+                .stream()
+                .collect(Collectors.toList()))
                 .stream()
                 .collect(Collectors.toList());
     }

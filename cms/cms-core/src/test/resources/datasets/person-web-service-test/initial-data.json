@@ -3,17 +3,19 @@
     {
       "id": 1,
       "name": "teacherName",
-      "secondName": null,
-      "lastName": "teacherLastName",
+      "second_name": "teacherSecondName",
+      "last_name": "teacherLastName",
       "email": "teacher@gmail.com",
+      "phone": "123456789",
       "personRole": "TEACHER"
     },
     {
       "id": 2,
       "name": "studentName",
-      "secondName": null,
-      "lastName": "studentLastName",
+      "second_name": "studentSecondName",
+      "last_name": "studentLastName",
       "email": "student@gmail.com",
+      "phone": "123456789",
       "personRole": "STUDENT"
     }
   ]

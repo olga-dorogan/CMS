@@ -225,6 +225,7 @@ public class LessonLinkDAOTest {
         LessonLinkEntity lessonLinkEntity = new LessonLinkEntity();
         LessonEntity lessonEntity = lessonDAO.getById(predefinedLessonId);
         lessonLinkEntity.setDescription("description");
+        lessonLinkEntity.setOrderNum(3L);
         lessonLinkEntity.setLink("otherLink");
         lessonLinkEntity.setLesson(lessonEntity);
           return lessonLinkEntity;
@@ -236,6 +237,7 @@ public class LessonLinkDAOTest {
         Long predefinedLessonLinkId = 1L;
         LessonEntity lessonEntity = lessonDAO.getById(predefinedLessonId);
         lessonLinkEntity.setDescription("description");
+        lessonLinkEntity.setOrderNum(3L);
         lessonLinkEntity.setLink("someLink");
         lessonLinkEntity.setLesson(lessonEntity);
         lessonLinkEntity.setId(predefinedLessonLinkId);

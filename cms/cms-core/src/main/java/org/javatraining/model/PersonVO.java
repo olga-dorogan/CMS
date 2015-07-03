@@ -16,7 +16,7 @@ public class PersonVO implements Serializable {
     @NotNull
     private String lastName;
     @NotNull
-    private String email;
+    protected String email;
     private PersonRole personRole;
 
     public PersonVO() {
