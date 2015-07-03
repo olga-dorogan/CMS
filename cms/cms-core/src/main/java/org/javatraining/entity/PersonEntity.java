@@ -2,6 +2,7 @@ package org.javatraining.entity;
 
 
 import org.javatraining.entity.enums.PersonRole;
+import org.javatraining.model.Image;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -42,6 +43,18 @@ public class PersonEntity implements Serializable, GenericEntity {
     @Column(name = "phone", nullable = true, insertable = true, updatable = true, length = 11)
     private String phone;
 
+    @Basic
+    @Column(name = "avatar", nullable = true, insertable = true, updatable = true, length = 255)
+    private String avatar;
+
+    @Basic
+    @Column(name = "graduation", nullable = true, insertable = true, updatable = true, length = 255)
+    private String graduation;
+
+    @Basic
+    @Column(name = "experience", nullable = true, insertable = true, updatable = true, length = 255)
+    private String experience;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "personRole", nullable = false, insertable = true, updatable = true, length = 255)
     private PersonRole personRole;
@@ -54,14 +67,6 @@ public class PersonEntity implements Serializable, GenericEntity {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "person")
     private Set<CoursePersonStatusEntity> coursePersonEntities;
-
-
-
-
-//    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "person")
-//    private Set<CourseEntity> course;
-
-
 
     public PersonEntity() {
     }
@@ -137,14 +142,6 @@ public class PersonEntity implements Serializable, GenericEntity {
         this.marks = marks;
     }
 
-//    public Set<CourseEntity> getCourse() {
-//        return course;
-//    }
-
-//    public void setCourse(Set<CourseEntity> course) {
-//        this.course = course;
-//    }
-
     public String getEmail() {
         return email;
     }
@@ -159,6 +156,30 @@ public class PersonEntity implements Serializable, GenericEntity {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getGraduation() {
+        return graduation;
+    }
+
+    public void setGraduation(String graduation) {
+        this.graduation = graduation;
+    }
+
+    public String getExperience() {
+        return experience;
+    }
+
+    public void setExperience(String experience) {
+        this.experience = experience;
     }
 
     public Set<CoursePersonStatusEntity> getCoursePersonEntities() {

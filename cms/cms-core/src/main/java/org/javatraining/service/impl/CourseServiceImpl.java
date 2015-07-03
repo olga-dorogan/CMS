@@ -155,11 +155,24 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public NewsVO getNewsById(@NotNull Long id) {
+    public NewsVO getAllNewsById(@NotNull Long id) {
         return NewsConverter
                 .convertEntityToVO(newsDAO.getById(id));
     }
 
+
+    @Override
+    public NewsVO getNewsByIdFromCourse(@NotNull Long courseId,@NotNull Long newsId) {
+
+      List <NewsEntity> newsEntities= courseDAO
+              .getById(courseId)
+                .getNews()
+                .stream()
+                .collect(Collectors.toList())
+                .stream()
+                .collect(Collectors.toList());
+                     return  NewsConverter.convertEntityToVO(newsEntities.get(0));
+    }
     @Override
     public List<NewsVO> getAllNewsFromCourse(@NotNull CourseVO courseVO) {
 
@@ -171,11 +184,22 @@ public class CourseServiceImpl implements CourseService {
                 .collect(Collectors.toList());
 }
 
-    @Override
+
     public List<NewsVO> getAllNews() {
         return NewsConverter
                 .convertEntitiesToVOs(newsDAO.getAllNews())
                 .stream()
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<NewsVO> getNewsByCourseId(@NotNull Long courseId){
+        return NewsConverter.convertEntitiesToVOs(courseDAO.getById(courseId)
+                .getNews()
+                .stream()
+                .collect(Collectors.toList()))
+                .stream()
+                .collect(Collectors.toList());
+    }
+
 }

@@ -5,6 +5,7 @@ import org.javatraining.model.CourseVO;
 import org.javatraining.model.NewsVO;
 import org.javatraining.model.PersonVO;
 
+import javax.annotation.Nullable;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -50,7 +51,8 @@ public interface CourseService {
 
     NewsVO updateNews(@NotNull @Valid NewsVO newsVO);
 
-    NewsVO getNewsById(@NotNull Long id);
+    NewsVO getAllNewsById(@NotNull Long id);
+
 
     @NotNull
     @Valid
@@ -59,6 +61,14 @@ public interface CourseService {
     @NotNull
     @Valid
     List<NewsVO> getAllNews();
+
+    @Nullable
+    @Valid
+    List<NewsVO> getNewsByCourseId(@NotNull Long courseId);
+
+   @Nullable
+    @Valid
+    NewsVO getNewsByIdFromCourse(@NotNull Long courseId,@NotNull Long newsId);
 
     //TODO: add methods to interact with LessonVO
 

@@ -17,6 +17,7 @@ public class NewsVO implements Serializable {
     @NotNull
     private Timestamp date;
 
+
     public NewsVO() {
     }
 
@@ -64,6 +65,7 @@ public class NewsVO implements Serializable {
     public void setDate(Timestamp date) {
         this.date = date;
     }
+
 
     @Override
     public boolean equals(Object o) {
