@@ -3,14 +3,16 @@
         <table class="table person-course-file" ng-show="uploader.queue.length>0">
             <thead>
             <tr>
-                <th class="col-md-2">Название</th>
+                <th class="col-md-1 text-center">N</th>
+                <th class="col-md-2 text-left">Название</th>
                 <th class="col-md-2 text-center" ng-show="uploader.isHTML5">Размер</th>
                 <th class="col-md-1 text-center">Статус</th>
-                <th class="col-md-4 text-center">Дополнительно</th>
+                <th class="col-md-4 text-right">Дополнительно</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="item in uploader.queue">
+                <td class="text-center">{{ $index+1 }}</td>
                 <td><strong>{{ item.file.name }}</strong></td>
                 <td ng-show="uploader.isHTML5" nowrap class="text-center">{{ item.file.size/1024/1024|number:2 }} MB
                 </td>
@@ -32,21 +34,22 @@
                 </td>
             </tr>
             <tr>
-                <td>
+                <td  class="text-center">
                     <span class="glyphicon glyphicon-plus btn-file">
-                        <input type="file" nv-file-select="" uploader="uploader" multiple/><br/>
+                        <input type="file" nv-file-select="" uploader="uploader" multiple/>
                     </span>
                 </td>
+                <td></td>
                 <td colspan="2"></td>
                 <td nowrap class="text-right">
-                        <button type="button" class="btn btn-success btn-xs person-course-add-files-xs-btn"
-                                ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
-                            <span class="glyphicon glyphicon-upload"></span> Загрузить все
-                        </button>
-                        <button type="button" class="btn btn-danger btn-xs person-course-add-files-xs-btn"
-                                ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
-                            <span class="glyphicon glyphicon-trash"></span> Удалить все
-                        </button>
+                    <button type="button" class="btn btn-success btn-xs person-course-add-files-xs-btn"
+                            ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
+                        <span class="glyphicon glyphicon-upload"></span> Загрузить все
+                    </button>
+                    <button type="button" class="btn btn-danger btn-xs person-course-add-files-xs-btn"
+                            ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
+                        <span class="glyphicon glyphicon-trash"></span> Удалить все
+                    </button>
                 </td>
             </tr>
             </tbody>

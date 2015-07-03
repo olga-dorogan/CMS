@@ -3,6 +3,7 @@ package org.javatraining.integration.gitlab.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.javatraining.model.PersonVO;
 
 import java.io.Serializable;
 
@@ -12,9 +13,8 @@ import java.io.Serializable;
  * For more information you should send mail to codedealerb@gmail.com
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GitLabUser implements Serializable {
+public class GitLabUser extends PersonVO implements Serializable {
     protected Long id;
-    protected String email;//required
     protected String password;//required
     protected String username;//required
     protected String name;//required
@@ -50,15 +50,6 @@ public class GitLabUser implements Serializable {
 
     public GitLabUser() {
 
-    }
-
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPassword() {

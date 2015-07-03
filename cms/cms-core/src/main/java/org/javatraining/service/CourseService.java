@@ -2,6 +2,7 @@ package org.javatraining.service;
 
 import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.model.CourseVO;
+import org.javatraining.model.CourseWithDetailsVO;
 import org.javatraining.model.NewsVO;
 import org.javatraining.model.PersonVO;
 
@@ -22,6 +23,8 @@ public interface CourseService {
     CourseVO updateCourse(@NotNull @Valid CourseVO courseVO);
 
     CourseVO removeCourse(@NotNull CourseVO courseVO);
+
+    void save(@NotNull @Valid CourseWithDetailsVO courseVO);
 
     @NotNull
     @Valid

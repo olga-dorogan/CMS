@@ -1,6 +1,6 @@
-function AddCourseCtrl($scope, CourseService, allTeachers) {
+function AddCourseCtrl($rootScope, $scope, CourseService, allTeachers) {
     $scope.course = $scope.course || {};
-    $scope.courseTeachers = $scope.courseTeachers || [];
+    $scope.course.teachers = [parseInt($rootScope.getUserId())];
     $scope.teachers = allTeachers;
 
     $scope.isValidDates = function () {
@@ -13,7 +13,7 @@ function AddCourseCtrl($scope, CourseService, allTeachers) {
         return $scope.course.startDate <= $scope.course.endDate;
     };
     $scope.isValidTeachers = function () {
-        return $scope.courseTeachers.length > 0;
+        return $scope.course.teachers.length > 0;
     };
     $scope.isValidCourse = function (courseForm) {
         return !courseForm.$invalid &&
@@ -22,6 +22,9 @@ function AddCourseCtrl($scope, CourseService, allTeachers) {
     };
 
     $scope.createCourse = function () {
+        for (var i = 0; i < $scope.course.teachers.length; i++) {
+            $scope.course.teachers[i] = {'id': $scope.course.teachers[i]};
+        }
         CourseService.createCourse($scope.course).then(
             function (createdCourse) {
                 if (CourseService.isCourseSuccessfullyCreated(createdCourse)) {
@@ -39,7 +42,7 @@ function AddCourseCtrl($scope, CourseService, allTeachers) {
             .finally(
             function () {
                 $scope.course = {};
-                $scope.courseTeachers = [];
+                $scope.course.teachers = [];
             }
         );
     }

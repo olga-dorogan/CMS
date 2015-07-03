@@ -3,6 +3,7 @@ package org.javatraining.ws.service;
 import org.javatraining.auth.Auth;
 import org.javatraining.config.AuthRole;
 import org.javatraining.model.LessonVO;
+import org.javatraining.model.LessonWithDetailsVO;
 import org.javatraining.service.LessonService;
 
 import javax.ejb.EJB;
@@ -34,7 +35,7 @@ public class LessonWebService {
     @Path("{course_id}/lesson")
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
-    public Response saveLesson(@Context UriInfo uriInfo, @PathParam("course_id") Long courseId, LessonVO lesson) {
+    public Response saveLesson(@Context UriInfo uriInfo, @PathParam("course_id") Long courseId, LessonWithDetailsVO lesson) {
         Response.ResponseBuilder r;
         try {
             lesson.setCourseId(courseId);
