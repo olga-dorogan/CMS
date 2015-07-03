@@ -4,8 +4,33 @@ function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentServi
     $scope.lecture = $scope.lecture || {};
 
     $scope.isValidLecture = function (lectureForm) {
-        return !lectureForm.$invalid;
+        return !lectureForm.$invalid && areValidLinks();
     };
+
+    var areValidLinks = function () {
+        var valid = true;
+        for (var i = 0; i < $scope.lectureLinks.length; i++) {
+            if ($scope.lectureLinks[i].orderNum == undefined) {
+                valid = false;
+                break;
+            }
+        }
+        if (valid) {
+            for (var i = 0; i < $scope.lectureLinks.length; i++) {
+                for (var j = i + 1; j < $scope.lectureLinks.length; j++) {
+                    if($scope.lectureLinks[i].orderNum == $scope.lectureLinks[j].orderNum) {
+                        valid = false;
+                        break;
+                    }
+                }
+                if(!valid) {
+                    break;
+                }
+            }
+        }
+        return valid;
+    };
+
     var createLecture = function () {
         $scope.lecture.createDate = new Date();
         $scope.lecture.orderNum = 1;
