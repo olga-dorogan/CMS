@@ -9,16 +9,16 @@ function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentServi
 
     var areValidLinks = function () {
         var valid = true;
-        for (var i = 0; i < $scope.lectureLinks.length; i++) {
-            if ($scope.lectureLinks[i].orderNum == undefined) {
+        for (var i = 0; i < $scope.lecture.links.length; i++) {
+            if ($scope.lecture.links[i].orderNum == undefined) {
                 valid = false;
                 break;
             }
         }
         if (valid) {
-            for (var i = 0; i < $scope.lectureLinks.length; i++) {
-                for (var j = i + 1; j < $scope.lectureLinks.length; j++) {
-                    if($scope.lectureLinks[i].orderNum == $scope.lectureLinks[j].orderNum) {
+            for (var i = 0; i < $scope.lecture.links.length; i++) {
+                for (var j = i + 1; j < $scope.lecture.links.length; j++) {
+                    if($scope.lecture.links[i].orderNum == $scope.lecture.links[j].orderNum) {
                         valid = false;
                         break;
                     }
@@ -105,8 +105,8 @@ function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentServi
     uploader.onSuccessItem = function (fileItem, response, status, headers) {
         console.info('onSuccessItem', fileItem, response, status, headers);
         fileItem.isUploaded = false;
-        response.orderNum = $scope.lectureLinks.length + 1;
-        $scope.lectureLinks.push(response);
+        response.orderNum = $scope.lecture.links.length + 1;
+        $scope.lecture.links.push(response);
         $scope.newLink.orderNum = $scope.newLink.orderNum + 1;
     };
     uploader.onErrorItem = function (fileItem, response, status, headers) {
@@ -121,18 +121,18 @@ function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentServi
     };
 
     // lecture links operations
-    $scope.lectureLinks = $scope.lectureLinks || [];
-    $scope.newLink = $scope.newLink || {'orderNum': $scope.lectureLinks.length + 1};
+    $scope.lecture.links = $scope.lecture.links || [];
+    $scope.newLink = $scope.newLink || {'orderNum': $scope.lecture.links.length + 1};
     $scope.addLink = function () {
-        $scope.lectureLinks.push(angular.copy($scope.newLink));
-        $scope.newLink.orderNum = $scope.lectureLinks.length + 1;
+        $scope.lecture.links.push(angular.copy($scope.newLink));
+        $scope.newLink.orderNum = $scope.lecture.links.length + 1;
         $scope.newLink.description = '';
         $scope.newLink.link = '';
     };
     $scope.removeLink = function (linkToRemove) {
-        for (var i = 0; i < $scope.lectureLinks.length; i++) {
-            if (angular.equals($scope.lectureLinks[i], linkToRemove)) {
-                $scope.lectureLinks.splice(i, 1);
+        for (var i = 0; i < $scope.lecture.links.length; i++) {
+            if (angular.equals($scope.lecture.links[i], linkToRemove)) {
+                $scope.lecture.links.splice(i, 1);
             }
         }
     };

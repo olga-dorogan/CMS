@@ -1,6 +1,7 @@
 package org.javatraining.service;
 
 import org.javatraining.model.LessonVO;
+import org.javatraining.model.LessonWithDetailsVO;
 
 import javax.annotation.Nullable;
 import javax.validation.Valid;
@@ -14,6 +15,8 @@ public interface LessonService {
     void save(@NotNull @Valid LessonVO lessonVO);
     LessonVO update(@NotNull @Valid LessonVO lessonVO);
     void remove(@NotNull LessonVO lessonVO);
+
+    void save(@NotNull @Valid LessonWithDetailsVO lessonVO);
 
     @Valid
     @Nullable
