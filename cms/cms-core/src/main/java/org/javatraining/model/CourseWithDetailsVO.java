@@ -8,6 +8,10 @@ import java.util.List;
 public class CourseWithDetailsVO extends CourseVO {
     private List<PersonVO> teachers;
 
+    public CourseWithDetailsVO() {
+        super();
+    }
+
     public List<PersonVO> getTeachers() {
         return teachers;
     }

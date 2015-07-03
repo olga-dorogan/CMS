@@ -28,8 +28,8 @@
                 <div class="form-group">
                     <label for="teachers"> Преподаватели курса<span class="required">*</span></label>
                     <select id="teachers"
-                            ng-model="courseTeachers"
-                            ng-options="teacher.name+' '+teacher.lastName for teacher in teachers"
+                            ng-model="course.teachers"
+                            ng-options="teacher.id as teacher.name+' '+teacher.lastName for teacher in teachers"
                             class="form-control" multiple>
                     </select>
                 </div>

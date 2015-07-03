@@ -71,7 +71,7 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
             });
         };
         $rootScope.isLogin = function () {
-            return !(($rootScope.getUserId() === undefined) || ($rootScope.getUserId() == null));
+            return !(($rootScope.getUserId() == undefined) || ($rootScope.getUserId() == null));
         };
         $rootScope.getUserId = function() {
             return $window.localStorage['id'];

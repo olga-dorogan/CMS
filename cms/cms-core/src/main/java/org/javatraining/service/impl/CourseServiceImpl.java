@@ -3,14 +3,16 @@ package org.javatraining.service.impl;
 import org.javatraining.dao.CourseDAO;
 import org.javatraining.dao.CoursePersonStatusDAO;
 import org.javatraining.dao.NewsDAO;
+import org.javatraining.dao.PersonDAO;
 import org.javatraining.entity.CourseEntity;
+import org.javatraining.entity.CoursePersonStatusEntity;
 import org.javatraining.entity.NewsEntity;
 import org.javatraining.entity.PersonEntity;
+import org.javatraining.entity.enums.CourseStatus;
 import org.javatraining.entity.enums.PersonRole;
-import org.javatraining.model.CourseVO;
-import org.javatraining.model.NewsVO;
-import org.javatraining.model.PersonVO;
+import org.javatraining.model.*;
 import org.javatraining.model.conversion.CourseConverter;
+import org.javatraining.model.conversion.CoursePersonStatusConverter;
 import org.javatraining.model.conversion.NewsConverter;
 import org.javatraining.model.conversion.PersonConverter;
 import org.javatraining.service.CourseService;
@@ -39,6 +41,9 @@ public class CourseServiceImpl implements CourseService {
     @EJB
     private NewsDAO newsDAO;
 
+    @EJB
+    private PersonDAO personDAO;
+
     @Override
     public CourseVO save(@NotNull @Valid CourseVO courseVO) {
         CourseEntity courseEntity = CourseConverter.convertVOToEntity(courseVO);
@@ -63,7 +68,24 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public CourseVO remove(@NotNull CourseVO courseVO) {
         courseDAO.removeById(courseVO.getId());
-         return courseVO;
+        return courseVO;
+    }
+
+    @Override
+    public void save(@NotNull @Valid CourseWithDetailsVO courseVO) {
+        CourseEntity courseEntity = CourseConverter.convertVOToEntity(courseVO);
+        courseDAO.save(courseEntity);
+        courseVO.setId(courseEntity.getId());
+        for (PersonVO teacherVO: courseVO.getTeachers()) {
+            CoursePersonStatusVO statusVO =
+                    new CoursePersonStatusVO(CourseStatus.SIGNED, courseVO.getId(), teacherVO.getId());
+            CoursePersonStatusEntity statusEntity =
+                    CoursePersonStatusConverter.convertVOToEntityWithoutEntityRelations(statusVO);
+            PersonEntity personEntity = personDAO.getById(teacherVO.getId());
+            statusEntity.setPerson(personEntity);
+            statusEntity.setCourse(courseEntity);
+            coursePersonStatusDAO.save(statusEntity);
+        }
     }
 
     @Override
@@ -87,7 +109,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseVO removePersonsFromCourse(@NotNull CourseVO courseVO, @NotNull @Valid List<PersonVO> persons) {
-           CourseEntity courseEntity = CourseConverter.convertVOToEntity(courseVO);
+        CourseEntity courseEntity = CourseConverter.convertVOToEntity(courseVO);
         Set<PersonEntity> personEntities = PersonConverter.convertVOsToEntities(persons);
 
 //        courseEntity.getPersons().remove(personEntities);
@@ -97,9 +119,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<PersonVO> getAllPersonsFromCourseByRole(@NotNull CourseVO courseVO, @NotNull PersonRole role) {
-        CourseEntity courseEntity =CourseConverter.convertVOToEntity(courseVO);
-       //                stream().filter(person -> person.getPersonRole() == role)
-       // .collect(Collectors.toList());
+        CourseEntity courseEntity = CourseConverter.convertVOToEntity(courseVO);
+        //                stream().filter(person -> person.getPersonRole() == role)
+        // .collect(Collectors.toList());
         throw new UnsupportedOperationException();
     }
 
@@ -122,12 +144,12 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public NewsVO updateNews(@NotNull @Valid NewsVO newsVO) {
-        NewsEntity newsEntity =  newsDAO.getById(newsVO.getId());
+        NewsEntity newsEntity = newsDAO.getById(newsVO.getId());
         newsEntity.setTitle(newsVO.getTitle());
         newsEntity.setDate(newsVO.getDate());
         newsEntity.setDescription(newsVO.getContent());
         newsDAO.update(newsEntity);
-       return NewsConverter.convertEntityToVO(newsEntity);
+        return NewsConverter.convertEntityToVO(newsEntity);
 
     }
 
