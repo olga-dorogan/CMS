@@ -73,7 +73,7 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
         $rootScope.isLogin = function () {
             return !(($rootScope.getUserId() == undefined) || ($rootScope.getUserId() == null));
         };
-        $rootScope.getUserId = function() {
+        $rootScope.getUserId = function () {
             return $window.localStorage['id'];
         };
         $rootScope.getUsername = function () {
@@ -86,6 +86,13 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
         $rootScope.$on('app.unauthorized', function () {
             $state.go("home");
             console.log('attempt to get secure data');
+        });
+
+        $rootScope.$on('$stateChangeStart', function (event, toState) {
+           if((toState.name == 'home') && $rootScope.isLogin()) {
+               event.preventDefault();
+               $state.go('person');
+           }
         });
     }]);
 
