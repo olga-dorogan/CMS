@@ -28,7 +28,7 @@ angular.module('myApp.teacher', ['ui.router'])
                     "content@teacher": {
                         templateUrl: 'angular/views/addTheme.html',
                         controller: 'AddLectureCtrl'
-                    },
+                    },person
                     "uploadFile@teacher.addTheme": {
                         templateUrl: 'angular/views/addFile.html',
                         controller: "FileUploadCtrl"

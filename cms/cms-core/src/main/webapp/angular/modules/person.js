@@ -64,22 +64,6 @@ angular.module('myApp.person', ['ui.router'])
                     }
                 }
             })
-            .state('person.subcribe', {
-                url: "/person",
-                views: {
-                    "": {
-                        templateUrl: 'angular/views/home.html'
-                    },
-                    "content@person": {
-                        templateUrl: 'angular/views/course.html',
-                        controller: 'PersonCtrl'//FIXME KAK PROHODIT VSE?
-                    },
-                    "avalaible@person": {
-                        templateUrl: 'angular/views/settings',
-                        controller: 'PersonCtrl'
-                    }
-                }
-            })
             .state('person.course', {
                 url: '/course/:courseId',
                 params: {courseName: null},
@@ -131,11 +115,20 @@ angular.module('myApp.person', ['ui.router'])
             .state('person.settings', {
                 url: '/settings',
                 views: {
-                    "": {
-                        templateUrl: 'angular/views/home.html'
+                    "body@main": {
+                        templateUrl: 'angular/views/settings/body.html',
+                        controller: "SettingCtrl"
                     },
-                    "content@person": {
-                        templateUrl: 'angular/views/settings.html',
+                    "setting-top@main": {
+                        templateUrl: 'angular/views/settings/setting-top.html',
+                        controller: "SettingCtrl"
+                    },
+                    "setting-menubar@main": {
+                        templateUrl: 'angular/views/settings/menubar.html',
+                        controller: "SettingCtrl"
+                    },
+                    "setting-content@main": {
+                        templateUrl: 'angular/views/settings/settings.html',
                         controller: "SettingCtrl"
                     }
                 }

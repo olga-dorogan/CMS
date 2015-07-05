@@ -75,11 +75,23 @@ body {
     border-right: solid lavender 2px;
 }
 
+.setting-menubar {
+    border-right: solid lavender 2px;
+}
+
 .person-course-content {
     padding-left: 20px;
 }
 
+.setting-course-content {
+    padding-left: 20px;
+}
+
 .person-main-top {
+    border-bottom: solid lavender 2px;
+}
+
+.setting-main-top {
     border-bottom: solid lavender 2px;
 }
 
@@ -95,6 +107,16 @@ ul#person-menu > li {
 ul#person-menu > li.active > a,
 ul#person-menu > li.active > a:hover,
 ul#person-menu > li.active > a:focus {
+    color: darkblue;
+    font-weight: bolder;
+}
+
+ul#setting-menu {
+    list-style-type: none;
+}
+ul#setting-menu > li.active > a,
+ul#setting-menu > li.active > a:hover,
+ul#setting-menu > li.active > a:focus {
     color: darkblue;
     font-weight: bolder;
 }

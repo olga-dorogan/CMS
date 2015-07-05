@@ -6,4 +6,5 @@ INSERT INTO courses(id, name, startdate, enddate, description) VALUES (1, 'Java 
 INSERT INTO courses(id, name, startdate, enddate, description) VALUES (2, 'Java EE', '2014-01-10', '2015-07-31','Companies utilize the new, lightweight Java EE Web Profile to create next-generation web applications. Through Java EE Training, learn more about the full power of the Java EE platform for enterprise applications and more.');
 
 INSERT INTO course_person_status(id, course_id, person_id, course_status) VALUES (1, 1, 3, 'SIGNED');
+INSERT INTO course_person_status(id, course_id, person_id, course_status) VALUES (2, 1, 2, 'SIGNED');
 
