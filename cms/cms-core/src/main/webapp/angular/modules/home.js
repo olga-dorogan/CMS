@@ -13,7 +13,7 @@ angular.module('myApp.home', ['ui.router'])
                 resolve: {
                     courseService: 'CourseService',
                     courses: function (courseService) {
-                        return courseService.getCourses().then(function (result) {
+                        return courseService.getNewCourses().then(function (result) {
                             return result;
                         });
                     }

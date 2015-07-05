@@ -23,6 +23,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -43,8 +44,13 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCourseList() {
-        List<CourseVO> courses = courseService.getAll();
+    public Response getCoursesList(@QueryParam("date") String curDate) {
+        List<CourseVO> courses;
+        if (curDate == null) {
+            courses = courseService.getAll();
+        } else {
+            courses = courseService.getAllStartedAfterDate(new Date());
+        }
         return Response.ok(courses).build();
     }
 

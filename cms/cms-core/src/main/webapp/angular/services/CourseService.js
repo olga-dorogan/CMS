@@ -1,9 +1,17 @@
 function CourseService(Restangular) {
     var restBase = 'resources/course';
     var Course = Restangular.all(restBase);
+
     this.getCourses = function () {
         return Course.getList();
     };
+
+    this.getNewCourses = function () {
+        var today = new Date();
+        var todayAsString = today.getUTCFullYear() + '-' + (today.getUTCMonth() + 1) + '-' + today.getUTCDay();
+        return Course.getList({'date': todayAsString});
+    };
+
     this.createCourse = function (newCourse, prototypeId) {
         // POST returns promise, in which successHandler is executed ALWAYS when response contains any text
         // so, it's necessary to check is response status equal 2xx or not
