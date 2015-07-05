@@ -31,6 +31,7 @@ import java.util.List;
 @Stateless
 @Path("course")
 public class CourseWebService extends AbstractWebService<CourseVO> {
+    private static final Long NONE_COURSE_PROTOTYPE = -1L;
     @EJB
     private CourseService courseService;
     @EJB
@@ -63,12 +64,22 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
-    public Response createCourse(@Context UriInfo uriInfo, CourseWithDetailsVO courseVO) {
+    public Response createCourse(@Context UriInfo uriInfo, CourseWithDetailsVO courseVO,
+                                 @DefaultValue("-1") @QueryParam(value = "prototypeId") String prototypeId) {
         Response.ResponseBuilder r;
         try {
-            courseService.saveCourse(courseVO);
+            Long coursePrototypeId = Long.parseLong(prototypeId);
+            if (coursePrototypeId.equals(NONE_COURSE_PROTOTYPE)) {
+                courseService.save(courseVO);
+            } else {
+                CourseVO coursePrototype = new CourseVO();
+                coursePrototype.setId(coursePrototypeId);
+                courseService.createFromPrototype(courseVO, coursePrototype);
+            }
             String courseUri = uriInfo.getRequestUri().toString() + "/" + courseVO.getId();
             r = Response.created(new URI(courseUri)).entity(courseVO);
+        } catch (NumberFormatException e) {
+            r = Response.status(Response.Status.BAD_REQUEST);
         } catch (JSONException e) {
             r = Response.status(Response.Status.NOT_ACCEPTABLE);
         } catch (URISyntaxException e) {

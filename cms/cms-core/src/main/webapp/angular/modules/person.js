@@ -25,14 +25,14 @@ angular.module('myApp.person', ['ui.router'])
                                 for (var i = 0; i < personalizedCourses.length; i++) {
                                     var isExistCourseStatus = false;
                                     for (var j = 0; j < personCourseStatuses.length; j++) {
-                                        if(personalizedCourses[i].id == personCourseStatuses[j].courseId) {
+                                        if (personalizedCourses[i].id == personCourseStatuses[j].courseId) {
                                             personalizedCourses[i].courseActionMsg =
                                                 personService.getLinkNameForStatus(personCourseStatuses[j].courseStatus);
                                             personalizedCourses[i].isPersonEnrolled = true;
                                             isExistCourseStatus = true;
                                         }
                                     }
-                                    if(!isExistCourseStatus) {
+                                    if (!isExistCourseStatus) {
                                         personalizedCourses[i].courseActionMsg = 'Undefined action';
                                         personalizedCourses[i].isPersonEnrolled = false;
                                     }
@@ -55,10 +55,19 @@ angular.module('myApp.person', ['ui.router'])
                 },
                 resolve: {
                     personService: 'PersonService',
+                    courseService: 'CourseService',
                     allTeachers: function (personService) {
                         var promise = personService.getTeachers();
                         promise = promise.then(function (teachers) {
                             return teachers;
+                        });
+                        return promise;
+                    },
+                    coursePrototypes: function (courseService) {
+                        var promise = courseService.getCourses();
+                        promise = promise.then(function (courses) {
+                            courses.push({'id': -1, 'name': 'Отсутствует'});
+                            return courses;
                         });
                         return promise;
                     }
