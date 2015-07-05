@@ -26,7 +26,7 @@ public class PersonEntity implements Serializable, GenericEntity {
     private String name;
 
     @Basic
-    @Column(name = "second_name", nullable = false, insertable = true, updatable = true, length = 255)
+    @Column(name = "second_name", nullable = true, insertable = true, updatable = true, length = 255)
     private String secondName;
 
     @NotNull
