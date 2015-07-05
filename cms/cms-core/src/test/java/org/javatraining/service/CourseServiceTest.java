@@ -125,7 +125,7 @@ public class CourseServiceTest {
     @ShouldMatchDataSet(value = {DS_EMPTY,DS_COURSE})
     public void testGetNewsById() {
        NewsVO newsVO = predefinedNewsVOInitialization();
-         assertEquals(newsVO,courseService.getNewsById(newsVO.getId()));
+         assertEquals(newsVO,courseService.getAllNewsById(newsVO.getId()));
     }
 
 
@@ -218,7 +218,7 @@ public class CourseServiceTest {
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testGetNewsByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException{
         Long notExistingId = 10L;
-        assertThatThrownBy(() -> courseService.getNewsById(notExistingId))
+        assertThatThrownBy(() -> courseService.getAllNewsById(notExistingId))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
                 +notExistingId+" does not exist in database");
     }

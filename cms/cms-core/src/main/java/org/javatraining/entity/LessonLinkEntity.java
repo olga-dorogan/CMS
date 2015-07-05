@@ -40,7 +40,7 @@ public class LessonLinkEntity implements Serializable, GenericEntity {
     @Column(name = "link", nullable = false, insertable = true, updatable = true, length = 255)
     private String link;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(cascade = {})
     @JoinColumn(name = "lesson_id", nullable = false)
     private LessonEntity lesson;
 

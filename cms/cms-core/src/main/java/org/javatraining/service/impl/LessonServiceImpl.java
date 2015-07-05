@@ -1,8 +1,13 @@
 package org.javatraining.service.impl;
 
 import org.javatraining.dao.LessonDAO;
+import org.javatraining.dao.LessonLinkDAO;
 import org.javatraining.entity.LessonEntity;
+import org.javatraining.entity.LessonLinkEntity;
+import org.javatraining.model.LessonLinkVO;
 import org.javatraining.model.LessonVO;
+import org.javatraining.model.LessonWithDetailsVO;
+import org.javatraining.model.conversion.LessonLinkConverter;
 import org.javatraining.service.LessonService;
 
 import javax.annotation.Nullable;
@@ -10,7 +15,6 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import java.util.Set;
 
 import static org.javatraining.model.conversion.LessonConverter.*;
@@ -22,6 +26,8 @@ import static org.javatraining.model.conversion.LessonConverter.*;
 public class LessonServiceImpl implements LessonService {
     @EJB
     private LessonDAO lessonDAO;
+    @EJB
+    private LessonLinkDAO lessonLinkDAO;
 
     @Override
     public void save(@NotNull @Valid LessonVO lessonVO) {
@@ -38,6 +44,19 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public void remove(@NotNull LessonVO lessonVO) {
         lessonDAO.remove(convertVOToEntity(lessonVO));
+    }
+
+    @Override
+    public void save(@NotNull @Valid LessonWithDetailsVO lessonVO) {
+        LessonEntity lessonEntity = convertVOToEntity(lessonVO);
+        lessonDAO.save(lessonEntity);
+        lessonVO.setId(lessonEntity.getId());
+        for (LessonLinkVO linkVO : lessonVO.getLinks()) {
+            linkVO.setLessonId(lessonVO.getId());
+            LessonLinkEntity linkEntity = LessonLinkConverter.convertVOToEntity(linkVO);
+            lessonLinkDAO.save(linkEntity);
+            linkVO.setId(lessonEntity.getId());
+        }
     }
 
     @Nullable

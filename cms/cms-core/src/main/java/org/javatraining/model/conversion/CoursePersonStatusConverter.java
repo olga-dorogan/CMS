@@ -17,6 +17,12 @@ public class CoursePersonStatusConverter {
         return vo;
     }
 
+    public static CoursePersonStatusEntity convertVOToEntityWithoutEntityRelations(@NotNull CoursePersonStatusVO vo) {
+        CoursePersonStatusEntity entity = new CoursePersonStatusEntity(vo.getCourseStatus());
+        entity.setId(vo.getId());
+        return entity;
+    }
+
     public static List<CoursePersonStatusVO> convertEntitiesToVOs(@NotNull @Valid List<CoursePersonStatusEntity> entities) {
         List<CoursePersonStatusVO> vos = new ArrayList<>(entities.size());
         for (CoursePersonStatusEntity entity : entities) {

@@ -105,11 +105,20 @@ ul#person-menu > li.active > a:focus {
 }
 
 .person-course-add-files-xs-btn {
-    width: 40%;
+    width: 45%;
+}
+
+.person-course-add-files-xs-one-btn {
+    width: 90%;
 }
 
 .person-add-files-input {
-    margin: 3px;
+    width: 98%;
+    padding: 1%;
+}
+
+.table tbody > tr > td .vert-align-middle {
+    vertical-align: middle;
 }
 
 .btn-file {
