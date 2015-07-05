@@ -4,6 +4,6 @@
   "email_for_gitlab_notification": "",
   "password_for_gitlab_notification": "",//insert pass here
   "account_for_sms_notification": "soapgateway",
-  "password_for_sms_notification": "pasliv681",//insert pass here
+  "password_for_sms_notification": "",//insert pass here
   "account_phone_number": "380934110628"
 }
