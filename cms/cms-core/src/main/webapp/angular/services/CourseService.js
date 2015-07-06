@@ -18,8 +18,13 @@ function CourseService(Restangular) {
         // or another way --- any successfully returned object contains field 'fromServer' with value 'true'
         return Course.post(newCourse, {'prototypeId': prototypeId});
     };
+
     this.isCourseSuccessfullyCreated = function (returnedObject) {
         return returnedObject.responseStatus == 201;
+    };
+
+    this.removeCourse = function(id) {
+        return Restangular.one(restBase, id).remove();
     };
 
     this.subscribePersonToCourse = function (courseId, personId) {

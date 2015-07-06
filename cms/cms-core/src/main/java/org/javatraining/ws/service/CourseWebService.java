@@ -170,7 +170,10 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
             courseService.removeCourse(course);
             r = Response.ok();
         } catch (Exception e) {
-            r = Response.noContent();
+            r = Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .type(MediaType.TEXT_HTML_TYPE)
+                    .entity(String.format("Exception: %s, description: %s", e.getClass().getName(), e.getMessage()));
         }
         return r.build();
     }

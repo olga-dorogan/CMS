@@ -46,7 +46,7 @@ angular.module('myApp.person', ['ui.router'])
                     }
                 }
             })
-            .state('person.addCourse', {
+            .state('person.addOrEditCourse', {
                 url: '/addCourse',
                 views: {
                     "body@main": {
@@ -68,6 +68,28 @@ angular.module('myApp.person', ['ui.router'])
                         var promise = courseService.getCourses();
                         promise = promise.then(function (courses) {
                             courses.push({'id': -1, 'name': 'Отсутствует'});
+                            return courses;
+                        });
+                        return promise;
+                    }
+                }
+            })
+            .state('person.editCourses', {
+                url: '/editCourses',
+                views: {
+                    "body@main": {
+                        templateUrl: 'angular/views/person-course/teacher/editCourses.html',
+                        controller: 'EditCoursesCtrl'
+                    }
+                },
+                resolve: {
+                    courseService: 'CourseService',
+                    courses: function (courseService) {
+                        var promise = courseService.getCourses();
+                        promise = promise.then(function (courses) {
+                            if(courses.responseStatus != 200) {
+                                return promise;
+                            }
                             return courses;
                         });
                         return promise;
@@ -156,6 +178,7 @@ angular.module('myApp.person', ['ui.router'])
     .service('CourseContentService', CourseContentService)
     .controller('PersonCtrl', PersonCtrl)
     .controller('AddCourseCtrl', AddCourseCtrl)
+    .controller("EditCoursesCtrl", EditCoursesCtrl)
     .controller('DatepickerCtrl', DatepickerCtrl)
     .controller('CourseContentCtrl', CourseContentCtrl)
     .controller("AddLectureCtrl", AddLectureCtrl)

@@ -19,6 +19,7 @@ body {
 .info-list {
     font-size: 20px;
     list-style: none;
+    padding-left: 0px;
 }
 
 .info-list .description {
@@ -29,6 +30,31 @@ body {
 .info-list .course-action {
     font-size: 16px;
     text-align: right;
+}
+
+.info-list .course-action-anchor {
+    font-size: 16px;
+    text-align: right;
+    cursor: pointer;
+}
+
+#course-edit-header {
+    display: table;
+    width: 100%;
+}
+
+#course-edit-header .title {
+    display: table-cell;
+    text-align: left;
+}
+
+#course-edit-header .date {
+    display: table-cell;
+    text-align: right;
+}
+
+#course-edit-header.clear {
+    clear: both;
 }
 
 .info-list .enroll-into-course {
