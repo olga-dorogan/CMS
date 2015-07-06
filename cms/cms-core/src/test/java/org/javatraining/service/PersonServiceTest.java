@@ -6,6 +6,7 @@ import org.javatraining.dao.exception.EntityIsAlreadyExistException;
 import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.entity.PersonEntity;
 import org.javatraining.entity.enums.PersonRole;
+import org.javatraining.entity.util.Pair;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.MarkVO;
 import org.javatraining.model.PersonVO;
@@ -105,6 +106,7 @@ public class PersonServiceTest {
                 .addPackage(PersonRole.class.getPackage())
                 .addClasses(PersonDAO.class, CourseDAO.class, MarkDAO.class,
                         PracticeLessonDAO.class, CoursePersonStatusDAO.class, GenericDAO.class)
+                .addClass(Pair.class)
                 .addClasses(PersonService.class, PersonServiceImpl.class, UnsupportedOperationException.class)
                 .addAsResource(DS_DIR)
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml");

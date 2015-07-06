@@ -4,6 +4,7 @@ import org.javatraining.dao.CourseDAO;
 import org.javatraining.dao.NewsDAO;
 import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.entity.enums.PersonRole;
+import org.javatraining.entity.util.Pair;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.NewsVO;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -70,6 +71,7 @@ public class CourseServiceTest {
                 .addPackage("org.assertj.core.util")
                 .addPackage("org.assertj.core.presentation")
                 .addPackage("org.assertj.core.internal")
+                .addClass(Pair.class)
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
         System.out.println(war.toString(true));
