@@ -14,7 +14,7 @@
                     <div class="panel-body">
                         <div class="description">{{course.description}}</div>
                         <div class="course-action-anchor">
-                            <a ng-click="updateCourse(course.id)">Редактировать</a>
+                            <a ui-sref="person.addOrEditCourse({mode:'edit', editedCourse:course})">Редактировать</a>
                             <a ng-click="removeCourse(course.id)">Удалить</a>
                         </div>
                     </div>

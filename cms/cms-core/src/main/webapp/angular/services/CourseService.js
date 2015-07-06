@@ -27,6 +27,10 @@ function CourseService(Restangular) {
         return Restangular.one(restBase, id).remove();
     };
 
+    this.updateCourse = function(course){
+        return Restangular.one(restBase).customPUT(course, course.id);
+    };
+
     this.subscribePersonToCourse = function (courseId, personId) {
         if (courseId === undefined || personId === undefined) {
             return {};

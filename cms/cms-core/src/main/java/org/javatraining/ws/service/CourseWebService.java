@@ -145,17 +145,15 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
     @Path("{course_id}")
-    public Response updateCourse(@PathParam("course_id") long courseId, @QueryParam("course_json") String courseJson) {
+    public Response updateCourse(@PathParam("course_id") long courseId, CourseVO courseVO) {
         Response.ResponseBuilder r;
         try {
-            CourseVO course = deserialize(courseJson);
-            course.setId(courseId);
-            courseService.updateCourse(course);
+            courseVO.setId(courseId);
+            courseService.updateCourse(courseVO);
             r = Response.ok();
         } catch (JSONException e) {
             r = Response.status(Response.Status.NOT_ACCEPTABLE);
         }
-
         return r.build();
     }
 

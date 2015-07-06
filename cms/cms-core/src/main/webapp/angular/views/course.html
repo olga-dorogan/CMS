@@ -64,7 +64,7 @@
         <div ng-hide="!isTeacher() || (personCourses == undefined) || (newCourses == undefined)" class="pull-right">
             <button class="btn btn-default" ui-sref="person.editCourses">Перейти в режим редактирования
             </button>
-            <button class="btn btn-default" ui-sref="person.addOrEditCourse">Добавить новый курс
+            <button class="btn btn-default" ui-sref="person.addOrEditCourse({mode:'add'})">Добавить новый курс
             </button>
         </div>
 
