@@ -273,7 +273,7 @@ public class PersonServiceTest {
     public void testGetCoursesForNotExistingPerson() throws Exception {
         PersonVO notExistingPerson = createNotExistingPerson();
         try {
-            personService.getPersonCourseStatuses(notExistingPerson);
+            personService.getPersonCoursesWithStatuses(notExistingPerson);
             fail("Must throw exception");
         } catch (EJBException e) {
             assertThat(e.getCause(), is(instanceOf(ConstraintViolationException.class)));

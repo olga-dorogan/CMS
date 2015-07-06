@@ -58,7 +58,7 @@ public interface PersonService {
 
     @NotNull
     @Valid
-    List<CoursePersonStatusVO> getPersonCourseStatuses(@NotNull PersonVO personVO);
+    List<CourseWithStatusVO> getPersonCoursesWithStatuses(@NotNull PersonVO personVO);
 
     //    Person --- Mark methods
 
