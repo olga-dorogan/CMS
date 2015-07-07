@@ -1,34 +1,50 @@
 <div>
     <div class="row">
-        <div class="col-lg-12">
-            <div id="messages" class="alert alert-{{alertStatus}}" ng-show="messages">
-                <span ng-bind="messages"></span>
-                <i class="dismiss-messages pull-right glyphicon glyphicon-remove" ng-click="messages = ''"
-                   ng-show="messages"></i>
-            </div>
-        </div>
-    </div>
-    <div class="row">
         <div class="col-md-8">
-            <h3>Добавление нового курса (все поля со звездочкой обязательны!)</h3>
+            <h3>Добавление нового курса</h3>
 
             <form name="courseForm" novalidate role="form">
+
+                <div class="form-group">
+                    <label for="prototypes"> Курс-прототип</label>
+                    <select id="prototypes"
+                            ng-model="coursePrototypeId"
+                            ng-options="course.id as course.name for course in coursePrototypes"
+                            class="form-control">
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <label for="name">Название <span class="required">*</span></label>
                     <input id="name" type="text" name="name" ng-model="course.name" class="form-control"
                            ng-required="true"/>
+
+                    <div class="add-course-div-btn-proto">
+                        <button type="button" class="btn btn-default btn-xs btn-add-course-as-proto"
+                                ng-disabled="disableAsPrototype()" ng-click="setTitleAsPrototype()">
+                            Установить как в прототипе
+                        </button>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label for="content">Краткое описание<span class="required">*</span></label>
-                <textarea class="form-control" id="content" ng-model="course.description"
-                          placeholder="Введите описание..." rows="4"> </textarea>
+                    <textarea class="form-control" id="content" ng-model="course.description"
+                              placeholder="Введите описание..." rows="4"> </textarea>
+
+                    <div class="add-course-div-btn-proto">
+                        <button type="button" class="btn btn-default btn-xs btn-add-course-as-proto"
+                                ng-disabled="disableAsPrototype()"
+                                ng-click="setDescriptionAsPrototype()">
+                            Установить как в прототипе
+                        </button>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label for="teachers"> Преподаватели курса<span class="required">*</span></label>
                     <select id="teachers"
-                            ng-model="course.teachers"
+                            ng-model="courseTeachers"
                             ng-options="teacher.id as teacher.name+' '+teacher.lastName for teacher in teachers"
                             class="form-control" multiple>
                     </select>
@@ -69,9 +85,16 @@
                     </p>
                 </div>
 
-                <button type="button" class="btn btn-success  trench_out full_screen"
-                        ng-disabled="!isValidCourse(courseForm)" ng-click="createCourse()"> Добавить курс
-                </button>
+                <label><span class="required">* - обязательные поля</span></label>
+
+                <div class="pull-right">
+                    <button type="button" class="btn btn-success btn-s"
+                            ng-disabled="!isValidCourse(courseForm)" ng-click="createCourse()"> Добавить курс
+                    </button>
+                    <button type="button" class="btn btn-warning btn-s"
+                            ng-click="cancel()">Отмена
+                    </button>
+                </div>
             </form>
         </div>
     </div>

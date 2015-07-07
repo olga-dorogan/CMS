@@ -76,6 +76,16 @@ public class LessonEntity implements Serializable, GenericEntity {
         this.course = course;
     }
 
+    public LessonEntity(LessonEntity lessonEntity) {
+        this.id = null;
+        this.type = lessonEntity.getType();
+        this.orderNum = lessonEntity.getOrderNum();
+        this.topic = lessonEntity.getTopic();
+        this.description = lessonEntity.getDescription();
+        this.createDate = lessonEntity.getCreateDate();
+        this.course = lessonEntity.getCourse();
+    }
+
     public Long getId() {
         return id;
     }

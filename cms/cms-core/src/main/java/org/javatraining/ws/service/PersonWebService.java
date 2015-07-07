@@ -149,7 +149,6 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
     @Path("{person_id}/description")
     @Consumes("application/json")
     public Response updatePersonDescription(@PathParam("person_id") long personId, PersonDescriptionVO personDescriptionVO) {
-        Response.ResponseBuilder r;
         PersonDescriptionVO personDesc = personService.getPersonDescription(personId);
 
         if (personDesc == null) {

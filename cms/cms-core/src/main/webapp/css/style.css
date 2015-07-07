@@ -104,6 +104,10 @@ ul#person-menu > li {
     padding-bottom: 10px;
 }
 
+ul#person-menu * {
+    vertical-align: top;
+}
+
 ul#person-menu > li.active > a,
 ul#person-menu > li.active > a:hover,
 ul#person-menu > li.active > a:focus {
@@ -119,6 +123,14 @@ ul#setting-menu > li.active > a:hover,
 ul#setting-menu > li.active > a:focus {
     color: darkblue;
     font-weight: bolder;
+}
+.btn-add-course-as-proto {
+    display: inline-block;
+}
+
+.add-course-div-btn-proto {
+    text-align: right;
+    padding-top: 10px;
 }
 
 .person-course-add-files {
@@ -213,6 +225,15 @@ ul#setting-menu > li.active > a:focus {
 
 #git-id {
     padding-top: 45px;
+}
+
+.circular {
+    border-radius: 99%;
+    -webkit-border-radius: 99%;
+    -moz-border-radius: 99%;
+    box-shadow: 0 0 2px rgba(0, 0, 0, .8);
+    -webkit-box-shadow: 0 0 2px rgba(0, 0, 0, .8);
+    -moz-box-shadow: 0 0 2px rgba(0, 0, 0, .8);
 }
 
 .btn-custom {

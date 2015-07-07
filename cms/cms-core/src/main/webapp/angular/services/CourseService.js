@@ -4,18 +4,18 @@ function CourseService(Restangular) {
     this.getCourses = function () {
         return Course.getList();
     };
-    this.createCourse = function (newCourse) {
+    this.createCourse = function (newCourse, prototypeId) {
         // POST returns promise, in which successHandler is executed ALWAYS when response contains any text
         // so, it's necessary to check is response status equal 2xx or not
         // or another way --- any successfully returned object contains field 'fromServer' with value 'true'
-        return Course.post(newCourse);
+        return Course.post(newCourse, {'prototypeId': prototypeId});
     };
-    this.isCourseSuccessfullyCreated = function(returnedObject) {
+    this.isCourseSuccessfullyCreated = function (returnedObject) {
         return returnedObject.responseStatus == 201;
     };
 
-    this.subscribePersonToCourse = function(courseId, personId) {
-        if(courseId === undefined || personId === undefined) {
+    this.subscribePersonToCourse = function (courseId, personId) {
+        if (courseId === undefined || personId === undefined) {
             return {};
         }
         return Restangular.one(restBase, courseId).all('subscribe').put({"person_id": personId});

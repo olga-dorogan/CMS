@@ -1,0 +1,18 @@
+<div>
+    <div class="row">
+        <div class="col-md-8">
+            <h3>Отправка сообщения</h3>
+
+            <form name="mailNotification" novalidate role="form">
+                <div class="form-group">
+                    <label for="mtypes"> Message type</label>
+                    <select id="mtypes"
+                            ng-model="coursePrototypeId"
+                            ng-options="course.id as course.name for course in coursePrototypes"
+                            class="form-control">
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

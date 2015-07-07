@@ -26,6 +26,8 @@ public interface CourseService {
 
     void save(@NotNull @Valid CourseWithDetailsVO courseVO);
 
+    void createFromPrototype(@NotNull @Valid CourseWithDetailsVO courseWithDetailsVO, @NotNull CourseVO coursePrototype);
+
     @NotNull
     @Valid
     List<CourseVO> getAll();

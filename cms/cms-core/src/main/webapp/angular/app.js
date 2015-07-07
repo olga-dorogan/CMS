@@ -84,6 +84,7 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
         };
         // обработчик оповещения о попытке несанкционированного доступа
         $rootScope.$on('app.unauthorized', function () {
+            $rootScope.doLogOut();
             $state.go("home");
             console.log('attempt to get secure data');
         });
