@@ -105,7 +105,7 @@ function AddOrEditCourseCtrl($rootScope, $scope, $state, $modal, CourseService, 
     };
 
     $scope.cancel = function () {
-        isAddMode() ? $state.go('home') : $state.go('person.editCourses');
+        $scope.isAddMode() ? $state.go('home') : $state.go('person.editCourses');
     };
 
     var showAlertWithError = function (alertData) {

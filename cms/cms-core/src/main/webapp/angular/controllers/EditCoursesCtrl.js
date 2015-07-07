@@ -16,9 +16,6 @@ function EditCoursesCtrl($scope, $modal, courseService, courses) {
                 }
             });
     };
-    $scope.updateCourse = function (courseId) {
-        console.log("course updating");
-    };
 
     var showAlertWithError = function (alertData) {
         var modalInstance = $modal.open(

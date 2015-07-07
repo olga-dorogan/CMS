@@ -59,7 +59,7 @@ angular.module('myApp.person', ['ui.router'])
                     personService: 'PersonService',
                     courseService: 'CourseService',
                     allTeachers: function (mode, personService) {
-                        if(mode != 'add') {
+                        if (mode != 'add') {
                             return [];
                         }
                         var promise = personService.getTeachers();
@@ -69,7 +69,7 @@ angular.module('myApp.person', ['ui.router'])
                         return promise;
                     },
                     coursePrototypes: function (mode, courseService) {
-                        if(mode != 'add') {
+                        if (mode != 'add') {
                             return [];
                         }
                         var promise = courseService.getCourses();
@@ -82,7 +82,7 @@ angular.module('myApp.person', ['ui.router'])
                     mode: function ($stateParams) {
                         return $stateParams.mode;
                     },
-                    editedCourse: function($stateParams) {
+                    editedCourse: function ($stateParams) {
                         return $stateParams.editedCourse;
                     }
                 }
@@ -100,7 +100,7 @@ angular.module('myApp.person', ['ui.router'])
                     courses: function (courseService) {
                         var promise = courseService.getCourses();
                         promise = promise.then(function (courses) {
-                            if (courses.responseStatus != 200) {
+                            if (courses.responseStatus / 100 != 2) {
                                 return promise;
                             }
                             return courses;
@@ -142,10 +142,7 @@ angular.module('myApp.person', ['ui.router'])
                         templateUrl: 'angular/views/person-course/menu.html'
                     },
                     "content@person.course": {
-                        templateUrl: 'angular/views/person-course/content.html',
-                        controller: function ($state) {
-                            $state.go('person.course.content');
-                        }
+                        templateUrl: 'angular/views/person-course/content.html'
                     }
                 }
             })
