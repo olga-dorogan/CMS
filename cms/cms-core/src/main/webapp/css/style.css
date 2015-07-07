@@ -104,7 +104,16 @@ ul#person-menu > li {
     padding-bottom: 10px;
 }
 
+ul#setting-menu > li {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
 ul#person-menu * {
+    vertical-align: top;
+}
+
+ul#setting-menu * {
     vertical-align: top;
 }
 

@@ -10,5 +10,4 @@ import javax.ws.rs.Path;
 @Path("person")//FIXME person/course/:id/content
 public class NotificationWebService {
 
-
 }

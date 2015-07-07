@@ -11,10 +11,8 @@
     <li><a href="#">
         <img class="person-menu-icon " ng-src="angular/img/calendar.png"/>
         Calendar</a></li>
-    <li><a href="#">
-        <img class="person-menu-icon "/>
-        <span class="glyphicons glyphicons-envelope">Notification</span></a></li>
-    <li><a href="#">
-        <img class="person-menu-icon "/>
-        <span class="glyphicons glyphicons-git-branch">Gitlab</span></a></li>
+    <li ui-sref-active="active"><span class="glyphicons glyphicon-envelope"><a ui-sref="person.course.notification">
+        Notification</a></span></li>
+    <li ui-sref-active="active"><span class="social social-github"><a ui-sref="person.course.gitlab">
+        Gitlab</a></span></li>
 </ul>

@@ -15,7 +15,8 @@
                            ng-if="course.isPersonEnrolled" class="go-into-course">
                             {{course.courseActionMsg}}
                         </a>
-                        <a href="" ng-if="!course.isPersonEnrolled" class="enroll-into-course">Подписаться</a>
+                        <a ui-sref="person.subscribe.modal" ng-if="!course.isPersonEnrolled&&!isPersonHasPhoneNumber()" class="enroll-into-course">Подписаться</a>
+                        <a ui-sref="person.subscribe" ng-if="!course.isPersonEnrolled&&isPersonHasPhoneNumber()" class="enroll-into-course">Подписаться</a>
                     </div>
                 </div>
             </div>

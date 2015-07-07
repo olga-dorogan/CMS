@@ -55,6 +55,7 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
                     $window.localStorage['role'] = data.personRole.toLowerCase();
                     $window.localStorage['name'] = data.name + " " + data.lastName;
                     $window.localStorage['token'] = $window.gapi.auth.getToken().access_token;
+                    $window.localStorage['email'] = data.email.toLowerCase();
                     $state.go("person");
                 });
                 console.log('user is logined successfully');
@@ -73,11 +74,20 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
         $rootScope.isLogin = function () {
             return !(($rootScope.getUserId() == undefined) || ($rootScope.getUserId() == null));
         };
+        $rootScope.getEmail = function(){
+          return $window.localStorage['email'];
+        };
         $rootScope.getUserId = function () {
             return $window.localStorage['id'];
         };
         $rootScope.getUsername = function () {
             return $window.localStorage['name'];
+        };
+        $rootScope.getEmailHash = function () {
+            var Hasher = Restangular.one("mailhash");
+            return Hasher.post({
+                "email": $window.localStorage['email']
+            });
         };
         $rootScope.isTeacher = function () {
             return $window.localStorage['role'] == 'teacher';

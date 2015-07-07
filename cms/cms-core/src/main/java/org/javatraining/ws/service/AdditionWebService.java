@@ -1,7 +1,7 @@
 package org.javatraining.ws.service;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.security.MessageDigest;
@@ -12,13 +12,12 @@ import java.security.NoSuchAlgorithmException;
  * Created by sergey on 07.07.15 at 17:19.
  * For more information you should send mail to codedealerb@gmail.com
  */
-@Path("course")
+@Path("mailhash")
 public class AdditionWebService {
 
-    @GET
-    @Path("mailhash")
-    @Produces("application/json")
-    @Consumes("text/plain")
+    @POST
+    @Produces("text/plain")
+    @Consumes("application/json")
     public String getEmailHash(String email) {
         return getMDA5(email);
     }
@@ -28,7 +27,7 @@ public class AdditionWebService {
             throw new IllegalArgumentException("email can't be null");
         }
         try {
-            MessageDigest mDigest = MessageDigest.getInstance("MDA5");
+            MessageDigest mDigest = MessageDigest.getInstance("MD5");
             byte[] result = mDigest.digest(email.trim().getBytes());
             StringBuilder sb = new StringBuilder();
 

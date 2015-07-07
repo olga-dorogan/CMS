@@ -88,17 +88,17 @@ function PersonService(Restangular) {
         return [{id: 2, name: "Java SE", description: "Description for Java SE"}];
     };
 
-    this.updatePicture = function (image) {
-        var PersonDescription = Person.get($window.localStorage['id']).one("description");
-        return PersonDescription.put({
-            "personalLogo": image
-        });
-    };
-
-    this.removePicture = function () {
-        var PersonDescription = Person.get($window.localStorage['id']).one("description");
-        return PersonDescription.put({
-            "personalLogo": null
-        });
-    }
+    //this.updatePicture = function (image) {
+    //    var PersonDescription = Person.get($window.localStorage['id']).one("description");
+    //    return PersonDescription.put({
+    //        "personalLogo": image
+    //    });
+    //};
+    //
+    //this.removePicture = function () {
+    //    var PersonDescription = Person.get($window.localStorage['id']).one("description");
+    //    return PersonDescription.put({
+    //        "personalLogo": null
+    //    });
+    //}
 }

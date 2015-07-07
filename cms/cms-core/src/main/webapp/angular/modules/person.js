@@ -112,6 +112,10 @@ angular.module('myApp.person', ['ui.router'])
                     }
                 }
             })
+            .state('person.course.notification', {
+                url: '/notification',
+                templateUrl: ''
+            })
             .state('person.course.addLecture', {
                 url: '/addLecture',
                 templateUrl: 'angular/views/person-course/teacher/addLecture.html',
@@ -134,9 +138,13 @@ angular.module('myApp.person', ['ui.router'])
                         templateUrl: 'angular/views/settings/menubar.html'
                     },
                     "setting-content@person.settings": {
-                        templateUrl: 'angular/views/settings/settings.html'
+                        templateUrl: 'angular/views/settings/settings.html'//FIXME CHANGE CONTENT
                     }
                 }
+            })
+            .state('person.subcribe.modal', {
+                url: '/subscribe',
+                templateUrl: 'angular/views/addition.html'
             })
     }])
     .service('PersonService', PersonService)

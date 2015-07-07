@@ -2,40 +2,19 @@
     <div class="col-md-8">
         <form name="personForm" novalidate role="form">
             <div class="form-group">
-                <label for="name">Имя<span class="required">*</span></label>
-                <input id="name" type="text" name="name" ng-model="person.name" class="form-control"
-                       ng-required="true"/>
+                <label for="phoneNumber"><span class="glyphicon glyphicon-phone"></span>Телефон</label>
+                <input id="phoneNumber" size="11" type="text" ng-change="phoneValidator()" name="phoneNumber"
+                       ng-model="person.description.phoneNumber" class="form-control"/>
             </div>
 
             <div class="form-group">
-                <label for="surname">Фамилия<span class="required">*</span></label>
-                <input id="surname" type="text" name="surname" ng-model="person.lastName" class="form-control"
-                       ng-required="true"/>
-            </div>
-
-            <div class="form-group">
-                <label for="secondName">Отчество</label>
-                <input id="secondName" type="text" name="secondName" ng-model="person.secondName"
-                       class="form-control"
-                       ng-required="true"/>
-            </div>
-
-            <div class="form-group">
-                <label for="phoneNumber"><span class="glyphicon glyphicon-earphone">Телефон</span><span
-                        class="required">*</span></label>
-                <input id="phoneNumber" size="11" type="text" onchange="return phoneValidator()" name="phoneNumber"
-                       ng-model="person.description.phoneNumber" class="form-control"
-                       ng-required="true"/>
-            </div>
-
-            <div class="form-group">
-                <label for="graduation">Краткое описание Вашего образования</label>
+                <label for="graduation"><span class="glyphicon glyphicon-education"></span>Краткое описание Вашего образования</label>
                 <textarea class="form-control" id="graduation" ng-model="person.description.graduation"
                           placeholder="Ваше образование..." rows="4"> </textarea>
             </div>
 
             <div class="form-group">
-                <label for="experience">Краткое описание Вашего опыта работы</label>
+                <label for="experience"><span class="glyphicon glyphicon-blackboard"></span>Краткое описание Вашего опыта работы</label>
                 <textarea class="form-control" id="experience" ng-model="person.description.experience"
                           placeholder="Ваш опыт работы..." rows="4"> </textarea>
             </div>
