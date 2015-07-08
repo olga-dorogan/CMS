@@ -57,6 +57,44 @@ body {
     clear: both;
 }
 
+#lecture-content-header {
+    width: 100%;
+    cursor: pointer;
+}
+
+#lecture-content-header > div.left {
+    float: left;
+    width: 33%;
+    text-align: left;
+}
+
+#lecture-content-header > div.center {
+    margin: 0 auto;
+    width: 33%;
+    text-align: center;
+}
+
+#lecture-content-header > div.right {
+    float: right;
+    width: 33%;
+    text-align: right;
+}
+
+#lecture-content {
+    margin-top: 10px;
+}
+
+#lecture-content > div.title {
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+    margin: 20px auto 20px auto;
+}
+
+#lecture-content > div.content {
+    margin: 10px 0 0 0;
+}
+
 .info-list .enroll-into-course {
     color: #990000;
 }
@@ -151,13 +189,13 @@ ul#person-menu > li.active > a:focus {
     width: 90%;
 }
 
+.person-course-link > tbody > tr > td.vert-align-middle {
+    vertical-align: middle;
+}
+
 .person-add-files-input {
     width: 98%;
     padding: 1%;
-}
-
-.table tbody > tr > td .vert-align-middle {
-    vertical-align: middle;
 }
 
 .btn-file {

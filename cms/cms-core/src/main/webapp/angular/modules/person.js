@@ -127,15 +127,14 @@ angular.module('myApp.person', ['ui.router'])
             })
             .state('person.course', {
                 url: '/course/:courseId',
-                params: {courseName: null},
                 views: {
                     "body@main": {
                         templateUrl: 'angular/views/person-course/main.html'
                     },
                     "top@person.course": {
                         templateUrl: 'angular/views/person-course/top.html',
-                        controller: function ($scope, $stateParams) {
-                            $scope.courseName = $stateParams.courseName;
+                        controller: function ($scope, courseName) {
+                            $scope.courseName = courseName;
                         }
                     },
                     "menubar@person.course": {
@@ -143,6 +142,19 @@ angular.module('myApp.person', ['ui.router'])
                     },
                     "content@person.course": {
                         templateUrl: 'angular/views/person-course/content.html'
+                    }
+                },
+                resolve: {
+                    courseService: 'CourseService',
+                    courseName: function ($stateParams, courseService) {
+                        var promise = courseService.getCourse($stateParams.courseId);
+                        promise = promise.then(function(course){
+                            if(course.responseStatus != 200) {
+                                return null;
+                            }
+                            return course.name;
+                        });
+                        return promise;
                     }
                 }
             })
@@ -164,7 +176,48 @@ angular.module('myApp.person', ['ui.router'])
             .state('person.course.addLecture', {
                 url: '/addLecture',
                 templateUrl: 'angular/views/person-course/teacher/addLecture.html',
-                controller: 'AddLectureCtrl'
+                controller: 'AddLectureCtrl',
+                resolve: {
+                    courseContentService: 'CourseContentService',
+                    lecturesCnt: function($stateParams, courseContentService) {
+                        var promise = courseContentService.getLectures($stateParams.courseId);
+                        promise = promise.then(function (lectures) {
+                            if (lectures.responseStatus != 200) {
+                                return null;
+                            }
+                            return lectures.length;
+                        });
+                        return promise;
+                    }
+                }
+            })
+            .state('person.course.lecture', {
+                url: '/lecture/:lectureId',
+                templateUrl: 'angular/views/person-course/lectureContent.html',
+                controller: 'LectureContentCtrl',
+                resolve: {
+                    courseContentService: 'CourseContentService',
+                    lecture: function ($stateParams, courseContentService) {
+                        var promise = courseContentService.getLecture($stateParams.courseId, $stateParams.lectureId);
+                        promise = promise.then(function (lecture) {
+                            if (lecture.responseStatus != 200) {
+                                return null;
+                            }
+                            return lecture;
+                        });
+                        return promise;
+                    },
+                    lecturesCnt: function($stateParams, courseContentService) {
+                        var promise = courseContentService.getLectures($stateParams.courseId);
+                        promise = promise.then(function (lectures) {
+                            if (lectures.responseStatus != 200) {
+                                return null;
+                            }
+                            return lectures.length;
+                        });
+                        return promise;
+                    }
+                }
             })
             .state('person.course.progress', {
                 url: '/progress',
@@ -181,7 +234,7 @@ angular.module('myApp.person', ['ui.router'])
                         controller: "SettingCtrl"
                     }
                 }
-            })
+            });
     }])
     .service('PersonService', PersonService)
     .service('CourseService', CourseService)
@@ -192,6 +245,7 @@ angular.module('myApp.person', ['ui.router'])
     .controller('DatepickerCtrl', DatepickerCtrl)
     .controller('CourseContentCtrl', CourseContentCtrl)
     .controller("AddLectureCtrl", AddLectureCtrl)
+    .controller("LectureContentCtrl", LectureContentCtrl)
     .controller("SettingCtrl", SettingCtrl);
 
 
