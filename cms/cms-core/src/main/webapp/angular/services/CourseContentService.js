@@ -2,8 +2,10 @@
  * Created by olga on 25.06.15.
  */
 function CourseContentService(Restangular) {
+    var restBase = 'resources/course';
+
     var createLectureRest = function (courseId) {
-        return Restangular.one('resources/course', courseId).all('lesson');
+        return Restangular.one(restBase, courseId).all('lesson');
     };
 
     this.getLectures = function (courseId) {
@@ -17,7 +19,7 @@ function CourseContentService(Restangular) {
         return createLectureRest(newLecture.courseId).post(newLecture);
     };
 
-    this.getLecturesCap = function (courseId) {
-        return [{'id': 1, 'topic': 'Lection 1'}, {'id': 2, 'topic': 'Lection 2'}];
+    this.getLecture = function(courseId, lectureOrderNum) {
+        return Restangular.one(restBase, courseId).one('lesson', lectureOrderNum).get();
     };
 }

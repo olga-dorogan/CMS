@@ -23,6 +23,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -43,8 +44,13 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCourseList() {
-        List<CourseVO> courses = courseService.getAll();
+    public Response getCoursesList(@QueryParam("date") String curDate) {
+        List<CourseVO> courses;
+        if (curDate == null) {
+            courses = courseService.getAll();
+        } else {
+            courses = courseService.getAllStartedAfterDate(new Date());
+        }
         return Response.ok(courses).build();
     }
 
@@ -139,17 +145,15 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
     @Path("{course_id}")
-    public Response updateCourse(@PathParam("course_id") long courseId, @QueryParam("course_json") String courseJson) {
+    public Response updateCourse(@PathParam("course_id") long courseId, CourseVO courseVO) {
         Response.ResponseBuilder r;
         try {
-            CourseVO course = deserialize(courseJson);
-            course.setId(courseId);
-            courseService.updateCourse(course);
+            courseVO.setId(courseId);
+            courseService.updateCourse(courseVO);
             r = Response.ok();
         } catch (JSONException e) {
             r = Response.status(Response.Status.NOT_ACCEPTABLE);
         }
-
         return r.build();
     }
 
@@ -164,7 +168,10 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
             courseService.removeCourse(course);
             r = Response.ok();
         } catch (Exception e) {
-            r = Response.noContent();
+            r = Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .type(MediaType.TEXT_HTML_TYPE)
+                    .entity(String.format("Exception: %s, description: %s", e.getClass().getName(), e.getMessage()));
         }
         return r.build();
     }

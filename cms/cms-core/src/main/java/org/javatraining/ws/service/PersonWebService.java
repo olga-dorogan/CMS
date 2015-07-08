@@ -5,7 +5,7 @@ import org.javatraining.auth.Auth;
 import org.javatraining.config.AuthRole;
 import org.javatraining.config.Config;
 import org.javatraining.entity.enums.PersonRole;
-import org.javatraining.model.CoursePersonStatusVO;
+import org.javatraining.model.CourseWithStatusVO;
 import org.javatraining.model.PersonDescriptionVO;
 import org.javatraining.model.PersonVO;
 import org.javatraining.service.PersonService;
@@ -207,7 +207,7 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
     @Produces(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER, AuthRole.STUDENT})
     public Response getCoursesForPerson(@PathParam("person_id") long personId) {
-        List<CoursePersonStatusVO> courses = personService.getPersonCourseStatuses(new PersonVO(personId));
+        List<CourseWithStatusVO> courses = personService.getPersonCoursesWithStatuses(new PersonVO(personId));
         return Response.ok(courses).build();
     }
 }

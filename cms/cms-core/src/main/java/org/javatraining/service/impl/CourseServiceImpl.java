@@ -15,7 +15,10 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -87,6 +90,13 @@ public class CourseServiceImpl implements CourseService {
             lessonDAO.save(lessonEntity);
             // TODO: for every lesson do practices saving
         }
+    }
+
+    @Override
+    public List<CourseVO> getAllStartedAfterDate(Date date) {
+        List<CourseEntity> courseEntities = courseDAO.getAllCoursesStartedAfterDate(new java.sql.Date(date.getTime()));
+        Set<CourseVO> courseVOs = CourseConverter.convertEntitiesToVOs(courseEntities);
+        return new ArrayList<>(courseVOs);
     }
 
     @Override

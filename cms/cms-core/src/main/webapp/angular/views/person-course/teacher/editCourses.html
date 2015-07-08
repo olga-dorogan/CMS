@@ -1,0 +1,31 @@
+<div>
+
+    <div>
+        <h3>Все курсы системы</h3>
+        <ul class="info-list">
+            <li ng-repeat="course in courses">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title" id="course-edit-header">
+                            <span class="title">{{course.name}}</span>
+                            <span class="date">{{course.startDate}} - {{course.endDate}}</span>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="description">{{course.description}}</div>
+                        <div class="course-action-anchor">
+                            <a ui-sref="person.addOrEditCourse({mode:'edit', editedCourse:course})">Редактировать</a>
+                            <a ng-click="removeCourse(course.id)">Удалить</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="pull-right">
+        <button class="btn btn-default" ui-sref="home">Вернуться к списку
+        </button>
+    </div>
+
+</div>

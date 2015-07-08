@@ -1,4 +1,4 @@
-function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentService, FileUploader) {
+function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentService, FileUploader, lecturesCnt) {
     var BASE_URL_FILE_TO_STORAGE = 'resources/file/upload';
 
     $scope.lecture = $scope.lecture || {};
@@ -18,12 +18,12 @@ function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentServi
         if (valid) {
             for (var i = 0; i < $scope.lecture.links.length; i++) {
                 for (var j = i + 1; j < $scope.lecture.links.length; j++) {
-                    if($scope.lecture.links[i].orderNum == $scope.lecture.links[j].orderNum) {
+                    if ($scope.lecture.links[i].orderNum == $scope.lecture.links[j].orderNum) {
                         valid = false;
                         break;
                     }
                 }
-                if(!valid) {
+                if (!valid) {
                     break;
                 }
             }
@@ -33,7 +33,7 @@ function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentServi
 
     var createLecture = function () {
         $scope.lecture.createDate = new Date();
-        $scope.lecture.orderNum = 1;
+        $scope.lecture.orderNum = lecturesCnt + 1;
         $scope.lecture.courseId = $stateParams.courseId;
         return CourseContentService.createLecture($scope.lecture);
     };

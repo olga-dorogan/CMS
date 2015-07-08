@@ -41,7 +41,7 @@ angular.module('myApp.teacher', ['ui.router'])
                 views: {
                     "content@teacher": {
                         templateUrl: 'angular/views/addCourse.html',
-                        controller: "AddCourseCtrl"
+                        controller: "AddOrEditCourseCtrl"
                     }
                 },
                 resolve: {teacherAccess: teacherAccess}
@@ -49,7 +49,7 @@ angular.module('myApp.teacher', ['ui.router'])
     }])
     .service('CourseContentService', CourseContentService)
     .controller("AddLectureCtrl", AddLectureCtrl)
-    .controller("AddCourseCtrl", AddCourseCtrl)
+    .controller("AddOrEditCourseCtrl", AddOrEditCourseCtrl)
     .factory('UploadManager', ["$rootScope", UploadManager])
     .controller('FileUploadCtrl', ['$scope', '$rootScope', 'UploadManager', FileUploadCtrl])
     .directive('upload', ['UploadManager', uploadDirective])

@@ -16,28 +16,29 @@ angular.module('myApp.person', ['ui.router'])
                 resolve: {
                     courseService: 'CourseService',
                     personService: 'PersonService',
-                    personalizedCourses: function ($rootScope, courseService, personService) {
-                        var promise = courseService.getCourses();
-                        promise = promise.then(function (courses) {
-                            promise = personService.getCoursesStatusesForPerson($rootScope.getUserId());
-                            promise = promise.then(function (personCourseStatuses) {
-                                var personalizedCourses = courses;
-                                for (var i = 0; i < personalizedCourses.length; i++) {
-                                    var isExistCourseStatus = false;
-                                    for (var j = 0; j < personCourseStatuses.length; j++) {
-                                        if (personalizedCourses[i].id == personCourseStatuses[j].courseId) {
-                                            personalizedCourses[i].courseActionMsg =
-                                                personService.getLinkNameForStatus(personCourseStatuses[j].courseStatus);
-                                            personalizedCourses[i].isPersonEnrolled = true;
-                                            isExistCourseStatus = true;
+                    coursesGroups: function ($rootScope, courseService, personService) {
+                        var promise = personService.getCoursesStatusesForPerson($rootScope.getUserId());
+                        promise = promise.then(function (personCourses) {
+                            if (personCourses.responseStatus != 200) {
+                                return promise;
+                            }
+                            promise = courseService.getNewCourses();
+                            promise = promise.then(function (newCourses) {
+                                if (newCourses.responseStatus != 200) {
+                                    return promise;
+                                }
+                                for (var i = 0; i < personCourses.length; i++) {
+                                    for (var j = 0; j < newCourses.length; j++) {
+                                        if (personCourses[i].id == newCourses[j].id) {
+                                            newCourses.splice(j, 1);
+                                            break;
                                         }
                                     }
-                                    if (!isExistCourseStatus) {
-                                        personalizedCourses[i].courseActionMsg = 'Undefined action';
-                                        personalizedCourses[i].isPersonEnrolled = false;
-                                    }
                                 }
-                                return personalizedCourses;
+                                return {
+                                    'coursesEnrolled': personCourses,
+                                    'coursesToSubscribe': newCourses
+                                };
                             });
                             return promise;
                         });
@@ -45,28 +46,63 @@ angular.module('myApp.person', ['ui.router'])
                     }
                 }
             })
-            .state('person.addCourse', {
-                url: '/addCourse',
+            .state('person.addOrEditCourse', {
+                url: '/addOrEditCourse',
+                params: {mode: null, editedCourse: null},
                 views: {
                     "body@main": {
                         templateUrl: 'angular/views/person-course/teacher/addCourse.html',
-                        controller: "AddCourseCtrl"
+                        controller: "AddOrEditCourseCtrl"
                     }
                 },
                 resolve: {
                     personService: 'PersonService',
                     courseService: 'CourseService',
-                    allTeachers: function (personService) {
+                    allTeachers: function (mode, personService) {
+                        if (mode != 'add') {
+                            return [];
+                        }
                         var promise = personService.getTeachers();
                         promise = promise.then(function (teachers) {
                             return teachers;
                         });
                         return promise;
                     },
-                    coursePrototypes: function (courseService) {
+                    coursePrototypes: function (mode, courseService) {
+                        if (mode != 'add') {
+                            return [];
+                        }
                         var promise = courseService.getCourses();
                         promise = promise.then(function (courses) {
                             courses.push({'id': -1, 'name': 'Отсутствует'});
+                            return courses;
+                        });
+                        return promise;
+                    },
+                    mode: function ($stateParams) {
+                        return $stateParams.mode;
+                    },
+                    editedCourse: function ($stateParams) {
+                        return $stateParams.editedCourse;
+                    }
+                }
+            })
+            .state('person.editCourses', {
+                url: '/editCourses',
+                views: {
+                    "body@main": {
+                        templateUrl: 'angular/views/person-course/teacher/editCourses.html',
+                        controller: 'EditCoursesCtrl'
+                    }
+                },
+                resolve: {
+                    courseService: 'CourseService',
+                    courses: function (courseService) {
+                        var promise = courseService.getCourses();
+                        promise = promise.then(function (courses) {
+                            if (courses.responseStatus / 100 != 2) {
+                                return promise;
+                            }
                             return courses;
                         });
                         return promise;
@@ -75,25 +111,34 @@ angular.module('myApp.person', ['ui.router'])
             })
             .state('person.course', {
                 url: '/course/:courseId',
-                params: {courseName: null},
                 views: {
                     "body@main": {
                         templateUrl: 'angular/views/person-course/main.html'
                     },
                     "top@person.course": {
                         templateUrl: 'angular/views/person-course/top.html',
-                        controller: function ($scope, $stateParams) {
-                            $scope.courseName = $stateParams.courseName;
+                        controller: function ($scope, courseName) {
+                            $scope.courseName = courseName;
                         }
                     },
                     "menubar@person.course": {
                         templateUrl: 'angular/views/person-course/menu.html'
                     },
                     "content@person.course": {
-                        templateUrl: 'angular/views/person-course/content.html',
-                        controller: function ($state) {
-                            $state.go('person.course.content');
-                        }
+                        templateUrl: 'angular/views/person-course/content.html'
+                    }
+                },
+                resolve: {
+                    courseService: 'CourseService',
+                    courseName: function ($stateParams, courseService) {
+                        var promise = courseService.getCourse($stateParams.courseId);
+                        promise = promise.then(function (course) {
+                            if (course.responseStatus != 200) {
+                                return null;
+                            }
+                            return course.name;
+                        });
+                        return promise;
                     }
                 }
             })
@@ -119,7 +164,48 @@ angular.module('myApp.person', ['ui.router'])
             .state('person.course.addLecture', {
                 url: '/addLecture',
                 templateUrl: 'angular/views/person-course/teacher/addLecture.html',
-                controller: 'AddLectureCtrl'
+                controller: 'AddLectureCtrl',
+                resolve: {
+                    courseContentService: 'CourseContentService',
+                    lecturesCnt: function ($stateParams, courseContentService) {
+                        var promise = courseContentService.getLectures($stateParams.courseId);
+                        promise = promise.then(function (lectures) {
+                            if (lectures.responseStatus != 200) {
+                                return null;
+                            }
+                            return lectures.length;
+                        });
+                        return promise;
+                    }
+                }
+            })
+            .state('person.course.lecture', {
+                url: '/lecture/:lectureId',
+                templateUrl: 'angular/views/person-course/lectureContent.html',
+                controller: 'LectureContentCtrl',
+                resolve: {
+                    courseContentService: 'CourseContentService',
+                    lecture: function ($stateParams, courseContentService) {
+                        var promise = courseContentService.getLecture($stateParams.courseId, $stateParams.lectureId);
+                        promise = promise.then(function (lecture) {
+                            if (lecture.responseStatus != 200) {
+                                return null;
+                            }
+                            return lecture;
+                        });
+                        return promise;
+                    },
+                    lecturesCnt: function ($stateParams, courseContentService) {
+                        var promise = courseContentService.getLectures($stateParams.courseId);
+                        promise = promise.then(function (lectures) {
+                            if (lectures.responseStatus != 200) {
+                                return null;
+                            }
+                            return lectures.length;
+                        });
+                        return promise;
+                    }
+                }
             })
             .state('person.course.progress', {
                 url: '/progress',
@@ -151,10 +237,12 @@ angular.module('myApp.person', ['ui.router'])
     .service('CourseService', CourseService)
     .service('CourseContentService', CourseContentService)
     .controller('PersonCtrl', PersonCtrl)
-    .controller('AddCourseCtrl', AddCourseCtrl)
+    .controller('AddOrEditCourseCtrl', AddOrEditCourseCtrl)
+    .controller("EditCoursesCtrl", EditCoursesCtrl)
     .controller('DatepickerCtrl', DatepickerCtrl)
     .controller('CourseContentCtrl', CourseContentCtrl)
     .controller("AddLectureCtrl", AddLectureCtrl)
+    .controller("LectureContentCtrl", LectureContentCtrl)
     .controller("SettingCtrl", SettingCtrl);
 
 

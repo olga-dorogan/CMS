@@ -1,9 +1,15 @@
-function AddCourseCtrl($rootScope, $scope, $state, $modal, CourseService, allTeachers, coursePrototypes) {
-    $scope.course = $scope.course || {};
+function AddOrEditCourseCtrl($rootScope, $scope, $state, $modal, CourseService, allTeachers, coursePrototypes, mode, editedCourse) {
+
+    $scope.isAddMode = function () {
+        return mode == 'add';
+    };
+
+    $scope.course = $scope.isAddMode() ? ($scope.course || {}) : editedCourse;
     $scope.courseTeachers = [parseInt($rootScope.getUserId())];
     $scope.teachers = allTeachers;
     $scope.coursePrototypes = coursePrototypes;
     $scope.coursePrototypeId = -1;
+    $scope.okLabel = $scope.isAddMode() ? 'Добавить курс' : 'Обновить курс';
 
     $scope.isValidDates = function () {
         if (!$scope.course.startDate && !$scope.course.endDate) {
@@ -45,20 +51,23 @@ function AddCourseCtrl($rootScope, $scope, $state, $modal, CourseService, allTea
     $scope.setTitleAsPrototype = function () {
         $scope.course.name = getFieldFromPrototype('name');
     };
-
     $scope.setDescriptionAsPrototype = function () {
         $scope.course.description = getFieldFromPrototype('description');
     };
 
-    $scope.createCourse = function () {
+    var fillTeachers = function () {
         $scope.course.teachers = [];
         for (var i = 0; i < $scope.courseTeachers.length; i++) {
             $scope.course.teachers[i] = {'id': $scope.courseTeachers[i]};
         }
-        var alertData = {
-            boldTextTitle: "Ошибка",
-            mode: 'danger'
-        };
+    };
+    var alertData = {
+        boldTextTitle: "Ошибка",
+        mode: 'danger'
+    };
+
+    $scope.createCourse = function () {
+        fillTeachers();
         CourseService.createCourse($scope.course, $scope.coursePrototypeId)
             .then(
             function (createdCourse) {
@@ -78,8 +87,25 @@ function AddCourseCtrl($rootScope, $scope, $state, $modal, CourseService, allTea
             });
     };
 
+    $scope.updateCourse = function () {
+        CourseService.updateCourse($scope.course).then(
+            function (updatedCourse) {
+                if(updatedCourse.responseStatus / 100 == 2) {
+                    $state.go('person.editCourses', {}, {reload: true});
+                } else {
+                    alertData.textAlert = updatedCourse;
+                    showAlertWithError(alertData);
+                }
+            },
+            function () {
+                alertData.textAlert = 'Причина неизвестна';
+                showAlertWithError(alertData);
+            }
+        )
+    };
+
     $scope.cancel = function () {
-        $state.go('home');
+        $scope.isAddMode() ? $state.go('home') : $state.go('person.editCourses');
     };
 
     var showAlertWithError = function (alertData) {

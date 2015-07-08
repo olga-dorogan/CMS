@@ -3,12 +3,11 @@ package org.javatraining.service.impl;
 import org.javatraining.dao.*;
 import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.entity.*;
-import org.javatraining.model.*;
-import org.javatraining.model.conversion.CourseConverter;
 import org.javatraining.entity.enums.CourseStatus;
 import org.javatraining.entity.enums.PersonRole;
+import org.javatraining.entity.util.Pair;
 import org.javatraining.model.*;
-import org.javatraining.model.conversion.CoursePersonStatusConverter;
+import org.javatraining.model.conversion.CourseWithStatusConverter;
 import org.javatraining.model.conversion.MarkConverter;
 import org.javatraining.model.conversion.PersonConverter;
 import org.javatraining.service.PersonService;
@@ -21,6 +20,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by olga on 07.06.15.
@@ -59,6 +59,7 @@ public class PersonServiceImpl implements PersonService {
     public void removePersonDescription(Long id) {
         //FIXME add implementation after creating specified repository
     }
+
     @EJB
     private CoursePersonStatusDAO coursePersonStatusDAO;
 
@@ -79,6 +80,7 @@ public class PersonServiceImpl implements PersonService {
             saveStudent(personVO);
         }
     }
+
     @Override
     public PersonVO update(@NotNull @Valid PersonVO personVO) {
         PersonEntity entity = PersonConverter.convertVOToEntity(personVO);
@@ -152,9 +154,13 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<CoursePersonStatusVO> getPersonCourseStatuses(@NotNull PersonVO personVO) {
-        List<CoursePersonStatusEntity> entities = coursePersonStatusDAO.getCourseStatusesForPerson(personVO.getId());
-        return CoursePersonStatusConverter.convertEntitiesToVOs(entities);
+    public List<CourseWithStatusVO> getPersonCoursesWithStatuses(@NotNull PersonVO personVO) {
+        List<Pair<CourseEntity, CourseStatus>> entitiesCoursesWithStatuses = courseDAO.getAllCoursesWithStatusesForPerson(personVO.getId());
+        List<CourseWithStatusVO> voCoursesWithStatuses = entitiesCoursesWithStatuses
+                .stream()
+                .map((pair) -> CourseWithStatusConverter.convertEntityToVO(pair.first, pair.second))
+                .collect(Collectors.toList());
+        return voCoursesWithStatuses;
     }
 
     @Override

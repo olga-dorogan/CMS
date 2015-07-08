@@ -4,6 +4,7 @@ import org.javatraining.dao.exception.EntityIsAlreadyExistException;
 import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.entity.PersonEntity;
 import org.javatraining.entity.enums.PersonRole;
+import org.javatraining.entity.util.Pair;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.*;
@@ -56,6 +57,7 @@ public class PersonDAOTest {
                 .addPackage("org.assertj.core.util")
                 .addPackage("org.assertj.core.presentation")
                 .addPackage("org.assertj.core.internal")
+                .addClass(Pair.class)
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
         return war;
