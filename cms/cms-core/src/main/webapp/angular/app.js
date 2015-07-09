@@ -9,9 +9,7 @@ var myApp = angular.module('myApp', [
     'myApp.home',
     'myApp.person',
     'myApp.news',
-    'myApp.about',
-    'myApp.teacher',
-    'myApp.student'
+    'myApp.about'
 ]);
 myApp.service('sessionService', ['$window', '$rootScope', SessionService]);
 myApp.service('PersonService', ['Restangular', PersonService]);
@@ -33,23 +31,11 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
     function (GAuth, GApi, GData, $state, $rootScope, $window, $http, AuthService) {
 
         var CLIENT = '895405022160-pi238d0pi57fsmsov8khtpr4415hj5j5.apps.googleusercontent.com';
-        var BASE;
-        if (window.location.hostname == 'localhost') {
-            BASE = '//localhost:8080/_ah/api';
-        } else {
-            BASE = 'https://cloud-endpoints-gae.appspot.com/_ah/api';
-        }
-        if (window.location.port == 8000) {
-            CLIENT = '696510088921-8a2u226l2dpsm4maqqlrva8h0e9ft7v1.apps.googleusercontent.com';
-        }
-        GApi.load('AIzaSyDEVCJp5Hz_fSrHYeS24EcMM3FQV0GF8Do', 'v1', BASE);
         GAuth.setClient(CLIENT);
         GAuth.setScope('https://www.googleapis.com/auth/userinfo.email');
 
         $rootScope.doLogin = function () {
             GAuth.login().then(function () {
-                //FIXME:  (Andrey) Добавил POST запрос на сервер для получения
-                //FIXME: Раскомментировать для авторизации
                 AuthService.goAuth(GData.getUser()).then(function (data) {
                     $window.localStorage['id'] = data.id;
                     $window.localStorage['role'] = data.personRole.toLowerCase();
@@ -74,8 +60,8 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
         $rootScope.isLogin = function () {
             return !(($rootScope.getUserId() == undefined) || ($rootScope.getUserId() == null));
         };
-        $rootScope.getEmail = function(){
-          return $window.localStorage['email'];
+        $rootScope.getEmail = function () {
+            return $window.localStorage['email'];
         };
         $rootScope.getUserId = function () {
             return $window.localStorage['id'];
@@ -100,10 +86,10 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
         });
 
         $rootScope.$on('$stateChangeStart', function (event, toState) {
-           if((toState.name == 'home') && $rootScope.isLogin()) {
-               event.preventDefault();
-               $state.go('person');
-           }
+            if ((toState.name == 'home') && $rootScope.isLogin()) {
+                event.preventDefault();
+                $state.go('person');
+            }
         });
     }]);
 
