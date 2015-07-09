@@ -191,12 +191,14 @@ ul#person-menu > li.active > a:focus {
 ul#setting-menu {
     list-style-type: none;
 }
+
 ul#setting-menu > li.active > a,
 ul#setting-menu > li.active > a:hover,
 ul#setting-menu > li.active > a:focus {
     color: darkblue;
     font-weight: bolder;
 }
+
 .btn-add-course-as-proto {
     display: inline-block;
 }
@@ -253,12 +255,27 @@ ul#setting-menu > li.active > a:focus {
 }
 
 .content {
-    margin: 50px;
+    margin: 54px 50px 0 50px;
+}
+
+#navbar-main > div.content {
+    width: 1000px;
+    margin: 0 auto;
+    padding: 0 2px;
 }
 
 .avatar {
-    width: 35px;
-    height: 35px;
+    height: 50px;
+    margin: 0;
+    padding: 0;
+}
+
+.avatar > li > a:link.dropdown-toggle,
+.avatar > li > a:visited.dropdown-toggle,
+.avatar > li > a:hover.dropdown-toggle,
+.avatar > li > a:active.dropdown-toggle {
+    height: 50px;
+    padding: 13px 15px 5px 15px;
 }
 
 #userinfo-wrapper {
@@ -307,42 +324,4 @@ ul#setting-menu > li.active > a:focus {
     box-shadow: 0 0 2px rgba(0, 0, 0, .8);
     -webkit-box-shadow: 0 0 2px rgba(0, 0, 0, .8);
     -moz-box-shadow: 0 0 2px rgba(0, 0, 0, .8);
-}
-
-.btn-custom {
-    background-color: hsl(188, 83%, 75%) !important;
-    background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#fafefe", endColorstr="#8ae6f4");
-    background-image: -khtml-gradient(linear, left top, left bottom, from(#fafefe), to(#8ae6f4));
-    background-image: -moz-linear-gradient(top, #fafefe, #8ae6f4);
-    background-image: -ms-linear-gradient(top, #fafefe, #8ae6f4);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fafefe), color-stop(100%, #8ae6f4));
-    background-image: -webkit-linear-gradient(top, #fafefe, #8ae6f4);
-    background-image: -o-linear-gradient(top, #fafefe, #8ae6f4);
-    background-image: linear-gradient(#fafefe, #8ae6f4);
-    border-color: #8ae6f4 #8ae6f4 hsl(188, 83%, 69%);
-    color: #333 !important;
-    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.39);
-    -webkit-font-smoothing: antialiased;
-}
-
-.btn-file {
-    position: relative;
-    overflow: hidden;
-}
-
-.btn-file input[type=file] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    font-size: 100px;
-    text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
-    outline: none;
-    background: white;
-    cursor: inherit;
-    display: block;
 }
