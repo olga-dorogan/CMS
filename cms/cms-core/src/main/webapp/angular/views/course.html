@@ -25,17 +25,29 @@
                 <li ng-repeat="course in personCourses">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">{{course.name}}</h3>
-                        </div>
-                        <div class="panel-body">
-                            <div class="description">{{course.description}}</div>
-                            <div class="course-action">
-                                <a ui-sref="person.course.content({courseId:course.id, courseName:course.name})"
-                                   class="go-into-course">{{getActionMsg(course.courseStatus)}}
+                            <div class="panel-title course-edit-header">
+                                <div class="title"> {{course.name}}</div>
+                                <a ng-show="isTeacher()" class="remove-action" ng-click="removeCourse(course.id)">
+                                    <span class="glyphicon glyphicon-remove-circle"></span>
                                 </a>
                             </div>
                         </div>
+                        <div class="panel-body">
+                            <div class="description">{{course.description}}</div>
+                            <hr ng-show="isTeacher()">
+                            <div class="course-action course-teacher-footer">
+                                <div class="date" ng-show="isTeacher()">
+                                    Период проведения: с {{course.startDate}} по {{course.endDate}}
+                                </div>
+                                <div class="action">
+                                    <a ui-sref="person.course.content({courseId:course.id, courseName:course.name})"
+                                       class="go-into-course">{{getActionMsg(course.courseStatus)}}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </li>
             </ul>
         </div>
 
@@ -45,14 +57,60 @@
                 <li ng-repeat="course in newCourses">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">{{course.name}}</h3>
+                            <div class="panel-title course-edit-header">
+                                <div class="title"> {{course.name}}</div>
+                                <a ng-show="isTeacher()" class="remove-action" ng-click="removeCourse(course.id)">
+                                    <span class="glyphicon glyphicon-remove-circle"></span>
+                                </a>
+                            </div>
                         </div>
                         <div class="panel-body">
                             <div class="description">{{course.description}}</div>
-                            <div class="course-action">
+                            <hr>
+                            <div class="course-action course-teacher-footer">
+                                <div class="date" ng-show="isTeacher()">
+                                    Период проведения: с {{course.startDate}} по {{course.endDate}}
+                                </div>
+                                <div class="action">
+                                    <a ui-sref="person.subscribe.modal"
+                                       ng-if="!isPersonHasPhoneNumber()"
+                                       class="enroll-into-course">Подписаться</a>
+                                    <a ui-sref="person.subscribe"
+                                       ng-if="isPersonHasPhoneNumber()"
+                                       class="enroll-into-course">Подписаться</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
 
-                                <a ui-sref="person.subscribe.modal" ng-if="!course.isPersonEnrolled&&!isPersonHasPhoneNumber()" class="enroll-into-course">Подписаться</a>
-                                <a ui-sref="person.subscribe" ng-if="!course.isPersonEnrolled&&isPersonHasPhoneNumber()" class="enroll-into-course">Подписаться</a>
+        <div ng-hide="!isTeacher() || (oldCourses == undefined) || (oldCourses.length == 0)">
+            <h3>Прошедшие курсы</h3>
+            <ul class="info-list">
+                <li ng-repeat="course in oldCourses">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="panel-title course-edit-header">
+                                <div class="title"> {{course.name}}</div>
+                                <a class="remove-action" ng-click="removeCourse(course.id)">
+                                    <span class="glyphicon glyphicon-remove-circle"></span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="description">{{course.description}}</div>
+                            <hr>
+                            <div class="course-action course-teacher-footer">
+                                <div class="date" ng-show="isTeacher()">
+                                    Период проведения: с {{course.startDate}} по {{course.endDate}}
+                                </div>
+                                <div class="action">
+                                    <a ui-sref="person.course.content({courseId:course.id, courseName:course.name})"
+                                       class="go-into-course">Редактировать
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -61,10 +119,7 @@
         </div>
 
         <div ng-hide="!isTeacher() || (personCourses == undefined) || (newCourses == undefined)" class="pull-right">
-            <button class="btn btn-default" ui-sref="person.editCourses">Перейти в режим редактирования
-            </button>
-            <button class="btn btn-default" ui-sref="person.addOrEditCourse({mode:'add'})">Добавить новый курс
-            </button>
+            <button class="btn btn-default" ui-sref="person.addCourse">Добавить новый курс</button>
         </div>
 
     </div>

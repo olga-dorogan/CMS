@@ -33,6 +33,8 @@ import java.util.List;
 @Path("course")
 public class CourseWebService extends AbstractWebService<CourseVO> {
     private static final Long NONE_COURSE_PROTOTYPE = -1L;
+    private static final String COURSES_STARTED_AFTER_DATE = "start_after";
+    private static final String COURSES_ENDED_BEFORE_DATE = "end_before";
     @EJB
     private CourseService courseService;
     @EJB
@@ -44,12 +46,21 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCoursesList(@QueryParam("date") String curDate) {
+    public Response getCoursesList(@QueryParam("date") String curDate, @QueryParam("period") String period) {
         List<CourseVO> courses;
         if (curDate == null) {
             courses = courseService.getAll();
         } else {
-            courses = courseService.getAllStartedAfterDate(new Date());
+            switch (period) {
+                case COURSES_STARTED_AFTER_DATE:
+                    courses = courseService.getAllStartedAfterDate(new Date());
+                    break;
+                case COURSES_ENDED_BEFORE_DATE:
+                    courses = courseService.getAllEndedBeforeDate(new Date());
+                    break;
+                default:
+                    return Response.status(Response.Status.BAD_REQUEST).build();
+            }
         }
         return Response.ok(courses).build();
     }

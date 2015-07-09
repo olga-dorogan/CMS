@@ -39,6 +39,13 @@ public class CourseDAO extends GenericDAO<CourseEntity> {
         return query.getResultList();
     }
 
+    public List<CourseEntity> getAllCoursesEndedBeforeDate(Date date) {
+        TypedQuery<CourseEntity> query = getEntityManager().createQuery(
+                "SELECT c FROM CourseEntity c WHERE c.enddate < :date", CourseEntity.class);
+        query.setParameter("date", date);
+        return query.getResultList();
+    }
+
     public List<Pair<CourseEntity, CourseStatus>> getAllCoursesWithStatusesForPerson(@NotNull Long personId) {
         TypedQuery<Object[]> query = getEntityManager().createQuery(
                 "SELECT c, st.courseStatus FROM CourseEntity c, CoursePersonStatusEntity st WHERE c = st.course AND st.person.id = :personId",

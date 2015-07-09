@@ -38,23 +38,42 @@ body {
     cursor: pointer;
 }
 
-#course-edit-header {
+.course-edit-header {
     display: table;
     width: 100%;
 }
 
-#course-edit-header .title {
+.course-edit-header .title {
     display: table-cell;
     text-align: left;
 }
 
-#course-edit-header .date {
+.course-edit-header .date {
     display: table-cell;
     text-align: right;
 }
 
-#course-edit-header.clear {
-    clear: both;
+.course-edit-header .remove-action {
+    display: table-cell;
+    text-align: right;
+    cursor: pointer;
+    color: #990000;
+}
+
+.course-teacher-footer {
+    display: table;
+    width: 100%;
+}
+
+.course-teacher-footer .date {
+    display: table-cell;
+    text-align: left;
+    padding-left: 25px;
+}
+
+.course-teacher-footer .action {
+    display: table-cell;
+    text-align: right;
 }
 
 #lecture-content-header {
@@ -161,20 +180,26 @@ body {
 
 ul#person-menu {
     list-style-type: none;
+    padding-left: 10px;
 }
 
-ul#person-menu > li {
-    padding-top: 10px;
-    padding-bottom: 10px;
+ul#person-menu > li > a {
+    padding: 10px 0 10px 0;
+    display: table;
+    vertical-align: bottom;
+}
+
+ul#person-menu > li > a > span.icon,
+ul#person-menu > li > a > span.item {
+    min-width: 20px;
+    display: table-cell;
+    vertical-align: middle;
+    padding-right: 5px;
 }
 
 ul#setting-menu > li {
     padding-top: 10px;
     padding-bottom: 10px;
-}
-
-ul#person-menu * {
-    vertical-align: top;
 }
 
 ul#setting-menu * {

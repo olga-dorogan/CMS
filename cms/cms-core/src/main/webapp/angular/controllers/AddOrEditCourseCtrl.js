@@ -1,10 +1,10 @@
-function AddOrEditCourseCtrl($rootScope, $scope, $state, $modal, CourseService, allTeachers, coursePrototypes, mode, editedCourse) {
+function AddOrEditCourseCtrl($rootScope, $scope, $state, $modal, CourseService, allTeachers, coursePrototypes, mode, course) {
 
     $scope.isAddMode = function () {
         return mode == 'add';
     };
 
-    $scope.course = $scope.isAddMode() ? ($scope.course || {}) : editedCourse;
+    $scope.course = $scope.isAddMode() ? {} : course;
     $scope.courseTeachers = [parseInt($rootScope.getUserId())];
     $scope.teachers = allTeachers;
     $scope.coursePrototypes = coursePrototypes;
@@ -21,10 +21,14 @@ function AddOrEditCourseCtrl($rootScope, $scope, $state, $modal, CourseService, 
         return $scope.course.startDate <= $scope.course.endDate;
     };
     $scope.isValidTeachers = function () {
-        return $scope.courseTeachers.length > 0;
+        return $scope.isAddMode() ? ($scope.courseTeachers.length > 0) : true;
     };
-    $scope.isValidCourse = function (courseForm) {
-        return !courseForm.$invalid &&
+    $scope.areValidFields = function() {
+        return ($scope.course.name != undefined && $scope.course.name != '') &&
+            ($scope.course.description != undefined && $scope.course.description != '')
+    };
+    $scope.isValidCourse = function () {
+        return $scope.areValidFields() &&
             $scope.isValidTeachers() &&
             $scope.isValidDates();
     };
@@ -91,7 +95,7 @@ function AddOrEditCourseCtrl($rootScope, $scope, $state, $modal, CourseService, 
         CourseService.updateCourse($scope.course).then(
             function (updatedCourse) {
                 if(updatedCourse.responseStatus / 100 == 2) {
-                    $state.go('person.editCourses', {}, {reload: true});
+                    $state.go('person.course.content', {'courseId': $scope.course.id}, {reload: true});
                 } else {
                     alertData.textAlert = updatedCourse;
                     showAlertWithError(alertData);
@@ -105,7 +109,8 @@ function AddOrEditCourseCtrl($rootScope, $scope, $state, $modal, CourseService, 
     };
 
     $scope.cancel = function () {
-        $scope.isAddMode() ? $state.go('home') : $state.go('person.editCourses');
+        console.log("course: " + JSON.stringify($scope.course));
+        $scope.isAddMode() ? $state.go('home') : $state.go('person.course.content', {'courseId': $scope.course.id}, {reload: true});
     };
 
     var showAlertWithError = function (alertData) {

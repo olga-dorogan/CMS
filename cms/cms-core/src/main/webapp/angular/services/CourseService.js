@@ -9,7 +9,13 @@ function CourseService(Restangular) {
     this.getNewCourses = function () {
         var today = new Date();
         var todayAsString = today.getUTCFullYear() + '-' + (today.getUTCMonth() + 1) + '-' + today.getUTCDay();
-        return Course.getList({'date': todayAsString});
+        return Course.getList({'date': todayAsString, 'period': 'start_after'});
+    };
+
+    this.getOldCourses = function () {
+        var today = new Date();
+        var todayAsString = today.getUTCFullYear() + '-' + (today.getUTCMonth() + 1) + '-' + today.getUTCDay();
+        return Course.getList({'date': todayAsString, 'period': 'end_before'});
     };
 
     this.createCourse = function (newCourse, prototypeId) {
@@ -23,16 +29,26 @@ function CourseService(Restangular) {
         return returnedObject.responseStatus == 201;
     };
 
-    this.removeCourse = function(id) {
+    this.removeCourse = function (id) {
         return Restangular.one(restBase, id).remove();
     };
 
-    this.updateCourse = function(course){
+    this.updateCourse = function (course) {
         return Restangular.one(restBase).customPUT(course, course.id);
     };
 
-    this.getCourse = function(courseId) {
+    this.getCourse = function (courseId) {
         return Restangular.one(restBase, courseId).get();
+    };
+
+    this.normalizeCourse = function (course) {
+        return {
+            'id': course.id,
+            'name': course.name,
+            'description': course.description,
+            'startDate': course.startDate,
+            'endDate': course.endDate
+        };
     };
 
     this.subscribePersonToCourse = function (courseId, personId) {

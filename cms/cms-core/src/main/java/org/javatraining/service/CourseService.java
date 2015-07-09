@@ -35,6 +35,10 @@ public interface CourseService {
 
     @NotNull
     @Valid
+    List<CourseVO> getAllEndedBeforeDate(Date date);
+
+    @NotNull
+    @Valid
     List<CourseVO> getAll();
 
     void clear();

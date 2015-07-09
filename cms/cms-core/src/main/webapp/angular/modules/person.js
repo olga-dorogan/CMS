@@ -43,12 +43,24 @@ angular.module('myApp.person', ['ui.router'])
                             return promise;
                         });
                         return promise;
+                    },
+                    oldCourses: function ($rootScope, courseService) {
+                        if (!$rootScope.isTeacher()) {
+                            return [];
+                        }
+                        var promise = courseService.getOldCourses();
+                        promise = promise.then(function (oldCourses) {
+                            if (oldCourses.responseStatus != 200) {
+                                return promise;
+                            }
+                            return oldCourses;
+                        });
+                        return promise;
                     }
                 }
             })
-            .state('person.addOrEditCourse', {
-                url: '/addOrEditCourse',
-                params: {mode: null, editedCourse: null},
+            .state('person.addCourse', {
+                url: '/addCourse',
                 views: {
                     "body@main": {
                         templateUrl: 'angular/views/person-course/teacher/addCourse.html',
@@ -59,9 +71,6 @@ angular.module('myApp.person', ['ui.router'])
                     personService: 'PersonService',
                     courseService: 'CourseService',
                     allTeachers: function (mode, personService) {
-                        if (mode != 'add') {
-                            return [];
-                        }
                         var promise = personService.getTeachers();
                         promise = promise.then(function (teachers) {
                             return teachers;
@@ -69,9 +78,6 @@ angular.module('myApp.person', ['ui.router'])
                         return promise;
                     },
                     coursePrototypes: function (mode, courseService) {
-                        if (mode != 'add') {
-                            return [];
-                        }
                         var promise = courseService.getCourses();
                         promise = promise.then(function (courses) {
                             courses.push({'id': -1, 'name': 'Отсутствует'});
@@ -79,33 +85,11 @@ angular.module('myApp.person', ['ui.router'])
                         });
                         return promise;
                     },
-                    mode: function ($stateParams) {
-                        return $stateParams.mode;
+                    mode: function () {
+                        return 'add';
                     },
-                    editedCourse: function ($stateParams) {
-                        return $stateParams.editedCourse;
-                    }
-                }
-            })
-            .state('person.editCourses', {
-                url: '/editCourses',
-                views: {
-                    "body@main": {
-                        templateUrl: 'angular/views/person-course/teacher/editCourses.html',
-                        controller: 'EditCoursesCtrl'
-                    }
-                },
-                resolve: {
-                    courseService: 'CourseService',
-                    courses: function (courseService) {
-                        var promise = courseService.getCourses();
-                        promise = promise.then(function (courses) {
-                            if (courses.responseStatus / 100 != 2) {
-                                return promise;
-                            }
-                            return courses;
-                        });
-                        return promise;
+                    course: function () {
+                        return {};
                     }
                 }
             })
@@ -117,8 +101,8 @@ angular.module('myApp.person', ['ui.router'])
                     },
                     "top@person.course": {
                         templateUrl: 'angular/views/person-course/top.html',
-                        controller: function ($scope, courseName) {
-                            $scope.courseName = courseName;
+                        controller: function ($scope, course) {
+                            $scope.courseName = course.name;
                         }
                     },
                     "menubar@person.course": {
@@ -130,15 +114,32 @@ angular.module('myApp.person', ['ui.router'])
                 },
                 resolve: {
                     courseService: 'CourseService',
-                    courseName: function ($stateParams, courseService) {
+                    course: function ($stateParams, courseService) {
                         var promise = courseService.getCourse($stateParams.courseId);
                         promise = promise.then(function (course) {
                             if (course.responseStatus != 200) {
                                 return null;
                             }
-                            return course.name;
+                            return courseService.normalizeCourse(course);
                         });
                         return promise;
+                    }
+                }
+            })
+            .state('person.course.edit', {
+                url: '/edit',
+                templateUrl: 'angular/views/person-course/teacher/addCourse.html',
+                controller: 'AddOrEditCourseCtrl',
+                resolve: {
+                    courseService: 'CourseService',
+                    allTeachers: function () {
+                        return [];
+                    },
+                    coursePrototypes: function () {
+                        return [];
+                    },
+                    mode: function () {
+                        return 'edit';
                     }
                 }
             })
@@ -238,7 +239,6 @@ angular.module('myApp.person', ['ui.router'])
     .service('CourseContentService', CourseContentService)
     .controller('PersonCtrl', PersonCtrl)
     .controller('AddOrEditCourseCtrl', AddOrEditCourseCtrl)
-    .controller("EditCoursesCtrl", EditCoursesCtrl)
     .controller('DatepickerCtrl', DatepickerCtrl)
     .controller('CourseContentCtrl', CourseContentCtrl)
     .controller("AddLectureCtrl", AddLectureCtrl)

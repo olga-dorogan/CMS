@@ -100,6 +100,13 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public List<CourseVO> getAllEndedBeforeDate(Date date) {
+        List<CourseEntity> courseEntities = courseDAO.getAllCoursesEndedBeforeDate(new java.sql.Date(date.getTime()));
+        Set<CourseVO> courseVOs = CourseConverter.convertEntitiesToVOs(courseEntities);
+        return new ArrayList<>(courseVOs);
+    }
+
+    @Override
     public CourseVO removeCourse(@NotNull CourseVO courseVO) {
         CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
         newsDAO.removeById(courseEntity.getNews().iterator().next().getId());
