@@ -6,11 +6,11 @@ package org.javatraining.integration.gitlab.exception;
  * For more information you should send mail to codedealerb@gmail.com
  */
 public class ResourceNotFoundException extends Exception {
-    public ResourceNotFoundException(){
+    public ResourceNotFoundException() {
 
     }
 
-    public ResourceNotFoundException(String message){
+    public ResourceNotFoundException(String message) {
         super(message);
     }
 }

@@ -25,14 +25,14 @@ angular.module('myApp.person', ['ui.router'])
                                 for (var i = 0; i < personalizedCourses.length; i++) {
                                     var isExistCourseStatus = false;
                                     for (var j = 0; j < personCourseStatuses.length; j++) {
-                                        if(personalizedCourses[i].id == personCourseStatuses[j].courseId) {
+                                        if (personalizedCourses[i].id == personCourseStatuses[j].courseId) {
                                             personalizedCourses[i].courseActionMsg =
                                                 personService.getLinkNameForStatus(personCourseStatuses[j].courseStatus);
                                             personalizedCourses[i].isPersonEnrolled = true;
                                             isExistCourseStatus = true;
                                         }
                                     }
-                                    if(!isExistCourseStatus) {
+                                    if (!isExistCourseStatus) {
                                         personalizedCourses[i].courseActionMsg = 'Undefined action';
                                         personalizedCourses[i].isPersonEnrolled = false;
                                     }
@@ -123,6 +123,12 @@ angular.module('myApp.person', ['ui.router'])
                 url: '/addLecture',
                 templateUrl: 'angular/views/person-course/teacher/addLecture.html',
                 controller: 'AddLectureCtrl'
+            })
+
+            .state('person.course.addNews', {
+                url: '/addLecture',
+                templateUrl: 'angular/views/person-course/teacher/addNews.html',
+                controller: 'AddNewsCtrl'
             })
             .state('person.course.progress', {
                 url: '/progress',

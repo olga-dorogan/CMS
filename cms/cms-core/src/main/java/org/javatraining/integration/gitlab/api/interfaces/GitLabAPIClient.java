@@ -25,8 +25,8 @@ public interface GitLabAPIClient {
     @Path("/users")
     @Produces("application/json")
     List<GitLabUser> getUser(@QueryParam("private_token") String privateToken,
-                       @QueryParam("sudo") String sudo,
-                       @QueryParam("search") String email);
+                             @QueryParam("sudo") String sudo,
+                             @QueryParam("search") String email);
 
     @POST
     @Path("/users")

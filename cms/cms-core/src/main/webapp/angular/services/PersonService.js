@@ -11,20 +11,20 @@ function PersonService(Restangular) {
         var name = user.name.split(" ");
         var PersonDescription = Person.one("description");
         return Person.post(
-                {
-                    "email": user.email,
-                    "id": null,
-                    "lastName": name[1],
-                    "name": name[0],
-                    "personRole": null,
-                    "secondName": null
-                }
-            ) && PersonDescription.post({//FIXME maybe this could be removed
-                "id": $window.localStorage['id'],
-                "experience": null,
-                "graduation": null,
-                "phoneNumber": null
-            });
+            {
+                "email": user.email,
+                "id": null,
+                "lastName": name[1],
+                "name": name[0],
+                "personRole": null,
+                "secondName": null
+            }
+        ) && PersonDescription.post({//FIXME maybe this could be removed
+            "id": $window.localStorage['id'],
+            "experience": null,
+            "graduation": null,
+            "phoneNumber": null
+        });
     };
 
     this.createPersonForAuth = function (user) {
@@ -43,16 +43,16 @@ function PersonService(Restangular) {
     this.updatePerson = function (user) {
         var PersonDescription = Person.get($window.localStorage['id']).one("description");
         return Person.get($window.localStorage['id']).put(
-                {
-                    "name": user.name,
-                    "surname": user.surname,
-                    "secondName": user.seconName
-                }
-            ) && PersonDescription.put({
-                "experience": user.experience,
-                "graduation": user.graduation,
-                "phoneNumber": user.phoneNumber
-            });
+            {
+                "name": user.name,
+                "surname": user.surname,
+                "secondName": user.secondName
+            }
+        ) && PersonDescription.put({
+            "experience": user.experience,
+            "graduation": user.graduation,
+            "phoneNumber": user.phoneNumber
+        });
     };//FIXME проверка этого метода на правильность урлов
 
     this.getTeachers = function () {
@@ -65,6 +65,7 @@ function PersonService(Restangular) {
         }
         return Restangular.one("resources/person", personId).all("course").getList();
     };
+
 
     this.getLinkNameForStatus = function (status) {
         var msg = 'Подписаться';
@@ -85,7 +86,9 @@ function PersonService(Restangular) {
     };
 
     this.getCoursesForPersonCap = function () {
-        return [{id: 2, name: "Java SE", description: "Description for Java SE"}];
+        return [
+            {id: 2, name: "Java SE", description: "Description for Java SE"}
+        ];
     };
 
     this.updatePicture = function (image) {

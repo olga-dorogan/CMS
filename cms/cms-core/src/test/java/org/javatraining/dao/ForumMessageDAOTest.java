@@ -71,28 +71,29 @@ public class ForumMessageDAOTest {
         Long notExistingId = 10L;
         assertThatThrownBy(() -> forumMessageDAO.getById(notExistingId))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
+
     @Test
-    public void testRemoveByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException{
+    public void testRemoveByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         assertThatThrownBy(() -> forumMessageDAO.removeById(notExistingId))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
 
     @Test
     public void testUpdateReturnPracticeLessonEntity() {
-       ForumMessageEntity forumMessagesForUpdate = predefinedForumMessagesInitialization();
+        ForumMessageEntity forumMessagesForUpdate = predefinedForumMessagesInitialization();
         forumMessagesForUpdate.setTitle("Other title");
-      assertEquals(forumMessagesForUpdate, forumMessageDAO.update(forumMessagesForUpdate));
+        assertEquals(forumMessagesForUpdate, forumMessageDAO.update(forumMessagesForUpdate));
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_FORUM_MESSAGE})
     public void testSaveForumMessageThatExistThrowsEntityIsAlreadyExistException() throws EntityIsAlreadyExistException {
-        ForumMessageEntity forumMessagesThatExists =predefinedForumMessagesInitialization();
+        ForumMessageEntity forumMessagesThatExists = predefinedForumMessagesInitialization();
         assertThatThrownBy(() -> forumMessageDAO.save(forumMessagesThatExists))
                 .isInstanceOf(EntityIsAlreadyExistException.class).hasMessage("Field with id = "
                 + forumMessagesThatExists.getId() + " already exists in database");
@@ -100,28 +101,28 @@ public class ForumMessageDAOTest {
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_FORUM_MESSAGE})
-    public void testUpdateForumMessageThatNotExistThrowsEntityNotExistException() throws EntityNotExistException{
+    public void testUpdateForumMessageThatNotExistThrowsEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
-        ForumMessageEntity forumMessagesThatNotExists =predefinedForumMessagesInitialization();
+        ForumMessageEntity forumMessagesThatNotExists = predefinedForumMessagesInitialization();
         forumMessagesThatNotExists.setId(notExistingId);
         assertThatThrownBy(() -> forumMessageDAO.update(forumMessagesThatNotExists))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_FORUM_MESSAGE})
-    public void testRemovePersonThatNotExistThrowsEntityNotExistException() throws EntityNotExistException{
+    public void testRemovePersonThatNotExistThrowsEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
-        ForumMessageEntity forumMessagesThatNotExists =predefinedForumMessagesInitialization();
+        ForumMessageEntity forumMessagesThatNotExists = predefinedForumMessagesInitialization();
         forumMessagesThatNotExists.setId(notExistingId);
         assertThatThrownBy(() -> forumMessageDAO.remove(forumMessagesThatNotExists))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
 
-    private ForumMessageEntity predefinedForumMessagesInitialization(){
+    private ForumMessageEntity predefinedForumMessagesInitialization() {
         ForumMessageEntity predefinedForumMessages = new ForumMessageEntity();
         LessonEntity predefinedLesson = lessonDAO.getById(1L);
         PersonEntity predefinedPerson = personDAO.getById(1L);

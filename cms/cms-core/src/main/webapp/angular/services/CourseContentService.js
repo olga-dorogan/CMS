@@ -18,6 +18,9 @@ function CourseContentService(Restangular) {
     };
 
     this.getLecturesCap = function (courseId) {
-        return [{'id': 1, 'topic': 'Lection 1'}, {'id': 2, 'topic': 'Lection 2'}];
+        return [
+            {'id': 1, 'topic': 'Lection 1'},
+            {'id': 2, 'topic': 'Lection 2'}
+        ];
     };
 }

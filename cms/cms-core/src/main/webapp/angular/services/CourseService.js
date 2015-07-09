@@ -10,20 +10,22 @@ function CourseService(Restangular) {
         // or another way --- any successfully returned object contains field 'fromServer' with value 'true'
         return Course.post(newCourse);
     };
-    this.isCourseSuccessfullyCreated = function(returnedObject) {
+    this.isCourseSuccessfullyCreated = function (returnedObject) {
         return returnedObject.responseStatus == 201;
     };
 
-    this.subscribePersonToCourse = function(courseId, personId) {
-        if(courseId === undefined || personId === undefined) {
+    this.subscribePersonToCourse = function (courseId, personId) {
+        if (courseId === undefined || personId === undefined) {
             return {};
         }
         return Restangular.one(restBase, courseId).all('subscribe').put({"person_id": personId});
     };
     //FIXME заглушка, для нормальной работы на без запуска WildFly
     this.getCoursesCap = function () {
-        return [{id: 1, name: "Java EE", description: "Description for Java EE"},
+        return [
+            {id: 1, name: "Java EE", description: "Description for Java EE"},
             {id: 2, name: "Java SE", description: "Description for Java SE"},
-            {id: 3, name: "Android", description: "Description for Android"}];
+            {id: 3, name: "Android", description: "Description for Android"}
+        ];
     }
 }

@@ -178,17 +178,18 @@ public class CourseServiceImpl implements CourseService {
 
 
     @Override
-    public NewsVO getNewsByIdFromCourse(@NotNull Long courseId,@NotNull Long newsId) {
+    public NewsVO getNewsByIdFromCourse(@NotNull Long courseId, @NotNull Long newsId) {
 
-      List <NewsEntity> newsEntities= courseDAO
-              .getById(courseId)
+        List<NewsEntity> newsEntities = courseDAO
+                .getById(courseId)
                 .getNews()
                 .stream()
                 .collect(Collectors.toList())
                 .stream()
                 .collect(Collectors.toList());
-                     return  NewsConverter.convertEntityToVO(newsEntities.get(0));
+        return NewsConverter.convertEntityToVO(newsEntities.get(0));
     }
+
     @Override
     public List<NewsVO> getAllNewsFromCourse(@NotNull CourseVO courseVO) {
 
@@ -201,6 +202,25 @@ public class CourseServiceImpl implements CourseService {
     }
 
 
+    public List<NewsVO> getAllPersonsNews(@NotNull Long personId) {
+
+        PersonEntity personEntity = personDAO.getAllPersons().stream()
+                .filter(person -> person.getId()
+                        .equals(personId))
+                .findFirst()
+                .get();
+
+        return NewsConverter.convertEntitiesToVOs(personEntity
+                .getCoursePersonEntities().stream()
+                .map(CoursePersonStatusEntity::getCourse)
+                .map(courses -> courses.getNews()
+                        .iterator()
+                        .next())
+                .collect(Collectors.toList()))
+                .stream()
+                .collect(Collectors.toList());
+    }
+
     public List<NewsVO> getAllNews() {
         return NewsConverter
                 .convertEntitiesToVOs(newsDAO.getAllNews())
@@ -209,7 +229,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<NewsVO> getNewsByCourseId(@NotNull Long courseId){
+    public List<NewsVO> getNewsByCourseId(@NotNull Long courseId) {
         return NewsConverter.convertEntitiesToVOs(courseDAO.getById(courseId)
                 .getNews()
                 .stream()

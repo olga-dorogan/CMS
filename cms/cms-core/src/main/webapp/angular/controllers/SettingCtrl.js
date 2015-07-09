@@ -31,7 +31,7 @@ function SettingCtrl($scope, $window, PersonService) {
         var f = document.getElementById('image').files[0],
             r = new FileReader();
         r.onloadend = function (e) {
-            $scope.person.avatar =  e.target.result;
+            $scope.person.avatar = e.target.result;
         };
         r.readAsBinaryString(f);
 

@@ -1,19 +1,22 @@
-.trench{
+.trench {
     padding: 10px;
     margin: 5px;
 }
-.trench_out{
+
+.trench_out {
     margin: 5px;
 
 }
 
-.third_screen{
+.third_screen {
     width: 30%;
 }
-.half_screen{
+
+.half_screen {
     width: 50%;
 }
-.full_screen{
+
+.full_screen {
     width: 100%;
 }
 

@@ -1,12 +1,12 @@
 {
-  "courses": [
-      {
-          "name": "OtherName",
-          "description": "Java",
-          "startdate": "2015-10-10",
-          "enddate": "2016-11-11"
-      }
-  ],
+    "courses": [
+        {
+            "name": "OtherName",
+            "description": "Java",
+            "startdate": "2015-10-10",
+            "enddate": "2016-11-11"
+        }
+    ],
     "person": [
         {
             "id": 1,
@@ -16,5 +16,6 @@
             "second_name": "teacherSecondName",
             "last_name": "teacherLastName",
             "personRole": "TEACHER"
-        }]
+        }
+    ]
 }

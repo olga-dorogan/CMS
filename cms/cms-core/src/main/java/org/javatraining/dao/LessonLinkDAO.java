@@ -7,7 +7,6 @@ import org.javatraining.entity.LessonLinkEntity;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

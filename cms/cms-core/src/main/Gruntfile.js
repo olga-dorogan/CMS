@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
     // Задачи
     grunt.initConfig({
@@ -44,7 +44,7 @@ module.exports = function(grunt) {
         watch: {
             scripts: {
                 files: '<%= concat.main.src %>',
-                tasks: ['concat','uglify:main'],
+                tasks: ['concat', 'uglify:main'],
                 options: {
                     spawn: false
                 }
@@ -59,5 +59,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Задача по умолчанию
-    grunt.registerTask('default', ['concat','bower_concat',/*'uglify'*/]);
+    grunt.registerTask('default', ['concat', 'bower_concat', /*'uglify'*/]);
 };

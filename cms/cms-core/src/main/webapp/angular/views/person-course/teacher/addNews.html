@@ -1,0 +1,53 @@
+<div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="messages" class="alert alert-{{alertStatus}}" ng-show="messages">
+                <span ng-bind="messages"></span>
+                <i class="dismiss-messages pull-right glyphicon glyphicon-remove" ng-click="messages = ''"
+                   ng-show="messages"></i>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <h3>Добавление новости к курсу (все поля со звездочкой обязательны!)</h3>
+
+            <form name="newsForm" novalidate role="form">
+                <div class="form-group">
+                    <label for="name">Заголовок <span class="required">*</span></label>
+                    <input id="name" type="text" name="name" ng-model="news.title" class="form-control"
+                           ng-required="true"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="content">Краткое описание<span class="required">*</span></label>
+                    <textarea class="form-control" id="content" ng-model="news.content"
+                              placeholder="Введите описание..." rows="4"> </textarea>
+                </div>
+
+
+                <div class="form-group" ng-controller="DatepickerCtrl">
+                    <label for="startDate">Дата<span class="required">*</span></label>
+
+                    <p class="input-group">
+                        <input id="startDate" name="startDate" type="text" class="form-control"
+                               datepicker-popup="{{format}}"
+                               ng-model="course.startDate" is-open="opened" ng-click="open($event)"
+                               datepicker-options="dateOptions"
+                               close-text="Close"/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" ng-click="open($event)">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                    </span>
+                    </p>
+                </div>
+
+
+                <button type="button" class="btn btn-success  trench_out full_screen"
+                        ng-disabled="!isValidCourse(courseForm)" ng-click="createCourse()"> Добавить курс
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -79,14 +79,15 @@ public class LessonDAOTest {
         Long notExistingId = 10L;
         assertThatThrownBy(() -> lessonDAO.getById(notExistingId))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
+
     @Test
-    public void testRemoveByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException{
+    public void testRemoveByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         assertThatThrownBy(() -> lessonDAO.removeById(notExistingId))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
 
@@ -99,7 +100,7 @@ public class LessonDAOTest {
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_LESSON_AFTER_SAVE}, excludeColumns = {"id"})
     public void testSaveLesson() {
-         lessonDAO.save(lessonInitializationForTests());
+        lessonDAO.save(lessonInitializationForTests());
     }
 
     @Test
@@ -121,7 +122,7 @@ public class LessonDAOTest {
     @Test
     @ShouldMatchDataSet(value = {DS_LESSON_AFTER_REMOVE})
     public void testRemoveLesson() {
-         lessonDAO.remove(predefinedLessonInitialization());
+        lessonDAO.remove(predefinedLessonInitialization());
     }
 
     @Test
@@ -134,12 +135,13 @@ public class LessonDAOTest {
     @ShouldMatchDataSet(value = {DS_LESSON_AFTER_REMOVE})
     public void testRemoveReturnLessonEntity() {
         LessonEntity lessonForRemove = predefinedLessonInitialization();
-       assertEquals(lessonForRemove, lessonDAO.remove(lessonForRemove));
- }
+        assertEquals(lessonForRemove, lessonDAO.remove(lessonForRemove));
+    }
+
     @Test
     public void testGetReturnLessonEntity() {
-        LessonEntity lessonForGet= predefinedLessonInitialization();
-      assertNotNull(lessonDAO.getById(lessonForGet.getId()));
+        LessonEntity lessonForGet = predefinedLessonInitialization();
+        assertNotNull(lessonDAO.getById(lessonForGet.getId()));
     }
 
     @Test
@@ -162,7 +164,7 @@ public class LessonDAOTest {
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_LESSON})
-    public void testRemoveNullLessonTrowEJBException() throws EJBException{
+    public void testRemoveNullLessonTrowEJBException() throws EJBException {
         assertThatThrownBy(() -> lessonDAO.remove(null))
                 .isInstanceOf(EJBException.class);
     }
@@ -201,34 +203,34 @@ public class LessonDAOTest {
         LessonEntity lessonThatExists = predefinedLessonInitialization();
         assertThatThrownBy(() -> lessonDAO.save(lessonThatExists))
                 .isInstanceOf(EntityIsAlreadyExistException.class).hasMessage("Field with id = "
-                +lessonThatExists.getId()+" already exists in database");
+                + lessonThatExists.getId() + " already exists in database");
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_LESSON})
-    public void testUpdateLessonThatNotExistThrowsEntityNotExistException() throws EntityNotExistException{
+    public void testUpdateLessonThatNotExistThrowsEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         LessonEntity lessonThatNotExists = predefinedLessonInitialization();
         lessonThatNotExists.setId(notExistingId);
         assertThatThrownBy(() -> lessonDAO.update(lessonThatNotExists))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_LESSON})
-    public void testRemoveLessonThatNotExistThrowsEntityNotExistException() throws EntityNotExistException{
+    public void testRemoveLessonThatNotExistThrowsEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         LessonEntity lessonThatNotExists = lessonInitializationForTests();
         lessonThatNotExists.setId(notExistingId);
         assertThatThrownBy(() -> lessonDAO.remove(lessonThatNotExists))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
     private LessonEntity predefinedLessonInitialization() {
         LessonEntity lessonEntity = new LessonEntity();
-        CourseEntity predefinedCourse =courseDAO.getById(1L);
+        CourseEntity predefinedCourse = courseDAO.getById(1L);
         lessonEntity.setCourse(predefinedCourse);
         lessonEntity.setCreateDate(Date.valueOf("2016-08-11"));
         lessonEntity.setTopic("topic");

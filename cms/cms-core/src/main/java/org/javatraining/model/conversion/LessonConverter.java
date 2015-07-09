@@ -39,7 +39,7 @@ public class LessonConverter {
 
     public static Set<LessonVO> convertEntitiesToVOs(@NotNull Collection<LessonEntity> lessonEntities) {
         Set<LessonVO> lessonVOs = new HashSet<>();
-        for(LessonEntity lessonEntity : lessonEntities) {
+        for (LessonEntity lessonEntity : lessonEntities) {
             lessonVOs.add(convertEntityToVO(lessonEntity));
         }
         return lessonVOs;
@@ -47,7 +47,7 @@ public class LessonConverter {
 
     public static Set<LessonEntity> convertVOsToEntities(@NotNull Collection<LessonVO> lessonVOs) {
         Set<LessonEntity> lessonEntities = new HashSet<>();
-        for(LessonVO LessonVO : lessonVOs) {
+        for (LessonVO LessonVO : lessonVOs) {
             lessonEntities.add(convertVOToEntity(LessonVO));
         }
         return lessonEntities;

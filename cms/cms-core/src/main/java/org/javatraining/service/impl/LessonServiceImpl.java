@@ -2,8 +2,10 @@ package org.javatraining.service.impl;
 
 import org.javatraining.dao.LessonDAO;
 import org.javatraining.dao.LessonLinkDAO;
+import org.javatraining.dao.NewsDAO;
 import org.javatraining.entity.LessonEntity;
 import org.javatraining.entity.LessonLinkEntity;
+import org.javatraining.entity.NewsEntity;
 import org.javatraining.model.LessonLinkVO;
 import org.javatraining.model.LessonVO;
 import org.javatraining.model.LessonWithDetailsVO;
@@ -15,6 +17,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
 import java.util.Set;
 
 import static org.javatraining.model.conversion.LessonConverter.*;
@@ -24,6 +27,10 @@ import static org.javatraining.model.conversion.LessonConverter.*;
  */
 @Stateless
 public class LessonServiceImpl implements LessonService {
+
+    @EJB
+    private NewsDAO newsDAO;
+
     @EJB
     private LessonDAO lessonDAO;
     @EJB
@@ -34,6 +41,13 @@ public class LessonServiceImpl implements LessonService {
         LessonEntity lessonEntity = convertVOToEntity(lessonVO);
         lessonDAO.save(lessonEntity);
         lessonVO.setId(lessonEntity.getId());
+        NewsEntity newsEntity = new NewsEntity();
+        newsEntity.setTitle("К курсу" + lessonEntity.getCourse().getName()
+                + " была добавлена лекция");
+        newsEntity.setDescription(lessonEntity.getDescription());
+        newsEntity.setDate((Timestamp) lessonEntity.getCreateDate());
+        newsEntity.setCourses(lessonEntity.getCourse());
+        newsDAO.save(newsEntity);
     }
 
     @Override

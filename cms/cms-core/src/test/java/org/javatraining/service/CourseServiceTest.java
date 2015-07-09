@@ -80,14 +80,14 @@ public class CourseServiceTest {
     @Test
     public void testSaveReturnCourseVO() {
         CourseVO courseVO = courseVOInitialization();
-        assertEquals(courseVO,courseService.saveCourse(courseVO));
+        assertEquals(courseVO, courseService.saveCourse(courseVO));
     }
 
     @Test
-    @ShouldMatchDataSet(value = {DS_EMPTY,DS_COURSE_AFTER_SAVE}, excludeColumns = {"id"})
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE_AFTER_SAVE}, excludeColumns = {"id"})
     public void testSaveCourseVO() {
         CourseVO courseVO = courseVOInitialization();
-       courseService.saveCourse(courseVO);
+        courseService.saveCourse(courseVO);
     }
 
 
@@ -99,15 +99,14 @@ public class CourseServiceTest {
     }
 
 
-
     @Test
     public void testRemoveReturnCourseVO() {
         CourseVO courseVO = predefinedCourseVO();
-        assertEquals(courseVO,courseService.removeCourse(courseVO));
+        assertEquals(courseVO, courseService.removeCourse(courseVO));
     }
 
     @Test
-    @ShouldMatchDataSet(value = {DS_EMPTY,DS_COURSE_AFTER_REMOVE})
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE_AFTER_REMOVE})
     public void testRemoveCourse() {
         CourseVO courseVO = predefinedCourseVO();
 
@@ -115,17 +114,17 @@ public class CourseServiceTest {
     }
 
     @Test
-    @ShouldMatchDataSet(value = {DS_EMPTY,DS_NEWS_AFTER_UPDATE}, excludeColumns = {"id"})
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_NEWS_AFTER_UPDATE}, excludeColumns = {"id"})
     public void testUpdateNews() {
         NewsVO newsVO = predefinedNewsVOInitialization();
         courseService.updateNews(newsVO);
     }
 
     @Test
-    @ShouldMatchDataSet(value = {DS_EMPTY,DS_COURSE})
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testGetNewsById() {
-       NewsVO newsVO = predefinedNewsVOInitialization();
-         assertEquals(newsVO,courseService.getAllNewsById(newsVO.getId()));
+        NewsVO newsVO = predefinedNewsVOInitialization();
+        assertEquals(newsVO, courseService.getAllNewsById(newsVO.getId()));
     }
 
 
@@ -135,16 +134,17 @@ public class CourseServiceTest {
         CourseVO predefinedCourseVO = predefinedCourseVO();
         CourseVO courseVO = courseService.getCourseById(predefinedCourseVO.getId());
         assertNotNull(courseVO);
-        }
+    }
 
     @Test
     public void testGetAllCourses() {
         assertNotNull(courseService.getAll());
     }
+
     @Test
-    public void testGetAllPersonsFromCourseByRole(){
+    public void testGetAllPersonsFromCourseByRole() {
         CourseVO courseVO = predefinedCourseVO();
-      assertNotNull(courseService.getAllPersonsFromCourseByRole(courseVO,PersonRole.TEACHER));
+        assertNotNull(courseService.getAllPersonsFromCourseByRole(courseVO, PersonRole.TEACHER));
     }
 
     @Test
@@ -178,7 +178,7 @@ public class CourseServiceTest {
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
-    public void testRemoveNullCourseTrowEJBException() throws EJBException{
+    public void testRemoveNullCourseTrowEJBException() throws EJBException {
         assertThatThrownBy(() -> courseService.removeCourse(null))
                 .isInstanceOf(EJBException.class);
     }
@@ -190,12 +190,12 @@ public class CourseServiceTest {
                 .isInstanceOf(EJBException.class);
     }
 
-     @Test
-     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testGetAllNewsFromCourse() {
         CourseVO courseVO = predefinedCourseVO();
-         assertNotNull(courseService.getAllNewsFromCourse(courseVO));
-   }
+        assertNotNull(courseService.getAllNewsFromCourse(courseVO));
+    }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
@@ -210,17 +210,17 @@ public class CourseServiceTest {
     public void testGetCourseByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         assertThatThrownBy(() -> courseService.getCourseById(notExistingId))
-                .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "+notExistingId+" does not exist in database");
+                .isInstanceOf(EntityNotExistException.class).hasMessage("Field with " + notExistingId + " does not exist in database");
 
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
-    public void testGetNewsByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException{
+    public void testGetNewsByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         assertThatThrownBy(() -> courseService.getAllNewsById(notExistingId))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
 
@@ -228,10 +228,10 @@ public class CourseServiceTest {
     public void testAddNewsToCourse() {
         CourseVO courseVO = predefinedCourseVO();
         NewsVO newsVOForSave = newsVOInitializationForTests();
-     assertEquals(newsVOForSave,courseService.addNewsToCourse(courseVO,newsVOForSave));
-          }
+        assertEquals(newsVOForSave, courseService.addNewsToCourse(courseVO, newsVOForSave));
+    }
 
-    private CourseVO courseVOInitialization(){
+    private CourseVO courseVOInitialization() {
         CourseVO courseVO = new CourseVO();
         courseVO.setName("JavaEE");
         courseVO.setStartDate(Date.valueOf("2015-10-10"));
@@ -240,7 +240,7 @@ public class CourseServiceTest {
         return courseVO;
     }
 
-    private CourseVO predefinedCourseVO(){
+    private CourseVO predefinedCourseVO() {
         CourseVO courseVO = new CourseVO();
         courseVO.setId(1L);
         courseVO.setName("courseName");
@@ -251,7 +251,7 @@ public class CourseServiceTest {
         return courseVO;
     }
 
-    private NewsVO predefinedNewsVOInitialization(){
+    private NewsVO predefinedNewsVOInitialization() {
         Long predefinedNewsId = 1L;
         NewsVO newsVO = new NewsVO();
         newsVO.setId(predefinedNewsId);
@@ -261,7 +261,7 @@ public class CourseServiceTest {
         return newsVO;
     }
 
-    private NewsVO newsVOInitializationForTests(){
+    private NewsVO newsVOInitializationForTests() {
         NewsVO newsVO = new NewsVO();
         newsVO.setContent("newsDescription");
         newsVO.setTitle("title");

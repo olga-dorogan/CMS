@@ -12,10 +12,10 @@ import org.junit.Test;
 @Ignore
 public class NotificationServiceTest {
     @Test
-    public void testSendMessageToTestEmail(){
+    public void testSendMessageToTestEmail() {
         NotificationService<PersonVO> mail = new MailNotification();
         PersonVO vo = new PersonVO((long) 1);
         vo.setEmail("valet12353@gmail.com");//test email
-        mail.sendUserProperties("testSubject",vo);
+        mail.sendUserProperties("testSubject", vo);
     }
 }

@@ -73,7 +73,7 @@ public class PracticeLessonDAOTest {
     public void testRemoveReturnPracticeLessonEntity() {
         PracticeLessonEntity predefinedPracticeLesson = predefinedPracticeLessonInitialization();
         assertEquals(predefinedPracticeLesson, practiceLessonDAO.remove(predefinedPracticeLesson));
-      }
+    }
 
 
     @Test
@@ -86,7 +86,7 @@ public class PracticeLessonDAOTest {
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PRACTICE_LESSON_AFTER_SAVE}, excludeColumns = {"id"})
     public void testSavePracticeLesson() {
-       practiceLessonDAO.save(practiceLessonInitialisationForTests());
+        practiceLessonDAO.save(practiceLessonInitialisationForTests());
     }
 
     @Test
@@ -106,7 +106,7 @@ public class PracticeLessonDAOTest {
 
     @Test
     public void testGetReturnPracticeLessonEntity() {
-        PracticeLessonEntity practiceLessonForGet= predefinedPracticeLessonInitialization();
+        PracticeLessonEntity practiceLessonForGet = predefinedPracticeLessonInitialization();
         assertThat(practiceLessonForGet, is(equalTo(practiceLessonDAO.getById(practiceLessonForGet.getId()))));
     }
 
@@ -121,17 +121,17 @@ public class PracticeLessonDAOTest {
     public void testGetByIdForNotExistingIdShouldReturnEntityDoesNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         assertThatThrownBy(() -> practiceLessonDAO.getById(notExistingId))
-                .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "+notExistingId+" does not exist in database");
+                .isInstanceOf(EntityNotExistException.class).hasMessage("Field with " + notExistingId + " does not exist in database");
 
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PRACTICE_LESSON})
-    public void testRemoveByIdForNotExistingIdShouldReturnEntityDoesNotExistException() throws EntityNotExistException{
+    public void testRemoveByIdForNotExistingIdShouldReturnEntityDoesNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         assertThatThrownBy(() -> practiceLessonDAO.removeById(notExistingId))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
     @Test
@@ -144,7 +144,7 @@ public class PracticeLessonDAOTest {
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PRACTICE_LESSON})
-    public void testRemoveNullPracticeLessonTrowEJBException() throws EJBException{
+    public void testRemoveNullPracticeLessonTrowEJBException() throws EJBException {
         assertThatThrownBy(() -> practiceLessonDAO.remove(null))
                 .isInstanceOf(EJBException.class);
     }
@@ -180,7 +180,7 @@ public class PracticeLessonDAOTest {
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PRACTICE_LESSON})
     public void testSavePracticeLessonThatExistThrowsEntityIsAlreadyExistException() throws EntityIsAlreadyExistException {
-        PracticeLessonEntity practiceLessonThatExists =predefinedPracticeLessonInitialization();
+        PracticeLessonEntity practiceLessonThatExists = predefinedPracticeLessonInitialization();
         assertThatThrownBy(() -> practiceLessonDAO.save(practiceLessonThatExists))
                 .isInstanceOf(EntityIsAlreadyExistException.class).hasMessage("Field with id = "
                 + practiceLessonThatExists.getId() + " already exists in database");
@@ -188,26 +188,25 @@ public class PracticeLessonDAOTest {
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PRACTICE_LESSON})
-    public void testUpdatePracticeLessonThatNotExistThrowsEntityNotExistException() throws EntityNotExistException{
+    public void testUpdatePracticeLessonThatNotExistThrowsEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
-        PracticeLessonEntity practiceLessonThatNotExists =practiceLessonInitialisationForTests();
+        PracticeLessonEntity practiceLessonThatNotExists = practiceLessonInitialisationForTests();
         practiceLessonThatNotExists.setId(notExistingId);
         assertThatThrownBy(() -> practiceLessonDAO.update(practiceLessonThatNotExists))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PRACTICE_LESSON})
-    public void testRemovePracticeLessonThatNotExistThrowsEntityNotExistException() throws EntityNotExistException{
+    public void testRemovePracticeLessonThatNotExistThrowsEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
-        PracticeLessonEntity practiceLessonThatNotExists =practiceLessonInitialisationForTests();
+        PracticeLessonEntity practiceLessonThatNotExists = practiceLessonInitialisationForTests();
         practiceLessonThatNotExists.setId(notExistingId);
         assertThatThrownBy(() -> practiceLessonDAO.remove(practiceLessonThatNotExists))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
-
 
 
     private PracticeLessonEntity practiceLessonInitialisationForTests() {

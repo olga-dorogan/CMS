@@ -78,12 +78,12 @@ public class LessonLinkDAOTest {
     @Test
     public void testSaveReturnLessonEntity() {
         LessonLinkEntity lessonLinkEntity = lessonLinkEntityInitializationForTests();
-       assertEquals(lessonLinkDAO.save(lessonLinkEntity), lessonLinkEntity);
+        assertEquals(lessonLinkDAO.save(lessonLinkEntity), lessonLinkEntity);
     }
 
     @Test
     public void testUpdateReturnLessonEntity() {
-       LessonLinkEntity lessonLinkEntity = predefinedLessonLinkInitialization();
+        LessonLinkEntity lessonLinkEntity = predefinedLessonLinkInitialization();
         lessonLinkEntity.setDescription("otherDescription");
         assertEquals(lessonLinkEntity, lessonLinkDAO.update(lessonLinkEntity));
     }
@@ -93,7 +93,7 @@ public class LessonLinkDAOTest {
     public void testUpdateLesson() {
         LessonLinkEntity lessonLinkEntity = predefinedLessonLinkInitialization();
         lessonLinkEntity.setDescription("Other description");
-       lessonLinkDAO.update(lessonLinkEntity);
+        lessonLinkDAO.update(lessonLinkEntity);
     }
 
     @Test
@@ -117,8 +117,8 @@ public class LessonLinkDAOTest {
 
     @Test
     public void testGetReturnLessonLinkEntity() {
-        LessonLinkEntity lessonLinkForGet= predefinedLessonLinkInitialization();
-        assertThat(lessonLinkForGet, is(equalTo( lessonLinkDAO.getById(lessonLinkForGet.getId()))));
+        LessonLinkEntity lessonLinkForGet = predefinedLessonLinkInitialization();
+        assertThat(lessonLinkForGet, is(equalTo(lessonLinkDAO.getById(lessonLinkForGet.getId()))));
     }
 
     @Test
@@ -137,7 +137,7 @@ public class LessonLinkDAOTest {
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_LESSON_LINK})
-    public void testRemoveNullLessonLinkTrowEJBException() throws EJBException{
+    public void testRemoveNullLessonLinkTrowEJBException() throws EJBException {
         assertThatThrownBy(() -> lessonLinkDAO.remove(null))
                 .isInstanceOf(EJBException.class);
     }
@@ -175,17 +175,17 @@ public class LessonLinkDAOTest {
     public void testGetByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         assertThatThrownBy(() -> lessonLinkDAO.getById(notExistingId))
-                .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "+notExistingId+" does not exist in database");
+                .isInstanceOf(EntityNotExistException.class).hasMessage("Field with " + notExistingId + " does not exist in database");
 
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_LESSON_LINK})
-    public void testRemoveByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException{
+    public void testRemoveByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         assertThatThrownBy(() -> lessonLinkDAO.removeById(notExistingId))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
     @Test
@@ -194,29 +194,29 @@ public class LessonLinkDAOTest {
         LessonLinkEntity lessonLinkThatExists = predefinedLessonLinkInitialization();
         assertThatThrownBy(() -> lessonLinkDAO.save(lessonLinkThatExists))
                 .isInstanceOf(EntityIsAlreadyExistException.class).hasMessage("Field with id = "
-                +lessonLinkThatExists.getId()+" already exists in database");
+                + lessonLinkThatExists.getId() + " already exists in database");
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_LESSON_LINK})
-    public void testUpdateLessonLinkThatNotExistThrowsEntityNotExistException() throws EntityNotExistException{
+    public void testUpdateLessonLinkThatNotExistThrowsEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         LessonLinkEntity lessonLinkThatNotExists = predefinedLessonLinkInitialization();
         lessonLinkThatNotExists.setId(notExistingId);
         assertThatThrownBy(() -> lessonLinkDAO.update(lessonLinkThatNotExists))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_LESSON_LINK})
-    public void testRemoveLessonLinkThatNotExistThrowsEntityNotExistException() throws EntityNotExistException{
+    public void testRemoveLessonLinkThatNotExistThrowsEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         LessonLinkEntity lessonLinkThatNotExists = lessonLinkEntityInitializationForTests();
         lessonLinkThatNotExists.setId(notExistingId);
         assertThatThrownBy(() -> lessonLinkDAO.remove(lessonLinkThatNotExists))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
 
@@ -228,10 +228,10 @@ public class LessonLinkDAOTest {
         lessonLinkEntity.setOrderNum(3L);
         lessonLinkEntity.setLink("otherLink");
         lessonLinkEntity.setLesson(lessonEntity);
-          return lessonLinkEntity;
+        return lessonLinkEntity;
     }
 
-    private LessonLinkEntity predefinedLessonLinkInitialization(){
+    private LessonLinkEntity predefinedLessonLinkInitialization() {
         LessonLinkEntity lessonLinkEntity = new LessonLinkEntity();
         Long predefinedLessonId = 1L;
         Long predefinedLessonLinkId = 1L;

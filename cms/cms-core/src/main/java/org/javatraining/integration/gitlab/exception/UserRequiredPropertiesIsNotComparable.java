@@ -6,11 +6,11 @@ package org.javatraining.integration.gitlab.exception;
  * For more information you should send mail to codedealerb@gmail.com
  */
 public class UserRequiredPropertiesIsNotComparable extends Exception {
-    public UserRequiredPropertiesIsNotComparable(){
+    public UserRequiredPropertiesIsNotComparable() {
 
     }
 
-    public UserRequiredPropertiesIsNotComparable(String message){
+    public UserRequiredPropertiesIsNotComparable(String message) {
         super(message);
     }
 }

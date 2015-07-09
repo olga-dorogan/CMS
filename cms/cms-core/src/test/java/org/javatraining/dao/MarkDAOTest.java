@@ -63,7 +63,7 @@ public class MarkDAOTest {
                 .addPackage("org.assertj.core.internal")
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
-         return war;
+        return war;
     }
 
 
@@ -73,33 +73,30 @@ public class MarkDAOTest {
     }
 
     @Test
-    public void testSaveReturnMarkEntity()
-    {
+    public void testSaveReturnMarkEntity() {
         MarkEntity markForSave = markInitializationForTests();
-        assertEquals(markForSave,markDAO.save(markForSave));
-         }
+        assertEquals(markForSave, markDAO.save(markForSave));
+    }
 
     @Test
     @ShouldMatchDataSet(value = {DS_MARK_AFTER_SAVE})
-    public void testSaveMark()
-    {
+    public void testSaveMark() {
         markDAO.save(markInitializationForTests());
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_MARK_AFTER_UPDATE})
-    public void testUpdateMark()
-    {
+    public void testUpdateMark() {
         MarkEntity markForUpdate = predefinedMarkInitialization();
         markForUpdate.setMark(85L);
         markDAO.update(markForUpdate);
     }
 
     @Test
-     public void testUpdateReturnMarkEntity() {
+    public void testUpdateReturnMarkEntity() {
         MarkEntity markForUpdate = predefinedMarkInitialization();
         markForUpdate.setMark(85L);
-       assertEquals(markDAO.update(markForUpdate), markForUpdate);
+        assertEquals(markDAO.update(markForUpdate), markForUpdate);
     }
 
     @Test
@@ -111,8 +108,9 @@ public class MarkDAOTest {
     @Test
     public void testRemoveReturnMarkEntity() {
         MarkEntity markForRemove = predefinedMarkInitialization();
-          assertEquals(markForRemove,markDAO.remove(markForRemove));
+        assertEquals(markForRemove, markDAO.remove(markForRemove));
     }
+
     @Test
     @ShouldMatchDataSet(value = {DS_MARK_AFTER_REMOVE})
     public void testRemoveByIdMark() {
@@ -131,14 +129,15 @@ public class MarkDAOTest {
         Long notExistingId = 10L;
         assertThatThrownBy(() -> markDAO.getById(notExistingId))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
+
     @Test
-    public void testRemoveByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException{
+    public void testRemoveByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         assertThatThrownBy(() -> markDAO.removeById(notExistingId))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
     @Test
@@ -151,7 +150,7 @@ public class MarkDAOTest {
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_MARK})
-    public void testRemoveNullMarkTrowEJBException() throws EJBException{
+    public void testRemoveNullMarkTrowEJBException() throws EJBException {
         assertThatThrownBy(() -> markDAO.remove(null))
                 .isInstanceOf(EJBException.class);
     }
@@ -190,35 +189,35 @@ public class MarkDAOTest {
         MarkEntity markThatExists = predefinedMarkInitialization();
         assertThatThrownBy(() -> markDAO.save(markThatExists))
                 .isInstanceOf(EntityIsAlreadyExistException.class).hasMessage("Field with id = "
-                +markThatExists.getId()+" already exists in database");
+                + markThatExists.getId() + " already exists in database");
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_MARK})
-    public void testUpdateMarkThatNotExistThrowsEntityNotExistException() throws EntityNotExistException{
+    public void testUpdateMarkThatNotExistThrowsEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         MarkEntity markThatExists = predefinedMarkInitialization();
         markThatExists.setId(notExistingId);
         assertThatThrownBy(() -> markDAO.update(markThatExists))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_MARK})
-    public void testRemoveMarkThatNotExistThrowsEntityNotExistException() throws EntityNotExistException{
+    public void testRemoveMarkThatNotExistThrowsEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         MarkEntity markThatExists = predefinedMarkInitialization();
         markThatExists.setId(notExistingId);
         assertThatThrownBy(() -> markDAO.remove(markThatExists))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
-    private MarkEntity markInitializationForTests(){
+    private MarkEntity markInitializationForTests() {
         MarkEntity markEntity = new MarkEntity();
         Long predefinedPersonId = 1L;
-         Long predefinedPracticeLessonId = 1L;
+        Long predefinedPracticeLessonId = 1L;
         PersonEntity predefinedPerson = personDAO.getById(predefinedPersonId);
         PracticeLessonEntity predefinedLesson = practiceLessonDAO.getById(predefinedPracticeLessonId);
         markEntity.setPracticeLesson(predefinedLesson);
@@ -228,7 +227,7 @@ public class MarkDAOTest {
         return markEntity;
     }
 
-    private MarkEntity predefinedMarkInitialization(){
+    private MarkEntity predefinedMarkInitialization() {
         MarkEntity markEntity = new MarkEntity();
         Long predefinedPersonId = 1L;
         Long predefinedMarkId = 1L;
@@ -239,7 +238,7 @@ public class MarkDAOTest {
         markEntity.setPersons(predefinedPerson);
         markEntity.setId(predefinedMarkId);
         markEntity.setMark(80L);
-         return markEntity;
+        return markEntity;
     }
 }
 

@@ -31,6 +31,7 @@ public interface CourseService {
     List<CourseVO> getAll();
 
     void clear();
+
     @Valid
     CourseVO getCourseById(@NotNull Long id);
 
@@ -39,7 +40,6 @@ public interface CourseService {
     CourseVO addPersonsToCourse(@NotNull CourseVO courseVO, @NotNull @Valid List<PersonVO> persons);
 
     CourseVO removePersonsFromCourse(@NotNull CourseVO courseVO, @NotNull @Valid List<PersonVO> persons);
-
 
 
     @NotNull
@@ -63,15 +63,19 @@ public interface CourseService {
 
     @NotNull
     @Valid
+    List<NewsVO> getAllPersonsNews(@NotNull Long personId);
+
+    @NotNull
+    @Valid
     List<NewsVO> getAllNews();
 
     @Nullable
     @Valid
     List<NewsVO> getNewsByCourseId(@NotNull Long courseId);
 
-   @Nullable
+    @Nullable
     @Valid
-    NewsVO getNewsByIdFromCourse(@NotNull Long courseId,@NotNull Long newsId);
+    NewsVO getNewsByIdFromCourse(@NotNull Long courseId, @NotNull Long newsId);
 
     //TODO: add methods to interact with LessonVO
 

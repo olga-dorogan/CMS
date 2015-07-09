@@ -14,7 +14,7 @@ import java.util.List;
 @Stateless
 public class NewsDAO extends GenericDAO<NewsEntity> {
 
-     public NewsDAO() {
+    public NewsDAO() {
         setEntityClass(NewsEntity.class);
     }
 

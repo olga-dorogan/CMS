@@ -1,9 +1,9 @@
 <div>
-<ol>
-    <li ng-repeat="lecture in lectures">
-        {{lecture.topic}}
-    </li>
-</ol>
+    <ol>
+        <li ng-repeat="lecture in lectures">
+            {{lecture.topic}}
+        </li>
+    </ol>
     <button ng-show="isTeacher()" class="btn btn-default" ui-sref="person.course.addLecture">Добавить лекцию</button>
 
 </div>

@@ -9,11 +9,10 @@ import javax.persistence.PersistenceContext;
 import javax.validation.constraints.NotNull;
 
 
+public abstract class GenericDAO<ENTITY extends GenericEntity> {
 
-public abstract class GenericDAO <ENTITY extends GenericEntity> {
 
-
-    Class<ENTITY> entityClass ;
+    Class<ENTITY> entityClass;
 
     @PersistenceContext
     private EntityManager em;
@@ -28,8 +27,8 @@ public abstract class GenericDAO <ENTITY extends GenericEntity> {
 
     public ENTITY remove(@NotNull ENTITY entity) {
         if (getEntityManager().find(entityClass, entity.getId()) == null) {
-            throw new EntityNotExistException("Field with "+entity.getId()+" does not exist in database");
-        }else {
+            throw new EntityNotExistException("Field with " + entity.getId() + " does not exist in database");
+        } else {
 
             entity = getEntityManager().merge(entity);
             getEntityManager().remove(entity);
@@ -40,7 +39,7 @@ public abstract class GenericDAO <ENTITY extends GenericEntity> {
     public ENTITY getById(@NotNull Long id) {
         ENTITY entity = getEntityManager().find(entityClass, id);
         if (entity == null) {
-            throw new EntityNotExistException("Field with "+id+" does not exist in database");
+            throw new EntityNotExistException("Field with " + id + " does not exist in database");
         }
         return entity;
     }
@@ -48,7 +47,7 @@ public abstract class GenericDAO <ENTITY extends GenericEntity> {
     public ENTITY removeById(@NotNull Long id) {
         ENTITY entity = getEntityManager().find(entityClass, id);
         if (entity == null) {
-            throw new EntityNotExistException("Field with "+id+" does not exist in database");
+            throw new EntityNotExistException("Field with " + id + " does not exist in database");
         }
         getEntityManager().remove(entity);
         return entity;
@@ -59,7 +58,7 @@ public abstract class GenericDAO <ENTITY extends GenericEntity> {
             throw new EntityIsAlreadyExistException("Field with id = "
                     + entity.getId()
                     + " already exists in database");
-        }else {
+        } else {
             getEntityManager().persist(entity);
         }
         return entity;
@@ -67,9 +66,9 @@ public abstract class GenericDAO <ENTITY extends GenericEntity> {
 
     public ENTITY update(@NotNull ENTITY entity) {
         if (entity.getId() != null && getEntityManager().find(entityClass, entity.getId()) == null) {
-            throw new EntityNotExistException("Field with "+entity.getId()+" does not exist in database");
-        }else {
-           getEntityManager().merge(entity);
+            throw new EntityNotExistException("Field with " + entity.getId() + " does not exist in database");
+        } else {
+            getEntityManager().merge(entity);
         }
         return entity;
     }

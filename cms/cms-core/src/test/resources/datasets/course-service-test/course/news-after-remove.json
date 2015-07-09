@@ -18,5 +18,6 @@
             "second_name": "teacherSecondName",
             "last_name": "teacherLastName",
             "personRole": "TEACHER"
-        }]
+        }
+    ]
 }

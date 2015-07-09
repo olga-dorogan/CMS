@@ -3,8 +3,6 @@ package org.javatraining.service.impl;
 import org.javatraining.dao.*;
 import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.entity.*;
-import org.javatraining.model.*;
-import org.javatraining.model.conversion.CourseConverter;
 import org.javatraining.entity.enums.CourseStatus;
 import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.model.*;
@@ -59,6 +57,7 @@ public class PersonServiceImpl implements PersonService {
     public void removePersonDescription(Long id) {
         //FIXME add implementation after creating specified repository
     }
+
     @EJB
     private CoursePersonStatusDAO coursePersonStatusDAO;
 
@@ -79,6 +78,7 @@ public class PersonServiceImpl implements PersonService {
             saveStudent(personVO);
         }
     }
+
     @Override
     public PersonVO update(@NotNull @Valid PersonVO personVO) {
         PersonEntity entity = PersonConverter.convertVOToEntity(personVO);

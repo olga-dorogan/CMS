@@ -74,7 +74,7 @@ public class NewsDAOTest {
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_NEWS_AFTER_SAVE}, excludeColumns = {"id"})
     public void testSaveNews() {
-         newsDAO.save(newsEntityInitializationForTests());
+        newsDAO.save(newsEntityInitializationForTests());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class NewsDAOTest {
     @ShouldMatchDataSet(value = DS_NEWS_AFTER_REMOVE)
     public void testRemoveByIdNews() {
         newsDAO.removeById(predefinedNewsInitialization().getId());
-      }
+    }
 
     @Test
     @ShouldMatchDataSet(value = DS_NEWS_AFTER_REMOVE)
@@ -97,35 +97,35 @@ public class NewsDAOTest {
 
     @Test
     public void testRemoveReturnNewsEntity() {
-        NewsEntity newsForRemove= predefinedNewsInitialization();
+        NewsEntity newsForRemove = predefinedNewsInitialization();
         assertEquals(newsForRemove, newsDAO.remove(newsForRemove));
-         }
+    }
 
     @Test
     public void testUpdateReturnNewsEntity() {
-         NewsEntity newsForUpdate= predefinedNewsInitialization();
-         newsForUpdate.setTitle("otherTitle");
-        assertEquals(newsForUpdate,newsDAO.update(newsForUpdate));
+        NewsEntity newsForUpdate = predefinedNewsInitialization();
+        newsForUpdate.setTitle("otherTitle");
+        assertEquals(newsForUpdate, newsDAO.update(newsForUpdate));
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_NEWS_AFTER_UPDATE}, excludeColumns = {"id"})
     public void testUpdateNews() {
-        NewsEntity newsForUpdate= predefinedNewsInitialization();
+        NewsEntity newsForUpdate = predefinedNewsInitialization();
         newsForUpdate.setTitle("otherTitle");
         newsDAO.update(newsForUpdate);
     }
 
     @Test
     public void testGetReturnNewsEntity() {
-        NewsEntity newsForGet= predefinedNewsInitialization();
-        assertThat(newsForGet, is(equalTo( newsDAO.getById(newsForGet.getId()))));
-      }
+        NewsEntity newsForGet = predefinedNewsInitialization();
+        assertThat(newsForGet, is(equalTo(newsDAO.getById(newsForGet.getId()))));
+    }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_NEWS})
     public void testGetNews() {
-       assertNotNull(newsDAO.getById(predefinedNewsInitialization().getId()));
+        assertNotNull(newsDAO.getById(predefinedNewsInitialization().getId()));
     }
 
     @Test
@@ -138,7 +138,7 @@ public class NewsDAOTest {
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_NEWS})
-    public void testRemoveNullNewsTrowEJBException() throws EJBException{
+    public void testRemoveNullNewsTrowEJBException() throws EJBException {
         assertThatThrownBy(() -> newsDAO.remove(null))
                 .isInstanceOf(EJBException.class);
     }
@@ -176,52 +176,52 @@ public class NewsDAOTest {
     public void testGetByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         assertThatThrownBy(() -> newsDAO.getById(notExistingId))
-                .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "+notExistingId+" does not exist in database");
+                .isInstanceOf(EntityNotExistException.class).hasMessage("Field with " + notExistingId + " does not exist in database");
 
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_NEWS})
-    public void testRemoveByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException{
+    public void testRemoveByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         assertThatThrownBy(() -> newsDAO.removeById(notExistingId))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_NEWS})
     public void testSaveNewsThatExistThrowsEntityIsAlreadyExistException() throws EntityIsAlreadyExistException {
-        NewsEntity newsThatExists =predefinedNewsInitialization();
+        NewsEntity newsThatExists = predefinedNewsInitialization();
         assertThatThrownBy(() -> newsDAO.save(newsThatExists))
                 .isInstanceOf(EntityIsAlreadyExistException.class).hasMessage("Field with id = "
-                +newsThatExists.getId()+" already exists in database");
+                + newsThatExists.getId() + " already exists in database");
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_NEWS})
-    public void testUpdateNewsThatNotExistThrowsEntityNotExistException() throws EntityNotExistException{
+    public void testUpdateNewsThatNotExistThrowsEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
-        NewsEntity newsThatExists =predefinedNewsInitialization();
+        NewsEntity newsThatExists = predefinedNewsInitialization();
         newsThatExists.setId(notExistingId);
         assertThatThrownBy(() -> newsDAO.update(newsThatExists))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_NEWS})
-    public void testRemoveNewsThatNotExistThrowsEntityNotExistException() throws EntityNotExistException{
+    public void testRemoveNewsThatNotExistThrowsEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
-        NewsEntity newsThatExists =predefinedNewsInitialization();
+        NewsEntity newsThatExists = predefinedNewsInitialization();
         newsThatExists.setId(notExistingId);
         assertThatThrownBy(() -> newsDAO.remove(newsThatExists))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
-    private NewsEntity newsEntityInitializationForTests(){
+    private NewsEntity newsEntityInitializationForTests() {
         NewsEntity newsEntity = new NewsEntity();
         Long predefinedCourseId = (long) 1;
         CourseEntity courseEntity = courseDAO.getById(predefinedCourseId);
@@ -232,14 +232,14 @@ public class NewsDAOTest {
         return newsEntity;
     }
 
-    public CourseEntity predefinedCourse(){
+    public CourseEntity predefinedCourse() {
         Long predefinedCourseId = 1L;
-        CourseEntity predefinedCourse = new CourseEntity("courseName","courseDescription",Date.valueOf("2014-01-10"),Date.valueOf("2015-07-31"));
+        CourseEntity predefinedCourse = new CourseEntity("courseName", "courseDescription", Date.valueOf("2014-01-10"), Date.valueOf("2015-07-31"));
         predefinedCourse.setId(predefinedCourseId);
         return predefinedCourse;
     }
 
-    private NewsEntity predefinedNewsInitialization(){
+    private NewsEntity predefinedNewsInitialization() {
         Long predefinedNewsId = 1L;
         CourseEntity courseEntity = predefinedCourse();
         NewsEntity newsEntity = new NewsEntity();

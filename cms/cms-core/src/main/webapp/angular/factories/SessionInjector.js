@@ -7,7 +7,7 @@ function SessionInjector($rootScope, sessionService) {
             }
             return config;
         },
-        response: function(response) {
+        response: function (response) {
             response.data = response.data || {};
             response.data.responseStatus = response.status;
             return response;

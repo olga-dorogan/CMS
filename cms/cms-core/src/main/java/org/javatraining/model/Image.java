@@ -8,11 +8,11 @@ package org.javatraining.model;
 public class Image {
     private byte[] imageBytes;
 
-    public Image(){
+    public Image() {
 
     }
 
-    public Image(byte[] imageBytes){
+    public Image(byte[] imageBytes) {
         this.imageBytes = imageBytes;
     }
 

@@ -17,9 +17,6 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
-import org.jboss.arquillian.persistence.Cleanup;
-import org.jboss.arquillian.persistence.CleanupStrategy;
-import org.jboss.arquillian.persistence.TestExecutionPhase;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -63,6 +60,7 @@ public class PersonWebServiceTest {
         newPerson.setLastName("newLastName");
         newPerson.setEmail("new@gmail.com");
     }
+
     private static String TEACHER_TOKEN = "AIzaSyDEVCJp5Hz_fSrHYeS24EcMM3FQV0GF8Do";
     private static String STUDENT_TOKEN = "AIzaSyDEVCJp5Hz_fSrHYeS24EcMM3FQV0GF8Do";
 
@@ -102,8 +100,7 @@ public class PersonWebServiceTest {
     @Test
     @UsingDataSet("datasets/person-web-service-test/initial-data.json")
     @InSequence(1)
-    public void setupDB_ARQ1077_Workaround()
-    {
+    public void setupDB_ARQ1077_Workaround() {
         //ugly hack to fill db from dataset. for more information see https://issues.jboss.org/browse/ARQ-1077
     }
 

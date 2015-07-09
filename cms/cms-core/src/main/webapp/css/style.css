@@ -26,6 +26,28 @@ body {
     font-size: 16px;
 }
 
+.description {
+    margin-left: 25px;
+    font-size: 16px;
+}
+
+.date-format {
+    text-align: right;
+    color: #9c9c9c;
+}
+
+.news-title {
+    text-align: left;
+    color: #0000FF;
+    font-size: 20px;
+
+}
+
+h1 {
+    padding-bottom: 25px;
+    border-bottom: solid lavender 2px;
+}
+
 .info-list .course-action {
     font-size: 16px;
     text-align: right;

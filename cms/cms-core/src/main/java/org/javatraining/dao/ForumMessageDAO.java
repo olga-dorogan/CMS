@@ -27,6 +27,7 @@ public class ForumMessageDAO extends GenericDAO<ForumMessageEntity> {
         getEntityManager().persist(forumMessagesEntity);
         return forumMessagesEntity;
     }
+
     public List<ForumMessageEntity> getAllForumMassage() {
         Query query = getEntityManager().createQuery("SELECT c FROM ForumMassagesEntity c");
         return query.getResultList();

@@ -1,8 +1,6 @@
 package org.javatraining.model;
 
 
-import org.javatraining.entity.LessonEntity;
-
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 

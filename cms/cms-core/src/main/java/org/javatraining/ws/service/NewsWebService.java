@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 /**
  * Created by vika on 02.07.15.
@@ -27,19 +28,27 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
         super(NewsVO.class);
     }
 
+
     @GET
-    @Path("{course_id}/news")
     @Produces(MediaType.APPLICATION_JSON)
-    @Auth(roles = {AuthRole.STUDENT, AuthRole.TEACHER})
-    public Response getNews(@PathParam("course_id") Long courseId) {
-        return Response.ok(courseService.getAllNewsById(courseId)).build();
+    public Response getNewsList() {
+        List<NewsVO> news = courseService.getAllNews();
+        return Response.ok(news).build();
     }
 
     @GET
-    @Path("{course_id}/news/{news_id}")
+    @Path("{person_id}/news-person")
     @Produces(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.STUDENT, AuthRole.TEACHER})
-    public Response getLessonByOrderNum(@PathParam("course_id") Long courseId, @PathParam("news_id") Long news_id) {
+    public Response getPersonNews(@PathParam("person_id") Long personId) {
+        return Response.ok(courseService.getAllPersonsNews(personId)).build();
+    }
+
+    @GET
+    @Path("{course_id}/{news_id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Auth(roles = {AuthRole.STUDENT, AuthRole.TEACHER})
+    public Response getNewsByOrderNum(@PathParam("course_id") Long courseId, @PathParam("news_id") Long news_id) {
         return Response.ok(courseService.getNewsByIdFromCourse(courseId, news_id)).build();
     }
 
@@ -48,13 +57,13 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
     @Path("{course_id}/news")
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
-    public Response saveLesson(@Context UriInfo uriInfo, @PathParam("course_id") Long courseId, NewsVO newsVO) {
+    public Response saveNews(@Context UriInfo uriInfo, @PathParam("course_id") Long courseId, NewsVO newsVO) {
         Response.ResponseBuilder r;
         try {
             newsVO.setId(null); //make sure that there no id set.
             CourseVO courseVO = courseService.getCourseById(courseId);
 
-            courseService.addNewsToCourse(courseVO,newsVO);
+            courseService.addNewsToCourse(courseVO, newsVO);
 
             String lessonUri = uriInfo.getRequestUri().toString() + "/" + newsVO.getId();
             r = Response.created(new URI(lessonUri));

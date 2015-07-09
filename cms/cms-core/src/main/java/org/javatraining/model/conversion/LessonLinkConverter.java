@@ -37,7 +37,7 @@ public class LessonLinkConverter {
 
     public static Set<LessonLinkVO> convertEntitiesToVOs(@NotNull Collection<LessonLinkEntity> lessonLinkEntities) {
         Set<LessonLinkVO> lessonLinkVOs = new HashSet<>();
-        for(LessonLinkEntity lessonLinkEntity : lessonLinkEntities) {
+        for (LessonLinkEntity lessonLinkEntity : lessonLinkEntities) {
             lessonLinkVOs.add(convertEntityToVO(lessonLinkEntity));
         }
         return lessonLinkVOs;
@@ -45,7 +45,7 @@ public class LessonLinkConverter {
 
     public static Set<LessonLinkEntity> convertVOsToEntities(@NotNull Collection<LessonLinkVO> lessonLinkVOs) {
         Set<LessonLinkEntity> lessonEntities = new HashSet<>();
-        for(LessonLinkVO LessonLinkVO : lessonLinkVOs) {
+        for (LessonLinkVO LessonLinkVO : lessonLinkVOs) {
             lessonEntities.add(convertVOToEntity(LessonLinkVO));
         }
         return lessonEntities;

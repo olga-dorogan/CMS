@@ -6,7 +6,7 @@ function SessionService($window) {
     service.getAccessToken = function () {
         return $window.localStorage['token'];
     };
-    service.getUserId = function() {
+    service.getUserId = function () {
         return $window.localStorage['id'];
     };
 }

@@ -13,9 +13,11 @@ public class CalendarVO {
     private String id;
     @NotNull
     private String title;
-    @NotNull @Valid
+    @NotNull
+    @Valid
     private List<PersonVO> teachers;
-    @NotNull @Valid
+    @NotNull
+    @Valid
     private List<PersonVO> students;
 
     public String getId() {

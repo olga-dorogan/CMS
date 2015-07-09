@@ -18,12 +18,12 @@ function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentServi
         if (valid) {
             for (var i = 0; i < $scope.lecture.links.length; i++) {
                 for (var j = i + 1; j < $scope.lecture.links.length; j++) {
-                    if($scope.lecture.links[i].orderNum == $scope.lecture.links[j].orderNum) {
+                    if ($scope.lecture.links[i].orderNum == $scope.lecture.links[j].orderNum) {
                         valid = false;
                         break;
                     }
                 }
-                if(!valid) {
+                if (!valid) {
                     break;
                 }
             }

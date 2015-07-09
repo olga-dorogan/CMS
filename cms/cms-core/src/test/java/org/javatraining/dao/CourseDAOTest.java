@@ -37,7 +37,7 @@ public class CourseDAOTest {
     @Deployment
     public static WebArchive createDeployment() {
         WebArchive war = ShrinkWrap.create(WebArchive.class)
-               .addPackage("org.javatraining.dao")
+                .addPackage("org.javatraining.dao")
                 .addPackage("org.javatraining.entity")
                 .addPackage("org.javatraining.entity.enums")
                 .addPackage("org.javatraining.dao.exception")
@@ -60,65 +60,65 @@ public class CourseDAOTest {
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
-    public void testGetByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException{
+    public void testGetByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
-                assertThatThrownBy(() -> courseDAO.getById(notExistingId))
-                .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "+notExistingId+" does not exist in database");
+        assertThatThrownBy(() -> courseDAO.getById(notExistingId))
+                .isInstanceOf(EntityNotExistException.class).hasMessage("Field with " + notExistingId + " does not exist in database");
 
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
-    public void testRemoveByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException{
+    public void testRemoveByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         assertThatThrownBy(() -> courseDAO.removeById(notExistingId))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
-    public void testSaveCourseThatExistThrowsEntityIsAlreadyExistException() throws EntityIsAlreadyExistException{
+    public void testSaveCourseThatExistThrowsEntityIsAlreadyExistException() throws EntityIsAlreadyExistException {
         CourseEntity courseThatExists = predefinedCourseInitialization();
         assertThatThrownBy(() -> courseDAO.save(courseThatExists))
                 .isInstanceOf(EntityIsAlreadyExistException.class).hasMessage("Field with id = "
-                +courseThatExists.getId()+" already exists in database");
+                + courseThatExists.getId() + " already exists in database");
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
-    public void testUpdateCourseThatNotExistThrowsEntityNotExistException() throws EntityNotExistException{
+    public void testUpdateCourseThatNotExistThrowsEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         CourseEntity courseThatNotExists = courseInitializationForTests();
         courseThatNotExists.setId(notExistingId);
         assertThatThrownBy(() -> courseDAO.update(courseThatNotExists))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
-    public void testRemoveCourseThatNotExistThrowsEntityNotExistException() throws EntityNotExistException{
+    public void testRemoveCourseThatNotExistThrowsEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         CourseEntity courseThatNotExists = courseInitializationForTests();
         courseThatNotExists.setId(notExistingId);
         assertThatThrownBy(() -> courseDAO.remove(courseThatNotExists))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
     @Test
     public void testSaveCourseReturnCourseEntity() {
-        CourseEntity predefinedCourse =courseInitializationForTests();
+        CourseEntity predefinedCourse = courseInitializationForTests();
         assertEquals(predefinedCourse, courseDAO.save(predefinedCourse));
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE_AFTER_SAVE})
     public void testSaveCourse() {
-        CourseEntity courseForSave =courseInitializationForTests();
-         courseDAO.save(courseForSave);
+        CourseEntity courseForSave = courseInitializationForTests();
+        courseDAO.save(courseForSave);
     }
 
     @Test
@@ -126,9 +126,10 @@ public class CourseDAOTest {
         CourseEntity courseEntity = courseInitializationForTests();
         assertEquals(courseEntity, courseDAO.update(courseEntity));
     }
+
     @Test
     public void testRemoveReturnCourseEntity() {
-        CourseEntity courseEntity =  predefinedCourseInitialization();
+        CourseEntity courseEntity = predefinedCourseInitialization();
         assertEquals(courseEntity, courseDAO.remove(courseEntity));
     }
 
@@ -143,7 +144,7 @@ public class CourseDAOTest {
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY})
     public void testRemoveCourse() {
-      courseDAO.remove(predefinedCourseInitialization());
+        courseDAO.remove(predefinedCourseInitialization());
     }
 
     @Test
@@ -163,7 +164,7 @@ public class CourseDAOTest {
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
-    public void testRemoveNullCourseTrowEJBException() throws EJBException{
+    public void testRemoveNullCourseTrowEJBException() throws EJBException {
         assertThatThrownBy(() -> courseDAO.remove(null))
                 .isInstanceOf(EJBException.class);
     }
@@ -178,7 +179,7 @@ public class CourseDAOTest {
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testSaveNotValidCourseTrowEJBException() throws EJBException {
-         assertThatThrownBy(() -> courseDAO.save(new CourseEntity()))
+        assertThatThrownBy(() -> courseDAO.save(new CourseEntity()))
                 .isInstanceOf(EJBException.class);
     }
 
@@ -192,16 +193,16 @@ public class CourseDAOTest {
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testRemoveNotValidCourseTrowEJBException() throws EJBException {
-         assertThatThrownBy(() -> courseDAO.remove(new CourseEntity()))
+        assertThatThrownBy(() -> courseDAO.remove(new CourseEntity()))
                 .isInstanceOf(EJBException.class);
     }
 
 
     @Test
     public void testGetReturnCourseEntity() {
-        CourseEntity courseEntity =  courseInitializationForTests();
-       courseDAO.save(courseEntity);
-       assertEquals(courseEntity, courseDAO.getById(courseEntity.getId()));
+        CourseEntity courseEntity = courseInitializationForTests();
+        courseDAO.save(courseEntity);
+        assertEquals(courseEntity, courseDAO.getById(courseEntity.getId()));
     }
 
     @Test
@@ -212,13 +213,13 @@ public class CourseDAOTest {
 
     @Test
     @ShouldMatchDataSet(value = DS_EMPTY)
-    public void testClearDataBaseShouldBeEmpty(){
-         courseDAO.clear();
+    public void testClearDataBaseShouldBeEmpty() {
+        courseDAO.clear();
 
     }
 
 
-    private CourseEntity courseInitializationForTests(){
+    private CourseEntity courseInitializationForTests() {
         CourseEntity courseEntity = new CourseEntity();
         courseEntity.setName("courseName");
         courseEntity.setStartDate(Date.valueOf("2015-10-10"));
@@ -227,7 +228,7 @@ public class CourseDAOTest {
         return courseEntity;
     }
 
-    private CourseEntity predefinedCourseInitialization(){
+    private CourseEntity predefinedCourseInitialization() {
         CourseEntity predefinedCourse = new CourseEntity();
         predefinedCourse.setId((long) 1);
         predefinedCourse.setName("courseName");
@@ -236,8 +237,6 @@ public class CourseDAOTest {
         predefinedCourse.setDescription("courseDescription");
         return predefinedCourse;
     }
-
-
 
 
 }

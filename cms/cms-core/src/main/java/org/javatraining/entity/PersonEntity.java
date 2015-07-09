@@ -2,7 +2,6 @@ package org.javatraining.entity;
 
 
 import org.javatraining.entity.enums.PersonRole;
-import org.javatraining.model.Image;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -71,7 +70,7 @@ public class PersonEntity implements Serializable, GenericEntity {
     public PersonEntity() {
     }
 
-    public PersonEntity(String name, String secondName, String lastName, String email,String phone, PersonRole personRole) {
+    public PersonEntity(String name, String secondName, String lastName, String email, String phone, PersonRole personRole) {
         this.name = name;
         this.secondName = secondName;
         this.lastName = lastName;
@@ -122,6 +121,7 @@ public class PersonEntity implements Serializable, GenericEntity {
     public void setForumMassages(Set<ForumMessageEntity> forumMassages) {
         this.forumMassages = forumMassages;
     }
+
     public Set<ForumMessageEntity> getForumMassages() {
         return forumMassages;
     }

@@ -1,6 +1,5 @@
 package org.javatraining.entity;
 
-import org.javatraining.dao.GenericDAO;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -12,7 +11,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "courses", schema = "")
-public class CourseEntity  implements Serializable, GenericEntity {
+public class CourseEntity implements Serializable, GenericEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
@@ -147,7 +146,7 @@ public class CourseEntity  implements Serializable, GenericEntity {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (startdate != null ? !startdate.equals(that.startdate) : that.startdate != null) return false;
-         return true;
+        return true;
     }
 
     @Override

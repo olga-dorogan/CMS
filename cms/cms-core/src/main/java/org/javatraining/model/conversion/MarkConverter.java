@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class MarkConverter {
     public static MarkVO convertEntityToVO(MarkEntity markEntity) {
-        return new MarkVO(markEntity.getId(), (int)((long)markEntity.getMark()));
+        return new MarkVO(markEntity.getId(), (int) ((long) markEntity.getMark()));
     }
 
     public static MarkEntity convertVOToEntity(MarkVO markVO) {

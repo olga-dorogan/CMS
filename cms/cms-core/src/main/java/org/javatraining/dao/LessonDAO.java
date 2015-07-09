@@ -13,7 +13,7 @@ import java.util.List;
 @Stateless
 public class LessonDAO extends GenericDAO<LessonEntity> {
 
-  public LessonDAO() {
+    public LessonDAO() {
         setEntityClass(LessonEntity.class);
     }
 

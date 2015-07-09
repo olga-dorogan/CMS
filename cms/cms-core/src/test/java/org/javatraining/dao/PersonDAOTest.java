@@ -42,7 +42,6 @@ public class PersonDAOTest {
     private static final String DS_PERSON_AFTER_SAVE = DS_DIR + "person/expected-after-save.json";
 
 
-
     @Deployment
     public static WebArchive createDeployment() {
         WebArchive war = ShrinkWrap.create(WebArchive.class)
@@ -66,7 +65,6 @@ public class PersonDAOTest {
     public void testPersonDAOShouldBeInjected() throws Exception {
         assertThat(personDAO, is(notNullValue()));
     }
-
 
 
     @Test
@@ -102,7 +100,7 @@ public class PersonDAOTest {
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON_AFTER_UPDATE}, excludeColumns = {"id", "phone"})
-  public void testUpdatePerson() {
+    public void testUpdatePerson() {
         PersonEntity personEntity = predefinedPersonInitializationForTests();
         personEntity.setName("Student");
         assertEquals(personDAO.update(personEntity), personEntity);
@@ -111,18 +109,18 @@ public class PersonDAOTest {
     @Test
     public void testGetPersonEntity() {
         PersonEntity predefinedPerson = predefinedPersonInitializationForTests();
-       assertThat(predefinedPerson, is(equalTo(predefinedPerson)));
+        assertThat(predefinedPerson, is(equalTo(predefinedPerson)));
     }
 
     @Test
     @ShouldMatchDataSet(value = DS_EMPTY)
     public void testRemovePerson() {
         personDAO.remove(predefinedPersonInitializationForTests());
-     }
+    }
 
     @Test
     @ShouldMatchDataSet(value = DS_EMPTY)
-    public void testClearDataBaseShouldBeEmpty(){
+    public void testClearDataBaseShouldBeEmpty() {
         personDAO.clear();
     }
 
@@ -169,22 +167,23 @@ public class PersonDAOTest {
     public void testGetByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         assertThatThrownBy(() -> personDAO.getById(notExistingId))
-                .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "+notExistingId+" does not exist in database");
+                .isInstanceOf(EntityNotExistException.class).hasMessage("Field with " + notExistingId + " does not exist in database");
 
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON})
-    public void testRemoveByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException{
+    public void testRemoveByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
         assertThatThrownBy(() -> personDAO.removeById(notExistingId))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
+
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON})
     public void testSavePersonThatExistThrowsEntityIsAlreadyExistException() throws EntityIsAlreadyExistException {
-        PersonEntity personThatExists =predefinedPersonInitializationForTests();
+        PersonEntity personThatExists = predefinedPersonInitializationForTests();
         assertThatThrownBy(() -> personDAO.save(personThatExists))
                 .isInstanceOf(EntityIsAlreadyExistException.class).hasMessage("Field with id = "
                 + personThatExists.getId() + " already exists in database");
@@ -192,24 +191,24 @@ public class PersonDAOTest {
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON})
-    public void testUpdatePersonThatNotExistThrowsEntityNotExistException() throws EntityNotExistException{
+    public void testUpdatePersonThatNotExistThrowsEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
-        PersonEntity personThatNotExists =predefinedPersonInitializationForTests();
+        PersonEntity personThatNotExists = predefinedPersonInitializationForTests();
         personThatNotExists.setId(notExistingId);
         assertThatThrownBy(() -> personDAO.update(personThatNotExists))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_PERSON})
-    public void testRemovePersonThatNotExistThrowsEntityNotExistException() throws EntityNotExistException{
+    public void testRemovePersonThatNotExistThrowsEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
-        PersonEntity personThatExists =predefinedPersonInitializationForTests();
+        PersonEntity personThatExists = predefinedPersonInitializationForTests();
         personThatExists.setId(notExistingId);
         assertThatThrownBy(() -> personDAO.remove(personThatExists))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
-                +notExistingId+" does not exist in database");
+                + notExistingId + " does not exist in database");
     }
 
 

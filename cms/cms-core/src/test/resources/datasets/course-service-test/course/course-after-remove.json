@@ -1,5 +1,5 @@
 {
-  "courses": [],
+    "courses": [],
     "person": [
         {
             "id": 1,
@@ -12,7 +12,7 @@
         }
 
     ],
-    "news":[]
+    "news": []
 
 
 }

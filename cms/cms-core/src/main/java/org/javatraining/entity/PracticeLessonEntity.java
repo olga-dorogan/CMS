@@ -1,7 +1,6 @@
 package org.javatraining.entity;
 
 
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -32,7 +31,7 @@ public class PracticeLessonEntity implements Serializable, GenericEntity {
     public PracticeLessonEntity() {
     }
 
-    public PracticeLessonEntity(String task,LessonEntity lesson) {
+    public PracticeLessonEntity(String task, LessonEntity lesson) {
         this.task = task;
         this.lesson = lesson;
     }
@@ -48,6 +47,7 @@ public class PracticeLessonEntity implements Serializable, GenericEntity {
     public String getTask() {
         return task;
     }
+
     public void setTask(String task) {
         this.task = task;
     }
@@ -72,7 +72,7 @@ public class PracticeLessonEntity implements Serializable, GenericEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof PracticeLessonEntity)) return false;
-          PracticeLessonEntity that = (PracticeLessonEntity) o;
+        PracticeLessonEntity that = (PracticeLessonEntity) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (lesson != null ? !lesson.equals(that.lesson) : that.lesson != null) return false;

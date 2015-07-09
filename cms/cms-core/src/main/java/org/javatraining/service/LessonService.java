@@ -13,7 +13,9 @@ import java.util.Set;
  */
 public interface LessonService {
     void save(@NotNull @Valid LessonVO lessonVO);
+
     LessonVO update(@NotNull @Valid LessonVO lessonVO);
+
     void remove(@NotNull LessonVO lessonVO);
 
     void save(@NotNull @Valid LessonWithDetailsVO lessonVO);

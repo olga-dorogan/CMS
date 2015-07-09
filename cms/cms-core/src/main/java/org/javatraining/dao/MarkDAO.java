@@ -16,7 +16,7 @@ import java.util.List;
 @Stateless
 public class MarkDAO extends GenericDAO<MarkEntity> {
 
-     public MarkDAO() {
+    public MarkDAO() {
         setEntityClass(MarkEntity.class);
     }
 
@@ -26,6 +26,7 @@ public class MarkDAO extends GenericDAO<MarkEntity> {
         MarkEntity savedEntity = super.save(mark);
         return savedEntity;
     }
+
     public List<MarkEntity> getAllMarks() {
         Query query = getEntityManager().createQuery("SELECT c FROM MarkEntity c");
         return query.getResultList();

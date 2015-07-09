@@ -39,6 +39,7 @@ public class ForumMessageEntity implements Serializable, GenericEntity {
 
     public ForumMessageEntity() {
     }
+
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "lesson_id", nullable = false)
     private LessonEntity lessons;

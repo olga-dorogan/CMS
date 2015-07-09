@@ -13,8 +13,8 @@ import java.util.Set;
 
 @Table(name = "lesson", schema = "")
 @NamedQueries({
-    @NamedQuery(name = "Lesson.FindByCourseId", query = "SELECT l FROM LessonEntity l WHERE l.course.id = :course_id"),
-    @NamedQuery(name = "Lesson.FindByCourseIdAndOrderNum", query = "SELECT l FROM LessonEntity l WHERE l.course.id = :course_id AND l.orderNum = :order_num")
+        @NamedQuery(name = "Lesson.FindByCourseId", query = "SELECT l FROM LessonEntity l WHERE l.course.id = :course_id"),
+        @NamedQuery(name = "Lesson.FindByCourseIdAndOrderNum", query = "SELECT l FROM LessonEntity l WHERE l.course.id = :course_id AND l.orderNum = :order_num")
 })
 public class LessonEntity implements Serializable, GenericEntity {
     public static String FIND_BY_COURSE = "Lesson.FindByCourseId";

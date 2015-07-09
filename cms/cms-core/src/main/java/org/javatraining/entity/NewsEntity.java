@@ -44,6 +44,7 @@ public class NewsEntity implements Serializable, GenericEntity {
         this.date = date;
         this.courses = courses;
     }
+
     public Long getId() {
         return id;
     }

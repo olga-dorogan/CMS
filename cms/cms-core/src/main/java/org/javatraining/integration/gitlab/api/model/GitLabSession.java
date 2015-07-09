@@ -12,7 +12,7 @@ import java.io.Serializable;
  * For more information you should send mail to codedealerb@gmail.com
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GitLabSession extends GitLabUser implements Serializable{
+public class GitLabSession extends GitLabUser implements Serializable {
     @JsonProperty("private_token")
     private String privateToken;
 

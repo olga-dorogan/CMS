@@ -1,13 +1,13 @@
 {
-  "course_person_status": [
-    {
-      "id": 1,
-      "course_id": 1,
-      "person_id": 1,
-      "course_status":"SIGNED"
+    "course_person_status": [
+        {
+            "id": 1,
+            "course_id": 1,
+            "person_id": 1,
+            "course_status": "SIGNED"
 
-    }
-  ],
+        }
+    ],
     "courses": [
         {
             "id": 1,

@@ -7,7 +7,6 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import javax.mail.*;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.FileReader;

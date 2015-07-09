@@ -1,11 +1,11 @@
 {
     "lesson": [
         {
-             "type": 23,
+            "type": 23,
             "order_num": 234,
             "topic": "topic",
-            "description":"Other description",
-            "date":"2016-08-11",
+            "description": "Other description",
+            "date": "2016-08-11",
             "course_id": 1
         }
     ],
@@ -20,14 +20,14 @@
     "lesson_link": [
         {
             "link": "someLink",
-            "description":"description",
-            "order_num":3,
-             "lesson_id":1
+            "description": "description",
+            "order_num": 3,
+            "lesson_id": 1
         },
         {
             "link": "otherLink",
-            "description":"description",
-            "lesson_id":1
+            "description": "description",
+            "lesson_id": 1
 
         }
 

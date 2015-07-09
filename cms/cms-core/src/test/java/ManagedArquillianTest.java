@@ -16,6 +16,7 @@ public class ManagedArquillianTest {
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class);
     }
+
     @Test
     public void test() {
         assertTrue(true);

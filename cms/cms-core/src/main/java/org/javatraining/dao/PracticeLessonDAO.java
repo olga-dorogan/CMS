@@ -14,8 +14,7 @@ import java.util.List;
 @Stateless
 public class PracticeLessonDAO extends GenericDAO<PracticeLessonEntity> {
 
-    public PracticeLessonDAO()
-    {
+    public PracticeLessonDAO() {
         setEntityClass(PracticeLessonEntity.class);
     }
 

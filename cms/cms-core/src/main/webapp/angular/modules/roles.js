@@ -1,14 +1,14 @@
-var teacherAccess=function($location, $window){
-    if($window.localStorage['role']=="teacher"){
+var teacherAccess = function ($location, $window) {
+    if ($window.localStorage['role'] == "teacher") {
         return true;
-    }else{
+    } else {
         $location.path("/home");
     }
 };
-var studentAccess=function($location, $window){
-    if($window.localStorage['role']=="student"){
+var studentAccess = function ($location, $window) {
+    if ($window.localStorage['role'] == "student") {
         return true;
-    }else{
+    } else {
         $location.path("/home");
     }
 };

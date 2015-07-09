@@ -89,10 +89,10 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
         });
 
         $rootScope.$on('$stateChangeStart', function (event, toState) {
-           if((toState.name == 'home') && $rootScope.isLogin()) {
-               event.preventDefault();
-               $state.go('person');
-           }
+            if ((toState.name == 'home') && $rootScope.isLogin()) {
+                event.preventDefault();
+                $state.go('person');
+            }
         });
     }]);
 

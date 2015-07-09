@@ -12,7 +12,9 @@ import java.util.Set;
  */
 public interface LessonLinkService {
     void save(@NotNull @Valid LessonLinkVO lessonLinkVO);
+
     LessonLinkVO update(@NotNull @Valid LessonLinkVO lessonLinkVO);
+
     void remove(@NotNull LessonLinkVO lessonLinkVO);
 
     @Valid

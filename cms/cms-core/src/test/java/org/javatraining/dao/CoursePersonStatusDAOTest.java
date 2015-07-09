@@ -175,7 +175,7 @@ public class CoursePersonStatusDAOTest {
 
     private CoursePersonStatusEntity coursePersonStatusInitializationForTests() {
         CoursePersonStatusEntity coursePersonStatusEntity = new CoursePersonStatusEntity(CourseStatus.UNSIGNED);
-         coursePersonStatusEntity.setCourse(courseDAO.getById(1L));
+        coursePersonStatusEntity.setCourse(courseDAO.getById(1L));
         coursePersonStatusEntity.setPerson(personDAO.getById(2L));
 
         return coursePersonStatusEntity;

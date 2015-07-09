@@ -1,24 +1,24 @@
 {
-  "courses": [
-    {
-      "name": "courseName",
-      "description": "courseDescription",
-      "startdate": "2014-01-10",
-      "enddate": "2015-07-31"
-    },
-      {
-          "name": "courseName",
-          "description": "Java",
-          "startdate": "2015-10-10",
-          "enddate": "2016-11-11"
-      }
-  ],
+    "courses": [
+        {
+            "name": "courseName",
+            "description": "courseDescription",
+            "startdate": "2014-01-10",
+            "enddate": "2015-07-31"
+        },
+        {
+            "name": "courseName",
+            "description": "Java",
+            "startdate": "2015-10-10",
+            "enddate": "2016-11-11"
+        }
+    ],
     "news": [
         {
             "title": "title",
             "description": "newsDescription",
             "date": "2015-10-02 18:48:05"
-          }
+        }
     ],
     "person": [
         {
@@ -29,5 +29,6 @@
             "second_name": "teacherSecondName",
             "last_name": "teacherLastName",
             "personRole": "TEACHER"
-        }]
+        }
+    ]
 }

@@ -14,16 +14,15 @@ import java.util.List;
 public class CourseDAO extends GenericDAO<CourseEntity> {
 
     public CourseDAO() {
-      setEntityClass(CourseEntity.class);
-       }
-
-    public List<CourseEntity> getAllCourses() {
-       Query query = getEntityManager().createQuery("SELECT c FROM CourseEntity c");
-       return query.getResultList();
+        setEntityClass(CourseEntity.class);
     }
 
-    public void clear()
-    {
+    public List<CourseEntity> getAllCourses() {
+        Query query = getEntityManager().createQuery("SELECT c FROM CourseEntity c");
+        return query.getResultList();
+    }
+
+    public void clear() {
         getEntityManager().createQuery("delete from CourseEntity").executeUpdate();
     }
 
