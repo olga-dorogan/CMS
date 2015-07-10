@@ -80,7 +80,7 @@ angular.module('myApp.person', ['ui.router'])
                     coursePrototypes: function (mode, courseService) {
                         var promise = courseService.getCourses();
                         promise = promise.then(function (courses) {
-                            courses.push({'id': -1, 'name': 'Отсутствует'});
+                            courses.push({'id': -1, 'name': 'Новый курс'});
                             return courses;
                         });
                         return promise;

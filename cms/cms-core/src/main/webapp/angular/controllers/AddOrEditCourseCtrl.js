@@ -3,7 +3,7 @@ function AddOrEditCourseCtrl($rootScope, $scope, $state, $modal, CourseService, 
     $scope.isAddMode = function () {
         return mode == 'add';
     };
-
+    // ----------------- initialization -----------------
     $scope.course = $scope.isAddMode() ? {} : course;
     $scope.courseTeachers = [parseInt($rootScope.getUserId())];
     $scope.teachers = allTeachers;
@@ -11,6 +11,7 @@ function AddOrEditCourseCtrl($rootScope, $scope, $state, $modal, CourseService, 
     $scope.coursePrototypeId = -1;
     $scope.okLabel = $scope.isAddMode() ? 'Добавить курс' : 'Обновить курс';
 
+    // -----------------   validation   -----------------
     $scope.isValidDates = function () {
         if (!$scope.course.startDate && !$scope.course.endDate) {
             return true;
@@ -23,7 +24,7 @@ function AddOrEditCourseCtrl($rootScope, $scope, $state, $modal, CourseService, 
     $scope.isValidTeachers = function () {
         return $scope.isAddMode() ? ($scope.courseTeachers.length > 0) : true;
     };
-    $scope.areValidFields = function() {
+    $scope.areValidFields = function () {
         return ($scope.course.name != undefined && $scope.course.name != '') &&
             ($scope.course.description != undefined && $scope.course.description != '')
     };
@@ -33,9 +34,7 @@ function AddOrEditCourseCtrl($rootScope, $scope, $state, $modal, CourseService, 
             $scope.isValidDates();
     };
 
-    $scope.disableAsPrototype = function () {
-        return $scope.coursePrototypeId == -1;
-    };
+    // --------------- course prototyping -----------------
     var getFieldFromPrototype = function (field) {
         if ($scope.coursePrototypeId == -1) {
             return '';
@@ -58,7 +57,12 @@ function AddOrEditCourseCtrl($rootScope, $scope, $state, $modal, CourseService, 
     $scope.setDescriptionAsPrototype = function () {
         $scope.course.description = getFieldFromPrototype('description');
     };
+    $scope.setFieldsAsInPrototype = function () {
+        $scope.setTitleAsPrototype();
+        $scope.setDescriptionAsPrototype();
+    };
 
+    // ------------  creating and updating -----------------
     var fillTeachers = function () {
         $scope.course.teachers = [];
         for (var i = 0; i < $scope.courseTeachers.length; i++) {
@@ -94,7 +98,7 @@ function AddOrEditCourseCtrl($rootScope, $scope, $state, $modal, CourseService, 
     $scope.updateCourse = function () {
         CourseService.updateCourse($scope.course).then(
             function (updatedCourse) {
-                if(updatedCourse.responseStatus / 100 == 2) {
+                if (updatedCourse.responseStatus / 100 == 2) {
                     $state.go('person.course.content', {'courseId': $scope.course.id}, {reload: true});
                 } else {
                     alertData.textAlert = updatedCourse;

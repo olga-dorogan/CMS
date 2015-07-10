@@ -5,10 +5,11 @@
         <form name="courseForm" novalidate role="form">
 
             <div ng-show="isAddMode()" class="form-group">
-                <label for="prototypes"> Курс-прототип</label>
+                <label for="prototypes"> Создать на основе существующего</label>
                 <select id="prototypes"
+                        ng-click="setFieldsAsInPrototype()"
                         ng-model="coursePrototypeId"
-                        ng-options="course.id as course.name for course in coursePrototypes"
+                        ng-options="course.id as course.name for course in coursePrototypes | orderBy:'id' "
                         class="form-control">
                 </select>
             </div>
@@ -16,27 +17,12 @@
             <div class="form-group">
                 <label for="name">Название <span class="required">*</span></label>
                 <input id="name" type="text" name="name" ng-model="course.name" class="form-control"/>
-
-                <div ng-show="isAddMode()" class="add-course-div-btn-proto">
-                    <button type="button" class="btn btn-default btn-xs btn-add-course-as-proto"
-                            ng-disabled="disableAsPrototype()" ng-click="setTitleAsPrototype()">
-                        Установить как в прототипе
-                    </button>
-                </div>
             </div>
 
             <div class="form-group">
                 <label for="content">Краткое описание<span class="required">*</span></label>
                     <textarea class="form-control" id="content" ng-model="course.description"
                               placeholder="Введите описание..." rows="4"> </textarea>
-
-                <div ng-show="isAddMode()" class="add-course-div-btn-proto">
-                    <button type="button" class="btn btn-default btn-xs btn-add-course-as-proto"
-                            ng-disabled="disableAsPrototype()"
-                            ng-click="setDescriptionAsPrototype()">
-                        Установить как в прототипе
-                    </button>
-                </div>
             </div>
 
             <div ng-show="isAddMode()" class="form-group">
