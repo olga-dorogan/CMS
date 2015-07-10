@@ -41,7 +41,7 @@
                                 </div>
                                 <div class="action">
                                     <a ui-sref="person.course.content({courseId:course.id, courseName:course.name})"
-                                       class="go-into-course">{{getActionMsg(course.courseStatus)}}
+                                       class="go-into-course">{{getActionMsg(course.courseStatus, isTeacher())}}
                                     </a>
                                 </div>
                             </div>
@@ -72,12 +72,19 @@
                                     Период проведения: с {{course.startDate}} по {{course.endDate}}
                                 </div>
                                 <div class="action">
-                                    <a ui-sref="person.subscribe.modal"
-                                       ng-if="!isPersonHasPhoneNumber()"
-                                       class="enroll-into-course">Подписаться</a>
-                                    <a ui-sref="person.subscribe"
-                                       ng-if="isPersonHasPhoneNumber()"
-                                       class="enroll-into-course">Подписаться</a>
+                                    <div ng-show="isTeacher()">
+                                        <a ui-sref="person.course.content({courseId:course.id, courseName:course.name})"
+                                           class="go-into-course">{{getActionMsg('', true)}}
+                                        </a>
+                                    </div>
+                                    <div ng-hide="isTeacher()">
+                                        <a ui-sref="person.subscribe.modal"
+                                           ng-if="!isPersonHasPhoneNumber()"
+                                           class="enroll-into-course">{{getActionMsg('', isTeacher())}}</a>
+                                        <a ui-sref="person.subscribe"
+                                           ng-if="isPersonHasPhoneNumber()"
+                                           class="enroll-into-course">{{getActionMsg('', isTeacher())}}</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

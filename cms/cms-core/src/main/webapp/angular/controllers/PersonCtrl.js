@@ -4,20 +4,22 @@ function PersonCtrl($scope, $modal, courseService, coursesGroups, oldCourses) {
     $scope.newCourses = coursesGroups.coursesToSubscribe;
     $scope.oldCourses = oldCourses;
 
-    $scope.getActionMsg = function (status) {
+    $scope.getActionMsg = function (status, teacherRole) {
         var msg = 'Подписаться';
-        switch (status) {
-            case "REQUESTED":
-                msg = 'Перейти к курсу';
-                break;
-            case "SIGNED":
-                msg = 'Перейти к курсу';
-                break;
-            case "UNSIGNED":
-                msg = 'Подписаться';
-                break;
-            default:
-                msg = 'Действия запрещены';
+        if (teacherRole) {
+            msg = 'Редактировать';
+        } else {
+            switch (status) {
+                case "REQUESTED":
+                    msg = 'Перейти к курсу';
+                    break;
+                case "SIGNED":
+                    msg = 'Перейти к курсу';
+                    break;
+                case "UNSIGNED":
+                    msg = 'Подписаться';
+                    break;
+            }
         }
         return msg;
     };

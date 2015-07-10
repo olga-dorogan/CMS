@@ -1,3 +1,12 @@
+/********************* Color reference chart ****************
+*************************** comment ********* color ********
+
+warning-color              warn-col          #cd0200
+warning-color-light     warn-col-light       #ba0000
+warning-color-border    warn-col-border      #730000
+ok-color                   ok-col            #374e0c
+button-text-color          btn-txt-col       #ffffff
+*/
 
 body {
     margin: 0;
@@ -57,7 +66,7 @@ body {
     display: table-cell;
     text-align: right;
     cursor: pointer;
-    color: #990000;
+    color: #cd0200; /*warn-col*/
 }
 
 .course-teacher-footer {
@@ -115,15 +124,15 @@ body {
 }
 
 .info-list .enroll-into-course {
-    color: #990000;
+    color: #cd0200; /*warn-col*/
 }
 
 .info-list .go-into-course {
-    color: #374e0c;
+    color: #374e0c; /*ok-col*/
 }
 
 .required {
-    color: red;
+    color: #cd0200; /*warn-col*/
 }
 
 .dismiss-messages {
@@ -158,20 +167,27 @@ body {
     border-right: solid lavender 2px;
 }
 
-.setting-menubar {
-    border-right: solid lavender 2px;
-}
-
 .person-course-content {
-    padding-left: 20px;
-}
-
-.setting-course-content {
     padding-left: 20px;
 }
 
 .person-main-top {
     border-bottom: solid lavender 2px;
+}
+
+.person-main-top .title {
+    padding-left: 25px;
+    margin-bottom: 10px;
+    font-size: large;
+    font-weight: bold;
+}
+
+.setting-menubar {
+    border-right: solid lavender 2px;
+}
+
+.setting-course-content {
+    padding-left: 20px;
 }
 
 .setting-main-top {
@@ -183,18 +199,27 @@ ul#person-menu {
     padding-left: 10px;
 }
 
-ul#person-menu > li > a {
+ul#person-menu > li {
     padding: 10px 0 10px 0;
-    display: table;
+}
+
+ul#person-menu > li > a {
     vertical-align: bottom;
 }
 
-ul#person-menu > li > a > span.icon,
-ul#person-menu > li > a > span.item {
+ul#person-menu > li > a > span.icon {
     min-width: 20px;
-    display: table-cell;
-    vertical-align: middle;
     padding-right: 5px;
+}
+
+ul#person-menu > li > a > span.item {
+}
+
+ul#person-menu > li.active > a,
+ul#person-menu > li.active > a:hover,
+ul#person-menu > li.active > a:focus {
+    color: darkblue;
+    font-weight: bolder;
 }
 
 ul#setting-menu > li {
@@ -204,13 +229,6 @@ ul#setting-menu > li {
 
 ul#setting-menu * {
     vertical-align: top;
-}
-
-ul#person-menu > li.active > a,
-ul#person-menu > li.active > a:hover,
-ul#person-menu > li.active > a:focus {
-    color: darkblue;
-    font-weight: bolder;
 }
 
 ul#setting-menu {
@@ -260,6 +278,11 @@ ul#setting-menu > li.active > a:focus {
     overflow: hidden;
 }
 
+.btn-file-container {
+    text-align: right;
+    padding: 8px;
+}
+
 .btn-file input[type=file] {
     position: absolute;
     top: 0;
@@ -281,6 +304,10 @@ ul#setting-menu > li.active > a:focus {
 
 .content {
     margin: 54px 50px 0 50px;
+}
+
+.content .row {
+    margin: auto 0 auto 0;
 }
 
 #navbar-main > div.content {
