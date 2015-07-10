@@ -1,4 +1,4 @@
-function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentService, FileUploader) {
+function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentService, FileUploader, lecturesCnt) {
     var BASE_URL_FILE_TO_STORAGE = 'resources/file/upload';
 
     $scope.lecture = $scope.lecture || {};
@@ -33,7 +33,7 @@ function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentServi
 
     var createLecture = function () {
         $scope.lecture.createDate = new Date();
-        $scope.lecture.orderNum = 1;
+        $scope.lecture.orderNum = lecturesCnt + 1;
         $scope.lecture.courseId = $stateParams.courseId;
         return CourseContentService.createLecture($scope.lecture);
     };
@@ -46,7 +46,7 @@ function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentServi
     $scope.ok = function () {
         createLecture().then(
             function (successResult) {
-                if (successResult.status == 200 || successResult.status == 201) {
+                if (successResult.responseStatus == 200 || successResult.responseStatus == 201) {
                     $state.go('person.course.content');
                 } else {
                     $scope.alertData.textAlert = successResult;

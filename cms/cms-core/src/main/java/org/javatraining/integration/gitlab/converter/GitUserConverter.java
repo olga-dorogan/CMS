@@ -18,17 +18,16 @@ import java.util.stream.Collectors;
  * Created by sergey on 12.06.15 at 21:21.
  * For more information you should send mail to codedealerb@gmail.com
  */
-public class PersonConverter {
+public class GitUserConverter {
     @Inject
-//    @EJB
     private PersonServiceImpl personService;
     private String rootMail;
     private GitLabNotificationServiceImpl gitLabNotification;
 
-    public PersonConverter() {
+    public GitUserConverter() {
     }
 
-    public PersonConverter(String rootMail) {
+    public GitUserConverter(String rootMail) {
         this.rootMail = rootMail;
         gitLabNotification = new GitLabNotificationServiceImpl();
     }
@@ -46,7 +45,7 @@ public class PersonConverter {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-//        gitLabNotification.sendUserProperties(rootMail, entity);
+        gitLabNotification.sendNotificationToEndPoint(rootMail, entity);
 
         return entity;
     }

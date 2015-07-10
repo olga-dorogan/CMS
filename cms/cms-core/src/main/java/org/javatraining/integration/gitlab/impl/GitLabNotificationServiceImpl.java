@@ -2,8 +2,8 @@ package org.javatraining.integration.gitlab.impl;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.javatraining.integration.gitlab.api.model.GitLabUser;
-import org.javatraining.notification.MailNotification;
-import org.javatraining.notification.NotificationService;
+import org.javatraining.notification.email.impl.MailNotification;
+import org.javatraining.notification.email.interfaces.NotificationService;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.ui.velocity.VelocityEngineUtils;
@@ -23,12 +23,12 @@ import java.util.Properties;
  */
 public class GitLabNotificationServiceImpl implements NotificationService<GitLabUser> {
     @Override
-    public void sendUserProperties(String subject, GitLabUser user) {
+    public void sendNotificationToEndPoint(String subject, GitLabUser user) {
         Properties props = new Properties();
         JSONParser parser = new JSONParser();
         try {
             JSONObject propertiesMarshaler = (JSONObject) parser.parse(new FileReader(
-                    "../resources/mail/mail_properties.json"));
+                    "mail/mail_properties"));
 
             props.put("mail.transport.protocol", propertiesMarshaler.get("mail.transport.protocol"));
             props.put("mail.host", propertiesMarshaler.get("mail.host"));

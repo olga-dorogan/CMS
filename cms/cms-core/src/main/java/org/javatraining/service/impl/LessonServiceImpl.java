@@ -9,6 +9,7 @@ import org.javatraining.entity.NewsEntity;
 import org.javatraining.model.LessonLinkVO;
 import org.javatraining.model.LessonVO;
 import org.javatraining.model.LessonWithDetailsVO;
+import org.javatraining.model.conversion.LessonConverter;
 import org.javatraining.model.conversion.LessonLinkConverter;
 import org.javatraining.service.LessonService;
 
@@ -18,6 +19,7 @@ import javax.ejb.Stateless;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
 import static org.javatraining.model.conversion.LessonConverter.*;
@@ -89,6 +91,18 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public LessonVO getByOrderNum(@NotNull Long courseId, @NotNull Long orderNum) {
         return convertEntityToVO(lessonDAO.getByOrderNum(courseId, orderNum));
+    }
+
+    @Nullable
+    @Override
+    public LessonWithDetailsVO getByOrderNum(@NotNull Long courseId, @NotNull Long orderNum, boolean withDetails) {
+        if (!withDetails) {
+            return (LessonWithDetailsVO) getByOrderNum(courseId, orderNum);
+        }
+        LessonEntity lessonEntity = lessonDAO.getByOrderNum(courseId, orderNum);
+        List<LessonLinkEntity> lessonLinksForLesson = lessonLinkDAO.getAllLessonLinksByLesson(lessonEntity);
+        LessonWithDetailsVO lessonWithDetailsVO = LessonConverter.convertEntitiesToVOWithDetails(lessonEntity, lessonLinksForLesson);
+        return lessonWithDetailsVO;
     }
 
     @Nullable

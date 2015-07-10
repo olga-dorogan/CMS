@@ -4,6 +4,7 @@ import org.javatraining.dao.exception.EntityIsAlreadyExistException;
 import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.entity.LessonEntity;
 import org.javatraining.entity.LessonLinkEntity;
+import org.javatraining.entity.util.Pair;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.*;
@@ -58,6 +59,7 @@ public class LessonLinkDAOTest {
                 .addPackage("org.assertj.core.util")
                 .addPackage("org.assertj.core.presentation")
                 .addPackage("org.assertj.core.internal")
+                .addClass(Pair.class)
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml");
         return war;
     }

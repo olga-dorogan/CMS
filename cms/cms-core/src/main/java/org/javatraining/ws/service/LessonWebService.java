@@ -60,7 +60,7 @@ public class LessonWebService {
     @Produces(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.STUDENT, AuthRole.TEACHER})
     public Response getLessonByOrderNum(@PathParam("course_id") Long courseId, @PathParam("order_num") Long orderNum) {
-        return Response.ok(lessonService.getByOrderNum(courseId, orderNum)).build();
+        return Response.ok(lessonService.getByOrderNum(courseId, orderNum, true)).build();
     }
 
     @PUT

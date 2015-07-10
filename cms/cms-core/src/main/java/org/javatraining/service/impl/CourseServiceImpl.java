@@ -1,13 +1,7 @@
 package org.javatraining.service.impl;
 
-import org.javatraining.dao.CourseDAO;
-import org.javatraining.dao.CoursePersonStatusDAO;
-import org.javatraining.dao.NewsDAO;
-import org.javatraining.dao.PersonDAO;
-import org.javatraining.entity.CourseEntity;
-import org.javatraining.entity.CoursePersonStatusEntity;
-import org.javatraining.entity.NewsEntity;
-import org.javatraining.entity.PersonEntity;
+import org.javatraining.dao.*;
+import org.javatraining.entity.*;
 import org.javatraining.entity.enums.CourseStatus;
 import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.model.*;
@@ -21,7 +15,10 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +38,9 @@ public class CourseServiceImpl implements CourseService {
 
     @EJB
     private PersonDAO personDAO;
+
+    @EJB
+    private LessonDAO lessonDAO;
 
     @Override
     public CourseVO saveCourse(@NotNull @Valid CourseVO courseVO) {
@@ -77,6 +77,33 @@ public class CourseServiceImpl implements CourseService {
             statusEntity.setCourse(courseEntity);
             coursePersonStatusDAO.save(statusEntity);
         }
+    }
+
+    @Override
+    public void createFromPrototype(@NotNull @Valid CourseWithDetailsVO courseWithDetailsVO, @NotNull CourseVO coursePrototype) {
+        save(courseWithDetailsVO);
+        CourseEntity courseEntity = courseDAO.getById(courseWithDetailsVO.getId());
+        List<LessonEntity> lessonsFromPrototype = lessonDAO.getByCourseId(coursePrototype.getId());
+        for (LessonEntity lesson : lessonsFromPrototype) {
+            LessonEntity lessonEntity = new LessonEntity(lesson);
+            lessonEntity.setCourse(courseEntity);
+            lessonDAO.save(lessonEntity);
+            // TODO: for every lesson do practices saving
+        }
+    }
+
+    @Override
+    public List<CourseVO> getAllStartedAfterDate(Date date) {
+        List<CourseEntity> courseEntities = courseDAO.getAllCoursesStartedAfterDate(new java.sql.Date(date.getTime()));
+        Set<CourseVO> courseVOs = CourseConverter.convertEntitiesToVOs(courseEntities);
+        return new ArrayList<>(courseVOs);
+    }
+
+    @Override
+    public List<CourseVO> getAllEndedBeforeDate(Date date) {
+        List<CourseEntity> courseEntities = courseDAO.getAllCoursesEndedBeforeDate(new java.sql.Date(date.getTime()));
+        Set<CourseVO> courseVOs = CourseConverter.convertEntitiesToVOs(courseEntities);
+        return new ArrayList<>(courseVOs);
     }
 
     @Override

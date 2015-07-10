@@ -9,6 +9,7 @@ import org.javatraining.model.PersonVO;
 import javax.annotation.Nullable;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,6 +26,16 @@ public interface CourseService {
     CourseVO removeCourse(@NotNull CourseVO courseVO);
 
     void save(@NotNull @Valid CourseWithDetailsVO courseVO);
+
+    void createFromPrototype(@NotNull @Valid CourseWithDetailsVO courseWithDetailsVO, @NotNull CourseVO coursePrototype);
+
+    @NotNull
+    @Valid
+    List<CourseVO> getAllStartedAfterDate(Date date);
+
+    @NotNull
+    @Valid
+    List<CourseVO> getAllEndedBeforeDate(Date date);
 
     @NotNull
     @Valid

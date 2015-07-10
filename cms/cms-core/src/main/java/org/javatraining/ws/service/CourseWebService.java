@@ -8,6 +8,9 @@ import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.CourseWithDetailsVO;
 import org.javatraining.model.PersonVO;
+import org.javatraining.notification.email.impl.MailNotification;
+import org.javatraining.notification.email.interfaces.NotificationService;
+import org.javatraining.notification.sms.SMSNotificationService;
 import org.javatraining.service.CourseService;
 import org.javatraining.service.PersonService;
 
@@ -20,6 +23,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,6 +32,9 @@ import java.util.List;
 @Stateless
 @Path("course")
 public class CourseWebService extends AbstractWebService<CourseVO> {
+    private static final Long NONE_COURSE_PROTOTYPE = -1L;
+    private static final String COURSES_STARTED_AFTER_DATE = "start_after";
+    private static final String COURSES_ENDED_BEFORE_DATE = "end_before";
     @EJB
     private CourseService courseService;
     @EJB
@@ -39,8 +46,22 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCourseList() {
-        List<CourseVO> courses = courseService.getAll();
+    public Response getCoursesList(@QueryParam("date") String curDate, @QueryParam("period") String period) {
+        List<CourseVO> courses;
+        if (curDate == null) {
+            courses = courseService.getAll();
+        } else {
+            switch (period) {
+                case COURSES_STARTED_AFTER_DATE:
+                    courses = courseService.getAllStartedAfterDate(new Date());
+                    break;
+                case COURSES_ENDED_BEFORE_DATE:
+                    courses = courseService.getAllEndedBeforeDate(new Date());
+                    break;
+                default:
+                    return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+        }
         return Response.ok(courses).build();
     }
 
@@ -60,12 +81,22 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
-    public Response createCourse(@Context UriInfo uriInfo, CourseWithDetailsVO courseVO) {
+    public Response createCourse(@Context UriInfo uriInfo, CourseWithDetailsVO courseVO,
+                                 @DefaultValue("-1") @QueryParam(value = "prototypeId") String prototypeId) {
         Response.ResponseBuilder r;
         try {
-            courseService.saveCourse(courseVO);
+            Long coursePrototypeId = Long.parseLong(prototypeId);
+            if (coursePrototypeId.equals(NONE_COURSE_PROTOTYPE)) {
+                courseService.save(courseVO);
+            } else {
+                CourseVO coursePrototype = new CourseVO();
+                coursePrototype.setId(coursePrototypeId);
+                courseService.createFromPrototype(courseVO, coursePrototype);
+            }
             String courseUri = uriInfo.getRequestUri().toString() + "/" + courseVO.getId();
             r = Response.created(new URI(courseUri)).entity(courseVO);
+        } catch (NumberFormatException e) {
+            r = Response.status(Response.Status.BAD_REQUEST);
         } catch (JSONException e) {
             r = Response.status(Response.Status.NOT_ACCEPTABLE);
         } catch (URISyntaxException e) {
@@ -76,21 +107,64 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
         return r.build();
     }
 
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Auth(roles = {AuthRole.TEACHER})
-    @Path("{course_id}")
-    public Response updateCourse(@PathParam("course_id") long courseId, @QueryParam("course_json") String courseJson) {
+    @POST
+    @Path("{course_id}/notification/sms")
+    @Consumes("application/json")
+    public Response sendSmsNotification(@PathParam("course_id") long id, String text) {
         Response.ResponseBuilder r;
         try {
-            CourseVO course = deserialize(courseJson);
-            course.setId(courseId);
-            courseService.updateCourse(course);
+            List<PersonVO> students = courseService.getAllPersonsFromCourseByRole(
+                    courseService.getCourseById(id), PersonRole.STUDENT);
+            SMSNotificationService smsService = new SMSNotificationService();
+            if (smsService.connectAndAuthToService()) {
+                students.stream().map(
+                        s -> personService.getPersonDescription(s.getId())
+                ).forEach(s -> smsService.sendNotificationToEndPoint(text, s));
+            } else {
+                r = Response.status(Response.Status.BAD_GATEWAY);
+            }
             r = Response.ok();
         } catch (JSONException e) {
             r = Response.status(Response.Status.NOT_ACCEPTABLE);
         }
 
+        return r.build();
+    }
+
+    @POST
+    @Path("{course_id}/notification/email")
+    @Consumes("application/json")
+    public Response sendEmailNotification(@PathParam("course_id") long id, String subject) {
+        Response.ResponseBuilder r;
+        try {
+            List<PersonVO> students = courseService.getAllPersonsFromCourseByRole(
+                    courseService.getCourseById(id), PersonRole.STUDENT);
+            SMSNotificationService smsService = new SMSNotificationService();
+            NotificationService<PersonVO> emailService = new MailNotification();
+            students.parallelStream().forEach(
+                    s -> emailService.sendNotificationToEndPoint(subject, s)
+            );
+            r = Response.ok();
+        } catch (JSONException e) {
+            r = Response.status(Response.Status.NOT_ACCEPTABLE);
+        }
+
+        return r.build();
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Auth(roles = {AuthRole.TEACHER})
+    @Path("{course_id}")
+    public Response updateCourse(@PathParam("course_id") long courseId, CourseVO courseVO) {
+        Response.ResponseBuilder r;
+        try {
+            courseVO.setId(courseId);
+            courseService.updateCourse(courseVO);
+            r = Response.ok();
+        } catch (JSONException e) {
+            r = Response.status(Response.Status.NOT_ACCEPTABLE);
+        }
         return r.build();
     }
 
@@ -105,7 +179,10 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
             courseService.removeCourse(course);
             r = Response.ok();
         } catch (Exception e) {
-            r = Response.noContent();
+            r = Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .type(MediaType.TEXT_HTML_TYPE)
+                    .entity(String.format("Exception: %s, description: %s", e.getClass().getName(), e.getMessage()));
         }
         return r.build();
     }

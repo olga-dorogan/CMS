@@ -2,12 +2,13 @@ package org.javatraining.model.conversion;
 
 import org.javatraining.entity.CourseEntity;
 import org.javatraining.entity.LessonEntity;
+import org.javatraining.entity.LessonLinkEntity;
+import org.javatraining.model.LessonLinkVO;
 import org.javatraining.model.LessonVO;
+import org.javatraining.model.LessonWithDetailsVO;
 
 import javax.validation.constraints.NotNull;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by asudak on 6/24/15.
@@ -15,13 +16,16 @@ import java.util.Set;
 public class LessonConverter {
     public static LessonVO convertEntityToVO(LessonEntity lessonEntity) {
         LessonVO lessonVO = new LessonVO();
-        lessonVO.setId(lessonEntity.getId());
-        lessonVO.setCreateDate(lessonEntity.getCreateDate());
-        lessonVO.setContent(lessonEntity.getDescription());
-        lessonVO.setTopic(lessonEntity.getTopic());
-        lessonVO.setOrderNum(lessonEntity.getOrderNum());
-        lessonVO.setCourseId(lessonEntity.getCourse().getId());
+        fillLessonVOFromEntity(lessonVO, lessonEntity);
         return lessonVO;
+    }
+
+    public static LessonWithDetailsVO convertEntitiesToVOWithDetails(LessonEntity lessonEntity, List<LessonLinkEntity> linkEntities) {
+        LessonWithDetailsVO lessonWithDetailsVO = new LessonWithDetailsVO();
+        fillLessonVOFromEntity(lessonWithDetailsVO, lessonEntity);
+        Set<LessonLinkVO> lessonLinkVOs = LessonLinkConverter.convertEntitiesToVOs(linkEntities);
+        lessonWithDetailsVO.setLinks(new ArrayList<>(lessonLinkVOs));
+        return lessonWithDetailsVO;
     }
 
     public static LessonEntity convertVOToEntity(LessonVO lessonVO) {
@@ -51,5 +55,14 @@ public class LessonConverter {
             lessonEntities.add(convertVOToEntity(LessonVO));
         }
         return lessonEntities;
+    }
+
+    private static void fillLessonVOFromEntity(LessonVO lessonVO, LessonEntity lessonEntity) {
+        lessonVO.setId(lessonEntity.getId());
+        lessonVO.setCreateDate(lessonEntity.getCreateDate());
+        lessonVO.setContent(lessonEntity.getDescription());
+        lessonVO.setTopic(lessonEntity.getTopic());
+        lessonVO.setOrderNum(lessonEntity.getOrderNum());
+        lessonVO.setCourseId(lessonEntity.getCourse().getId());
     }
 }

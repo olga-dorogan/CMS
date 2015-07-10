@@ -34,6 +34,10 @@ public interface LessonService {
 
     @Nullable
     @Valid
+    LessonWithDetailsVO getByOrderNum(@NotNull Long courseId, @NotNull Long orderNum, boolean withDetails);
+
+    @Nullable
+    @Valid
     LessonVO updateByOrderNum(@NotNull Long courseId, @NotNull Long orderNum, LessonVO lesson);
 
     void deleteByOrderNum(@NotNull @Valid Long courseId, @NotNull @Valid Long orderNum);

@@ -1,6 +1,6 @@
 <div class="person-course-add-files">
     <div>
-        <table class="table">
+        <table class="table person-course-link">
             <thead>
             <tr>
                 <th class="col-md-1 text-center">N</th>
@@ -14,7 +14,7 @@
                 <td><input type="text" ng-model="lecture.links[$index].orderNum"
                            class="person-add-files-input text-center"></td>
                 <td><input type="text" ng-model="lecture.links[$index].description" class="person-add-files-input"></td>
-                <td class="text-left"><a href="{{ lectLink.link }}">перейти</a></td>
+                <td class="text-left"><a target="_blank" href="{{ lectLink.link }}">перейти</a></td>
                 <td nowrap class="text-right">
                     <button type="button" class="btn btn-danger btn-xs person-course-add-files-xs-one-btn"
                             ng-click="removeLink(lectLink)">
@@ -23,16 +23,16 @@
                 </td>
             </tr>
             <tr>
-                <td class="vert-align-middle">
+                <td>
                     <input type="text" ng-model="newLink.orderNum" class="person-add-files-input input-sm text-center">
                 </td>
-                <td class="vert-align-middle">
+                <td>
                     <input type="text" ng-model="newLink.description" class="person-add-files-input input-sm">
                 </td>
-                <td class="vert-align-middle">
+                <td>
                     <input type="text" ng-model="newLink.link" class="person-add-files-input input-sm">
                 </td>
-                <td class="text-right vert-align-middle">
+                <td class="vert-align-middle text-right">
                     <button type="button" class="btn btn-success btn-xs person-course-add-files-xs-one-btn"
                             ng-click="addLink()">
                         <span class="glyphicon glyphicon-plus"></span> Добавить

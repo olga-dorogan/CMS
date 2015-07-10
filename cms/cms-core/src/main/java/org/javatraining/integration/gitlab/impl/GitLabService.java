@@ -2,7 +2,7 @@ package org.javatraining.integration.gitlab.impl;
 
 import org.javatraining.integration.gitlab.api.interfaces.GitLabAPIClient;
 import org.javatraining.integration.gitlab.api.model.*;
-import org.javatraining.integration.gitlab.converter.PersonConverter;
+import org.javatraining.integration.gitlab.converter.GitUserConverter;
 import org.javatraining.integration.gitlab.exception.ResourceNotFoundException;
 import org.javatraining.integration.gitlab.exception.UserRequiredPropertiesIsNotComparable;
 import org.javatraining.model.PersonVO;
@@ -34,29 +34,29 @@ public class GitLabService {
     }
 
     public Collection<PersonVO> getAllPersons() {
-        return new PersonConverter().convertAllEntities(gitLabClient.getAllUsers(pToken, ROOT));
+        return new GitUserConverter().convertAllEntities(gitLabClient.getAllUsers(pToken, ROOT));
     }
 
     public PersonVO getPerson(String email) {
         GitLabUser user = gitLabClient.getUser(pToken, ROOT, email).get(0);
 
-        return new PersonConverter().convertGitLabUserEntity(user);
+        return new GitUserConverter().convertGitLabUserEntity(user);
     }
 
     public boolean addPerson(PersonVO personVO) {
-        Response.Status status = gitLabClient.createUser(pToken, ROOT, new PersonConverter(params.getEmail()).convertPerson(personVO));
+        Response.Status status = gitLabClient.createUser(pToken, ROOT, new GitUserConverter(params.getEmail()).convertPerson(personVO));
 
         return status.getStatusCode() == 201;
     }
 
 
     public boolean updatePerson(PersonVO personVO) {
-        PersonVO person = new PersonConverter().convertGitLabUserEntity(
+        PersonVO person = new GitUserConverter().convertGitLabUserEntity(
                 gitLabClient.getUser(pToken, ROOT, personVO.getEmail()).get(0));
 
         try {
-            person = new PersonConverter().mergePersons(person, personVO);
-            Response.Status status = gitLabClient.updateUser(pToken, ROOT, new PersonConverter().convertPerson(person));
+            person = new GitUserConverter().mergePersons(person, personVO);
+            Response.Status status = gitLabClient.updateUser(pToken, ROOT, new GitUserConverter().convertPerson(person));
             return status.getStatusCode() == 200;//FIXME check 200 or 201
         } catch (UserRequiredPropertiesIsNotComparable e) {
             System.err.println(e.getMessage());
@@ -84,7 +84,7 @@ public class GitLabService {
 
     public boolean addProjectMember(PersonVO personVO, Integer projId) throws ResourceNotFoundException {
         GitLabProjectMember projectMember =
-                (GitLabProjectMember) new PersonConverter().convertPerson(personVO);
+                (GitLabProjectMember) new GitUserConverter().convertPerson(personVO);
         projectMember.setAccessLevel(GitLabAccessLevel.Reporter);
         Response.Status status = gitLabClient.addProjectTeamMember(pToken, ROOT, projectMember, projId);
 
@@ -98,7 +98,7 @@ public class GitLabService {
     public boolean removeProjectMember(PersonVO personVO, GitLabProject project) throws ResourceNotFoundException {
         PersonVO gitLabEntityVO = getPerson(personVO.getEmail());
         GitLabProjectMember projectMember =
-                (GitLabProjectMember) new PersonConverter().convertPerson(gitLabEntityVO);
+                (GitLabProjectMember) new GitUserConverter().convertPerson(gitLabEntityVO);
 
         Response.Status status = gitLabClient.removeProjectTeamMember(pToken, ROOT, project.getId(), personVO.getId());
 

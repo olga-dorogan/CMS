@@ -1,6 +1,8 @@
-package org.javatraining.notification;
+package org.javatraining.notification.email;
 
 import org.javatraining.model.PersonVO;
+import org.javatraining.notification.email.impl.MailNotification;
+import org.javatraining.notification.email.interfaces.NotificationService;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -16,6 +18,6 @@ public class NotificationServiceTest {
         NotificationService<PersonVO> mail = new MailNotification();
         PersonVO vo = new PersonVO((long) 1);
         vo.setEmail("valet12353@gmail.com");//test email
-        mail.sendUserProperties("testSubject", vo);
+        mail.sendNotificationToEndPoint("testSubject", vo);
     }
 }

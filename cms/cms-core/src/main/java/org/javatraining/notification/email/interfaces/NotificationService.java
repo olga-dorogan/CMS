@@ -1,4 +1,4 @@
-package org.javatraining.notification;
+package org.javatraining.notification.email.interfaces;
 
 import org.javatraining.model.PersonVO;
 
@@ -9,5 +9,5 @@ import org.javatraining.model.PersonVO;
  */
 public interface NotificationService<T extends PersonVO> {
 
-    public void sendUserProperties(String subject, T user);
+    public void sendNotificationToEndPoint(String subject, T user);
 }

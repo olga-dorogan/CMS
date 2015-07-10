@@ -66,42 +66,10 @@ function PersonService(Restangular) {
         return Restangular.one("resources/person", personId).all("course").getList();
     };
 
-
-    this.getLinkNameForStatus = function (status) {
-        var msg = 'Подписаться';
-        switch (status) {
-            case "REQUESTED":
-                msg = 'Перейти к курсу';
-                break;
-            case "SIGNED":
-                msg = 'Перейти к курсу';
-                break;
-            case "UNSIGNED":
-                msg = 'Подписаться';
-                break;
-            default:
-                msg = 'Действия запрещены';
-        }
-        return msg;
-    };
-
     this.getCoursesForPersonCap = function () {
         return [
             {id: 2, name: "Java SE", description: "Description for Java SE"}
         ];
     };
 
-    this.updatePicture = function (image) {
-        var PersonDescription = Person.get($window.localStorage['id']).one("description");
-        return PersonDescription.put({
-            "personalLogo": image
-        });
-    };
-
-    this.removePicture = function () {
-        var PersonDescription = Person.get($window.localStorage['id']).one("description");
-        return PersonDescription.put({
-            "personalLogo": null
-        });
-    }
 }

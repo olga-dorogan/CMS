@@ -1,7 +1,8 @@
-package org.javatraining.notification;
+package org.javatraining.notification.email.impl;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.javatraining.model.PersonVO;
+import org.javatraining.notification.email.interfaces.NotificationService;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.ui.velocity.VelocityEngineUtils;
@@ -31,12 +32,12 @@ public class MailNotification implements NotificationService<PersonVO> {
     }
 
     @Override
-    public void sendUserProperties(String subject, PersonVO user) {
+    public void sendNotificationToEndPoint(String subject, PersonVO user) {
         Properties props = new Properties();
         JSONParser parser = new JSONParser();
         try {
             JSONObject propertiesMarshaler = (JSONObject) parser.parse(new FileReader(
-                    "../resources/mail/mail_properties.json"));
+                    "mail/mail_properties"));
 
             props.put("mail.transport.protocol", propertiesMarshaler.get("mail.transport.protocol"));
             props.put("mail.host", propertiesMarshaler.get("mail.host"));
