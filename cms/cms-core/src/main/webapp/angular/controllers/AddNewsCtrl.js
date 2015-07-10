@@ -1,12 +1,10 @@
-function AddNewsCtrl($scope,$stateParams,NewsService, news) {
+function AddNewsCtrl($scope, $stateParams, NewsService) {
+    $scope.news = {};
 
-    this.createNews = function () {
+    $scope.createNews = function () {
         $scope.news.date = new Date();
-        $scope.news.courseId = $stateParams.courseId;
+        console.log("controller: create news");
 
-        return NewsService.createNews($scope.news);
+        NewsService.createNews($scope.news, $stateParams.courseId);
     };
-
-
-    $scope.news = news;
 }

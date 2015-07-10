@@ -20,8 +20,9 @@ function NewsService(Restangular) {
     };
 
 
-    this.createNews = function (newNews) {
-        return Restangular.one(restBase, newNews.courseId).all('news').getList().post(newNews);
+    this.createNews = function (newNews, courseId) {
+        console.log("service: create news");
+        return Restangular.one(restBase, courseId).all('news').post(newNews);
     };
 
 
