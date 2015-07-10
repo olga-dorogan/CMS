@@ -143,7 +143,7 @@ angular.module('myApp.person', ['ui.router'])
 
             .state('person.course.addNews', {
                 url: '/addNews',
-                templateUrl: 'angular/views/person-course/teacher/AddNews.html',
+                templateUrl: 'angular/views/person-course/teacher/addNewNews.html',
                 controller: 'AddNewsCtrl'
             })
             .state('person.course.progress', {
