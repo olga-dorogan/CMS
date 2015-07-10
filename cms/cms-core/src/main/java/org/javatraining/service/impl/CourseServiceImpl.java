@@ -202,6 +202,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
 
+
     public List<NewsVO> getAllPersonsNews(@NotNull Long personId) {
 
         PersonEntity personEntity = personDAO.getAllPersons().stream()

@@ -73,6 +73,8 @@ public interface CourseService {
     @Valid
     List<NewsVO> getNewsByCourseId(@NotNull Long courseId);
 
+
+
     @Nullable
     @Valid
     NewsVO getNewsByIdFromCourse(@NotNull Long courseId, @NotNull Long newsId);

@@ -48,8 +48,16 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
     @Path("{course_id}/{news_id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.STUDENT, AuthRole.TEACHER})
-    public Response getNewsByOrderNum(@PathParam("course_id") Long courseId, @PathParam("news_id") Long news_id) {
+    public Response getNewsById(@PathParam("course_id") Long courseId, @PathParam("news_id") Long news_id) {
         return Response.ok(courseService.getNewsByIdFromCourse(courseId, news_id)).build();
+    }
+
+    @GET
+    @Path("{course_id}/news")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Auth(roles = {AuthRole.STUDENT, AuthRole.TEACHER})
+    public Response getNewsByCourseId(@PathParam("course_id") Long courseId) {
+        return Response.ok(courseService.getNewsByCourseId(courseId)).build();
     }
 
 

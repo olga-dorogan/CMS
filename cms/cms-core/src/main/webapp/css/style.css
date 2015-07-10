@@ -31,6 +31,12 @@ body {
     font-size: 16px;
 }
 
+
+.title-in-list {
+    margin-left: 25px;
+    font-size: 16px;
+    font-weight: bolder;
+}
 .date-format {
     text-align: right;
     color: #9c9c9c;

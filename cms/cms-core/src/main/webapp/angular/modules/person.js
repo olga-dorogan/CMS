@@ -119,6 +119,22 @@ angular.module('myApp.person', ['ui.router'])
                     }
                 }
             })
+
+            .state('person.course.newsContent', {
+                url: '/news-content',
+                templateUrl: 'angular/views/person-course/newsContent.html',
+                controller: 'NewsCtrl',
+                resolve: {
+                    newsService: 'NewsService',
+                    news: function ($stateParams, newsService) {
+                        var promise = newsService.getNewsFromCourse($stateParams.courseId);
+                        promise = promise.then(function (news) {
+                            return news;
+                        });
+                        return promise;
+                    }
+                }
+            })
             .state('person.course.addLecture', {
                 url: '/addLecture',
                 templateUrl: 'angular/views/person-course/teacher/addLecture.html',
@@ -126,8 +142,8 @@ angular.module('myApp.person', ['ui.router'])
             })
 
             .state('person.course.addNews', {
-                url: '/addLecture',
-                templateUrl: 'angular/views/person-course/teacher/addNews.html',
+                url: '/addNews',
+                templateUrl: 'angular/views/person-course/teacher/AddNews.html',
                 controller: 'AddNewsCtrl'
             })
             .state('person.course.progress', {
@@ -148,8 +164,11 @@ angular.module('myApp.person', ['ui.router'])
             })
     }])
     .service('PersonService', PersonService)
+    .service('NewsService', NewsService)
     .service('CourseService', CourseService)
+    .service('AddNewsCtrl', AddNewsCtrl)
     .service('CourseContentService', CourseContentService)
+    .controller('NewsCtrl', NewsCtrl)
     .controller('PersonCtrl', PersonCtrl)
     .controller('AddCourseCtrl', AddCourseCtrl)
     .controller('DatepickerCtrl', DatepickerCtrl)

@@ -1,0 +1,12 @@
+<div>
+    <ol>
+        <li ng-repeat="new in news">
+            <div class="title-in-list">{{new.title}}</div>
+            <div class="description">{{new.content}}</div>
+
+        </li>
+    </ol>
+
+    <button ng-show="isTeacher()" class="btn btn-default" ui-sref="person.course.addNews">Добавить новость</button>
+
+</div>
