@@ -35,7 +35,6 @@ public class NewsConverter {
     }
 
     public static Set<NewsVO> convertEntitiesToVOs(@NotNull Collection<NewsEntity> newsEntities) {
-        System.out.println(newsEntities.size());
         Set<NewsVO> news = new HashSet<>(newsEntities.size());
         for (NewsEntity newsEntity : newsEntities) {
             news.add(convertEntityToVO(newsEntity));

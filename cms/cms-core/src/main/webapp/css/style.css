@@ -155,6 +155,13 @@ h1 {
     color: #cd0200; /*warn-col*/
 }
 
+
+.info-list .remove-course {
+    color: #cd0200; /*warn-col*/
+    cursor: pointer;
+    padding-right: 10px;
+}
+
 .info-list .go-into-course {
     color: #374e0c; /*ok-col*/
 }
