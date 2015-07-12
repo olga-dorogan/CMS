@@ -9,8 +9,16 @@ public class PracticeLessonVO {
     private Long id;
     @NotNull
     private String task;
+    @NotNull
+    private Long orderNum;
 
     public PracticeLessonVO() {
+    }
+
+    public PracticeLessonVO(Long id, String task, Long orderNum) {
+        this.task = task;
+        this.id = id;
+        this.orderNum = orderNum;
     }
 
     public PracticeLessonVO(Long id, String task) {
@@ -59,5 +67,13 @@ public class PracticeLessonVO {
                 "id=" + id +
                 ", task='" + task + '\'' +
                 '}';
+    }
+
+    public Long getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Long orderNum) {
+        this.orderNum = orderNum;
     }
 }

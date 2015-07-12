@@ -3,14 +3,18 @@ package org.javatraining.service.impl;
 import org.javatraining.dao.LessonDAO;
 import org.javatraining.dao.LessonLinkDAO;
 import org.javatraining.dao.NewsDAO;
+import org.javatraining.dao.PracticeLessonDAO;
 import org.javatraining.entity.LessonEntity;
 import org.javatraining.entity.LessonLinkEntity;
 import org.javatraining.entity.NewsEntity;
+import org.javatraining.entity.PracticeLessonEntity;
 import org.javatraining.model.LessonLinkVO;
 import org.javatraining.model.LessonVO;
 import org.javatraining.model.LessonWithDetailsVO;
+import org.javatraining.model.PracticeLessonVO;
 import org.javatraining.model.conversion.LessonConverter;
 import org.javatraining.model.conversion.LessonLinkConverter;
+import org.javatraining.model.conversion.PracticeLessonConverter;
 import org.javatraining.service.LessonService;
 
 import javax.annotation.Nullable;
@@ -32,11 +36,12 @@ public class LessonServiceImpl implements LessonService {
 
     @EJB
     private NewsDAO newsDAO;
-
     @EJB
     private LessonDAO lessonDAO;
     @EJB
     private LessonLinkDAO lessonLinkDAO;
+    @EJB
+    private PracticeLessonDAO practiceLessonDAO;
 
     @Override
     public void save(@NotNull @Valid LessonVO lessonVO) {
@@ -72,6 +77,12 @@ public class LessonServiceImpl implements LessonService {
             LessonLinkEntity linkEntity = LessonLinkConverter.convertVOToEntity(linkVO);
             lessonLinkDAO.save(linkEntity);
             linkVO.setId(lessonEntity.getId());
+        }
+        for (PracticeLessonVO practiceVO : lessonVO.getPractices()) {
+            PracticeLessonEntity practiceEntity = PracticeLessonConverter.convertVOToEntity(practiceVO);
+            practiceEntity.setLesson(lessonEntity);
+            practiceLessonDAO.save(practiceEntity);
+            practiceVO.setId(practiceEntity.getId());
         }
     }
 

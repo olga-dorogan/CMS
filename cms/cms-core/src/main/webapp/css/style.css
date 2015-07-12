@@ -41,12 +41,12 @@ body {
     font-size: 16px;
 }
 
-
 .title-in-list {
     margin-left: 25px;
     font-size: 16px;
     font-weight: bolder;
 }
+
 .date-format {
     text-align: right;
     color: #9c9c9c;
@@ -154,7 +154,6 @@ h1 {
 .info-list .enroll-into-course {
     color: #cd0200; /*warn-col*/
 }
-
 
 .info-list .remove-course {
     color: #cd0200; /*warn-col*/
@@ -286,7 +285,8 @@ ul#setting-menu > li.active > a:focus {
     padding-top: 10px;
 }
 
-.person-course-add-files {
+.person-course-add-files,
+.person-course-add-practices {
     outline: solid lavender 1px;
     padding: 5px;
 }
@@ -299,11 +299,29 @@ ul#setting-menu > li.active > a:focus {
     width: 90%;
 }
 
+.person-course-link,
+.person-course-link > tbody > tr > td ,
+.person-course-practice,
+.person-course-practice > tbody > tr > td {
+}
+
 .person-course-link > tbody > tr > td.vert-align-middle {
     vertical-align: middle;
 }
 
 .person-add-files-input {
+    width: 98%;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+.person-course-practice > tbody > tr > td > textarea {
+    width: 98%;
+    padding: 1%;
+    resize: vertical;
+}
+
+.person-course-practice > tbody > tr > td > input {
     width: 98%;
     padding: 1%;
 }

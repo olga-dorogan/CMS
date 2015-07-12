@@ -21,6 +21,9 @@ public class PracticeLessonEntity implements Serializable, GenericEntity {
     @Column(name = "task", nullable = false, insertable = true, updatable = true, length = 255)
     private String task;
 
+    @Column(name = "orderNum", nullable = true)
+    private Long orderNum;
+
     @ManyToOne(cascade = {})
     @JoinColumn(name = "lesson_id", nullable = false, insertable = true, updatable = true)
     private LessonEntity lesson;
@@ -34,6 +37,12 @@ public class PracticeLessonEntity implements Serializable, GenericEntity {
     public PracticeLessonEntity(String task, LessonEntity lesson) {
         this.task = task;
         this.lesson = lesson;
+    }
+
+    public PracticeLessonEntity(Long id, String task, Long orderNum) {
+        this.id = id;
+        this.task = task;
+        this.orderNum = orderNum;
     }
 
     public Long getId() {
@@ -51,6 +60,15 @@ public class PracticeLessonEntity implements Serializable, GenericEntity {
     public void setTask(String task) {
         this.task = task;
     }
+
+    public Long getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Long orderNum) {
+        this.orderNum = orderNum;
+    }
+
 
     public LessonEntity getLesson() {
         return lesson;
@@ -87,5 +105,4 @@ public class PracticeLessonEntity implements Serializable, GenericEntity {
         result = 31 * result + (lesson != null ? lesson.hashCode() : 0);
         return result;
     }
-
 }

@@ -178,22 +178,9 @@ angular.module('myApp.person', ['ui.router'])
                 templateUrl: ''
             })
             .state('person.course.addLecture', {
-                url: '/addLecture',
+                url: '/addLecture/:lectureOrderNum',
                 templateUrl: 'angular/views/person-course/teacher/addLecture.html',
-                controller: 'AddLectureCtrl',
-                resolve: {
-                    courseContentService: 'CourseContentService',
-                    lecturesCnt: function ($stateParams, courseContentService) {
-                        var promise = courseContentService.getLectures($stateParams.courseId);
-                        promise = promise.then(function (lectures) {
-                            if (lectures.responseStatus != 200) {
-                                return null;
-                            }
-                            return lectures.length;
-                        });
-                        return promise;
-                    }
-                }
+                controller: 'AddLectureCtrl'
             })
             .state('person.course.lecture', {
                 url: '/lecture/:lectureId',

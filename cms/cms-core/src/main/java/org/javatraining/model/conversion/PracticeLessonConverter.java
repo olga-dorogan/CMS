@@ -8,13 +8,11 @@ import org.javatraining.model.PracticeLessonVO;
  */
 public class PracticeLessonConverter {
     public static PracticeLessonVO convertEntityToVO(PracticeLessonEntity entity) {
-        return new PracticeLessonVO(entity.getId(), entity.getTask());
+        return new PracticeLessonVO(entity.getId(), entity.getTask(), entity.getOrderNum());
     }
 
     public static PracticeLessonEntity convertVOToEntity(PracticeLessonVO lessonVO) {
-        PracticeLessonEntity lessonEntity = new PracticeLessonEntity();
-        lessonEntity.setId(lessonVO.getId());
-        lessonEntity.setTask(lessonVO.getTask());
+        PracticeLessonEntity lessonEntity = new PracticeLessonEntity(lessonVO.getId(), lessonVO.getTask(), lessonVO.getOrderNum());
         return lessonEntity;
     }
 }

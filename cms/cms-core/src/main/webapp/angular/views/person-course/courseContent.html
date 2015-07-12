@@ -1,8 +1,9 @@
 <div>
     <ol>
-        <li ng-repeat="lecture in lectures">
+        <li ng-repeat="lecture in lectures | orderBy : 'orderNum' ">
             <a ui-sref="person.course.lecture({lectureId:lecture.id})">{{lecture.topic}}</a>
         </li>
     </ol>
-    <button ng-show="isTeacher()" class="btn btn-default" ui-sref="person.course.addLecture">Добавить лекцию</button>
+    <button ng-show="isTeacher()" class="btn btn-default" ui-sref="person.course.addLecture({lectureOrderNum:lectures.length+1})">
+        Добавить лекцию</button>
 </div>

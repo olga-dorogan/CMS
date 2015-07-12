@@ -7,6 +7,7 @@ import java.util.List;
  */
 public class LessonWithDetailsVO extends LessonVO {
     private List<LessonLinkVO> links;
+    private List<PracticeLessonVO> practices;
 
     public LessonWithDetailsVO() {
         super();
@@ -18,5 +19,13 @@ public class LessonWithDetailsVO extends LessonVO {
 
     public void setLinks(List<LessonLinkVO> links) {
         this.links = links;
+    }
+
+    public List<PracticeLessonVO> getPractices() {
+        return practices;
+    }
+
+    public void setPractices(List<PracticeLessonVO> practices) {
+        this.practices = practices;
     }
 }

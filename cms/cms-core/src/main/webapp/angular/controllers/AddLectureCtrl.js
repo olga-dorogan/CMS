@@ -1,24 +1,32 @@
-function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentService, FileUploader, lecturesCnt) {
+function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentService, FileUploader) {
     var BASE_URL_FILE_TO_STORAGE = 'resources/file/upload';
 
     $scope.lecture = $scope.lecture || {};
 
-    $scope.isValidLecture = function (lectureForm) {
-        return !lectureForm.$invalid && areValidLinks();
+    $scope.isLectureValid = function (lectureForm) {
+        return !lectureForm.$invalid && areLinksValid() && arePracticesValid();
     };
 
-    var areValidLinks = function () {
+    var areLinksValid = function () {
+        return areOrderNumsValid($scope.lecture.links);
+    };
+
+    var arePracticesValid = function () {
+        return areOrderNumsValid($scope.lecture.practices);
+    };
+
+    var areOrderNumsValid = function (ar) {
         var valid = true;
-        for (var i = 0; i < $scope.lecture.links.length; i++) {
-            if ($scope.lecture.links[i].orderNum == undefined) {
+        for (var i = 0; i < ar.length; i++) {
+            if (ar[i].orderNum == undefined) {
                 valid = false;
                 break;
             }
         }
         if (valid) {
-            for (var i = 0; i < $scope.lecture.links.length; i++) {
-                for (var j = i + 1; j < $scope.lecture.links.length; j++) {
-                    if ($scope.lecture.links[i].orderNum == $scope.lecture.links[j].orderNum) {
+            for (var i = 0; i < ar.length; i++) {
+                for (var j = i + 1; j < ar.length; j++) {
+                    if (ar[i].orderNum == ar[j].orderNum) {
                         valid = false;
                         break;
                     }
@@ -33,7 +41,7 @@ function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentServi
 
     var createLecture = function () {
         $scope.lecture.createDate = new Date();
-        $scope.lecture.orderNum = lecturesCnt + 1;
+        $scope.lecture.orderNum = $stateParams.lectureOrderNum;
         $scope.lecture.courseId = $stateParams.courseId;
         return CourseContentService.createLecture($scope.lecture);
     };
@@ -133,6 +141,31 @@ function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentServi
         for (var i = 0; i < $scope.lecture.links.length; i++) {
             if (angular.equals($scope.lecture.links[i], linkToRemove)) {
                 $scope.lecture.links.splice(i, 1);
+                for (var j = i; j < $scope.lecture.links.length; j++) {
+                    $scope.lecture.links[j].orderNum = $scope.lecture.links[j].orderNum - 1;
+                }
+                $scope.newLink.orderNum = $scope.newLink.orderNum - 1;
+                break;
+            }
+        }
+    };
+
+    // practice tasks operations
+    $scope.lecture.practices = $scope.lecture.practices || [];
+    $scope.newPractice = $scope.newPractice || {'orderNum': $scope.lecture.practices.length + 1};
+    $scope.addPractice = function () {
+        $scope.lecture.practices.push(angular.copy($scope.newPractice));
+        $scope.newPractice.orderNum = $scope.lecture.practices.length + 1;
+        $scope.newPractice.task = '';
+    };
+    $scope.removePractice = function (practiceToRemove) {
+        for (var i = 0; i < $scope.lecture.practices.length; i++) {
+            if (angular.equals($scope.lecture.practices[i], practiceToRemove)) {
+                $scope.lecture.practices.splice(i, 1);
+                for (var j = i; j < $scope.lecture.practices.length; j++) {
+                    $scope.lecture.practices[j].orderNum = $scope.lecture.practices[j].orderNum - 1;
+                }
+                $scope.newPractice.orderNum = $scope.newPractice.orderNum - 1;
             }
         }
     };

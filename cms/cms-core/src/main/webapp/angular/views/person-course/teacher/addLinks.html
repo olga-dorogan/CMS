@@ -11,7 +11,7 @@
             </thead>
             <tbody>
             <tr ng-repeat="lectLink in lecture.links" class="vert-align-middle">
-                <td><input type="text" ng-model="lecture.links[$index].orderNum"
+                <td class="vert-align-middle"><input type="text" ng-model="lecture.links[$index].orderNum"
                            class="person-add-files-input text-center"></td>
                 <td><input type="text" ng-model="lecture.links[$index].description" class="person-add-files-input"></td>
                 <td class="text-left"><a target="_blank" href="{{ lectLink.link }}">перейти</a></td>
@@ -23,14 +23,14 @@
                 </td>
             </tr>
             <tr>
-                <td>
-                    <input type="text" ng-model="newLink.orderNum" class="person-add-files-input input-sm text-center">
+                <td class="vert-align-middle">
+                    <input type="text" ng-model="newLink.orderNum" class="person-add-files-input text-center">
                 </td>
                 <td>
-                    <input type="text" ng-model="newLink.description" class="person-add-files-input input-sm">
+                    <input type="text" ng-model="newLink.description" class="person-add-files-input">
                 </td>
-                <td>
-                    <input type="text" ng-model="newLink.link" class="person-add-files-input input-sm">
+                <td class="vert-align-middle">
+                    <input type="text" ng-model="newLink.link" class="person-add-files-input">
                 </td>
                 <td class="vert-align-middle text-right">
                     <button type="button" class="btn btn-success btn-xs person-course-add-files-xs-one-btn"
