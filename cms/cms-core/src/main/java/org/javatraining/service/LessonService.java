@@ -30,6 +30,10 @@ public interface LessonService {
 
     @Nullable
     @Valid
+    Set<LessonWithDetailsVO> getWithPracticesByCourseId(@NotNull Long courseId);
+
+    @Nullable
+    @Valid
     LessonVO getByOrderNum(@NotNull Long courseId, @NotNull Long orderNum);
 
     @Nullable

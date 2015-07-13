@@ -113,6 +113,16 @@ h1 {
     text-align: right;
 }
 
+.person-course-hide-practices {
+    margin: 0;
+}
+
+.person-course-hide-practices > span,
+.person-course-hide-practices > input[type="checkbox"] {
+    vertical-align: middle;
+    margin: 0;
+}
+
 #lecture-content-header {
     width: 100%;
     cursor: pointer;
@@ -137,7 +147,6 @@ h1 {
 }
 
 #lecture-content {
-    margin-top: 10px;
 }
 
 #lecture-content > div.title {
@@ -202,6 +211,7 @@ h1 {
 }
 
 .person-course-content {
+    padding-top: 10px;
     padding-left: 20px;
 }
 
@@ -276,6 +286,35 @@ ul#setting-menu > li.active > a:focus {
     font-weight: bolder;
 }
 
+/*Nested list for lecture with practices*/
+ol.lecture-with-practice {
+    list-style-type: none;
+    counter-reset: item;
+    margin: 0;
+    padding: 0;
+}
+
+ol.lecture-with-practice > li {
+    display: table;
+    counter-increment: item;
+    margin-bottom: 0.6em;
+}
+
+ol.lecture-with-practice > li:before {
+    content: counters(item, ".") ". ";
+    display: table-cell;
+    padding-right: 0.6em;
+}
+
+li ol > li {
+    margin: 0;
+}
+
+li ol > li:before {
+    content: counters(item, ".") ". ";
+}
+
+/**/
 .btn-add-course-as-proto {
     display: inline-block;
 }
@@ -300,7 +339,7 @@ ul#setting-menu > li.active > a:focus {
 }
 
 .person-course-link,
-.person-course-link > tbody > tr > td ,
+.person-course-link > tbody > tr > td,
 .person-course-practice,
 .person-course-practice > tbody > tr > td {
 }

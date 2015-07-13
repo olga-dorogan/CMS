@@ -2,10 +2,17 @@ package org.javatraining.dao;
 
 
 import org.javatraining.entity.LessonEntity;
+import org.javatraining.entity.PracticeLessonEntity;
+import org.javatraining.entity.util.Pair;
 
 import javax.ejb.Stateless;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by vika on 28.05.15.
@@ -48,5 +55,23 @@ public class LessonDAO extends GenericDAO<LessonEntity> {
     public void removeByOrderNum(Long courseId, Long orderNum) {
         LessonEntity lessonEntity = getByOrderNum(courseId, orderNum);
         getEntityManager().remove(lessonEntity);
+    }
+
+    public List<Pair<LessonEntity, List<PracticeLessonEntity>>> getWithPracticesByCourseId(@NotNull Long courseId) {
+        TypedQuery<Object[]> query = getEntityManager().createQuery(
+                "SELECT lesson, practice FROM LessonEntity lesson LEFT JOIN lesson.practiceLesson practice WHERE lesson.course.id = :courseId",
+                Object[].class).setParameter("courseId", courseId);
+        List<Object[]> resultList = query.getResultList();
+        return Stream
+                .concat(resultList.stream()
+                                .filter(ar -> (ar[1] != null))
+                                .map((ar) -> (PracticeLessonEntity) ar[1])
+                                .collect(Collectors.groupingBy(PracticeLessonEntity::getLesson))
+                                .entrySet().stream()
+                                .map((entry) -> new Pair<>(entry.getKey(), entry.getValue())),
+                        resultList.stream()
+                                .filter(ar -> (ar[1] == null))
+                                .map(ar -> new Pair<>((LessonEntity) ar[0], (List<PracticeLessonEntity>) new ArrayList<PracticeLessonEntity>(0))))
+                .collect(Collectors.toList());
     }
 }

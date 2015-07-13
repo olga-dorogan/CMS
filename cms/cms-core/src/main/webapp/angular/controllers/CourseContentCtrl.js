@@ -3,4 +3,5 @@
  */
 function CourseContentCtrl($scope, lectures) {
     $scope.lectures = lectures;
+    $scope.hidePractices = false;
 }

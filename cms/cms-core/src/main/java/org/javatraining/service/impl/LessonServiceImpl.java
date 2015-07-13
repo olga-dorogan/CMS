@@ -8,6 +8,7 @@ import org.javatraining.entity.LessonEntity;
 import org.javatraining.entity.LessonLinkEntity;
 import org.javatraining.entity.NewsEntity;
 import org.javatraining.entity.PracticeLessonEntity;
+import org.javatraining.entity.util.Pair;
 import org.javatraining.model.LessonLinkVO;
 import org.javatraining.model.LessonVO;
 import org.javatraining.model.LessonWithDetailsVO;
@@ -25,6 +26,7 @@ import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.javatraining.model.conversion.LessonConverter.*;
 
@@ -100,6 +102,15 @@ public class LessonServiceImpl implements LessonService {
 
     @Nullable
     @Override
+    public Set<LessonWithDetailsVO> getWithPracticesByCourseId(@NotNull Long courseId) {
+        List<Pair<LessonEntity, List<PracticeLessonEntity>>> lessonsWithPractices = lessonDAO.getWithPracticesByCourseId(courseId);
+        return lessonsWithPractices.stream()
+                .map((pair) -> LessonConverter.convertEntitiesToVOWithDetails(pair.first, null, pair.second))
+                .collect(Collectors.toSet());
+    }
+
+    @Nullable
+    @Override
     public LessonVO getByOrderNum(@NotNull Long courseId, @NotNull Long orderNum) {
         return convertEntityToVO(lessonDAO.getByOrderNum(courseId, orderNum));
     }
@@ -112,7 +123,9 @@ public class LessonServiceImpl implements LessonService {
         }
         LessonEntity lessonEntity = lessonDAO.getByOrderNum(courseId, orderNum);
         List<LessonLinkEntity> lessonLinksForLesson = lessonLinkDAO.getAllLessonLinksByLesson(lessonEntity);
-        LessonWithDetailsVO lessonWithDetailsVO = LessonConverter.convertEntitiesToVOWithDetails(lessonEntity, lessonLinksForLesson);
+        List<PracticeLessonEntity> practicesForLesson = practiceLessonDAO.getPracticesForLesson(lessonEntity);
+        LessonWithDetailsVO lessonWithDetailsVO =
+                LessonConverter.convertEntitiesToVOWithDetails(lessonEntity, lessonLinksForLesson, practicesForLesson);
         return lessonWithDetailsVO;
     }
 
