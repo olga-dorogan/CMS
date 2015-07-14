@@ -178,7 +178,7 @@ angular.module('myApp.person', ['ui.router'])
             })
             .state('person.course.notification', {
                 url: '/notification',
-                templateUrl: ''
+                templateUrl: 'angular/views/person-course/teacher/notification.html'
             })
             .state('person.course.addLecture', {
                 url: '/addLecture/:lectureOrderNum',
@@ -249,7 +249,7 @@ angular.module('myApp.person', ['ui.router'])
                 templateUrl: 'angular/views/settings/settings.html'
             })
             //SUBSCRIBE
-            .state('person.subcribe.modal', {
+            .state('person.subscribe', {
                 url: '/subscribe',
                 templateUrl: 'angular/views/addition.html'
             })

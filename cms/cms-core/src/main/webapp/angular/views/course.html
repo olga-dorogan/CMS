@@ -78,12 +78,12 @@
                                         </a>
                                     </div>
                                     <div ng-hide="isTeacher()">
-                                        <a ui-sref="person.subscribe.modal"
+                                        <a ui-sref="person.subscribe"
                                            ng-if="!isPersonHasPhoneNumber()"
                                            class="enroll-into-course">{{getActionMsg('', isTeacher())}}</a>
                                         <a href="#"
                                            ng-if="isPersonHasPhoneNumber()"
-                                           ng-click="subscribePersonToCourse({{courseId:course.id}}, {{person.id}})"
+                                           ng-click="subscribePersonToCourse(course.id, getUserId())"
                                            class="enroll-into-course">{{getActionMsg('', isTeacher())}}</a>
                                         <!--FIXME check person id -->
                                     </div>

@@ -13,7 +13,7 @@ var myApp = angular.module('myApp', [
 ]);
 myApp.service('sessionService', ['$window', '$rootScope', SessionService]);
 myApp.service('PersonService', ['Restangular', PersonService]);
-myApp.service('AuthService', ['PersonService', AuthService]);
+myApp.service('AuthService', ['PersonService', 'Restangular', AuthService]);
 myApp.factory('sessionInjector', ['$rootScope', 'sessionService', SessionInjector]);
 
 myApp.config(function (RestangularProvider) {
@@ -69,12 +69,12 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
         $rootScope.getUsername = function () {
             return $window.localStorage['name'];
         };
-        $rootScope.getEmailHash = function () {
-            var Hasher = Restangular.one("mailhash");
-            return Hasher.post({
-                "email": $window.localStorage['email']
-            });
+        $rootScope.getEmailHash = function (email) {
+            var t = AuthService.getEmailHash(email);
+            console.log("email hash: " + JSON.stringify(t));
+            return t;
         };
+
         $rootScope.isTeacher = function () {
             return $window.localStorage['role'] == 'teacher';
         };
