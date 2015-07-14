@@ -3,7 +3,7 @@ function SettingCtrl($scope, $window, PersonService, $modal) {
     $scope.animationsEnabled = true;
 
     $scope.person = $scope.person || {};
-    var description = PersonService.getPersonDescription();
+    var description = PersonService.getPersonDescription($window.localStorage['id']);
     $scope.person.id = $window.localStorage['id'];
     $scope.person.name = $window.localStorage['name'].split(" ")[0];
     $scope.person.surname = $window.localStorage['name'].split(" ")[1];

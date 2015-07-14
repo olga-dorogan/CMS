@@ -1,9 +1,9 @@
-function PersonService(Restangular, $rootScope) {
+function PersonService(Restangular) {
     var Person = Restangular.all("resources/person");
-    var PersonDescription = Person.one($window.localStorage['id']).get("description");//person/:person_id/description
+    //person/:person_id/description
 
-    this.getPersonDescription = function () {
-        return PersonDescription;//Возвращение описание человека для личного кабинета
+    this.getPersonDescription = function (userId) {
+        return Person.one(userId).get("description");//Возвращение описание человека для личного кабинета
     };
 
     this.createPerson = function (user) {

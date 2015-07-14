@@ -1,4 +1,4 @@
-function NotificationCtrl(Restangular){
+function NotificationCtrl(Restangular, $scope){
     var restBase = '';//FIXME write ws
     var Notification = Restangular.all(restBase);
 
