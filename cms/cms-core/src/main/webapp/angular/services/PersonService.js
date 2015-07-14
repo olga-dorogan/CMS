@@ -1,15 +1,14 @@
-function PersonService(Restangular) {
+function PersonService(Restangular, $rootScope) {
     var Person = Restangular.all("resources/person");
+    var PersonDescription = Person.one($window.localStorage['id']).get("description");//person/:person_id/description
 
     this.getPersonDescription = function () {
-        var PersonDescription = Person.get($window.localStorage['id']).one("description");
-
-        return PersonDescription.getList()[0];//Возвращение описание человека для личного кабинета
+        return PersonDescription;//Возвращение описание человека для личного кабинета
     };
 
     this.createPerson = function (user) {
         var name = user.name.split(" ");
-        var PersonDescription = Person.one("description");
+
         return Person.post(
             {
                 "email": user.email,
@@ -19,12 +18,7 @@ function PersonService(Restangular) {
                 "personRole": null,
                 "secondName": null
             }
-        ) && PersonDescription.post({//FIXME maybe this could be removed
-            "id": $window.localStorage['id'],
-            "experience": null,
-            "graduation": null,
-            "phoneNumber": null
-        });
+        )
     };
 
     this.createPersonForAuth = function (user) {
@@ -41,8 +35,7 @@ function PersonService(Restangular) {
     };
 
     this.updatePerson = function (user) {
-        var PersonDescription = Person.get($window.localStorage['id']).one("description");
-        return Person.get($window.localStorage['id']).put(
+        return Person.one($window.localStorage['id']).put(
             {
                 "name": user.name,
                 "surname": user.surname,
@@ -53,7 +46,7 @@ function PersonService(Restangular) {
             "graduation": user.graduation,
             "phoneNumber": user.phoneNumber
         });
-    };//FIXME проверка этого метода на правильность урлов
+    };
 
     this.getTeachers = function () {
         return Person.getList({'role': 'teacher'});

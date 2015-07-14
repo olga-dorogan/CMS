@@ -14,9 +14,9 @@
     <li ui-sref-active="active"><a href="#">
         <span class="fa fa-calendar icon"></span>
         <span class="item">Календарь</span></a></li>
-    <li ui-sref-active="active"><a ui-sref="person.course.notification">
+    <li ui-sref-active="active" ng-show="isTeacher()"><a ui-sref="person.course.notification">
         <span class="fa fa-envelope-o icon"></span>
         <span class="item"></span>Notification</a></span></li>
-    <li ui-sref-active="active"><span class="social social-github"><a ui-sref="person.course.gitlab">
+    <li ui-sref-active="active" ng-show="isTeacher()"><span class="social social-github"><a ui-sref="person.course.gitlab">
         Gitlab</a></span></li>
 </ul>

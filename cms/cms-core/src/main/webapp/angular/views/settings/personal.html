@@ -1,6 +1,6 @@
 <div ng-controller="SettingCtrl">
     <div class="col-md-8">
-        <form name="personForm" novalidate role="form">
+        <form name="personalForm" novalidate role="form">
             <div class="form-group">
                 <label for="name">Имя<span class="required">*</span></label>
                 <input id="name" type="text" name="name" ng-model="person.name" class="form-control"
@@ -9,7 +9,7 @@
 
             <div class="form-group">
                 <label for="surname">Фамилия<span class="required">*</span></label>
-                <input id="surname" type="text" name="surname" ng-model="person.lastName" class="form-control"
+                <input id="surname" type="text" name="surname" ng-model="person.surname" class="form-control"
                        ng-required="true"/>
             </div>
 
@@ -21,7 +21,7 @@
             </div>
 
             <button type="button" class="btn btn-success  trench_out full_screen"
-                    ng-disabled="!isValidUser(personForm)" ng-click="updatePerson()">
+                    ng-disabled="!isValidUser(personalForm)" ng-click="updatePerson()">
                 <span class="glyphicon glyphicon-floppy-disk">Save</span>
             </button>
         </form>

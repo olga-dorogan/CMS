@@ -81,9 +81,11 @@
                                         <a ui-sref="person.subscribe.modal"
                                            ng-if="!isPersonHasPhoneNumber()"
                                            class="enroll-into-course">{{getActionMsg('', isTeacher())}}</a>
-                                        <a ui-sref="person.subscribe"
+                                        <a href="#"
                                            ng-if="isPersonHasPhoneNumber()"
+                                           ng-click="subscribePersonToCourse({{courseId:course.id}}, {{person.id}})"
                                            class="enroll-into-course">{{getActionMsg('', isTeacher())}}</a>
+                                        <!--FIXME check person id -->
                                     </div>
                                 </div>
                             </div>

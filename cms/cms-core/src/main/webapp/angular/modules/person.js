@@ -4,6 +4,7 @@
 angular.module('myApp.person', ['ui.router'])
     .config(['$stateProvider', function ($stateProvider) {
         $stateProvider
+            //PERSON
             .state('person', {
                 parent: 'main',
                 url: '/person',
@@ -59,6 +60,7 @@ angular.module('myApp.person', ['ui.router'])
                     }
                 }
             })
+            //ADDCOURSE
             .state('person.addCourse', {
                 url: '/addCourse',
                 views: {
@@ -93,6 +95,7 @@ angular.module('myApp.person', ['ui.router'])
                     }
                 }
             })
+            //COURSE
             .state('person.course', {
                 url: '/course/:courseId',
                 views: {
@@ -210,7 +213,6 @@ angular.module('myApp.person', ['ui.router'])
                     }
                 }
             })
-
             .state('person.course.addNews', {
                 url: '/addNews',
                 templateUrl: 'angular/views/person-course/teacher/addNewNews.html',
@@ -220,6 +222,7 @@ angular.module('myApp.person', ['ui.router'])
                 url: '/progress',
                 templateUrl: 'angular/views/person-course/progressContent.html'
             })
+            //SETTINGs
             .state('person.settings', {
                 url: '/settings',
                 views: {
@@ -233,10 +236,19 @@ angular.module('myApp.person', ['ui.router'])
                         templateUrl: 'angular/views/settings/menubar.html'
                     },
                     "setting-content@person.settings": {
-                        templateUrl: 'angular/views/settings/settings.html'//FIXME CHANGE CONTENT
+                        templateUrl: 'angular/views/person-course/content.html'
                     }
                 }
             })
+            .state('person.settings.personal', {
+                url: '/personal',
+                templateUrl: 'angular/views/settings/personal.html'
+            })
+            .state('person.settings.addition', {
+                url: '/addition',
+                templateUrl: 'angular/views/settings/settings.html'
+            })
+            //SUBSCRIBE
             .state('person.subcribe.modal', {
                 url: '/subscribe',
                 templateUrl: 'angular/views/addition.html'
