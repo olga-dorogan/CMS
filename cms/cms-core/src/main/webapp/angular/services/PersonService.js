@@ -1,4 +1,4 @@
-function PersonService(Restangular) {
+function PersonService(Restangular, PersonPersistenceService) {
     var Person = Restangular.all("resources/person");
     //person/:person_id/description
 
@@ -35,17 +35,17 @@ function PersonService(Restangular) {
     };
 
     this.updatePerson = function (user) {
-        return Person.one($window.localStorage['id']).put(
-            {
-                "name": user.name,
-                "surname": user.surname,
-                "secondName": user.secondName
-            }
-        ) && PersonDescription.put({
-            "experience": user.experience,
-            "graduation": user.graduation,
-            "phoneNumber": user.phoneNumber
-        });
+        return Person.one(PersonPersistenceService.getId()).put(
+                {
+                    "name": user.name,
+                    "surname": user.surname,
+                    "secondName": user.secondName
+                }
+            ) && PersonDescription.put({
+                "experience": user.experience,
+                "graduation": user.graduation,
+                "phoneNumber": user.phoneNumber
+            });
     };
 
     this.getTeachers = function () {

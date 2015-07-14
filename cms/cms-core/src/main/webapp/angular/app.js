@@ -5,54 +5,62 @@ var myApp = angular.module('myApp', [
     'angular-google-gapi',
     'ui.bootstrap',
     'angularFileUpload',
+    'LocalStorageModule',
     'myApp.main',
     'myApp.home',
     'myApp.person',
     'myApp.news',
     'myApp.about'
 ]);
-myApp.service('sessionService', ['$window', '$rootScope', SessionService]);
+myApp.service('sessionService', ['PersonPersistenceService', SessionService]);
 myApp.service('PersonService', ['Restangular', PersonService]);
 myApp.service('AuthService', ['PersonService', 'Restangular', AuthService]);
+myApp.service('PersonPersistenceService', ['localStorageService', PersonPersistenceService]);
 myApp.factory('sessionInjector', ['$rootScope', 'sessionService', SessionInjector]);
 
 myApp.config(function (RestangularProvider) {
     //Изменяем базовый Url для REST
     RestangularProvider.setBaseUrl('http://localhost:8080/cms-core-1.0/');
 });
-
+myApp.config(function (localStorageServiceProvider) {
+    localStorageServiceProvider
+        .setPrefix('cms')
+        .setStorageType('localStorage')
+        .setNotify(true, true);
+});
 myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider',
     function ($stateProvider, $urlRouterProvider, $httpProvider) {
         $urlRouterProvider.otherwise('/home');
         $httpProvider.interceptors.push('sessionInjector');
     }]);
 
-myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http', 'AuthService',
-    function (GAuth, GApi, GData, $state, $rootScope, $window, $http, AuthService) {
+myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', 'AuthService', 'PersonPersistenceService',
+    function (GAuth, GApi, GData, $state, $rootScope, $window, AuthService, PersonPersistenceService) {
 
+        // ----------------  Google API lib initialization -------------------------
         var CLIENT = '895405022160-pi238d0pi57fsmsov8khtpr4415hj5j5.apps.googleusercontent.com';
         GAuth.setClient(CLIENT);
         GAuth.setScope('https://www.googleapis.com/auth/userinfo.email');
 
+        // ---------------------  Login / Logout  -------------------------
         $rootScope.doLogin = function () {
             GAuth.login().then(function () {
                 AuthService.goAuth(GData.getUser()).then(function (data) {
-                    $window.localStorage['id'] = data.id;
-                    $window.localStorage['role'] = data.personRole.toLowerCase();
-                    $window.localStorage['name'] = data.name + " " + data.lastName;
-                    $window.localStorage['token'] = $window.gapi.auth.getToken().access_token;
-                    $window.localStorage['email'] = data.email.toLowerCase();
+                    PersonPersistenceService.saveInfo(
+                        data.id,
+                        data.personRole.toLowerCase(),
+                        data.name + " " + data.lastName,
+                        data.email.toLowerCase(),
+                        $window.gapi.auth.getToken().access_token);
                     $state.go("person");
                 });
-                console.log('user is logined successfully');
             }, function () {
                 $state.go("home");
                 console.log('login fail');
             });
         };
-
         $rootScope.doLogOut = function () {
-            $window.localStorage.clear();
+            PersonPersistenceService.clearInfo();
             GAuth.logout().then(function () {
                 $state.go("home");
             });
@@ -60,31 +68,33 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$http',
         $rootScope.isLogin = function () {
             return !(($rootScope.getUserId() == undefined) || ($rootScope.getUserId() == null));
         };
+
+        // --------------------  Main person info -------------------------
         $rootScope.getEmail = function () {
-            return $window.localStorage['email'];
+            return PersonPersistenceService.getEmail();
         };
         $rootScope.getUserId = function () {
-            return $window.localStorage['id'];
+            return PersonPersistenceService.getId();
         };
         $rootScope.getUsername = function () {
-            return $window.localStorage['name'];
+            return PersonPersistenceService.getName();
         };
+        $rootScope.isTeacher = function () {
+            return PersonPersistenceService.isTeacher();
+        };
+
         $rootScope.getEmailHash = function (email) {
             var t = AuthService.getEmailHash(email);
             console.log("email hash: " + JSON.stringify(t));
             return t;
         };
 
-        $rootScope.isTeacher = function () {
-            return $window.localStorage['role'] == 'teacher';
-        };
-        // обработчик оповещения о попытке несанкционированного доступа
+        // ------------------  Broadcast receivers -------------------------
         $rootScope.$on('app.unauthorized', function () {
             $rootScope.doLogOut();
             $state.go("home");
             console.log('attempt to get secure data');
         });
-
         $rootScope.$on('$stateChangeStart', function (event, toState) {
             if ((toState.name == 'home') && $rootScope.isLogin()) {
                 event.preventDefault();
