@@ -3,10 +3,13 @@ package org.javatraining.model.conversion;
 import org.javatraining.entity.CourseEntity;
 import org.javatraining.entity.LessonEntity;
 import org.javatraining.entity.LessonLinkEntity;
+import org.javatraining.entity.PracticeLessonEntity;
 import org.javatraining.model.LessonLinkVO;
 import org.javatraining.model.LessonVO;
 import org.javatraining.model.LessonWithDetailsVO;
+import org.javatraining.model.PracticeLessonVO;
 
+import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
@@ -20,11 +23,19 @@ public class LessonConverter {
         return lessonVO;
     }
 
-    public static LessonWithDetailsVO convertEntitiesToVOWithDetails(LessonEntity lessonEntity, List<LessonLinkEntity> linkEntities) {
+    public static LessonWithDetailsVO convertEntitiesToVOWithDetails(@NotNull LessonEntity lessonEntity,
+                                                                     @Nullable Collection<LessonLinkEntity> linkEntities,
+                                                                     @Nullable Collection<PracticeLessonEntity> practiceEntities) {
         LessonWithDetailsVO lessonWithDetailsVO = new LessonWithDetailsVO();
         fillLessonVOFromEntity(lessonWithDetailsVO, lessonEntity);
-        Set<LessonLinkVO> lessonLinkVOs = LessonLinkConverter.convertEntitiesToVOs(linkEntities);
-        lessonWithDetailsVO.setLinks(new ArrayList<>(lessonLinkVOs));
+        if (linkEntities != null) {
+            Set<LessonLinkVO> lessonLinkVOs = LessonLinkConverter.convertEntitiesToVOs(linkEntities);
+            lessonWithDetailsVO.setLinks(new ArrayList<>(lessonLinkVOs));
+        }
+        if (practiceEntities != null) {
+            List<PracticeLessonVO> practiceLessonVOs = PracticeLessonConverter.convertEntitiesToVOs(practiceEntities);
+            lessonWithDetailsVO.setPractices(practiceLessonVOs);
+        }
         return lessonWithDetailsVO;
     }
 

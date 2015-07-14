@@ -55,7 +55,7 @@ function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentServi
         createLecture().then(
             function (successResult) {
                 if (successResult.responseStatus == 200 || successResult.responseStatus == 201) {
-                    $state.go('person.course.content');
+                    $state.go('person.course.content', {}, {reload: true});
                 } else {
                     $scope.alertData.textAlert = successResult;
                     $scope.showAlertWithError();

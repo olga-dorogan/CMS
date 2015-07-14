@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Set;
 
 /**
  * Created by asudak on 6/24/15.
@@ -28,7 +29,8 @@ public class LessonWebService {
     @Produces(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.STUDENT, AuthRole.TEACHER})
     public Response getLessons(@PathParam("course_id") Long courseId) {
-        return Response.ok(lessonService.getByCourseId(courseId)).build();
+        Set<LessonWithDetailsVO> lessons = lessonService.getWithPracticesByCourseId(courseId);
+        return Response.ok(lessons).build();
     }
 
     @POST

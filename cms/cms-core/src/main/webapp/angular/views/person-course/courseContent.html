@@ -1,9 +1,24 @@
 <div>
-    <ol>
+    <div ng-show="lectures.length > 0" class="pull-right">
+        <label class="person-course-hide-practices">
+            <input type="checkbox" ng-model="hidePractices">
+            <span>скрыть задания</span>
+        </label>
+    </div>
+    <ol class="lecture-with-practice">
         <li ng-repeat="lecture in lectures | orderBy : 'orderNum' ">
             <a ui-sref="person.course.lecture({lectureId:lecture.id})">{{lecture.topic}}</a>
+            <ol ng-if="!hidePractices" class="lecture-with-practice">
+                <li ng-repeat="practice in lecture.practices | orderBy : 'orderNum' ">
+                    {{practice.task}}
+                </li>
+            </ol>
         </li>
     </ol>
-    <button ng-show="isTeacher()" class="btn btn-default" ui-sref="person.course.addLecture({lectureOrderNum:lectures.length+1})">
-        Добавить лекцию</button>
+    <div ng-show="isTeacher()" class="pull-right">
+        <button class="btn btn-default"
+                ui-sref="person.course.addLecture({lectureOrderNum:lectures.length+1})">
+            Добавить лекцию
+        </button>
+    </div>
 </div>
