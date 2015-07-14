@@ -1,4 +1,4 @@
-function PersonService(Restangular, $rootScope) {
+function PersonService(Restangular, $window) {
     var Person = Restangular.all("resources/person");
     var PersonDescription = Person.one($window.localStorage['id']).get("description");//person/:person_id/description
 

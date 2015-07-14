@@ -83,7 +83,7 @@
                                            class="enroll-into-course">{{getActionMsg('', isTeacher())}}</a>
                                         <a href="#"
                                            ng-if="isPersonHasPhoneNumber()"
-                                           ng-click="subscribePersonToCourse({{courseId:course.id}}, {{person.id}})"
+                                           ng-click="subscribePersonToCourse({{courseId:course.id}}, {{getUserId()}})"
                                            class="enroll-into-course">{{getActionMsg('', isTeacher())}}</a>
                                         <!--FIXME check person id -->
                                     </div>
