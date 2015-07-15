@@ -403,7 +403,7 @@ li ol > li:before {
 }
 
 #navbar-main > div.content {
-    width: 1000px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 0 2px;
 }
