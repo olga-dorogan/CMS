@@ -76,7 +76,6 @@ public class LessonWebService {
 
     @DELETE
     @Path("{course_id}/lesson/{order_num}")
-    @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
     public Response deleteLessonByOrderNum(@PathParam("course_id") Long courseId, @PathParam("order_num") Long orderNum) {
         lessonService.deleteByOrderNum(courseId, orderNum);

@@ -298,12 +298,14 @@ ol.lecture-with-practice > li {
     display: table;
     counter-increment: item;
     margin-bottom: 0.6em;
+    width: 100%;
 }
 
 ol.lecture-with-practice > li:before {
     content: counters(item, ".") ". ";
     display: table-cell;
     padding-right: 0.6em;
+    width: 30px;
 }
 
 li ol > li {
@@ -315,6 +317,24 @@ li ol > li:before {
 }
 
 /**/
+
+.lecture-with-practice .lecture {
+    display: inline-block;
+    min-width: 30%;
+}
+
+.lecture-with-practice .lecture-actions {
+    display: inline-block;
+}
+
+.lecture-with-practice .lecture-actions .action-remove {
+    color: #cd0200; /*warn-col*/;
+}
+
+.lecture-with-practice .lecture-actions .action-update {
+    color: #374e0c; /*ok-col*/
+}
+
 .btn-add-course-as-proto {
     display: inline-block;
 }

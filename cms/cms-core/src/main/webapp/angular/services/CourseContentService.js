@@ -19,6 +19,10 @@ function CourseContentService(Restangular) {
         return createLectureRest(newLecture.courseId).post(newLecture);
     };
 
+    this.removeLecture = function(courseId, lectureOrderNum) {
+        return Restangular.one(restBase, courseId).one('lesson', lectureOrderNum).remove();
+    };
+
     this.getLecture = function(courseId, lectureOrderNum) {
         return Restangular.one(restBase, courseId).one('lesson', lectureOrderNum).get();
     };
