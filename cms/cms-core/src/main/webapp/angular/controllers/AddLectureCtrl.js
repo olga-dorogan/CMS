@@ -1,7 +1,11 @@
-function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentService, FileUploader) {
+function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentService, FileUploader, mode, lecture) {
     var BASE_URL_FILE_TO_STORAGE = 'resources/file/upload';
+    var isEditMode = (mode == 'edit');
 
-    $scope.lecture = $scope.lecture || {};
+    $scope.lecture = isEditMode ? lecture : {};
+    $scope.okBtnLabel = isEditMode ? 'Изменить лекцию' : 'Добавить лекцию';
+    var removedLinks = [];
+    var removedPractices = [];
 
     $scope.isLectureValid = function (lectureForm) {
         return !lectureForm.$invalid && areLinksValid() && arePracticesValid();
@@ -46,13 +50,18 @@ function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentServi
         return CourseContentService.createLecture($scope.lecture);
     };
 
+    var updateLecture = function () {
+        return CourseContentService.updateLecture($scope.lecture, removedLinks, removedPractices);
+    };
+
     $scope.alertData = {
         boldTextTitle: "Ошибка",
         mode: 'danger'
     };
 
     $scope.ok = function () {
-        createLecture().then(
+        var promise = isEditMode ? updateLecture() : createLecture();
+        promise.then(
             function (successResult) {
                 if (successResult.responseStatus == 200 || successResult.responseStatus == 201) {
                     $state.go('person.course.content', {}, {reload: true});
@@ -148,6 +157,7 @@ function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentServi
                 break;
             }
         }
+        removedLinks.push(linkToRemove.id);
     };
 
     // practice tasks operations
@@ -168,5 +178,6 @@ function AddLectureCtrl($scope, $stateParams, $state, $modal, CourseContentServi
                 $scope.newPractice.orderNum = $scope.newPractice.orderNum - 1;
             }
         }
+        removedPractices.push(practiceToRemove.id);
     };
 }

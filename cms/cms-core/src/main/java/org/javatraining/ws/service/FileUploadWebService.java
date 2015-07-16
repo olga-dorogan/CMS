@@ -1,4 +1,4 @@
-package org.javatraining.integration.google.drive.mocks;
+package org.javatraining.ws.service;
 
 import org.apache.commons.io.IOUtils;
 import org.javatraining.integration.google.drive.DriveService;
@@ -6,8 +6,6 @@ import org.javatraining.integration.google.drive.FileVO;
 import org.javatraining.model.LessonLinkVO;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.inject.Inject;
@@ -24,8 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @Path("/file")
-public class MockUploadFileRestService {
-    private static final Logger log = LoggerFactory.getLogger(MockUploadFileRestService.class);
+public class FileUploadWebService {
     @Inject
     private DriveService driveService;
     @Inject
@@ -43,7 +40,7 @@ public class MockUploadFileRestService {
             try {
                 MultivaluedMap<String, String> header = inputPart.getHeaders();
                 fileName = getFileName(header);
-                //convert the uploaded file to inputstream
+                //convert the uploaded file to input stream
                 InputStream inputStream = inputPart.getBody(InputStream.class, null);
                 byte[] content = IOUtils.toByteArray(inputStream);
                 // add the file
@@ -57,8 +54,7 @@ public class MockUploadFileRestService {
             } catch (IOException ignore) {
             }
         }
-        return Response.status(200)
-                .entity("error with file uploading").build();
+        return Response.ok("error with file uploading").build();
     }
 
     /**
