@@ -129,10 +129,30 @@ public class LessonServiceImpl implements LessonService {
         return lessonWithDetailsVO;
     }
 
-    @Nullable
+    @NotNull
     @Override
     public LessonVO updateByOrderNum(@NotNull Long courseId, @NotNull Long orderNum, LessonVO lesson) {
         return convertEntityToVO(lessonDAO.updateByOrderNum(courseId, orderNum, convertVOToEntity(lesson)));
+    }
+
+    @NotNull
+    @Override
+    public LessonWithDetailsVO updateByOrderNum(@NotNull LessonWithDetailsVO lesson, List<Long> removedLinkIds, List<Long> removedPracticeIds) {
+        LessonEntity lessonEntity = convertVOToEntity(lesson);
+        LessonEntity updatedLessonEntity = lessonDAO.updateByOrderNum(lesson.getCourseId(), lesson.getOrderNum(), lessonEntity);
+        removedLinkIds.stream().forEach(lessonLinkDAO::removeById);
+        List<LessonLinkEntity> lessonLinkEntities = lesson.getLinks().stream()
+                .map(LessonLinkConverter::convertVOToEntity)
+                .peek(entity -> entity.setLesson(updatedLessonEntity))
+                .map(entity -> entity.getId() == null ? lessonLinkDAO.save(entity) : lessonLinkDAO.update(entity))
+                .collect(Collectors.toList());
+        removedPracticeIds.stream().forEach(practiceLessonDAO::removeById);
+        List<PracticeLessonEntity> practiceLessonEntities = lesson.getPractices().stream()
+                .map(PracticeLessonConverter::convertVOToEntity)
+                .peek(entity -> entity.setLesson(updatedLessonEntity))
+                .map(entity -> entity.getId() == null ? practiceLessonDAO.save(entity) : practiceLessonDAO.update(entity))
+                .collect(Collectors.toList());
+        return convertEntitiesToVOWithDetails(updatedLessonEntity, lessonLinkEntities, practiceLessonEntities);
     }
 
     @Override

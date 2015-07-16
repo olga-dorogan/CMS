@@ -1,12 +1,12 @@
-function SettingCtrl($scope, $window, PersonService, $modal) {
+function SettingCtrl($scope, PersonPersistenceService, PersonService, $modal) {
     // init
     $scope.animationsEnabled = true;
 
     $scope.person = $scope.person || {};
-    var description = PersonService.getPersonDescription($window.localStorage['id']);
-    $scope.person.id = $window.localStorage['id'];
-    $scope.person.name = $window.localStorage['name'].split(" ")[0];
-    $scope.person.surname = $window.localStorage['name'].split(" ")[1];
+    var description = PersonService.getPersonDescription(PersonPersistenceService.getId());
+    $scope.person.id = PersonPersistenceService.getId();
+    $scope.person.name = PersonPersistenceService.getName().split(" ")[0];
+    $scope.person.surname = PersonPersistenceService.getName().split(" ")[1];
     $scope.person.phoneNumber = description.phoneNumber;
     $scope.person.graduation = description.graduation;
     $scope.person.experience = description.experience;

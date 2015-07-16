@@ -161,6 +161,27 @@ angular.module('myApp.person', ['ui.router'])
                     }
                 }
             })
+            .state('person.course.editLecture', {
+                url: '/editLecture/:lectureOrderNum',
+                templateUrl: 'angular/views/person-course/teacher/addLecture.html',
+                controller: 'AddLectureCtrl',
+                resolve: {
+                    courseContentService: 'CourseContentService',
+                    lecture: function ($stateParams, courseContentService) {
+                        var promise = courseContentService.getLecture($stateParams.courseId, $stateParams.lectureOrderNum);
+                        promise = promise.then(function (lecture) {
+                            if (lecture.responseStatus != 200) {
+                                return null;
+                            }
+                            return courseContentService.normalizeLecture(lecture);
+                        });
+                        return promise;
+                    },
+                    mode: function() {
+                        return 'edit';
+                    }
+                }
+            })
             .state('person.course.newsContent', {
                 url: '/news-content',
                 templateUrl: 'angular/views/person-course/newsContent.html',
@@ -178,12 +199,20 @@ angular.module('myApp.person', ['ui.router'])
             })
             .state('person.course.notification', {
                 url: '/notification',
-                templateUrl: ''
+                templateUrl: 'angular/views/person-course/teacher/notification.html'
             })
             .state('person.course.addLecture', {
                 url: '/addLecture/:lectureOrderNum',
                 templateUrl: 'angular/views/person-course/teacher/addLecture.html',
-                controller: 'AddLectureCtrl'
+                controller: 'AddLectureCtrl',
+                resolve: {
+                    lecture: function () {
+                        return {};
+                    },
+                    mode: function() {
+                        return 'add';
+                    }
+                }
             })
             .state('person.course.lecture', {
                 url: '/lecture/:lectureId',
@@ -249,7 +278,7 @@ angular.module('myApp.person', ['ui.router'])
                 templateUrl: 'angular/views/settings/settings.html'
             })
             //SUBSCRIBE
-            .state('person.subcribe.modal', {
+            .state('person.subscribe', {
                 url: '/subscribe',
                 templateUrl: 'angular/views/addition.html'
             })

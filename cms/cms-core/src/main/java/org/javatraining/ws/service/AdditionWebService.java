@@ -17,7 +17,7 @@ public class AdditionWebService {
 
     @POST
     @Produces("text/plain")
-    @Consumes("application/json")
+    @Consumes("text/plain")
     public String getEmailHash(String email) {
         return getMDA5(email);
     }
