@@ -15,6 +15,7 @@ public class CourseVO implements Serializable {
     private String description;
     private Date startDate;
     private Date endDate;
+    private String calendarId;
 
     public CourseVO() {
     }
@@ -63,6 +64,15 @@ public class CourseVO implements Serializable {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+
+    public String getCalendarId() {
+        return calendarId;
+    }
+
+    public void setCalendarId(String calendarId) {
+        this.calendarId = calendarId;
     }
 
     @Override

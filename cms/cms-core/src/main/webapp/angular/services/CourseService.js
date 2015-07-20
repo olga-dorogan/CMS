@@ -46,7 +46,8 @@ function CourseService(Restangular) {
             'name': course.name,
             'description': course.description,
             'startDate': course.startDate,
-            'endDate': course.endDate
+            'endDate': course.endDate,
+            'calendarId': course.calendarId
         };
     };
 

@@ -177,8 +177,25 @@ angular.module('myApp.person', ['ui.router'])
                         });
                         return promise;
                     },
-                    mode: function() {
+                    mode: function () {
                         return 'edit';
+                    }
+                }
+            })
+            .state('person.course.calendar', {
+                url: '/calendar',
+                templateUrl: 'angular/views/person-course/calendarContent.html',
+                controller: function ($scope, calendarUrl) {
+                    $scope.calendarUrl = calendarUrl;
+
+                },
+                resolve: {
+                    calendarUrl: function ($sce, course) {
+                        return $sce.trustAsResourceUrl(
+                            "https://www.google.com/calendar/embed?" +
+                            "wkst=2&hl=ru&bgcolor=%23ffffff&" +
+                            "src=" + course.calendarId +
+                            "&color=%235229A3&ctz=Europe%2FKiev");
                     }
                 }
             })
@@ -209,7 +226,7 @@ angular.module('myApp.person', ['ui.router'])
                     lecture: function () {
                         return {};
                     },
-                    mode: function() {
+                    mode: function () {
                         return 'add';
                     }
                 }
