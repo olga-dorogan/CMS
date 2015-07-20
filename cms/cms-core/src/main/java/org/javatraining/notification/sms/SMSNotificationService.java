@@ -6,7 +6,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -16,10 +15,10 @@ import java.io.IOException;
  * For more information you should send mail to codedealerb@gmail.com
  */
 public class SMSNotificationService implements NotificationService<PersonDescriptionVO> {
-    private ServiceSoap smsService;
+//    private ServiceSoap smsService;
 
     public boolean connectAndAuthToService() {
-        smsService = new Service().getServiceSoap();
+//        smsService = new Service().getServiceSoap();
         JSONParser parser = new JSONParser();
         try {
             JSONObject propertiesMarshaler = (JSONObject) parser.parse(new FileReader(
@@ -27,12 +26,12 @@ public class SMSNotificationService implements NotificationService<PersonDescrip
                     String from = (String) propertiesMarshaler.get("email_for_notification");
             String password = (String) propertiesMarshaler.get("password_for_notification");
 
-            String result = smsService.auth(from, password);
-            switch (result) {
-                case "Вы успешно авторизировались":
-                    return true;
-                //FIXME https://turbosms.ua/soap.html else
-            }
+//            String result = smsService.auth(from, password);
+//            switch (result) {
+//                case "Вы успешно авторизировались":
+//                    return true;
+//                FIXME https://turbosms.ua/soap.html else
+//            }
 
         } catch (IOException | ParseException e) {
             e.printStackTrace();
@@ -43,17 +42,17 @@ public class SMSNotificationService implements NotificationService<PersonDescrip
 
     @Override
     public void sendNotificationToEndPoint(String subject, PersonDescriptionVO user) {
-        SendSMS sms = new SendSMS();
+//        SendSMS sms = new SendSMS();
         JSONParser parser = new JSONParser();
         try {
             JSONObject propertiesMarshaler = (JSONObject) parser.parse(new FileReader(
                     "../resources/mail/account_properties"));
 
-            sms.setSender((String) propertiesMarshaler.get("account_phone_number"));
-            sms.setDestination(user.getPhoneNumber());
-            sms.setText(subject);
+//            sms.setSender((String) propertiesMarshaler.get("account_phone_number"));
+//            sms.setDestination(user.getPhoneNumber());
+//            sms.setText(subject);
 
-            smsService.sendSMS(sms.getSender(), sms.getDestination(), sms.getText(), null);
+//            smsService.sendSMS(sms.getSender(), sms.getDestination(), sms.getText(), null);
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }

@@ -1,5 +1,5 @@
 function NewsService(Restangular) {
-    var restBase = 'resources/news';
+    var restBase = 'resources/courses';
     var News = Restangular.all(restBase);
     this.getNews = function () {
         return News.getList();
@@ -9,7 +9,7 @@ function NewsService(Restangular) {
         if (personId === undefined) {
             return {};
         }
-        return Restangular.one(restBase, personId).all('news-person').getList();
+        return Restangular.one(restBase, personId).all('news').getList();
     };
 
     this.getNewsFromCourse = function (courseId) {
@@ -20,11 +20,26 @@ function NewsService(Restangular) {
     };
 
 
+    this.isNewsSuccessfullyCreated = function (returnedObject) {
+        return returnedObject.responseStatus == 201;
+    };
+
+
+
     this.createNews = function (newNews, courseId) {
         console.log("service: create news");
         return Restangular.one(restBase, courseId).all('news').post(newNews);
     };
 
+    this.updateNews = function (newNews) {
+        console.log("service: create news");
+        return Restangular.one(restBase).all('news').put(newNews);
+    };
+
+    this.removeNews = function (newNews, courseId) {
+        console.log("service: create news");
+        return Restangular.one(restBase, courseId).all('news').remove(newNews);
+    };
 
 
 }

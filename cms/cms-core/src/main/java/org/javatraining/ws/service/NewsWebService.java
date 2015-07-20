@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by vika on 02.07.15.
  */
-@Path("news")
+@Path("courses")
 public class NewsWebService extends AbstractWebService<NewsVO> {
     @EJB
     private CourseService courseService;
@@ -27,7 +27,6 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
     public NewsWebService() {
         super(NewsVO.class);
     }
-
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -37,7 +36,7 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
     }
 
     @GET
-    @Path("{person_id}/news-person")
+    @Path("{person_id}/news")
     @Produces(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.STUDENT, AuthRole.TEACHER})
     public Response getPersonNews(@PathParam("person_id") Long personId) {
@@ -83,6 +82,24 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
             r = Response.serverError();
         }
         return r.build();
+    }
+
+//    @PUT
+//    @Path("{news_id}/news")
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Auth(roles = {AuthRole.TEACHER})
+//    public Response updateNews(@PathParam("news_id") NewsVO newsVO) {
+//        courseService.updateNews(newsVO);
+//        return Response.ok().build();
+//    }
+
+    @DELETE
+    @Path("{news_id}/news")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Auth(roles = {AuthRole.TEACHER})
+    public Response deleteNews(@PathParam("news_id") Long newsId) {
+        courseService.removeNews(newsId);
+        return Response.ok().build();
     }
 
 }

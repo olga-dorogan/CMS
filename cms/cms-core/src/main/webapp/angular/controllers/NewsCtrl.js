@@ -4,7 +4,23 @@ function NewsCtrl($scope, news) {
         news[i].date = timestampConvector(timestamp);
     }
         $scope.news = news;
+
+    $scope.removeNews = function (newsId) {
+        newsService.removeCourse(newsId).then(
+            function (success) {
+                if (success.responseStatus / 100 != 2) {
+                    showAlertWithError(
+                        {
+                            boldTextTitle: "Ошибка",
+                            textAlert: success,
+                            mode: 'danger'
+                        });
+                }
+            });
+    };
 }
+
+
 
 var timestampConvector = function (timestamp) {
     var newsCreateDate = new Date(timestamp);

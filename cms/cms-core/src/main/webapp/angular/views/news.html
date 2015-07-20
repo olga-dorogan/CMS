@@ -16,6 +16,14 @@
         <div class="description">{{new.content}}</div>
         <p class="date-format">{{new.date}}</p>
     </a>
+
+    <button ng-show="isTeacher()" class="btn"  ui-sref="person.course.addNews">
+        <span class="glyphicon glyphicon-pencil"></span>  Редактировать
+    </button>
+    <button ng-show="isTeacher()" class="btn"  ui-sref="person.course.addNews">
+        <span class="glyphicon glyphicon-pencil"></span>  Удалить
+    </button>
+
 </div>
 
 
