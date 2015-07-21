@@ -112,7 +112,6 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public CourseVO removeCourse(@NotNull CourseVO courseVO) {
         CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
-        newsDAO.removeById(courseEntity.getNews().iterator().next().getId());
         courseDAO.removeById(courseEntity.getId());
         return courseVO;
     }

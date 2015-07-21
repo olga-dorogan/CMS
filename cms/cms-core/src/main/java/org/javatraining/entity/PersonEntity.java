@@ -58,13 +58,13 @@ public class PersonEntity implements Serializable, GenericEntity {
     @Column(name = "personRole", nullable = false, insertable = true, updatable = true, length = 255)
     private PersonRole personRole;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "persons")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "persons")
     private Set<ForumMessageEntity> forumMassages;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "persons")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "persons")
     private Set<MarkEntity> marks;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "person")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "person")
     private Set<CoursePersonStatusEntity> coursePersonEntities;
 
     public PersonEntity() {

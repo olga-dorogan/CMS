@@ -31,7 +31,7 @@ public class NewsEntity implements Serializable, GenericEntity {
     @Column(name = "date", nullable = false, insertable = true, updatable = true)
     private Timestamp date;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(cascade = {})
     @JoinColumn(name = "course_id", nullable = false)
     private CourseEntity courses;
 

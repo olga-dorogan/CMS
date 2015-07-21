@@ -28,7 +28,7 @@ public class PracticeLessonEntity implements Serializable, GenericEntity {
     @JoinColumn(name = "lesson_id", nullable = false, insertable = true, updatable = true)
     private LessonEntity lesson;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessons")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "lessons")
     private Set<MarkEntity> marks;
 
     public PracticeLessonEntity() {

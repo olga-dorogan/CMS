@@ -21,11 +21,11 @@ public class CoursePersonStatusEntity implements Serializable, GenericEntity {
     @Column(name = "course_status", nullable = false, insertable = true, updatable = true, length = 255)
     private CourseStatus courseStatus;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(cascade = {})
     @JoinColumn(name = "course_id", nullable = false)
     private CourseEntity course;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(cascade = {})
     @JoinColumn(name = "person_id", nullable = false)
     private PersonEntity person;
 
