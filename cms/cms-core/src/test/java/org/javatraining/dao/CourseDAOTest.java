@@ -22,7 +22,7 @@ import static org.assertj.core.api.StrictAssertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-@Ignore
+
 @RunWith(Arquillian.class)
 @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
 @UsingDataSet(value = "dao-tests/course/course.json")

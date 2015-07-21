@@ -1,12 +1,16 @@
-function NewsCtrl($scope, news) {
+function NewsCtrl($scope, news, newsService) {
     for (var i = 0; i < news.length; i++) {
         var timestamp = news[i].date;
         news[i].date = timestampConvector(timestamp);
     }
-        $scope.news = news;
+
+    $scope.news = news;
+
+    $scope.noNews = ($scope.news.length == null);
+
 
     $scope.removeNews = function (newsId) {
-        newsService.removeCourse(newsId).then(
+        newsService.removeNews(newsId).then(
             function (success) {
                 if (success.responseStatus / 100 != 2) {
                     showAlertWithError(

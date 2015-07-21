@@ -67,7 +67,9 @@ public interface CourseService {
 
     NewsVO getAllNewsById(@NotNull Long id);
 
-    NewsVO removeNews(@NotNull Long newsId);
+    NewsVO removeNewsById(@NotNull Long newsId);
+
+    NewsVO removeNews(@NotNull NewsVO newsVO);
 
 
     @NotNull

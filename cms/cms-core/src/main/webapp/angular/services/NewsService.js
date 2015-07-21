@@ -25,20 +25,17 @@ function NewsService(Restangular) {
     };
 
 
-
     this.createNews = function (newNews, courseId) {
         console.log("service: create news");
-        return Restangular.one(restBase, courseId).all('news').post(newNews);
+        return Restangular.one(restBase, courseId).all('saveNews').post(newNews);
     };
 
     this.updateNews = function (newNews) {
-        console.log("service: create news");
         return Restangular.one(restBase).all('news').put(newNews);
     };
 
-    this.removeNews = function (newNews, courseId) {
-        console.log("service: create news");
-        return Restangular.one(restBase, courseId).all('news').remove(newNews);
+    this.removeNews = function (newsId) {
+         return Restangular.one(restBase, newsId).remove();
     };
 
 

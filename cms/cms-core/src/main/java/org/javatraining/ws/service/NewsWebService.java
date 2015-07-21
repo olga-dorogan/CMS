@@ -61,7 +61,7 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
 
 
     @POST
-    @Path("{course_id}/news")
+    @Path("{course_id}/saveNews")
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
     public Response saveNews(@Context UriInfo uriInfo, @PathParam("course_id") Long courseId, NewsVO newsVO) {
@@ -94,12 +94,13 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
 //    }
 
     @DELETE
-    @Path("{news_id}/news")
+    @Path("{news_id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
     public Response deleteNews(@PathParam("news_id") Long newsId) {
-        courseService.removeNews(newsId);
+      courseService.removeNewsById(newsId);
         return Response.ok().build();
     }
+
 
 }

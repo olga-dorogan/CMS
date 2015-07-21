@@ -45,7 +45,7 @@ import static org.junit.Assert.fail;
 /**
  * Created by olga on 15.06.15.
  */
-@Ignore
+
 @RunWith(Arquillian.class)
 @UsingDataSet(value = "datasets/person-service-test/person/one-person.json")
 @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)

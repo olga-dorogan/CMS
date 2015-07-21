@@ -2,12 +2,7 @@ angular.module('myApp.news', ['ui.router'])
     .config(['$stateProvider', function ($stateProvider) {
         $stateProvider
 
-            .state('noNews', {
-                parent: 'main',
-                url:'/nonews',
-                templateUrl: 'angular/views/noNews.html',
-                controller: 'NoNewsCtrl'
-            })
+
             .state('news', {
                 parent: 'main',
                 url: '/news',
@@ -18,14 +13,9 @@ angular.module('myApp.news', ['ui.router'])
                     }
                 },
                 resolve: {
-
-                    newsService: 'NewsService',
+                        newsService: 'NewsService',
                     news: function ($rootScope, newsService) {
                         var promise;
-                        $rootScope.redirectToDraftPage= function () {
-                           $location.path('/nonews');
-                        };
-
 
                         if ($rootScope.getUserId() == null||$rootScope.getUserId() == undefined) {
                             promise = newsService.getNews();
@@ -34,6 +24,7 @@ angular.module('myApp.news', ['ui.router'])
                            promise = newsService.getPersonNews($rootScope.getUserId());
 
                         }
+
                         return promise.then(function (news) {
                             return news;
                         });

@@ -29,7 +29,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Created by vika on 14.06.15.
  */
-@Ignore
+
 @RunWith(Arquillian.class)
 @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
 @UsingDataSet(value = "datasets/course-service-test/course/one-course.json")
@@ -113,7 +113,13 @@ public class CourseServiceTest {
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE_AFTER_REMOVE})
     public void testRemoveCourse() {
         CourseVO courseVO = predefinedCourseVO();
+        courseService.removeCourse(courseVO);
+    }
 
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE_AFTER_REMOVE})
+    public void testRemoveTwoCourse() {
+        CourseVO courseVO = predefinedCourseVO();
         courseService.removeCourse(courseVO);
     }
 
@@ -254,6 +260,8 @@ public class CourseServiceTest {
 
         return courseVO;
     }
+
+
 
     private NewsVO predefinedNewsVOInitialization() {
         Long predefinedNewsId = 1L;
