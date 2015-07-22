@@ -77,13 +77,10 @@
                                            class="go-into-course">{{getActionMsg('', true)}}
                                         </a>
                                     </div>
-                                    <div ng-hide="isTeacher()" controller="SettingCtrl">
-                                        <a ng-click="open('lg')" ng-if="!isPersonHasPhoneNumber()"
-                                           class="enroll-into-course">{{getActionMsg('', isTeacher())}}</a>
-                                        <a ng-if="isPersonHasPhoneNumber()"
-                                           ng-click="subscribePersonToCourse(course.id, getUserId())"
-                                           class="enroll-into-course">{{getActionMsg('', isTeacher())}}</a>
-                                        <!--FIXME check person id -->
+                                    <div ng-hide="isTeacher()">
+                                        <a ng-click="subscribePersonToCourse(course.id)"
+                                           class="enroll-into-course">{{getActionMsg('', isTeacher())}}
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -130,5 +127,7 @@
         </div>
 
     </div>
+
+    <div ng-include src="'angular/views/addition.html'"></div>
 
 </div>

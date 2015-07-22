@@ -161,9 +161,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     @PUT
     @Path("{course_id}/subscribe")
     @Auth(roles = {AuthRole.STUDENT})
-    public Response subscribeCourse(@PathParam("course_id") long courseId, @QueryParam("person_id") long personId) {
-        PersonVO person = new PersonVO();
-        person.setId(personId);
+    public Response subscribeCourse(@PathParam("course_id") long courseId, PersonVO person) {
         CourseVO course = new CourseVO();
         course.setId(courseId);
         personService.addPersonRequestForCourse(person, course);

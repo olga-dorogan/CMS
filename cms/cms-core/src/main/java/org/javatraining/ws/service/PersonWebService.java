@@ -28,6 +28,9 @@ import java.util.List;
 @Stateless
 @Path("person")
 public class PersonWebService extends AbstractWebService<PersonVO> {
+    private static final String PARAM_DESCRIPTION = "field";
+    private static final String PARAM_DESCRIPTION_ALL = "all";
+    private static final String PARAM_DESCRIPTION_PHONE = "phone";
     @EJB
     private PersonService personService;
 
@@ -81,10 +84,22 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
     @GET
     @Produces("application/json")
     @Path("{person_id}/description")
-    public Response getPersonDescription(@PathParam("person_id") long personId) {
+    public Response getPersonDescription(@PathParam("person_id") long personId,
+                                         @QueryParam(value = PARAM_DESCRIPTION) @DefaultValue(PARAM_DESCRIPTION_ALL) String field) {
         Response.ResponseBuilder r;
         try {
-            PersonDescriptionVO personDescriptionVO = personService.getPersonDescription(personId);
+            PersonDescriptionVO personDescriptionVO;
+            switch (field) {
+                case PARAM_DESCRIPTION_ALL:
+                    personDescriptionVO = personService.getPersonDescription(personId);
+                    break;
+                case PARAM_DESCRIPTION_PHONE:
+                    personDescriptionVO = personService.getPersonPhone(personId);
+                    break;
+                default:
+                    personDescriptionVO = personService.getPersonDescription(personId);
+                    break;
+            }
             r = Response.ok(personDescriptionVO);
         } catch (IllegalArgumentException e) {
             r = Response.noContent();
