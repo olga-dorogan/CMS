@@ -9,6 +9,9 @@ function PersonPersistenceService(localStorageService) {
         localStorageService.set('email', email);
         localStorageService.set('token', token);
     };
+    this.saveHash = function (hash) {
+        localStorageService.set('emailhash', hash);
+    };
     this.clearInfo = function () {
         localStorageService.clearAll();
     };
@@ -26,6 +29,9 @@ function PersonPersistenceService(localStorageService) {
     };
     this.getToken = function () {
         return localStorageService.get('token');
+    };
+    this.getEmailHash = function () {
+        return localStorageService.get('emailhash');
     };
     this.isTeacher = function () {
         return this.getRole() == 'teacher';

@@ -18,10 +18,10 @@
             </ul>
             <ul class="nav navbar-nav navbar-right avatar">
                 <li ng-hide="isLogin()"><a class="person-login" ng-click="doLogin()">Войти</a></li>
-                <li ng-show="isLogin()" class="dropdown">
+                <li ng-if="isLogin()" class="dropdown">
                     <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">
-                        <span gravatar name="{{getUsername()}}" width='32' email-hash="{{getEmailHash(getEmail())}}"></span>
+                        <span gravatar name="{{getUsername()}}" width="32" hash="{{getEmailHash()}}"></span>
                         <span>{{getUsername()}}</span>
                         <span class="caret"></span>
                     </a>

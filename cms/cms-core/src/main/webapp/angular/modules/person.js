@@ -177,7 +177,7 @@ angular.module('myApp.person', ['ui.router'])
                         });
                         return promise;
                     },
-                    mode: function() {
+                    mode: function () {
                         return 'edit';
                     }
                 }
@@ -209,7 +209,7 @@ angular.module('myApp.person', ['ui.router'])
                     lecture: function () {
                         return {};
                     },
-                    mode: function() {
+                    mode: function () {
                         return 'add';
                     }
                 }
@@ -276,11 +276,6 @@ angular.module('myApp.person', ['ui.router'])
             .state('person.settings.addition', {
                 url: '/addition',
                 templateUrl: 'angular/views/settings/settings.html'
-            })
-            //SUBSCRIBE
-            .state('person.subscribe', {
-                url: '/subscribe',
-                templateUrl: 'angular/views/addition.html'
             })
     }])
     .service('PersonService', PersonService)

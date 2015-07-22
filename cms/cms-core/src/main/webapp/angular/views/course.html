@@ -77,12 +77,10 @@
                                            class="go-into-course">{{getActionMsg('', true)}}
                                         </a>
                                     </div>
-                                    <div ng-hide="isTeacher()">
-                                        <a ui-sref="person.subscribe"
-                                           ng-if="!isPersonHasPhoneNumber()"
+                                    <div ng-hide="isTeacher()" controller="SettingCtrl">
+                                        <a ng-click="open('lg')" ng-if="!isPersonHasPhoneNumber()"
                                            class="enroll-into-course">{{getActionMsg('', isTeacher())}}</a>
-                                        <a href="#"
-                                           ng-if="isPersonHasPhoneNumber()"
+                                        <a ng-if="isPersonHasPhoneNumber()"
                                            ng-click="subscribePersonToCourse(course.id, getUserId())"
                                            class="enroll-into-course">{{getActionMsg('', isTeacher())}}</a>
                                         <!--FIXME check person id -->
