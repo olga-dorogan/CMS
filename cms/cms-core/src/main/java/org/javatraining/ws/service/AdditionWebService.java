@@ -4,7 +4,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Response;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -18,10 +17,12 @@ public class AdditionWebService {
 
     @GET
     @Produces("application/json")
-    public Response getEmailHash(@QueryParam("email") String email) {
+    public EmailHash getEmailHash(@QueryParam("email") String email) {
+//    public Response getEmailHash(@QueryParam("email") String email) {
         String hash = getMDA5(email);
         EmailHash hash1 = new EmailHash(hash);
-        return Response.ok(hash1).build();
+        return hash1;
+//        return Response.ok(hash1).build();
     }
 
     private String getMDA5(String email) {

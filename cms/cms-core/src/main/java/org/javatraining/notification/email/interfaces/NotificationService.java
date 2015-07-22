@@ -9,5 +9,5 @@ import org.javatraining.model.PersonVO;
  */
 public interface NotificationService<T extends PersonVO> {
 
-    public void sendNotificationToEndPoint(String subject, T user);
+    void sendNotificationToEndPoint(String subject, String message, T user);
 }

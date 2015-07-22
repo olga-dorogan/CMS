@@ -32,7 +32,7 @@ public class MailNotification implements NotificationService<PersonVO> {
     }
 
     @Override
-    public void sendNotificationToEndPoint(String subject, PersonVO user) {
+    public void sendNotificationToEndPoint(String subject, String mail, PersonVO user) {
         Properties props = new Properties();
         JSONParser parser = new JSONParser();
         try {
@@ -72,6 +72,7 @@ public class MailNotification implements NotificationService<PersonVO> {
 
             Map model = new HashMap<>();
             model.put("person.Properties", user);
+            model.put("message", message);
 
             message.setContent(VelocityEngineUtils.mergeTemplateIntoString(
                             velocityEngine, "../resources/velocity/mail.html", "UTF-8", model),
