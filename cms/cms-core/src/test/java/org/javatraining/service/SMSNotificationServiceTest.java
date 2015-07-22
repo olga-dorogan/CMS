@@ -21,6 +21,6 @@ public class SMSNotificationServiceTest {
         PersonDescriptionVO person = new PersonDescriptionVO();
         person.setId((long) 1);
         person.setPhoneNumber("380981348966");
-        service.sendNotificationToEndPoint("Hello", person);
+        service.sendNotificationToEndPoint("Hello", "World", person);
     }
 }
