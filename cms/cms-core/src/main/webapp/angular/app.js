@@ -52,6 +52,7 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', 'AuthSer
                         data.name + " " + data.lastName,
                         data.email.toLowerCase(),
                         $window.gapi.auth.getToken().access_token);
+                    PersonPersistenceService.saveHash(AuthService.getEmailHash($rootScope.getEmail()));
                     $state.go("person");
                 });
             }, function () {
@@ -77,18 +78,16 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', 'AuthSer
             return PersonPersistenceService.getId();
         };
         $rootScope.getUsername = function () {
+            console.log("username: " + PersonPersistenceService.getEmailHash());
             return PersonPersistenceService.getName();
         };
         $rootScope.isTeacher = function () {
             return PersonPersistenceService.isTeacher();
         };
-
-        $rootScope.getEmailHash = function (email) {
-            var t = AuthService.getEmailHash(email);
-            console.log("email hash: " + JSON.stringify(t));
-            return t;
+        $rootScope.getEmailHash = function(){
+            console.log("emailhash: " + PersonPersistenceService.getEmailHash());
+            return PersonPersistenceService.getEmailHash();
         };
-
         // ------------------  Broadcast receivers -------------------------
         $rootScope.$on('app.unauthorized', function () {
             $rootScope.doLogOut();

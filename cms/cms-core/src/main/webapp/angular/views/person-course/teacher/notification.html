@@ -4,8 +4,10 @@
             <h3>Message type</h3>
 
             <div class="btn-group">
-                <label class="btn btn-primary" ng-model="mailModel.sms" btn-checkbox>SMS</label>
-                <label class="btn btn-primary" ng-model="mailModel.email" btn-checkbox>Email</label>
+                <label class="btn btn-primary" ng-model="mailModel.sms" btn-checkbox
+                       ng-click="onClickChangeFlagsInSms()">SMS</label>
+                <label class="btn btn-primary" ng-model="mailModel.email" btn-checkbox
+                       ng-click="onClickChangeFlagsInEmail()">Email</label>
             </div>
             <form name="notificationForm" novalidate role="form">
                 <div class="form-group">

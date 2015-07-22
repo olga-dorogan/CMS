@@ -12,7 +12,7 @@ function SettingCtrl($scope, PersonPersistenceService, PersonService, $modal) {
     $scope.person.experience = description.experience;
 
     $scope.open = function (size) {
-
+        console.log("hello");
         var modalInstance = $modal.open({
             animation: $scope.animationsEnabled,
             templateUrl: 'myModalContent.html',

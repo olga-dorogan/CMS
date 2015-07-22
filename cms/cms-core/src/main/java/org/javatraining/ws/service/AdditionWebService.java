@@ -1,9 +1,9 @@
 package org.javatraining.ws.service;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -15,11 +15,14 @@ import java.security.NoSuchAlgorithmException;
 @Path("mailhash")
 public class AdditionWebService {
 
-    @POST
-    @Produces("text/plain")
-    @Consumes("text/plain")
-    public String getEmailHash(String email) {
-        return getMDA5(email);
+    @GET
+    @Produces("application/json")
+    public EmailHash getEmailHash(@QueryParam("email") String email) {
+//    public Response getEmailHash(@QueryParam("email") String email) {
+        String hash = getMDA5(email);
+        EmailHash hash1 = new EmailHash(hash);
+        return hash1;
+//        return Response.ok(hash1).build();
     }
 
     private String getMDA5(String email) {
@@ -40,5 +43,21 @@ public class AdditionWebService {
             e.printStackTrace();
         }
         return null;
+    }
+    private class EmailHash{
+        private String hash;
+
+        public EmailHash(String hash){
+            this.hash = hash;
+        }
+
+
+        public String getHash() {
+            return hash;
+        }
+
+        public void setHash(String hash) {
+            this.hash = hash;
+        }
     }
 }

@@ -3,23 +3,33 @@ function NotificationCtrl(Restangular, $scope){
     var Notification = Restangular.all(restBase);
 
     $scope.mailModel = {
-        sms: false,
+        sms: true,
         email: false
     };
 
+    //$scope.onClickChangeFlagsInSms = function () {
+    //    if(mailModel.sms) mailModel.email = false;
+    //    if(!mailModel.sms) mailModel.email = true;
+    //};
+    //
+    //$scope.onClickChangeFlagsInEmail = function () {
+    //    if(mailModel.email) mailModel.sms = false;
+    //    if(!mailModel.email) mailModel.sms = true;
+    //};
+
     $scope.doNotifying = function(){
-        if($scope.mailModel.email){
-            Notification.post({
-                mailtype: "email",
-                text: $scope.emailMessage,
-                subject: $scope.subject
-            })
-        }
-        if($scope.mailModel.sms){
-            Notification.post({
-                mailtype: "sms",
-                text: $scope.smsMessage
-            })
-        }
+        //if($scope.mailModel.email){
+        //    Notification.post({
+        //        mailtype: "MAIL",
+        //        message: $scope.emailMessage,
+        //        subject: $scope.subject
+        //    })
+        //}
+        //if($scope.mailModel.sms){
+        //    Notification.post({
+        //        mailtype: "SMS",
+        //        message: $scope.smsMessage
+        //    })
+        //}
     };
 }

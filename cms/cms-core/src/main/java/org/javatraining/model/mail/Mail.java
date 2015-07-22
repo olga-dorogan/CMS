@@ -1,49 +1,45 @@
 package org.javatraining.model.mail;
 
-import org.javatraining.model.PersonVO;
-
 /**
  * The project name is cms.
  * Created by sergey on 07.07.15 at 17:26.
  * For more information you should send mail to codedealerb@gmail.com
  */
 public class Mail {
-    private MailType type;
-    private String memory;
-    private PersonVO userTo;
-
+    private MailType mailtype;
+    private String message;
+    private String subject;
     public Mail() {
 
     }
 
-    public Mail(MailType type, String memory, PersonVO userTo) {
+    public Mail(MailType type, String message) {
         this.setType(type);
-        this.setMemory(memory);
-        this.setUserTo(userTo);
+        this.setMessage(message);
     }
 
     public MailType getType() {
-        return type;
+        return mailtype;
     }
 
     public void setType(MailType type) {
-        this.type = type;
+        this.mailtype = type;
     }
 
-    public String getMemory() {
-        return memory;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMemory(String memory) {
-        this.memory = memory;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public PersonVO getUserTo() {
-        return userTo;
+    public String getSubject() {
+        return subject;
     }
 
-    public void setUserTo(PersonVO userTo) {
-        this.userTo = userTo;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 }
 

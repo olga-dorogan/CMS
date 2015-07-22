@@ -23,7 +23,7 @@ import java.util.Properties;
  */
 public class GitLabNotificationServiceImpl implements NotificationService<GitLabUser> {
     @Override
-    public void sendNotificationToEndPoint(String subject, GitLabUser user) {
+    public void sendNotificationToEndPoint(String subject, String message, GitLabUser user) {
         Properties props = new Properties();
         JSONParser parser = new JSONParser();
         try {
@@ -57,20 +57,21 @@ public class GitLabNotificationServiceImpl implements NotificationService<GitLab
 
             VelocityEngine velocityEngine = MailNotification.createEngine();
 
-            MimeMessage message = new MimeMessage(session);
-            message.setSender(addressFrom);
-            message.setSubject(subject);
+            MimeMessage mMessage = new MimeMessage(session);
+            mMessage.setSender(addressFrom);
+            mMessage.setSubject(subject);
 
             Map model = new HashMap<>();
             model.put("person.Properties", user);
+            model.put("text", message);
 
-            message.setContent(VelocityEngineUtils.mergeTemplateIntoString(
+            mMessage.setContent(VelocityEngineUtils.mergeTemplateIntoString(
                             velocityEngine, "../resources/velocity/gitlab-mail-template.html", "UTF-8", model),
                     "text/html; charset=UTF-8");
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
+            mMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
 
             transport.connect();
-            Transport.send(message);
+            Transport.send(mMessage);
             transport.close();
         } catch (Exception e) {
             e.printStackTrace();
