@@ -18,6 +18,7 @@ public class CourseConverter {
         CourseVO courseVO = new CourseVO(courseEntity.getId(), courseEntity.getName(), courseEntity.getDescription());
         courseVO.setStartDate(courseEntity.getStartdate());
         courseVO.setEndDate(courseEntity.getEnddate());
+        courseVO.setCalendarId(courseEntity.getCalendar_id());
         return courseVO;
     }
 
@@ -36,6 +37,7 @@ public class CourseConverter {
         if (courseVO.getEndDate() != null) {
             courseEntity.setEndDate(new Date(courseVO.getEndDate().getTime()));
         }
+        courseEntity.setCalendar_id(courseVO.getCalendarId());
         return courseEntity;
     }
 

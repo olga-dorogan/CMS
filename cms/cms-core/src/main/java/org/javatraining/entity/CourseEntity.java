@@ -41,14 +41,14 @@ public class CourseEntity implements Serializable, GenericEntity {
     @Column(name = "enddate", nullable = false, insertable = true, updatable = true)
     private Date enddate;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "course")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course", cascade = {CascadeType.REMOVE})
     private Set<LessonEntity> lessons;
 
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "courses")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "courses", cascade = {CascadeType.REMOVE})
     private Set<NewsEntity> news;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "course")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course", cascade = {CascadeType.REMOVE})
     private Set<CoursePersonStatusEntity> coursePersonEntities;
 
 

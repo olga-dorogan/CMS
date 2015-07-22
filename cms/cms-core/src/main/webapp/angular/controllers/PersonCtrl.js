@@ -34,6 +34,8 @@ function PersonCtrl($scope, $modal, courseService, coursesGroups, oldCourses) {
                             textAlert: success,
                             mode: 'danger'
                         });
+                } else {
+                    removeCourseFromView(courseId);
                 }
             });
     };
@@ -54,5 +56,26 @@ function PersonCtrl($scope, $modal, courseService, coursesGroups, oldCourses) {
                 size: 'lg'
             }
         );
+    };
+
+    var removeCourseFromView = function (courseId) {
+        var removed = false;
+        removed = removeFromArray($scope.personCourses, courseId);
+        if (!removed) {
+            removed = removeFromArray($scope.newCourses, courseId);
+        }
+        if (!removed) {
+            removed = removeFromArray($scope.oldCourses, courseId);
+        }
+
+    };
+    var removeFromArray = function (array, courseId) {
+        for (var i = 0; i < array.length; i++) {
+            if (array[i].id == courseId) {
+                array.splice(i, 1);
+                return true;
+            }
+        }
+        return false;
     };
 }

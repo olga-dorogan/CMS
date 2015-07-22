@@ -16,9 +16,17 @@ public class CalendarVO {
     @NotNull
     @Valid
     private List<PersonVO> teachers;
-    @NotNull
     @Valid
     private List<PersonVO> students;
+
+    public CalendarVO() {
+
+    }
+
+    public CalendarVO(String title, List<PersonVO> teachers) {
+        this.title = title;
+        this.teachers = teachers;
+    }
 
     public String getId() {
         return id;

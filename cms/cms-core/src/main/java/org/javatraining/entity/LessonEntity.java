@@ -50,17 +50,17 @@ public class LessonEntity implements Serializable, GenericEntity {
     @Column(name = "date", nullable = false, insertable = true, updatable = true, length = 255)
     private Date createDate;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lesson", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "lesson", cascade = CascadeType.REMOVE)
     private Set<LessonLinkEntity> lessonLinks;
 
     @ManyToOne(cascade = {})
     @JoinColumn(name = "course_id", nullable = false)
     private CourseEntity course;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lessons", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "lessons", cascade = CascadeType.REMOVE)
     private Set<ForumMessageEntity> forumMessages;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lesson", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "lesson", cascade = CascadeType.REMOVE)
     private Set<PracticeLessonEntity> practiceLesson;
 
     public LessonEntity() {
