@@ -1,7 +1,7 @@
-function SettingCtrl($scope, $modalInstance) {
+function SettingInstanceCtrl($scope, $modalInstance) {
 
     $scope.ok = function () {
-        $modalInstance.close();
+        $modalInstance.close($scope.phoneNumber);
     };
 
     $scope.cancel = function () {

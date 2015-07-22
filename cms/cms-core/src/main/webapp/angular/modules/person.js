@@ -294,11 +294,6 @@ angular.module('myApp.person', ['ui.router'])
                 url: '/addition',
                 templateUrl: 'angular/views/settings/settings.html'
             })
-            //SUBSCRIBE
-            .state('person.subscribe', {
-                url: '/subscribe',
-                templateUrl: 'angular/views/addition.html'
-            })
     }])
     .service('PersonService', PersonService)
     .service('NewsService', NewsService)
@@ -312,7 +307,8 @@ angular.module('myApp.person', ['ui.router'])
     .controller('CourseContentCtrl', CourseContentCtrl)
     .controller("AddLectureCtrl", AddLectureCtrl)
     .controller("LectureContentCtrl", LectureContentCtrl)
-    .controller("SettingCtrl", SettingCtrl);
+    .controller("SettingCtrl", SettingCtrl)
+    .controller("SettingInstanceCtrl", SettingInstanceCtrl);
 
 
 

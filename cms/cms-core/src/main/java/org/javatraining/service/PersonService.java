@@ -20,6 +20,8 @@ public interface PersonService {
     @Nullable
     PersonDescriptionVO getPersonDescription(@NotNull Long id);
 
+    PersonDescriptionVO getPersonPhone(@NotNull Long personId);
+
     PersonDescriptionVO updatePersonDescription(@NotNull PersonDescriptionVO personDescriptionVO);
 
     void removePersonDescription(Long id);

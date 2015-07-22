@@ -78,14 +78,9 @@
                                         </a>
                                     </div>
                                     <div ng-hide="isTeacher()">
-                                        <a ui-sref="person.subscribe"
-                                           ng-if="!isPersonHasPhoneNumber()"
-                                           class="enroll-into-course">{{getActionMsg('', isTeacher())}}</a>
-                                        <a href="#"
-                                           ng-if="isPersonHasPhoneNumber()"
-                                           ng-click="subscribePersonToCourse(course.id, getUserId())"
-                                           class="enroll-into-course">{{getActionMsg('', isTeacher())}}</a>
-                                        <!--FIXME check person id -->
+                                        <a ng-click="subscribePersonToCourse(course.id)"
+                                           class="enroll-into-course">{{getActionMsg('', isTeacher())}}
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -132,5 +127,7 @@
         </div>
 
     </div>
+
+    <div ng-include src="'angular/views/addition.html'"></div>
 
 </div>

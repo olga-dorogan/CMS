@@ -1,9 +1,10 @@
 function PersonService(Restangular, PersonPersistenceService) {
-    var Person = Restangular.all("resources/person");
+    var REST_BASE = 'resources/person';
+    var Person = Restangular.all(REST_BASE);
     //person/:person_id/description
 
     this.getPersonDescription = function (userId) {
-        return Person.one(userId).get("description");//Возвращение описание человека для личного кабинета
+        return Restangular.one(REST_BASE, userId).customGET('description', {'field': 'phone'});//Возвращение описание человека для личного кабинета
     };
 
     this.createPerson = function (user) {
