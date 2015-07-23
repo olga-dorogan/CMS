@@ -78,14 +78,14 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', 'AuthSer
             return PersonPersistenceService.getId();
         };
         $rootScope.getUsername = function () {
-            console.log("username: " + PersonPersistenceService.getEmailHash());
+            //console.log("username: " + PersonPersistenceService.getEmailHash());
             return PersonPersistenceService.getName();
         };
         $rootScope.isTeacher = function () {
             return PersonPersistenceService.isTeacher();
         };
         $rootScope.getEmailHash = function(){
-            console.log("emailhash: " + PersonPersistenceService.getEmailHash());
+            //console.log("emailhash: " + PersonPersistenceService.getEmailHash());
             return PersonPersistenceService.getEmailHash();
         };
         // ------------------  Broadcast receivers -------------------------

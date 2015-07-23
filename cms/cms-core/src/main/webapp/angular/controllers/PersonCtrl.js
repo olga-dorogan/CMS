@@ -81,27 +81,34 @@ function PersonCtrl($state, $scope, $modal, PersonPersistenceService, courseServ
     };
 
     // subscribe person to the course
-    var personPhoneNumber = undefined;
-
-    var hasPersonPhoneNumber = function () {
-        return personPhoneNumber != undefined && personPhoneNumber != null;
-    };
-
-    var getPersonPhoneNumber = function () {
+    var requestPhoneNumberFromPerson = function (callback) {
         var modalInstance = $modal.open({
-            animation: $scope.animationsEnabled,
-            templateUrl: 'myModalContent.html',
-            controller: 'SettingInstanceCtrl',
-            size: 'lg'
+            animation: true,
+            templateUrl: 'angular/templates/phoneModal.html',
+            controller: function ($scope, $modalInstance) {
+                $scope.person = {'phone': ''};
+                $scope.ok = function () {
+                    $modalInstance.close($scope.person.phone);
+                };
+                $scope.cancel = function () {
+                    $modalInstance.dismiss('cancel');
+                };
+            },
+            size: 'sm'
         });
         modalInstance.result.then(function (number) {
-            personPhoneNumber = number;
+            personService.setPersonPhone(PersonPersistenceService.getId(), number).then(
+                function (success) {
+                    if (success.responseStatus / 100 == 2) {
+                        callback(number);
+                    }
+                });
         });
     };
 
-    var requestPersonPhoneNumber = function (callback) {
+    var requestPhoneNumberFromServer = function (callback) {
         alertData.textAlert = 'Ошибка при получении контактной информации';
-        personService.getPersonDescription(PersonPersistenceService.getId()).then(
+        personService.getPersonPhone(PersonPersistenceService.getId()).then(
             function (description) {
                 if (description.responseStatus / 100 == 2) {
                     callback(description.phoneNumber);
@@ -114,29 +121,25 @@ function PersonCtrl($state, $scope, $modal, PersonPersistenceService, courseServ
             });
     };
 
-    $scope.subscribePersonToCourse = function (courseId) {
-        if (!hasPersonPhoneNumber()) {
-            if (personPhoneNumber == undefined) {
-                requestPersonPhoneNumber(function (phone) {
-                    personPhoneNumber = phone;
-                    if (personPhoneNumber != undefined) {
-                        $scope.subscribePersonToCourse(courseId);
-                    }
-                });
-            }
-            else if (personPhoneNumber == null) {
-                getPersonPhoneNumber();
-                if (personPhoneNumber != null) {
-                    $scope.subscribePersonToCourse(courseId);
-                }
-            }
-        }
-        else {
-            courseService.subscribePersonToCourse(courseId, PersonPersistenceService.getId()).then(
-                function (success) {
-                    $state.go($state.current.name, $state.params, {reload: true});
-                })
-        }
+    var validatePhoneNumber = function (phone) {
+        return phone;
+    };
+    var doSubscribing = function (courseId) {
+        courseService.subscribePersonToCourse(courseId, PersonPersistenceService.getId()).then(
+            function (success) {
+                $state.go($state.current.name, $state.params, {reload: true});
+            });
     };
 
+    $scope.subscribePersonToCourse = function (courseId) {
+        requestPhoneNumberFromServer(function (phoneNumber) {
+            if (!validatePhoneNumber(phoneNumber)) {
+                requestPhoneNumberFromPerson(function (number) {
+                    doSubscribing(courseId);
+                })
+            } else {
+                doSubscribing(courseId);
+            }
+        });
+    };
 }

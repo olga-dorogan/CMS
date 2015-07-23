@@ -3,8 +3,15 @@ function PersonService(Restangular, PersonPersistenceService) {
     var Person = Restangular.all(REST_BASE);
     //person/:person_id/description
 
+    this.getPersonPhone = function (userId) {
+        return Restangular.one(REST_BASE, userId).customGET('description', {'field': 'phone'});
+    };
+    this.setPersonPhone = function (userId, phoneNumber) {
+        phoneNumber = phoneNumber.replace(/[^\/\d]/g,'');
+        return Restangular.one(REST_BASE, userId).all('phone').customPUT({'phoneNumber': phoneNumber});
+    };
     this.getPersonDescription = function (userId) {
-        return Restangular.one(REST_BASE, userId).customGET('description', {'field': 'phone'});//Возвращение описание человека для личного кабинета
+        return Restangular.one(REST_BASE, userId).customGET('description', {'field': 'all'});
     };
 
     this.createPerson = function (user) {

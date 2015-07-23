@@ -175,6 +175,19 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
         return personDesc != null ? Response.ok().build() : Response.status(422).build();
     }
 
+    @PUT
+    @Path("{person_id}/phone")
+    @Consumes("application/json")
+    public Response updatePersonPhone(@PathParam("person_id") long personId, PersonDescriptionVO personDescriptionVO) {
+        if (personDescriptionVO == null) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        personDescriptionVO.setId(personId);
+        PersonDescriptionVO updatedPersonVO = personService.updatePersonPhone(personDescriptionVO);
+        return updatedPersonVO != null ? Response.ok().build() : Response.status(422).build();
+    }
+
+
     @DELETE
     @Path("{person_id}")
     @Auth(roles = {AuthRole.TEACHER, AuthRole.STUDENT})

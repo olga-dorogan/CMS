@@ -307,8 +307,7 @@ angular.module('myApp.person', ['ui.router'])
     .controller('CourseContentCtrl', CourseContentCtrl)
     .controller("AddLectureCtrl", AddLectureCtrl)
     .controller("LectureContentCtrl", LectureContentCtrl)
-    .controller("SettingCtrl", SettingCtrl)
-    .controller("SettingInstanceCtrl", SettingInstanceCtrl);
+    .controller("SettingCtrl", SettingCtrl);
 
 
 
