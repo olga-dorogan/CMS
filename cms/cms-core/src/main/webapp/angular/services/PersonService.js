@@ -1,15 +1,22 @@
-function PersonService(Restangular) {
-    var Person = Restangular.all("resources/person");
+function PersonService(Restangular, PersonPersistenceService) {
+    var REST_BASE = 'resources/person';
+    var Person = Restangular.all(REST_BASE);
+    //person/:person_id/description
 
-    this.getPersonDescription = function () {
-        var PersonDescription = Person.get($window.localStorage['id']).one("description");
-
-        return PersonDescription.getList()[0];//Возвращение описание человека для личного кабинета
+    this.getPersonPhone = function (userId) {
+        return Restangular.one(REST_BASE, userId).customGET('description', {'field': 'phone'});
+    };
+    this.setPersonPhone = function (userId, phoneNumber) {
+        phoneNumber = phoneNumber.replace(/[^\/\d]/g,'');
+        return Restangular.one(REST_BASE, userId).all('phone').customPUT({'phoneNumber': phoneNumber});
+    };
+    this.getPersonDescription = function (userId) {
+        return Restangular.one(REST_BASE, userId).customGET('description', {'field': 'all'});
     };
 
     this.createPerson = function (user) {
         var name = user.name.split(" ");
-        var PersonDescription = Person.one("description");
+
         return Person.post(
             {
                 "email": user.email,
@@ -19,12 +26,7 @@ function PersonService(Restangular) {
                 "personRole": null,
                 "secondName": null
             }
-        ) && PersonDescription.post({//FIXME maybe this could be removed
-            "id": $window.localStorage['id'],
-            "experience": null,
-            "graduation": null,
-            "phoneNumber": null
-        });
+        )
     };
 
     this.createPersonForAuth = function (user) {
@@ -41,19 +43,18 @@ function PersonService(Restangular) {
     };
 
     this.updatePerson = function (user) {
-        var PersonDescription = Person.get($window.localStorage['id']).one("description");
-        return Person.get($window.localStorage['id']).put(
-            {
-                "name": user.name,
-                "surname": user.surname,
-                "secondName": user.secondName
-            }
-        ) && PersonDescription.put({
-            "experience": user.experience,
-            "graduation": user.graduation,
-            "phoneNumber": user.phoneNumber
-        });
-    };//FIXME проверка этого метода на правильность урлов
+        return Person.one(PersonPersistenceService.getId()).put(
+                {
+                    "name": user.name,
+                    "surname": user.surname,
+                    "secondName": user.secondName
+                }
+            ) && PersonDescription.put({
+                "experience": user.experience,
+                "graduation": user.graduation,
+                "phoneNumber": user.phoneNumber
+            });
+    };
 
     this.getTeachers = function () {
         return Person.getList({'role': 'teacher'});

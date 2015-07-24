@@ -1,17 +1,46 @@
-function SettingCtrl($scope, $window, PersonService) {
+function SettingCtrl($scope, PersonPersistenceService, PersonService, $modal) {
+    // init
+    $scope.animationsEnabled = true;
+
     $scope.person = $scope.person || {};
-    $scope.person.id = $window.localStorage['id'];
-    $scope.person.name = $window.localStorage['name'].split(" ")[0];
-    $scope.person.surname = $window.localStorage['name'].split(" ")[1];
-    $scope.person.description = PersonService.getPersonDescription() || {};
+    var description = PersonService.getPersonDescription(PersonPersistenceService.getId());
+    $scope.person.id = PersonPersistenceService.getId();
+    $scope.person.name = PersonPersistenceService.getName().split(" ")[0];
+    $scope.person.surname = PersonPersistenceService.getName().split(" ")[1];
+    $scope.person.phoneNumber = description.phoneNumber;
+    $scope.person.graduation = description.graduation;
+    $scope.person.experience = description.experience;
+
+    $scope.open = function (size) {
+        console.log("hello");
+        var modalInstance = $modal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'myModalContent.html',
+            controller: 'SettingInstanceCtrl',
+            size: size
+            //resolve: {
+            //    items: function () {
+            //        return $scope.items;
+            //    }
+            //}
+        });
+
+        modalInstance.result.then(function (number) {
+            $scope.person.phoneNumber = number;
+        });
+
+    };
 
     $scope.isValidUser = function () {
-        if (!this.isValidTextFields()) {
-            $scope.messages = 'Проверьте Ваши введённые ФИО. Поле не может быть пустым!';
-            $scope.alertStatus = 'warning';
+        if (!this.isValidFIO()) {
+            var alertData = {
+                boldTextTitle: 'Проверьте Ваши введённые ФИО. Имя или фамилия не могут быть пустыми!',
+                mode: 'warning'
+            };
+            showAlertWithError(alertData);
         }
 
-        return !personForm.$invalid && !this.isValidFIO();
+        return this.isValidFIO();
     };
 
     $scope.isPersonHasPhone = function () {
@@ -20,26 +49,11 @@ function SettingCtrl($scope, $window, PersonService) {
 
     $scope.isValidFIO = function () {
         return $scope.person.name.length > 0 &&
-            $scope.person.surname.length > 0 &&
-            $scope.person.secondName.length > 0;
+            $scope.person.surname.length > 0
     };
 
     $scope.phoneValidator = function () {
         $scope.person.phoneNumber = $scope.person.phoneNumber.replace(/[^\d]/g, '');//замена символов на пустые, для ввода только цифр
     };
 
-    $scope.updatePerson = function () {
-        PersonService.updatePerson($scope.person);//FIXME finally refresh fields of person
-    };
-
-    $scope.addImage = function () {//FIXME check read file for image extension
-        var f = document.getElementById('image').files[0],
-            r = new FileReader();
-        r.onloadend = function (e) {
-            $scope.person.avatar = e.target.result;
-        };
-        r.readAsBinaryString(f);
-
-        PersonService.updatePicture($scope.person.avatar);
-    };
 }

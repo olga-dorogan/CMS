@@ -32,7 +32,8 @@
 
                 <div class="pull-right">
                     <button type="button" class="btn btn-success btn-s"
-                            ng-disabled="!isLectureValid(lectureForm)" ng-click="ok()"> Добавить лекцию
+                            ng-disabled="!isLectureValid(lectureForm)"
+                            ng-click="ok()"> {{okBtnLabel}}
                     </button>
                     <button type="button" class="btn btn-danger btn-s"
                             ng-click="cancel()">Отмена

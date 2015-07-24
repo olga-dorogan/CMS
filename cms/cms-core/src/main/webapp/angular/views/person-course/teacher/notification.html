@@ -1,16 +1,46 @@
 <div>
     <div class="row">
         <div class="col-md-8">
-            <h3>Отправка сообщения</h3>
+            <h3>Message type</h3>
 
-            <form name="mailNotification" novalidate role="form">
+            <div class="btn-group">
+                <label class="btn btn-primary" ng-model="mailModel.sms" btn-checkbox
+                       ng-click="onClickChangeFlagsInSms()">SMS</label>
+                <label class="btn btn-primary" ng-model="mailModel.email" btn-checkbox
+                       ng-click="onClickChangeFlagsInEmail()">Email</label>
+            </div>
+            <form name="notificationForm" novalidate role="form">
                 <div class="form-group">
-                    <label for="mtypes"> Message type</label>
-                    <select id="mtypes"
-                            <!--ng-model="coursePrototypeId"-->
-                            <!--ng-options="course.id as course.name for course in coursePrototypes"-->
-                            <!--class="form-control">-->
-                    </select>
+                    <label ng-show="{{mailModel.email}}" for="subject">Subject<span
+                            class="required">*</span></label>
+                </div>
+                <div class="form-group">
+                    <input ng-show="{{mailModel.email}}" id="subject" name="subject" type="text" class="form-control"
+                           ng-model="subject"/>
+                </div>
+                <div class="form-group">
+                    <label ng-show="{{mailModel.email}}" for="email">Your email message<span
+                            class="required">*</span></label>
+                </div>
+                <div class="form-group">
+                <textarea ng-show="{{mailModel.email}}" class="form-control" id="email"
+                          ng-model="emailMessage"
+                          placeholder="Введите описание..." rows="4"> </textarea>
+                </div>
+                <div class="form-group">
+                    <label ng-show="{{mailModel.email}}" for="sms">Your email message<span
+                            class="required">*</span></label>
+                </div>
+                <div class="form-group">
+                <textarea ng-show="{{mailModel.email}}" class="form-control" id="sms"
+                          ng-model="smsMessage"
+                          placeholder="Введите описание..." rows="4"> </textarea>
+                </div>
+                <div class="pull-right">
+                    <button type="button" class="btn btn-success btn-s"
+                            ng-disabled="{{mailModel.sms}} && {{mailModel.sms}}"
+                            ng-click="">Send
+                    </button>
                 </div>
             </form>
         </div>

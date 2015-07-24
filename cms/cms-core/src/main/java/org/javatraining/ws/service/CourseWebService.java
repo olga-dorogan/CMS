@@ -5,17 +5,18 @@ import org.javatraining.auth.Auth;
 import org.javatraining.config.AuthRole;
 import org.javatraining.config.Config;
 import org.javatraining.entity.enums.PersonRole;
+import org.javatraining.integration.google.calendar.CalendarService;
+import org.javatraining.integration.google.calendar.CalendarVO;
+import org.javatraining.integration.google.calendar.exception.CalendarException;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.CourseWithDetailsVO;
 import org.javatraining.model.PersonVO;
-import org.javatraining.notification.email.impl.MailNotification;
-import org.javatraining.notification.email.interfaces.NotificationService;
-import org.javatraining.notification.sms.SMSNotificationService;
 import org.javatraining.service.CourseService;
 import org.javatraining.service.PersonService;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -39,6 +40,8 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     private CourseService courseService;
     @EJB
     private PersonService personService;
+    @Inject
+    private CalendarService calendarService;
 
     CourseWebService() {
         super(CourseVO.class);
@@ -93,60 +96,18 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
                 coursePrototype.setId(coursePrototypeId);
                 courseService.createFromPrototype(courseVO, coursePrototype);
             }
+            CalendarVO courseCalendar = calendarService.addCalendar(new CalendarVO(courseVO.getName(), courseVO.getTeachers()));
+            courseVO.setCalendarId(courseCalendar.getId());
+            courseService.updateCourse(courseVO);
             String courseUri = uriInfo.getRequestUri().toString() + "/" + courseVO.getId();
             r = Response.created(new URI(courseUri)).entity(courseVO);
         } catch (NumberFormatException e) {
             r = Response.status(Response.Status.BAD_REQUEST);
         } catch (JSONException e) {
             r = Response.status(Response.Status.NOT_ACCEPTABLE);
-        } catch (URISyntaxException e) {
+        } catch (URISyntaxException | CalendarException e) {
             //this shouldn't happen
             r = Response.serverError();
-        }
-
-        return r.build();
-    }
-
-    @POST
-    @Path("{course_id}/notification/sms")
-    @Consumes("application/json")
-    public Response sendSmsNotification(@PathParam("course_id") long id, String text) {
-        Response.ResponseBuilder r;
-        try {
-            List<PersonVO> students = courseService.getAllPersonsFromCourseByRole(
-                    courseService.getCourseById(id), PersonRole.STUDENT);
-            SMSNotificationService smsService = new SMSNotificationService();
-            if (smsService.connectAndAuthToService()) {
-                students.stream().map(
-                        s -> personService.getPersonDescription(s.getId())
-                ).forEach(s -> smsService.sendNotificationToEndPoint(text, s));
-            } else {
-                r = Response.status(Response.Status.BAD_GATEWAY);
-            }
-            r = Response.ok();
-        } catch (JSONException e) {
-            r = Response.status(Response.Status.NOT_ACCEPTABLE);
-        }
-
-        return r.build();
-    }
-
-    @POST
-    @Path("{course_id}/notification/email")
-    @Consumes("application/json")
-    public Response sendEmailNotification(@PathParam("course_id") long id, String subject) {
-        Response.ResponseBuilder r;
-        try {
-            List<PersonVO> students = courseService.getAllPersonsFromCourseByRole(
-                    courseService.getCourseById(id), PersonRole.STUDENT);
-            SMSNotificationService smsService = new SMSNotificationService();
-            NotificationService<PersonVO> emailService = new MailNotification();
-            students.parallelStream().forEach(
-                    s -> emailService.sendNotificationToEndPoint(subject, s)
-            );
-            r = Response.ok();
-        } catch (JSONException e) {
-            r = Response.status(Response.Status.NOT_ACCEPTABLE);
         }
 
         return r.build();
@@ -200,9 +161,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     @PUT
     @Path("{course_id}/subscribe")
     @Auth(roles = {AuthRole.STUDENT})
-    public Response subscribeCourse(@PathParam("course_id") long courseId, @QueryParam("person_id") long personId) {
-        PersonVO person = new PersonVO();
-        person.setId(personId);
+    public Response subscribeCourse(@PathParam("course_id") long courseId, PersonVO person) {
         CourseVO course = new CourseVO();
         course.setId(courseId);
         personService.addPersonRequestForCourse(person, course);

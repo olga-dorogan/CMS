@@ -1,7 +1,6 @@
 angular.module('myApp.news', ['ui.router'])
     .config(['$stateProvider', function ($stateProvider) {
         $stateProvider
-
             .state('news', {
                 parent: 'main',
                 url: '/news',

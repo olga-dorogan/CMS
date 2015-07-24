@@ -1,12 +1,12 @@
-var teacherAccess = function ($location, $window) {
-    if ($window.localStorage['role'] == "teacher") {
+var teacherAccess = function ($location, PersonPersistenceService) {
+    if (PersonPersistenceService.getRole() == "teacher") {
         return true;
     } else {
         $location.path("/home");
     }
 };
-var studentAccess = function ($location, $window) {
-    if ($window.localStorage['role'] == "student") {
+var studentAccess = function ($location, PersonPersistenceService) {
+    if (PersonPersistenceService.getRole() == "student") {
         return true;
     } else {
         $location.path("/home");

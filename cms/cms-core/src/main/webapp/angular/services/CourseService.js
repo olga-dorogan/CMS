@@ -47,7 +47,8 @@ function CourseService(Restangular) {
             'name': course.name,
             'description': course.description,
             'startDate': course.startDate,
-            'endDate': course.endDate
+            'endDate': course.endDate,
+            'calendarId': course.calendarId
         };
     };
 
@@ -55,7 +56,7 @@ function CourseService(Restangular) {
         if (courseId === undefined || personId === undefined) {
             return {};
         }
-        return Restangular.one(restBase, courseId).all('subscribe').put({"person_id": personId});
+        return Restangular.one(restBase, courseId).all('subscribe').customPUT({"id": personId});
     };
     //FIXME заглушка, для нормальной работы на без запуска WildFly
     this.getCoursesCap = function () {

@@ -4,6 +4,7 @@
 angular.module('myApp.person', ['ui.router'])
     .config(['$stateProvider', function ($stateProvider) {
         $stateProvider
+            //PERSON
             .state('person', {
                 parent: 'main',
                 url: '/person',
@@ -59,6 +60,7 @@ angular.module('myApp.person', ['ui.router'])
                     }
                 }
             })
+            //ADDCOURSE
             .state('person.addCourse', {
                 url: '/addCourse',
                 views: {
@@ -93,6 +95,7 @@ angular.module('myApp.person', ['ui.router'])
                     }
                 }
             })
+            //COURSE
             .state('person.course', {
                 url: '/course/:courseId',
                 views: {
@@ -158,6 +161,44 @@ angular.module('myApp.person', ['ui.router'])
                     }
                 }
             })
+            .state('person.course.editLecture', {
+                url: '/editLecture/:lectureOrderNum',
+                templateUrl: 'angular/views/person-course/teacher/addLecture.html',
+                controller: 'AddLectureCtrl',
+                resolve: {
+                    courseContentService: 'CourseContentService',
+                    lecture: function ($stateParams, courseContentService) {
+                        var promise = courseContentService.getLecture($stateParams.courseId, $stateParams.lectureOrderNum);
+                        promise = promise.then(function (lecture) {
+                            if (lecture.responseStatus != 200) {
+                                return null;
+                            }
+                            return courseContentService.normalizeLecture(lecture);
+                        });
+                        return promise;
+                    },
+                    mode: function () {
+                        return 'edit';
+                    }
+                }
+            })
+            .state('person.course.calendar', {
+                url: '/calendar',
+                templateUrl: 'angular/views/person-course/calendarContent.html',
+                controller: function ($scope, calendarUrl) {
+                    $scope.calendarUrl = calendarUrl;
+
+                },
+                resolve: {
+                    calendarUrl: function ($sce, course) {
+                        return $sce.trustAsResourceUrl(
+                            "https://www.google.com/calendar/embed?" +
+                            "wkst=2&hl=ru&bgcolor=%23ffffff&" +
+                            "src=" + course.calendarId +
+                            "&color=%235229A3&ctz=Europe%2FKiev");
+                    }
+                }
+            })
             .state('person.course.newsContent', {
                 url: '/news-content',
                 templateUrl: 'angular/views/person-course/newsContent.html',
@@ -175,12 +216,20 @@ angular.module('myApp.person', ['ui.router'])
             })
             .state('person.course.notification', {
                 url: '/notification',
-                templateUrl: ''
+                templateUrl: 'angular/views/person-course/teacher/notification.html'
             })
             .state('person.course.addLecture', {
                 url: '/addLecture/:lectureOrderNum',
                 templateUrl: 'angular/views/person-course/teacher/addLecture.html',
-                controller: 'AddLectureCtrl'
+                controller: 'AddLectureCtrl',
+                resolve: {
+                    lecture: function () {
+                        return {};
+                    },
+                    mode: function () {
+                        return 'add';
+                    }
+                }
             })
             .state('person.course.lecture', {
                 url: '/lecture/:lectureId',
@@ -210,7 +259,6 @@ angular.module('myApp.person', ['ui.router'])
                     }
                 }
             })
-
             .state('person.course.addNews', {
                 url: '/addNews',
                 templateUrl: 'angular/views/person-course/teacher/addNews.html',
@@ -221,6 +269,7 @@ angular.module('myApp.person', ['ui.router'])
                 url: '/progress',
                 templateUrl: 'angular/views/person-course/progressContent.html'
             })
+            //SETTINGs
             .state('person.settings', {
                 url: '/settings',
                 views: {
@@ -234,13 +283,17 @@ angular.module('myApp.person', ['ui.router'])
                         templateUrl: 'angular/views/settings/menubar.html'
                     },
                     "setting-content@person.settings": {
-                        templateUrl: 'angular/views/settings/settings.html'//FIXME CHANGE CONTENT
+                        templateUrl: 'angular/views/person-course/content.html'
                     }
                 }
             })
-            .state('person.subcribe.modal', {
-                url: '/subscribe',
-                templateUrl: 'angular/views/addition.html'
+            .state('person.settings.personal', {
+                url: '/personal',
+                templateUrl: 'angular/views/settings/personal.html'
+            })
+            .state('person.settings.addition', {
+                url: '/addition',
+                templateUrl: 'angular/views/settings/settings.html'
             })
     }])
     .service('PersonService', PersonService)

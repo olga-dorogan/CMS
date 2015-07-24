@@ -1,12 +1,12 @@
-function SessionService($window) {
+function SessionService(PersonPersistenceService) {
     var service = this;
     service.isAnonymous = function () {
-        return ($window.localStorage['token'] === undefined);
+        return (PersonPersistenceService.getToken() === undefined);
     };
     service.getAccessToken = function () {
-        return $window.localStorage['token'];
+        return PersonPersistenceService.getToken();
     };
     service.getUserId = function () {
-        return $window.localStorage['id'];
+        return PersonPersistenceService.getId();
     };
 }

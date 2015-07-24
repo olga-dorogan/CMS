@@ -236,8 +236,8 @@ public class CourseDAOTest {
         CourseEntity predefinedCourse = new CourseEntity();
         predefinedCourse.setId((long) 1);
         predefinedCourse.setName("courseName");
-        predefinedCourse.setStartDate(Date.valueOf("2015-10-10"));
-        predefinedCourse.setEndDate(Date.valueOf("2016-11-11"));
+        predefinedCourse.setStartDate(Date.valueOf("2014-01-10"));
+        predefinedCourse.setEndDate(Date.valueOf("2015-07-31"));
         predefinedCourse.setDescription("courseDescription");
         return predefinedCourse;
     }

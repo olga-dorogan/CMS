@@ -18,6 +18,6 @@ public class NotificationServiceTest {
         NotificationService<PersonVO> mail = new MailNotification();
         PersonVO vo = new PersonVO((long) 1);
         vo.setEmail("valet12353@gmail.com");//test email
-        mail.sendNotificationToEndPoint("testSubject", vo);
+        mail.sendNotificationToEndPoint("testSubject", "test", vo);
     }
 }

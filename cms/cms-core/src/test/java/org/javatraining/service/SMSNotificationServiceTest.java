@@ -2,7 +2,6 @@ package org.javatraining.service;
 
 import org.javatraining.model.PersonDescriptionVO;
 import org.javatraining.notification.sms.SMSNotificationService;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -21,6 +20,6 @@ public class SMSNotificationServiceTest {
         PersonDescriptionVO person = new PersonDescriptionVO();
         person.setId((long) 1);
         person.setPhoneNumber("380981348966");
-        service.sendNotificationToEndPoint("Hello", person);
+        service.sendNotificationToEndPoint("Hello", "World", person);
     }
 }

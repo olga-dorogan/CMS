@@ -69,6 +69,7 @@ public class CourseServiceImpl implements CourseService {
         CourseEntity courseEntity = CourseConverter.convertVOToEntity(courseVO);
         courseDAO.save(courseEntity);
         courseVO.setId(courseEntity.getId());
+        List<PersonVO> teachersFromDB = new ArrayList<>(courseVO.getTeachers().size());
         for (PersonVO teacherVO : courseVO.getTeachers()) {
             CoursePersonStatusVO statusVO =
                     new CoursePersonStatusVO(CourseStatus.SIGNED, courseVO.getId(), teacherVO.getId());
@@ -78,7 +79,9 @@ public class CourseServiceImpl implements CourseService {
             statusEntity.setPerson(personEntity);
             statusEntity.setCourse(courseEntity);
             coursePersonStatusDAO.save(statusEntity);
+            teachersFromDB.add(PersonConverter.convertEntityToVO(personEntity));
         }
+        courseVO.setTeachers(teachersFromDB);
     }
 
     @Override
@@ -111,7 +114,6 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public CourseVO removeCourse(@NotNull CourseVO courseVO) {
         CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
-        newsDAO.removeById(courseEntity.getNews().iterator().next().getId());
         courseDAO.removeById(courseEntity.getId());
         return courseVO;
     }
@@ -245,7 +247,6 @@ public class CourseServiceImpl implements CourseService {
                 .stream()
                 .collect(Collectors.toList());
     }
-
 
 
     public List<NewsVO> getAllPersonsNews(@NotNull Long personId) {

@@ -2,7 +2,6 @@ package org.javatraining.ws.service;
 
 import org.javatraining.auth.Auth;
 import org.javatraining.config.AuthRole;
-import org.javatraining.model.LessonVO;
 import org.javatraining.model.LessonWithDetailsVO;
 import org.javatraining.service.LessonService;
 
@@ -14,6 +13,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -21,6 +21,9 @@ import java.util.Set;
  */
 @Path("course")
 public class LessonWebService {
+    private static final String PARAM_REMOVED_LINK_IDS = "removedLinks";
+    private static final String PARAM_REMOVED_PRACTICE_IDS = "removedPractices";
+
     @EJB
     LessonService lessonService;
 
@@ -69,14 +72,15 @@ public class LessonWebService {
     @Path("{course_id}/lesson/{order_num}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
-    public Response updateLessonByOrderNum(@PathParam("course_id") Long courseId, @PathParam("order_num") Long orderNum, LessonVO lesson) {
-        lessonService.updateByOrderNum(courseId, orderNum, lesson);
+    public Response updateLessonByOrderNum(@QueryParam(PARAM_REMOVED_LINK_IDS) List<Long> removedLinks,
+                                           @QueryParam(PARAM_REMOVED_PRACTICE_IDS) List<Long> removedPractices,
+                                           LessonWithDetailsVO lesson) {
+        lessonService.updateByOrderNum(lesson, removedLinks, removedPractices);
         return Response.ok().build();
     }
 
     @DELETE
     @Path("{course_id}/lesson/{order_num}")
-    @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
     public Response deleteLessonByOrderNum(@PathParam("course_id") Long courseId, @PathParam("order_num") Long orderNum) {
         lessonService.deleteByOrderNum(courseId, orderNum);

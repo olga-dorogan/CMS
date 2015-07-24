@@ -75,13 +75,15 @@ public class CalendarServiceImpl implements CalendarService {
                 calendarService.acl().insert(addedCalendar.getId(), rule).queue(batch, callback);
             }
 
-            List<PersonVO> students = calendarVO.getStudents();
-            for (PersonVO student : students) {
-                rule = new AclRule();
-                scope = new AclRule.Scope();
-                scope.setType("user").setValue(student.getEmail());
-                rule.setScope(scope).setRole(CALENDAR_ROLE_STUDENT);
-                calendarService.acl().insert(addedCalendar.getId(), rule).queue(batch, callback);
+            if (calendarVO.getStudents() != null) {
+                List<PersonVO> students = calendarVO.getStudents();
+                for (PersonVO student : students) {
+                    rule = new AclRule();
+                    scope = new AclRule.Scope();
+                    scope.setType("user").setValue(student.getEmail());
+                    rule.setScope(scope).setRole(CALENDAR_ROLE_STUDENT);
+                    calendarService.acl().insert(addedCalendar.getId(), rule).queue(batch, callback);
+                }
             }
 
             batch.execute();

@@ -45,7 +45,8 @@ public class GitUserConverter {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        gitLabNotification.sendNotificationToEndPoint(rootMail, entity);
+        String text = ""; //FIXME destroy template
+        gitLabNotification.sendNotificationToEndPoint(rootMail, text, entity);
 
         return entity;
     }

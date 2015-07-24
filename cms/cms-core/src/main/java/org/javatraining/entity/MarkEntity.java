@@ -21,7 +21,7 @@ public class MarkEntity implements Serializable, GenericEntity {
     @Column(name = "mark", nullable = false, insertable = true, updatable = true)
     private Long mark;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(cascade = {})
     @JoinColumn(name = "person_id", nullable = false)
     private PersonEntity persons;
 

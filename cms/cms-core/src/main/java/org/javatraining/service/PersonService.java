@@ -20,6 +20,10 @@ public interface PersonService {
     @Nullable
     PersonDescriptionVO getPersonDescription(@NotNull Long id);
 
+    PersonDescriptionVO getPersonPhone(@NotNull Long personId);
+    @Nullable
+    PersonDescriptionVO updatePersonPhone(@NotNull PersonDescriptionVO personDescriptionVO);
+
     PersonDescriptionVO updatePersonDescription(@NotNull PersonDescriptionVO personDescriptionVO);
 
     void removePersonDescription(Long id);
@@ -69,6 +73,5 @@ public interface PersonService {
     @NotNull
     @Valid
     List<MarkVO> getMarks(@NotNull PersonVO personVO);
-
 
 }

@@ -6,6 +6,7 @@ import org.javatraining.model.LessonWithDetailsVO;
 import javax.annotation.Nullable;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -40,9 +41,13 @@ public interface LessonService {
     @Valid
     LessonWithDetailsVO getByOrderNum(@NotNull Long courseId, @NotNull Long orderNum, boolean withDetails);
 
-    @Nullable
+    @NotNull
     @Valid
     LessonVO updateByOrderNum(@NotNull Long courseId, @NotNull Long orderNum, LessonVO lesson);
+
+    @NotNull
+    @Valid
+    LessonWithDetailsVO updateByOrderNum(@NotNull LessonWithDetailsVO lesson, List<Long> removedLinkIds, List<Long> removedPracticeIds);
 
     void deleteByOrderNum(@NotNull @Valid Long courseId, @NotNull @Valid Long orderNum);
 }

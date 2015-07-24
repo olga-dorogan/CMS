@@ -50,6 +50,33 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public PersonDescriptionVO getPersonPhone(@NotNull Long personId) {
+        PersonEntity personEntity = personDAO.getById(personId);
+        if (personEntity == null) {
+            return null;
+        }
+        PersonDescriptionVO personDescriptionVO = new PersonDescriptionVO();
+        personDescriptionVO.setPhoneNumber(personEntity.getPhone());
+        return personDescriptionVO;
+    }
+
+    @Nullable
+    @Override
+    public PersonDescriptionVO updatePersonPhone(@NotNull PersonDescriptionVO personDescriptionVO) {
+        if (personDescriptionVO.getId() == null) {
+            return null;
+        }
+        PersonEntity personEntity = personDAO.getById(personDescriptionVO.getId());
+        if (personEntity == null) {
+            return null;
+        }
+        personEntity.setPhone(personDescriptionVO.getPhoneNumber());
+        PersonEntity updatedPersonEntity = personDAO.update(personEntity);
+        // FIXME: do conversation
+        return personDescriptionVO;
+    }
+
+    @Override
     public PersonDescriptionVO updatePersonDescription(@NotNull PersonDescriptionVO personDescriptionVO) {
         //FIXME add implementation after creating specified repository
         return null;
