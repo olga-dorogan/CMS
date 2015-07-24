@@ -17,16 +17,16 @@
 
         <div class="description">{{new.content}}</div>
         <p class="date-format">{{new.date}}</p>
-         <div class="course-action course-teacher-footer">
-         <button ng-show="isTeacher()" class="btn btn-primary pull-right"  ui-sref="person.course.addNews">
-         <span class="glyphicon glyphicon-pencil"></span>  Редактировать
-         </button>
-         <button ng-show="isTeacher()" class="btn btn-primary btn pull-right"   ng-click="removeNews(new.id)">
-             <span class="glyphicon glyphicon-remove"></span>  Удалить
-         </button>
-             </div>
-    </div>
 
+    </div>
+    <div class="course-action course-teacher-footer">
+        <button ng-show="isTeacher()" class="btn btn-primary pull-right"  ui-sref="person.course.addNews">
+            <span class="glyphicon glyphicon-pencil"></span>  Редактировать
+        </button>
+        <button ng-show="isTeacher()" class="btn btn-primary btn pull-right"   ng-click="removeNews(new.id)">
+            <span class="glyphicon glyphicon-remove"></span>  Удалить
+        </button>
+    </div>
 
 
 </div>

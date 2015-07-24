@@ -1,4 +1,4 @@
-function NewsCtrl($scope, news, newsService) {
+function NewsCtrl($scope, news, newsService,$modal) {
     for (var i = 0; i < news.length; i++) {
         var timestamp = news[i].date;
         news[i].date = timestampConvector(timestamp);
@@ -19,7 +19,7 @@ function NewsCtrl($scope, news, newsService) {
                 }
             });
     };
-}
+
 var alertData = {
     boldTextTitle: "Ошибка",
     mode: 'danger'
@@ -43,7 +43,7 @@ var showAlertWithError = function (alertData) {
     );
 };
 
-
+}
 var timestampConvector = function (timestamp) {
     var newsCreateDate = new Date(timestamp);
     var currentDate = new Date();
@@ -56,7 +56,7 @@ var timestampConvector = function (timestamp) {
         var date = ((newsCreateDate.getDate()) < 10) ? "0" + newsCreateDate.getDate() : newsCreateDate.getDate();
         var month = ((newsCreateDate.getMonth() + 1) < 10) ? "0" + (newsCreateDate.getMonth() + 1) : (newsCreateDate.getMonth() + 1);
         formattedDate = date + "-" + month + "-" + newsCreateDate.getFullYear();
-   }
+    }
 
     var hours = (newsCreateDate.getHours() < 10) ? "0" + newsCreateDate.getHours() : newsCreateDate.getHours();
     var minutes = (newsCreateDate.getMinutes() < 10) ? "0" + newsCreateDate.getMinutes() : newsCreateDate.getMinutes();

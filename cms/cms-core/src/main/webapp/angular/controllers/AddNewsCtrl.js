@@ -4,7 +4,7 @@ function AddNewsCtrl($scope, $stateParams, NewsService ,$modal,$state) {
     $scope.createNews = function () {
         $scope.news.date = new Date();
         $scope.news.courseId =  $stateParams.courseId;
-         NewsService.createNews($scope.news)
+         NewsService.createNews($scope.news, $stateParams.courseId)
             .then(
             function (createdNews) {
                 console.log("service: create newsCtrl 1");
