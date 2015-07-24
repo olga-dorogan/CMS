@@ -4,11 +4,11 @@ function NewsCtrl($scope, news, newsService,$modal) {
         news[i].date = timestampConvector(timestamp);
     }
 
-    $scope.news = news;
 
     $scope.removeNews = function (newsId) {
         newsService.removeNews(newsId).then(
             function (success) {
+
                 if (success.responseStatus / 100 != 2) {
                     showAlertWithError(
                         {
@@ -16,9 +16,15 @@ function NewsCtrl($scope, news, newsService,$modal) {
                             textAlert: success,
                             mode: 'danger'
                         });
+                }else{
+                    $state.go('news', {}, {reload: true});
                 }
             });
     };
+
+    $scope.news = news;
+
+
 
 var alertData = {
     boldTextTitle: "Ошибка",

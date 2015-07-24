@@ -7,7 +7,6 @@ function AddNewsCtrl($scope, $stateParams, NewsService ,$modal,$state) {
          NewsService.createNews($scope.news, $stateParams.courseId)
             .then(
             function (createdNews) {
-                console.log("service: create newsCtrl 1");
                 if (NewsService.isNewsSuccessfullyCreated(createdNews)) {
                      $state.go('news', {}, {reload: true});
                 } else {
@@ -20,6 +19,49 @@ function AddNewsCtrl($scope, $stateParams, NewsService ,$modal,$state) {
                 showAlertWithError(alertData);
             });
     };
+
+    $scope.removeNews = function (newsId) {
+
+        NewsService.removeNews(newsId).then(
+            function (success) {
+
+                if (success.responseStatus / 100 != 2) {
+                    showAlertWithError(
+                        {
+                            boldTextTitle: "Ошибка",
+                            textAlert: success,
+                            mode: 'danger'
+                        });
+                }else{
+                    $state.go('news', {}, {reload: true});
+                }
+            });
+    };
+
+
+    var alertData = {
+        boldTextTitle: "Ошибка",
+        mode: 'danger'
+    };
+
+    var showAlertWithError = function (alertData) {
+        var modalInstance = $modal.open(
+            {
+                templateUrl: 'angular/templates/alertModal.html',
+                controller: function ($scope, $modalInstance) {
+                    $scope.data = alertData;
+                    $scope.close = function () {
+                        $modalInstance.close();
+                    }
+                },
+                backdrop: true,
+                keyboard: true,
+                backdropClick: true,
+                size: 'lg'
+            }
+        );
+    };
+
 
 
     var alertData = {
