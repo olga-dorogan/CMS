@@ -1,5 +1,6 @@
 package org.javatraining.model.conversion;
 
+import org.javatraining.entity.CourseEntity;
 import org.javatraining.entity.NewsEntity;
 import org.javatraining.model.NewsVO;
 
@@ -14,6 +15,7 @@ import java.util.Set;
 public class NewsConverter {
     public static NewsVO convertEntityToVO(NewsEntity newsEntity) {
         NewsVO newsVO = new NewsVO(newsEntity.getId(), newsEntity.getTitle(), newsEntity.getContent(), newsEntity.getDate());
+        newsVO.setCourseId(newsEntity.getCourses().getId());
         return newsVO;
     }
 
@@ -31,6 +33,10 @@ public class NewsConverter {
         if (newsVO.getTitle() != null) {
             newsEntity.setTitle(newsVO.getTitle());
         }
+        CourseEntity courseEntity = new CourseEntity();
+        courseEntity.setId(newsVO.getCourseId());
+        newsEntity.setCourse(courseEntity);
+
         return newsEntity;
     }
 

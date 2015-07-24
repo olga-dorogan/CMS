@@ -13,7 +13,6 @@ import org.jboss.arquillian.persistence.*;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -134,7 +133,7 @@ public class CourseServiceTest {
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testGetNewsById() {
         NewsVO newsVO = predefinedNewsVOInitialization();
-        assertEquals(newsVO, courseService.getAllNewsById(newsVO.getId()));
+        assertEquals(newsVO, courseService.getNewsById(newsVO.getId()));
     }
 
 
@@ -228,7 +227,7 @@ public class CourseServiceTest {
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testGetNewsByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
-        assertThatThrownBy(() -> courseService.getAllNewsById(notExistingId))
+        assertThatThrownBy(() -> courseService.getNewsById(notExistingId))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
                 + notExistingId + " does not exist in database");
     }

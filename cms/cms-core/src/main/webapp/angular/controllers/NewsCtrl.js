@@ -6,9 +6,6 @@ function NewsCtrl($scope, news, newsService) {
 
     $scope.news = news;
 
-    $scope.noNews = ($scope.news.length == null);
-
-
     $scope.removeNews = function (newsId) {
         newsService.removeNews(newsId).then(
             function (success) {
@@ -23,7 +20,28 @@ function NewsCtrl($scope, news, newsService) {
             });
     };
 }
+var alertData = {
+    boldTextTitle: "Ошибка",
+    mode: 'danger'
+};
 
+var showAlertWithError = function (alertData) {
+    var modalInstance = $modal.open(
+        {
+            templateUrl: 'angular/templates/alertModal.html',
+            controller: function ($scope, $modalInstance) {
+                $scope.data = alertData;
+                $scope.close = function () {
+                    $modalInstance.close();
+                }
+            },
+            backdrop: true,
+            keyboard: true,
+            backdropClick: true,
+            size: 'lg'
+        }
+    );
+};
 
 
 var timestampConvector = function (timestamp) {

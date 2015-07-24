@@ -25,10 +25,11 @@ function NewsService(Restangular) {
     };
 
 
-    this.createNews = function (newNews, courseId) {
-        console.log("service: create news");
-        return Restangular.one(restBase, courseId).all('saveNews').post(newNews);
+    this.createNews = function (newNews) {
+        console.log("service: create news"+newNews.courseId);
+        return Restangular.one(restBase,3).all('saveNews').post(newNews);
     };
+
 
     this.updateNews = function (newNews) {
         return Restangular.one(restBase).all('news').put(newNews);

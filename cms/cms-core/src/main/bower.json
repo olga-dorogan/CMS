@@ -15,6 +15,7 @@
         "restangular": "~1.5.1",
         "blueimp-file-upload-node": "~9.10.1",
         "angular-ui-bootstrap-bower": "0.11.0",
-        "angular-file-upload": "1.1.5"
+        "angular-file-upload": "1.1.5",
+        "angular-redactor":"1.1.4"
     }
 }

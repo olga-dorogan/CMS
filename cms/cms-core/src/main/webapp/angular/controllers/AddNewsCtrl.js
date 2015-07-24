@@ -1,15 +1,15 @@
-function AddNewsCtrl($scope, $stateParams, NewsService ,$modal) {
+function AddNewsCtrl($scope, $stateParams, NewsService ,$modal,$state) {
     $scope.news = {};
-    $scope.noNews = ($scope.news.isEmpty());
 
     $scope.createNews = function () {
         $scope.news.date = new Date();
-
-         NewsService.createNews($scope.news, $stateParams.courseId)
+        $scope.news.courseId =  $stateParams.courseId;
+         NewsService.createNews($scope.news)
             .then(
             function (createdNews) {
+                console.log("service: create newsCtrl 1");
                 if (NewsService.isNewsSuccessfullyCreated(createdNews)) {
-                    $state.go('person', {}, {reload: true});
+                     $state.go('news', {}, {reload: true});
                 } else {
                     alertData.textAlert = createdNews;
                     showAlertWithError(alertData);

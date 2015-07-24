@@ -10,6 +10,10 @@
             <property name="javax.persistence.schema-generation.database.action"
                       value="${persistence-schema-generation}"/>
             <property name="javax.persistence.sql-load-script-source" value="${sql-load-script}"/>
+
+            <property name="hibernate.show_sql" value="true"></property>
+            <property name="hibernate.format_sql" value="true"></property>
+            <property name="hibernate.use_sql_comments" value="true"></property>
         </properties>
     </persistence-unit>
 </persistence>

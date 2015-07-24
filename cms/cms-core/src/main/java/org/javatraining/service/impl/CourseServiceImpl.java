@@ -13,6 +13,7 @@ import org.javatraining.service.CourseService;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
  * Created by olga on 07.06.15.
  */
 @Stateless
+@Transactional
 public class CourseServiceImpl implements CourseService {
 
     @EJB
@@ -187,9 +189,11 @@ public class CourseServiceImpl implements CourseService {
     public NewsVO addNewsToCourse(@NotNull CourseVO courseVO, @NotNull @Valid NewsVO newsVO) {
         CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
         NewsEntity newsEntity = NewsConverter.convertVOToEntity(newsVO);
-        courseEntity.getNews().add(newsEntity);
-        courseDAO.update(courseEntity);
-        return newsVO;
+//         courseEntity.getNews().add(newsEntity);
+//        courseDAO.update(courseEntity);
+//        courseDAO.update(courseEntity);
+        newsEntity.setCourse(courseEntity);
+        return NewsConverter.convertEntityToVO(newsDAO.save(newsEntity));
     }
 
     @Override
@@ -212,7 +216,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public NewsVO getAllNewsById(@NotNull Long id) {
+    public NewsVO getNewsById(@NotNull Long id) {
         return NewsConverter
                 .convertEntityToVO(newsDAO.getById(id));
     }

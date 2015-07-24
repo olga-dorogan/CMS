@@ -2,7 +2,6 @@ angular.module('myApp.news', ['ui.router'])
     .config(['$stateProvider', function ($stateProvider) {
         $stateProvider
 
-
             .state('news', {
                 parent: 'main',
                 url: '/news',
@@ -24,8 +23,7 @@ angular.module('myApp.news', ['ui.router'])
                            promise = newsService.getPersonNews($rootScope.getUserId());
 
                         }
-
-                        return promise.then(function (news) {
+                      return promise.then(function (news) {
                             return news;
                         });
                     }

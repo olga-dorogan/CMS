@@ -65,7 +65,7 @@ public interface CourseService {
 
     NewsVO updateNews(@NotNull @Valid NewsVO newsVO);
 
-    NewsVO getAllNewsById(@NotNull Long id);
+    NewsVO getNewsById(@NotNull Long id);
 
     NewsVO removeNewsById(@NotNull Long newsId);
 
@@ -89,11 +89,9 @@ public interface CourseService {
     List<NewsVO> getNewsByCourseId(@NotNull Long courseId);
 
 
-
     @Nullable
     @Valid
     NewsVO getNewsByIdFromCourse(@NotNull Long courseId, @NotNull Long newsId);
 
-    //TODO: add methods to interact with LessonVO
 
 }

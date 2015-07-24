@@ -55,7 +55,7 @@ public class LessonServiceImpl implements LessonService {
                 + " была добавлена лекция");
         newsEntity.setDescription(lessonEntity.getDescription());
         newsEntity.setDate((Timestamp) lessonEntity.getCreateDate());
-        newsEntity.setCourses(lessonEntity.getCourse());
+        newsEntity.setCourse(lessonEntity.getCourse());
         newsDAO.save(newsEntity);
     }
 

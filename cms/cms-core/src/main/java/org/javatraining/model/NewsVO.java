@@ -16,7 +16,8 @@ public class NewsVO implements Serializable {
     private String content;
     @NotNull
     private Timestamp date;
-
+    @NotNull
+    private Long courseId;
 
     public NewsVO() {
     }
@@ -66,6 +67,13 @@ public class NewsVO implements Serializable {
         this.date = date;
     }
 
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
 
     @Override
     public boolean equals(Object o) {

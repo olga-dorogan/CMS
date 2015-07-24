@@ -7,6 +7,7 @@ import org.javatraining.model.NewsVO;
 import org.javatraining.service.CourseService;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -19,6 +20,7 @@ import java.util.List;
 /**
  * Created by vika on 02.07.15.
  */
+@Stateless
 @Path("courses")
 public class NewsWebService extends AbstractWebService<NewsVO> {
     @EJB
@@ -68,6 +70,7 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
         Response.ResponseBuilder r;
         try {
             newsVO.setId(null); //make sure that there no id set.
+            newsVO.setCourseId(courseId);
             CourseVO courseVO = courseService.getCourseById(courseId);
 
             courseService.addNewsToCourse(courseVO, newsVO);
@@ -83,6 +86,13 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
         }
         return r.build();
     }
+
+
+
+
+
+
+
 
 //    @PUT
 //    @Path("{news_id}/news")

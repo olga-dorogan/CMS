@@ -11,20 +11,23 @@
 
 <div  ng-repeat="new in news">
 
-     <div ui-sref="person.course({courseId:new.course_id,courseName:new.title})"
+     <div ui-sref="person.course({courseId:new.courseId})"
        class="list-group-item">
         <div class="news-title">{{new.title}}</div>
 
         <div class="description">{{new.content}}</div>
         <p class="date-format">{{new.date}}</p>
+         <div class="course-action course-teacher-footer">
+         <button ng-show="isTeacher()" class="btn btn-primary pull-right"  ui-sref="person.course.addNews">
+         <span class="glyphicon glyphicon-pencil"></span>  Редактировать
+         </button>
+         <button ng-show="isTeacher()" class="btn btn-primary btn pull-right"   ng-click="removeNews(new.id)">
+             <span class="glyphicon glyphicon-remove"></span>  Удалить
+         </button>
+             </div>
     </div>
 
-    <button ng-show="isTeacher()" class="btn"  ui-sref="person.course.addNews">
-        <span class="glyphicon glyphicon-pencil"></span>  Редактировать
-    </button>
-    <button ng-show="isTeacher()" class="btn"   ng-click="removeNews(new.id)">
-        <span class="glyphicon glyphicon-remove"></span>  Удалить
-    </button>
+
 
 </div>
 
