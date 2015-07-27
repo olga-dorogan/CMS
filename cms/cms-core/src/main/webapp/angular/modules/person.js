@@ -109,7 +109,10 @@ angular.module('myApp.person', ['ui.router'])
                         }
                     },
                     "menubar@person.course": {
-                        templateUrl: 'angular/views/person-course/menu.html'
+                        templateUrl: 'angular/views/person-course/menu.html',
+                        controller: function ($scope, isCourseStarted) {
+                            $scope.progressState = 'person.course.subscribers';
+                        }
                     },
                     "content@person.course": {
                         templateUrl: 'angular/views/person-course/content.html'
@@ -126,6 +129,9 @@ angular.module('myApp.person', ['ui.router'])
                             return courseService.normalizeCourse(course);
                         });
                         return promise;
+                    },
+                    isCourseStarted: function (course) {
+                        return course.startDate <= new Date();
                     }
                 }
             })
@@ -264,10 +270,26 @@ angular.module('myApp.person', ['ui.router'])
                 templateUrl: 'angular/views/person-course/teacher/addNews.html',
                 controller: 'AddNewsCtrl'
             })
-
-            .state('person.course.progress', {
-                url: '/progress',
-                templateUrl: 'angular/views/person-course/progressContent.html'
+            .state('person.course.subscribers', {
+                url: '/subscribers',
+                templateUrl: 'angular/views/person-course/progress/subscribers.html',
+                controller: 'CourseSubscribersCtrl',
+                resolve: {
+                    personPersistenceService: 'PersonPersistenceService',
+                    subscribers: function ($stateParams, courseService, personPersistenceService) {
+                        if (!personPersistenceService.isTeacher()) {
+                            return [];
+                        }
+                        var promise = courseService.getCourseSubscribers($stateParams.courseId);
+                        promise = promise.then(function (subscribers) {
+                            return subscribers;
+                        });
+                        return promise;
+                    },
+                    courseId: function ($stateParams) {
+                        return $stateParams.courseId;
+                    }
+                }
             })
             //SETTINGs
             .state('person.settings', {
@@ -294,7 +316,7 @@ angular.module('myApp.person', ['ui.router'])
             .state('person.settings.addition', {
                 url: '/addition',
                 templateUrl: 'angular/views/settings/settings.html'
-            })
+            });
     }])
     .service('PersonService', PersonService)
     .service('NewsService', NewsService)
@@ -308,7 +330,8 @@ angular.module('myApp.person', ['ui.router'])
     .controller('CourseContentCtrl', CourseContentCtrl)
     .controller("AddLectureCtrl", AddLectureCtrl)
     .controller("LectureContentCtrl", LectureContentCtrl)
-    .controller("SettingCtrl", SettingCtrl);
+    .controller("SettingCtrl", SettingCtrl)
+    .controller("CourseSubscribersCtrl", CourseSubscribersCtrl);
 
 
 

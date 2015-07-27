@@ -16,6 +16,8 @@ public class CoursePersonStatusVO {
     private Long courseId;
     @NotNull
     private Long personId;
+    private String personLastName;
+    private String personFirstName;
 
     public CoursePersonStatusVO() {
     }
@@ -56,5 +58,21 @@ public class CoursePersonStatusVO {
 
     public void setPersonId(Long personId) {
         this.personId = personId;
+    }
+
+    public String getPersonLastName() {
+        return personLastName;
+    }
+
+    public void setPersonLastName(String personLastName) {
+        this.personLastName = personLastName;
+    }
+
+    public String getPersonFirstName() {
+        return personFirstName;
+    }
+
+    public void setPersonFirstName(String personFirstName) {
+        this.personFirstName = personFirstName;
     }
 }

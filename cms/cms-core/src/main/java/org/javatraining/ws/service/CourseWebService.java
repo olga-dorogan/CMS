@@ -4,10 +4,10 @@ import flexjson.JSONException;
 import org.javatraining.auth.Auth;
 import org.javatraining.config.AuthRole;
 import org.javatraining.config.Config;
-import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.integration.google.calendar.CalendarService;
 import org.javatraining.integration.google.calendar.CalendarVO;
 import org.javatraining.integration.google.calendar.exception.CalendarException;
+import org.javatraining.model.CoursePersonStatusVO;
 import org.javatraining.model.CourseVO;
 import org.javatraining.model.CourseWithDetailsVO;
 import org.javatraining.model.PersonVO;
@@ -149,13 +149,22 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     }
 
     @GET
-    @Path("{course_id}/subscribers")
+    @Path("{course_id}/subscriber")
     @Auth(roles = {AuthRole.TEACHER})
     public Response getSubscribers(@PathParam("course_id") long courseId) {
         CourseVO course = new CourseVO();
         course.setId(courseId);
-        List<PersonVO> persons = courseService.getAllPersonsFromCourseByRole(course, PersonRole.STUDENT);
+        List<CoursePersonStatusVO> persons = courseService.getSubscribersWithStatusesForCourse(course);
         return Response.ok(serialize(persons)).build();
+    }
+
+    @PUT
+    @Path("{course_id}/subscriber")
+    @Auth(roles = {AuthRole.TEACHER})
+    public Response updateSubscribers(@PathParam("course_id") long courseId, List<CoursePersonStatusVO> statusVOs) {
+        statusVOs.forEach(coursePersonStatusVO -> coursePersonStatusVO.setCourseId(courseId));
+        statusVOs.forEach(personService::updatePersonStatusOnCourse);
+        return Response.accepted().build();
     }
 
     @PUT

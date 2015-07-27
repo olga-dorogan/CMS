@@ -61,6 +61,8 @@ public interface PersonService {
 
     void rejectPersonRequestForCourse(@NotNull CoursePersonStatusVO coursePersonStatusVO);
 
+    void updatePersonStatusOnCourse(@NotNull CoursePersonStatusVO coursePersonStatusVO);
+
     @NotNull
     @Valid
     List<CourseWithStatusVO> getPersonCoursesWithStatuses(@NotNull PersonVO personVO);

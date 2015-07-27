@@ -181,6 +181,13 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public void updatePersonStatusOnCourse(@NotNull CoursePersonStatusVO coursePersonStatusVO) {
+        CoursePersonStatusEntity entity = coursePersonStatusDAO.getById(coursePersonStatusVO.getId());
+        entity.setCourseStatus(coursePersonStatusVO.getCourseStatus());
+        coursePersonStatusDAO.update(entity);
+    }
+
+    @Override
     public List<CourseWithStatusVO> getPersonCoursesWithStatuses(@NotNull PersonVO personVO) {
         List<Pair<CourseEntity, CourseStatus>> entitiesCoursesWithStatuses = courseDAO.getAllCoursesWithStatusesForPerson(personVO.getId());
         List<CourseWithStatusVO> voCoursesWithStatuses = entitiesCoursesWithStatuses

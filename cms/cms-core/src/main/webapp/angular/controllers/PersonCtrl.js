@@ -5,23 +5,7 @@ function PersonCtrl($state, $scope, $modal, PersonPersistenceService, courseServ
     $scope.oldCourses = oldCourses;
 
     $scope.getActionMsg = function (status, teacherRole) {
-        var msg = 'Подписаться';
-        if (teacherRole) {
-            msg = 'Редактировать';
-        } else {
-            switch (status) {
-                case "REQUESTED":
-                    msg = 'Перейти к курсу';
-                    break;
-                case "SIGNED":
-                    msg = 'Перейти к курсу';
-                    break;
-                case "UNSIGNED":
-                    msg = 'Подписаться';
-                    break;
-            }
-        }
-        return msg;
+        return courseService.getActionMsgByStatus(status, teacherRole);
     };
 
     $scope.removeCourse = function (courseId) {
