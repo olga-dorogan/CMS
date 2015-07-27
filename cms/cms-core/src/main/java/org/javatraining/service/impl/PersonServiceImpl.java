@@ -228,9 +228,11 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<MarkVO> getMarks(@NotNull PersonVO personVO) {
+    public List<MarkVO> getMarks(@NotNull PersonVO personVO, @NotNull CourseVO courseVO) {
         PersonEntity personEntity = personDAO.getById(personVO.getId());
-        Set<MarkEntity> marks = personEntity.getMarks();
+        Set<MarkEntity> marks = personEntity.getMarks().stream()
+                .filter(markEntity -> markEntity.getLessons().getLesson().getCourse().getId() == courseVO.getId())
+                .collect(Collectors.toSet());
         return MarkConverter.convertEntitiesToVOs(marks);
     }
 

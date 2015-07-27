@@ -42,3 +42,9 @@ INSERT INTO practice_lesson(id, orderNum, task, lesson_id) VALUES (10, 8, 'Tenth
 
 INSERT INTO mark(id, mark, lesson_id, person_id) VALUES (1, 100, 1, 4);
 INSERT INTO mark(id, mark, lesson_id, person_id) VALUES (2, 90, 3, 4);
+
+-- Persons to test student progress
+INSERT INTO person(id, email, phone, name, second_name, last_name, personRole) VALUES(8, 'dorogan.olga.n@gmail.com', '123', 'Olga', '', 'olga', 'STUDENT');
+INSERT INTO course_person_status(id, course_id, person_id, course_status) VALUES (9, 1, 8, 'SIGNED');
+INSERT INTO mark(id, mark, lesson_id, person_id) VALUES (3, 10, 1, 8);
+INSERT INTO mark(id, mark, lesson_id, person_id) VALUES (4, 20, 3, 8);

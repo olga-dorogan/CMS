@@ -112,11 +112,15 @@ angular.module('myApp.person', ['ui.router'])
                         templateUrl: 'angular/views/person-course/menu.html',
                         controller: function ($scope, isCourseStarted, personPersistenceService) {
                             if (personPersistenceService.isTeacher()) {
+                                $scope.progressLabel = 'Студенты';
                                 if (isCourseStarted) {
                                     $scope.progressState = 'person.course.students';
                                 } else {
                                     $scope.progressState = 'person.course.subscribers';
                                 }
+                            } else {
+                                $scope.progressLabel = 'Успеваемость';
+                                $scope.progressState = 'person.course.progress';
                             }
                         },
                         resolve: {
@@ -349,6 +353,43 @@ angular.module('myApp.person', ['ui.router'])
                     },
                     courseId: function ($stateParams) {
                         return $stateParams.courseId;
+                    }
+                }
+            })
+            .state('person.course.progress', {
+                url: '/progress',
+                templateUrl: 'angular/views/person-course/progress/progress.html',
+                controller: function ($scope, practices) {
+                    $scope.practices = practices;
+                },
+                resolve: {
+                    personPersistenceService: 'PersonPersistenceService',
+                    personService: 'PersonService',
+                    courseId: function ($stateParams) {
+                        return $stateParams.courseId;
+                    },
+                    practices: function (personPersistenceService, personService, courseService, courseId) {
+                        var promise = courseService.getCoursePractices(courseId);
+                        promise = promise.then(function (practices) {
+                            promise = personService.getMarksForPerson(personPersistenceService.getId(), courseId);
+                            promise = promise.then(function (marks) {
+                                for (var i = 0; i < practices.length; i++) {
+                                    practices[i].virtOrderNum = practices[i].lessonOrderNum * 100 + practices[i].orderNum;
+                                    for (var j = 0; j < marks.length; j++) {
+                                        if (marks[j].lessonId == practices[i].id) {
+                                            practices[i].mark = marks[j].mark;
+                                            break;
+                                        }
+                                    }
+                                }
+                                practices = practices.sort(function (v1, v2) {
+                                    return v1.virtOrderNum - v2.virtOrderNum;
+                                });
+                                return practices;
+                            });
+                            return promise;
+                        });
+                        return promise;
                     }
                 }
             })

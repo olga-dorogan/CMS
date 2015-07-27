@@ -71,6 +71,10 @@ function PersonService(Restangular, PersonPersistenceService) {
         return Restangular.one(REST_BASE, personId).all('marks').post(marks);
     };
 
+    this.getMarksForPerson = function (personId, courseId) {
+        return Restangular.one(REST_BASE, personId).one('course', courseId).all('marks').getList();
+    };
+
     this.personsCompare = function (v1, v2) {
         var res = v1.lastName.localeCompare(v2.lastName);
         if (res == 0) {

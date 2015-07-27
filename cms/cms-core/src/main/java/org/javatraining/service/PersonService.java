@@ -75,6 +75,6 @@ public interface PersonService {
 
     @NotNull
     @Valid
-    List<MarkVO> getMarks(@NotNull PersonVO personVO);
+    List<MarkVO> getMarks(@NotNull PersonVO personVO, @NotNull CourseVO courseVO);
 
 }

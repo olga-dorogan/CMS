@@ -20,6 +20,10 @@ public class CourseVO implements Serializable {
     public CourseVO() {
     }
 
+    public CourseVO(Long id) {
+        this.id = id;
+    }
+
     public CourseVO(Long id, String name, String description) {
         this.id = id;
         this.name = name;
