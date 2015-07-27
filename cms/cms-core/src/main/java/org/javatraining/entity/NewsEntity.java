@@ -81,7 +81,7 @@ public class NewsEntity implements Serializable, GenericEntity {
         return courses;
     }
 
-    public void setCourses(CourseEntity courses) {
+    public void setCourse(CourseEntity courses) {
         this.courses = courses;
     }
 

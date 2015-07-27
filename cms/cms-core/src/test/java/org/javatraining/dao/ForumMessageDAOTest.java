@@ -26,6 +26,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by vika on 12.06.15.
  */
+
 @RunWith(Arquillian.class)
 @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
 @UsingDataSet(value = "dao-tests/forumMessage/forumMessage.json")

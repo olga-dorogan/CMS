@@ -130,7 +130,7 @@ angular.module('myApp.person', ['ui.router'])
                         });
                         return promise;
                     },
-                    isCourseStarted: function(course) {
+                    isCourseStarted: function (course) {
                         return course.startDate <= new Date();
                     }
                 }
@@ -267,7 +267,7 @@ angular.module('myApp.person', ['ui.router'])
             })
             .state('person.course.addNews', {
                 url: '/addNews',
-                templateUrl: 'angular/views/person-course/teacher/addNewNews.html',
+                templateUrl: 'angular/views/person-course/teacher/addNews.html',
                 controller: 'AddNewsCtrl'
             })
             .state('person.course.subscribers', {

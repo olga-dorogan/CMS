@@ -227,7 +227,7 @@ public class NewsDAOTest {
         NewsEntity newsEntity = new NewsEntity();
         Long predefinedCourseId = (long) 1;
         CourseEntity courseEntity = courseDAO.getById(predefinedCourseId);
-        newsEntity.setCourses(courseEntity);
+        newsEntity.setCourse(courseEntity);
         newsEntity.setDescription("newsDescription");
         newsEntity.setTitle("Sometitle");
         newsEntity.setDate(Timestamp.valueOf("2015-10-02 18:48:05"));
@@ -246,7 +246,7 @@ public class NewsDAOTest {
         CourseEntity courseEntity = predefinedCourse();
         NewsEntity newsEntity = new NewsEntity();
         newsEntity.setId(predefinedNewsId);
-        newsEntity.setCourses(courseEntity);
+        newsEntity.setCourse(courseEntity);
         newsEntity.setDescription("newsDescription");
         newsEntity.setTitle("title");
         newsEntity.setDate(Timestamp.valueOf("2015-10-02 18:48:05"));

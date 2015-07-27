@@ -7,6 +7,7 @@ import org.javatraining.model.NewsVO;
 import org.javatraining.service.CourseService;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -19,7 +20,8 @@ import java.util.List;
 /**
  * Created by vika on 02.07.15.
  */
-@Path("news")
+@Stateless
+@Path("courses")
 public class NewsWebService extends AbstractWebService<NewsVO> {
     @EJB
     private CourseService courseService;
@@ -27,7 +29,6 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
     public NewsWebService() {
         super(NewsVO.class);
     }
-
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -37,7 +38,7 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
     }
 
     @GET
-    @Path("{person_id}/news-person")
+    @Path("{person_id}/news")
     @Produces(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.STUDENT, AuthRole.TEACHER})
     public Response getPersonNews(@PathParam("person_id") Long personId) {
@@ -62,13 +63,14 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
 
 
     @POST
-    @Path("{course_id}/news")
+    @Path("{course_id}/saveNews")
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
     public Response saveNews(@Context UriInfo uriInfo, @PathParam("course_id") Long courseId, NewsVO newsVO) {
         Response.ResponseBuilder r;
         try {
             newsVO.setId(null); //make sure that there no id set.
+            newsVO.setCourseId(courseId);
             CourseVO courseVO = courseService.getCourseById(courseId);
 
             courseService.addNewsToCourse(courseVO, newsVO);
@@ -84,5 +86,31 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
         }
         return r.build();
     }
+
+
+
+
+
+
+
+
+//    @PUT
+//    @Path("{news_id}/news")
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Auth(roles = {AuthRole.TEACHER})
+//    public Response updateNews(@PathParam("news_id") NewsVO newsVO) {
+//        courseService.updateNews(newsVO);
+//        return Response.ok().build();
+//    }
+
+    @DELETE
+    @Path("{news_id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Auth(roles = {AuthRole.TEACHER})
+    public Response deleteNews(@PathParam("news_id") Long newsId) {
+      courseService.removeNewsById(newsId);
+        return Response.ok().build();
+    }
+
 
 }

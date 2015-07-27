@@ -5,6 +5,7 @@ var myApp = angular.module('myApp', [
     'angular-google-gapi',
     'ui.bootstrap',
     'angularFileUpload',
+    'angular-redactor',
     'LocalStorageModule',
     'myApp.main',
     'myApp.home',
@@ -12,6 +13,8 @@ var myApp = angular.module('myApp', [
     'myApp.news',
     'myApp.about'
 ]);
+
+myApp.service('sessionService', ['$window', '$rootScope', SessionService]);
 myApp.service('sessionService', ['PersonPersistenceService', SessionService]);
 myApp.service('PersonService', ['Restangular', PersonService]);
 myApp.service('AuthService', ['PersonService', 'Restangular', AuthService]);

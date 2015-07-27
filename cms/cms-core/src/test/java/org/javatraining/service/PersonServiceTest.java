@@ -19,6 +19,7 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.*;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -44,6 +45,7 @@ import static org.junit.Assert.fail;
 /**
  * Created by olga on 15.06.15.
  */
+
 @RunWith(Arquillian.class)
 @UsingDataSet(value = "datasets/person-service-test/person/one-person.json")
 @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)

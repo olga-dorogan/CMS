@@ -8,7 +8,8 @@ INSERT INTO courses(id, name, startdate, enddate, description) VALUES (3, 'Andro
 
 INSERT INTO course_person_status(id, course_id, person_id, course_status) VALUES (1, 1, 3, 'SIGNED');
 INSERT INTO course_person_status(id, course_id, person_id, course_status) VALUES (3, 3, 3, 'SIGNED');
-INSERT INTO course_person_status(id, course_id, person_id, course_status) VALUES (2, 1, 2, 'SIGNED');
+INSERT INTO course_person_status(id, course_id, person_id, course_status) VALUES (2, 2, 3, 'SIGNED');
+
 
 INSERT INTO news(id, title, description, date, course_id) VALUES (1, 'Java SE', 'Курс Java SE начался', '2015-07-08 18:48:05',1);
 INSERT INTO news(id, title, description, date, course_id) VALUES (2, 'Java EE', 'Курс Java EE начался', '2015-09-01 17:35:01',2);

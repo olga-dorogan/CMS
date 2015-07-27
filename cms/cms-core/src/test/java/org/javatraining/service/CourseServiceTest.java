@@ -28,6 +28,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Created by vika on 14.06.15.
  */
+
 @RunWith(Arquillian.class)
 @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
 @UsingDataSet(value = "datasets/course-service-test/course/one-course.json")
@@ -111,7 +112,13 @@ public class CourseServiceTest {
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE_AFTER_REMOVE})
     public void testRemoveCourse() {
         CourseVO courseVO = predefinedCourseVO();
+        courseService.removeCourse(courseVO);
+    }
 
+    @Test
+    @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE_AFTER_REMOVE})
+    public void testRemoveTwoCourse() {
+        CourseVO courseVO = predefinedCourseVO();
         courseService.removeCourse(courseVO);
     }
 
@@ -126,7 +133,7 @@ public class CourseServiceTest {
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testGetNewsById() {
         NewsVO newsVO = predefinedNewsVOInitialization();
-        assertEquals(newsVO, courseService.getAllNewsById(newsVO.getId()));
+        assertEquals(newsVO, courseService.getNewsById(newsVO.getId()));
     }
 
 
@@ -220,7 +227,7 @@ public class CourseServiceTest {
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_COURSE})
     public void testGetNewsByIdForNotExistingIdShouldReturnEntityNotExistException() throws EntityNotExistException {
         Long notExistingId = 10L;
-        assertThatThrownBy(() -> courseService.getAllNewsById(notExistingId))
+        assertThatThrownBy(() -> courseService.getNewsById(notExistingId))
                 .isInstanceOf(EntityNotExistException.class).hasMessage("Field with "
                 + notExistingId + " does not exist in database");
     }
@@ -252,6 +259,8 @@ public class CourseServiceTest {
 
         return courseVO;
     }
+
+
 
     private NewsVO predefinedNewsVOInitialization() {
         Long predefinedNewsId = 1L;
