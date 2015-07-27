@@ -4,6 +4,7 @@ import org.javatraining.entity.enums.PersonRole;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by vika on 30.05.15.
@@ -18,6 +19,7 @@ public class PersonVO implements Serializable {
     @NotNull
     protected String email;
     private PersonRole personRole;
+    private List<MarkVO> marks;
 
     public PersonVO() {
     }
@@ -107,5 +109,13 @@ public class PersonVO implements Serializable {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (personRole != null ? personRole.hashCode() : 0);
         return result;
+    }
+
+    public List<MarkVO> getMarks() {
+        return marks;
+    }
+
+    public void setMarks(List<MarkVO> marks) {
+        this.marks = marks;
     }
 }

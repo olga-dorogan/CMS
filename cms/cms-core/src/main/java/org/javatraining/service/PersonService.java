@@ -69,6 +69,7 @@ public interface PersonService {
     //    Person --- Mark methods
 
     void setMark(@NotNull PersonVO personVO, @NotNull PracticeLessonVO practiceLessonVO, @NotNull @Valid MarkVO markVO);
+    void setMarks(@NotNull PersonVO personVO, @NotNull @Valid List<MarkVO> marksVO);
 
     void removeMark(@NotNull MarkVO markVO);
 

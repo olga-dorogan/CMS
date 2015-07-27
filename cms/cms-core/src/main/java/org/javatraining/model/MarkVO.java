@@ -11,6 +11,7 @@ public class MarkVO implements Serializable {
     private Long id;
     @NotNull
     private Integer mark;
+    private Long lessonId;
 
     public MarkVO() {
     }
@@ -57,5 +58,13 @@ public class MarkVO implements Serializable {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (mark != null ? mark.hashCode() : 0);
         return result;
+    }
+
+    public Long getLessonId() {
+        return lessonId;
+    }
+
+    public void setLessonId(Long lessonId) {
+        this.lessonId = lessonId;
     }
 }

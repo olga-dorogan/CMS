@@ -110,8 +110,17 @@ angular.module('myApp.person', ['ui.router'])
                     },
                     "menubar@person.course": {
                         templateUrl: 'angular/views/person-course/menu.html',
-                        controller: function ($scope, isCourseStarted) {
-                            $scope.progressState = 'person.course.subscribers';
+                        controller: function ($scope, isCourseStarted, personPersistenceService) {
+                            if (personPersistenceService.isTeacher()) {
+                                if (isCourseStarted) {
+                                    $scope.progressState = 'person.course.students';
+                                } else {
+                                    $scope.progressState = 'person.course.subscribers';
+                                }
+                            }
+                        },
+                        resolve: {
+                            personPersistenceService: 'PersonPersistenceService'
                         }
                     },
                     "content@person.course": {
@@ -275,14 +284,66 @@ angular.module('myApp.person', ['ui.router'])
                 templateUrl: 'angular/views/person-course/progress/subscribers.html',
                 controller: 'CourseSubscribersCtrl',
                 resolve: {
-                    personPersistenceService: 'PersonPersistenceService',
-                    subscribers: function ($stateParams, courseService, personPersistenceService) {
-                        if (!personPersistenceService.isTeacher()) {
-                            return [];
-                        }
+                    subscribers: function ($stateParams, courseService) {
                         var promise = courseService.getCourseSubscribers($stateParams.courseId);
                         promise = promise.then(function (subscribers) {
                             return subscribers;
+                        });
+                        return promise;
+                    },
+                    courseId: function ($stateParams) {
+                        return $stateParams.courseId;
+                    }
+                }
+            })
+            .state('person.course.students', {
+                url: '/students',
+                templateUrl: 'angular/views/person-course/progress/students.html',
+                controller: 'CourseStudentsCtrl',
+                resolve: {
+                    personService: 'PersonService',
+                    students: function (courseService, courseId, practices) {
+                        var promise = courseService.getCourseStudents(courseId);
+                        promise = promise.then(function (students) {
+                            var getMark = function (marks, practiceId) {
+                                for (var i = 0; i < marks.length; i++) {
+                                    if (marks[i].lessonId == practiceId) {
+                                        return {
+                                            'value': marks[i].mark,
+                                            'id': marks[i].id
+                                        };
+                                    }
+                                }
+                                return {
+                                    'value': -1,
+                                    'id': null
+                                };
+                            };
+                            for (var i = 0; i < students.length; i++) {
+                                students[i].viewPracticeMarks = [];
+                                for (var j = 0; j < practices.length; j++) {
+                                    students[i].viewPracticeMarks[j] = {
+                                        'updated': false,
+                                        'mark': getMark(students[i].marks, practices[j].id),
+                                        'lessonId': practices[j].id,
+                                        'virtOrderNum': practices[j].virtOrderNum
+                                    };
+                                }
+                            }
+                            return students;
+                        });
+                        return promise;
+                    },
+                    practices: function (courseService, courseId) {
+                        var promise = courseService.getCoursePractices(courseId);
+                        promise = promise.then(function (practices) {
+                            for (var i = 0; i < practices.length; i++) {
+                                practices[i].virtOrderNum = practices[i].lessonOrderNum * 100 + practices[i].orderNum;
+                            }
+                            practices = practices.sort(function (v1, v2) {
+                                return v1.virtOrderNum - v2.virtOrderNum;
+                            });
+                            return practices;
                         });
                         return promise;
                     },
@@ -331,7 +392,8 @@ angular.module('myApp.person', ['ui.router'])
     .controller("AddLectureCtrl", AddLectureCtrl)
     .controller("LectureContentCtrl", LectureContentCtrl)
     .controller("SettingCtrl", SettingCtrl)
-    .controller("CourseSubscribersCtrl", CourseSubscribersCtrl);
+    .controller("CourseSubscribersCtrl", CourseSubscribersCtrl)
+    .controller("CourseStudentsCtrl", CourseStudentsCtrl);
 
 
 

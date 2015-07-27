@@ -16,7 +16,7 @@ INSERT INTO news(id, title, description, date, course_id) VALUES (1, 'Java SE', 
 INSERT INTO news(id, title, description, date, course_id) VALUES (2, 'Java EE', 'Курс Java EE начался', '2015-09-01 17:35:01',2);
 INSERT INTO news(id, title, description, date, course_id) VALUES (3, 'Android', 'Курс Android начался', '2015-01-01 17:35:01',3);
 
--- Persons to test approving / rejcting course status
+-- Persons to test approving / rejecting course status
 INSERT INTO person(id, email, phone, name, second_name, last_name, personRole) VALUES(4, 'leo@gmail.com', '123', 'Leonard', 'Leakey', 'Hofstadter', 'STUDENT');
 INSERT INTO person(id, email, phone, name, second_name, last_name, personRole) VALUES(5, 'shelly@gmail.com', '123', 'Sheldon', 'Lee', 'Cooper', 'STUDENT');
 INSERT INTO person(id, email, phone, name, second_name, last_name, personRole) VALUES(6, 'howie@gmail.com', '123', 'Howard', 'Joel', 'Wolowitz', 'STUDENT');
@@ -26,3 +26,19 @@ INSERT INTO course_person_status(id, course_id, person_id, course_status) VALUES
 INSERT INTO course_person_status(id, course_id, person_id, course_status) VALUES (6, 1, 5, 'REQUESTED');
 INSERT INTO course_person_status(id, course_id, person_id, course_status) VALUES (7, 1, 6, 'REQUESTED');
 INSERT INTO course_person_status(id, course_id, person_id, course_status) VALUES (8, 1, 7, 'REQUESTED');
+
+INSERT INTO lesson(id, date, description, order_num, topic, type, course_id) VALUES(1, '2015-10-01', 'Intro', 1, 'Intro', null, 1);
+INSERT INTO lesson(id, date, description, order_num, topic, type, course_id) VALUES(2, '2015-10-08', 'Collections', 2, 'Collections', null, 1);
+INSERT INTO practice_lesson(id, orderNum, task, lesson_id) VALUES (1, 1, 'Install Ubuntu 15.01', 1);
+INSERT INTO practice_lesson(id, orderNum, task, lesson_id) VALUES (2, 2, 'Install Intellij Idea', 1);
+INSERT INTO practice_lesson(id, orderNum, task, lesson_id) VALUES (3, 1, 'Choose one collection (List, Set or Map) and create its realization', 2);
+INSERT INTO practice_lesson(id, orderNum, task, lesson_id) VALUES (4, 2, 'Test collection realization', 2);
+INSERT INTO practice_lesson(id, orderNum, task, lesson_id) VALUES (5, 3, 'Fifth task', 2);
+INSERT INTO practice_lesson(id, orderNum, task, lesson_id) VALUES (6, 4, 'Sixth task', 2);
+INSERT INTO practice_lesson(id, orderNum, task, lesson_id) VALUES (7, 5, 'Seventh task', 2);
+INSERT INTO practice_lesson(id, orderNum, task, lesson_id) VALUES (8, 6, 'Eighth task', 2);
+INSERT INTO practice_lesson(id, orderNum, task, lesson_id) VALUES (9, 7, 'Ninth task', 2);
+INSERT INTO practice_lesson(id, orderNum, task, lesson_id) VALUES (10, 8, 'Tenth task', 2);
+
+INSERT INTO mark(id, mark, lesson_id, person_id) VALUES (1, 100, 1, 4);
+INSERT INTO mark(id, mark, lesson_id, person_id) VALUES (2, 90, 3, 4);

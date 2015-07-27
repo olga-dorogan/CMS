@@ -3,6 +3,7 @@ package org.javatraining.ws.service;
 import org.javatraining.auth.Auth;
 import org.javatraining.config.AuthRole;
 import org.javatraining.model.LessonWithDetailsVO;
+import org.javatraining.model.PracticeLessonVO;
 import org.javatraining.service.LessonService;
 
 import javax.ejb.EJB;
@@ -34,6 +35,15 @@ public class LessonWebService {
     public Response getLessons(@PathParam("course_id") Long courseId) {
         Set<LessonWithDetailsVO> lessons = lessonService.getWithPracticesByCourseId(courseId);
         return Response.ok(lessons).build();
+    }
+
+    @GET
+    @Path("{course_id}/practice")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Auth(roles = {AuthRole.STUDENT, AuthRole.TEACHER})
+    public Response getPractices(@PathParam("course_id") Long courseId) {
+        List<PracticeLessonVO> practices = lessonService.getPracticesByCourseId(courseId);
+        return Response.ok(practices).build();
     }
 
     @POST

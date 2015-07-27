@@ -12,7 +12,9 @@ import java.util.stream.Collectors;
  */
 public class PracticeLessonConverter {
     public static PracticeLessonVO convertEntityToVO(PracticeLessonEntity entity) {
-        return new PracticeLessonVO(entity.getId(), entity.getTask(), entity.getOrderNum());
+        PracticeLessonVO practiceLessonVO = new PracticeLessonVO(entity.getId(), entity.getTask(), entity.getOrderNum());
+        practiceLessonVO.setLessonOrderNum(entity.getLesson().getOrderNum());
+        return practiceLessonVO;
     }
 
     public static PracticeLessonEntity convertVOToEntity(PracticeLessonVO lessonVO) {

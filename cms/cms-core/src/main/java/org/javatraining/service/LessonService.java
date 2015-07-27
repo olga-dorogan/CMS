@@ -2,6 +2,7 @@ package org.javatraining.service;
 
 import org.javatraining.model.LessonVO;
 import org.javatraining.model.LessonWithDetailsVO;
+import org.javatraining.model.PracticeLessonVO;
 
 import javax.annotation.Nullable;
 import javax.validation.Valid;
@@ -28,6 +29,10 @@ public interface LessonService {
     @Nullable
     @Valid
     Set<LessonVO> getByCourseId(@NotNull Long courseId);
+
+    @Nullable
+    @Valid
+    List<PracticeLessonVO> getPracticesByCourseId(@NotNull Long courseId);
 
     @Nullable
     @Valid

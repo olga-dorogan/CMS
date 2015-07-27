@@ -13,6 +13,7 @@ import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * Created by asudak on 6/11/15.
@@ -56,20 +57,11 @@ public class MarkWebService extends AbstractWebService<MarkVO> {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
-    @Path("{person_id}/mark")
-    public Response setMark(@PathParam("person_id") long personId, @QueryParam("mark_json") String markJson) {
-        Response.ResponseBuilder r;
-        PersonVO person = new PersonVO();
-        person.setId(personId);
-        try {
-            MarkVO mark = deserialize(markJson);
-            // FIXME: changes in PersonService
-//            personService.setMark(person, mark);
-            r = Response.ok();
-        } catch (JSONException e) {
-            r = Response.status(Response.Status.NOT_ACCEPTABLE);
-        }
-        return r.build();
+    @Path("{person_id}/marks")
+    public Response setMarks(@PathParam("person_id") long personId, List<MarkVO> marks) {
+        PersonVO personVO = new PersonVO(personId);
+        personService.setMarks(personVO, marks);
+        return Response.accepted().build();
     }
 
     @PUT
