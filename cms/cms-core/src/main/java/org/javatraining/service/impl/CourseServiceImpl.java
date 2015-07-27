@@ -4,6 +4,7 @@ import org.javatraining.dao.*;
 import org.javatraining.entity.*;
 import org.javatraining.entity.enums.CourseStatus;
 import org.javatraining.entity.enums.PersonRole;
+import org.javatraining.entity.util.Pair;
 import org.javatraining.model.*;
 import org.javatraining.model.conversion.CourseConverter;
 import org.javatraining.model.conversion.CoursePersonStatusConverter;
@@ -168,6 +169,15 @@ public class CourseServiceImpl implements CourseService {
                 .map(CoursePersonStatusEntity::getPerson)
                 .collect(Collectors.toList()))
                 .stream()
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CoursePersonStatusVO> getSubscribersWithStatusesForCourse(@NotNull CourseVO courseVO) {
+        List<Pair<PersonEntity, CoursePersonStatusEntity>> studentsWithStatusesForCourse = courseDAO.getAllStudentsWithStatusesForCourse(courseVO.getId());
+        return studentsWithStatusesForCourse
+                .stream()
+                .map(pair -> CoursePersonStatusConverter.convertEntityToVO(pair.first, pair.second))
                 .collect(Collectors.toList());
     }
 

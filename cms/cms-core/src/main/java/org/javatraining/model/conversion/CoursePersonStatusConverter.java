@@ -1,6 +1,7 @@
 package org.javatraining.model.conversion;
 
 import org.javatraining.entity.CoursePersonStatusEntity;
+import org.javatraining.entity.PersonEntity;
 import org.javatraining.model.CoursePersonStatusVO;
 
 import javax.validation.Valid;
@@ -14,6 +15,14 @@ import java.util.List;
 public class CoursePersonStatusConverter {
     public static CoursePersonStatusVO convertEntityToVO(@NotNull CoursePersonStatusEntity entity) {
         CoursePersonStatusVO vo = new CoursePersonStatusVO(entity.getCourseStatus(), entity.getCourse().getId(), entity.getPerson().getId());
+        return vo;
+    }
+
+    public static CoursePersonStatusVO convertEntityToVO(@NotNull PersonEntity personEntity, @NotNull CoursePersonStatusEntity statusEntity) {
+        CoursePersonStatusVO vo = new CoursePersonStatusVO(statusEntity.getCourseStatus(), null, personEntity.getId());
+        vo.setId(statusEntity.getId());
+        vo.setPersonFirstName(personEntity.getName());
+        vo.setPersonLastName(personEntity.getLastName());
         return vo;
     }
 

@@ -15,3 +15,14 @@ INSERT INTO course_person_status(id, course_id, person_id, course_status) VALUES
 INSERT INTO news(id, title, description, date, course_id) VALUES (1, 'Java SE', 'Курс Java SE начался', '2015-07-08 18:48:05',1);
 INSERT INTO news(id, title, description, date, course_id) VALUES (2, 'Java EE', 'Курс Java EE начался', '2015-09-01 17:35:01',2);
 INSERT INTO news(id, title, description, date, course_id) VALUES (3, 'Android', 'Курс Android начался', '2015-01-01 17:35:01',3);
+
+-- Persons to test approving / rejcting course status
+INSERT INTO person(id, email, phone, name, second_name, last_name, personRole) VALUES(4, 'leo@gmail.com', '123', 'Leonard', 'Leakey', 'Hofstadter', 'STUDENT');
+INSERT INTO person(id, email, phone, name, second_name, last_name, personRole) VALUES(5, 'shelly@gmail.com', '123', 'Sheldon', 'Lee', 'Cooper', 'STUDENT');
+INSERT INTO person(id, email, phone, name, second_name, last_name, personRole) VALUES(6, 'howie@gmail.com', '123', 'Howard', 'Joel', 'Wolowitz', 'STUDENT');
+INSERT INTO person(id, email, phone, name, second_name, last_name, personRole) VALUES(7, 'raj@gmail.com', '123', 'Rajesh', 'Ramayan', 'Koothrappali', 'STUDENT');
+
+INSERT INTO course_person_status(id, course_id, person_id, course_status) VALUES (5, 1, 4, 'REQUESTED');
+INSERT INTO course_person_status(id, course_id, person_id, course_status) VALUES (6, 1, 5, 'REQUESTED');
+INSERT INTO course_person_status(id, course_id, person_id, course_status) VALUES (7, 1, 6, 'REQUESTED');
+INSERT INTO course_person_status(id, course_id, person_id, course_status) VALUES (8, 1, 7, 'REQUESTED');

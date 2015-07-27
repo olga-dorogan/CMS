@@ -489,3 +489,11 @@ li ol > li:before {
     -webkit-box-shadow: 0 0 2px rgba(0, 0, 0, .8);
     -moz-box-shadow: 0 0 2px rgba(0, 0, 0, .8);
 }
+
+.students .pagination-students {
+    margin-top: 0;
+}
+
+.students > .table > tbody > tr > td {
+    vertical-align: middle;
+}

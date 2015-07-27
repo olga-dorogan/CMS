@@ -2,7 +2,10 @@ package org.javatraining.dao;
 
 
 import org.javatraining.entity.CourseEntity;
+import org.javatraining.entity.CoursePersonStatusEntity;
+import org.javatraining.entity.PersonEntity;
 import org.javatraining.entity.enums.CourseStatus;
+import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.entity.util.Pair;
 
 import javax.ejb.Stateless;
@@ -53,6 +56,18 @@ public class CourseDAO extends GenericDAO<CourseEntity> {
         List<Pair<CourseEntity, CourseStatus>> result = query.getResultList()
                 .stream()
                 .map((ar) -> new Pair<>((CourseEntity) ar[0], (CourseStatus) ar[1]))
+                .collect(Collectors.toList());
+        return result;
+    }
+
+    public List<Pair<PersonEntity, CoursePersonStatusEntity>> getAllStudentsWithStatusesForCourse(@NotNull Long courseId) {
+        TypedQuery<Object[]> query = getEntityManager().createQuery(
+                "SELECT person, status FROM PersonEntity person, CoursePersonStatusEntity status " +
+                        "WHERE status.person = person AND status.course.id = :courseId AND person.personRole = :personRole",
+                Object[].class).setParameter("courseId", courseId).setParameter("personRole", PersonRole.STUDENT);
+        List<Pair<PersonEntity, CoursePersonStatusEntity>> result = query.getResultList()
+                .stream()
+                .map((ar) -> new Pair<>((PersonEntity) ar[0], (CoursePersonStatusEntity) ar[1]))
                 .collect(Collectors.toList());
         return result;
     }

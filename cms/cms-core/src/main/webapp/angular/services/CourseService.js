@@ -57,12 +57,49 @@ function CourseService(Restangular) {
         }
         return Restangular.one(restBase, courseId).all('subscribe').customPUT({"id": personId});
     };
-    //FIXME заглушка, для нормальной работы на без запуска WildFly
-    this.getCoursesCap = function () {
-        return [
-            {id: 1, name: "Java EE", description: "Description for Java EE"},
-            {id: 2, name: "Java SE", description: "Description for Java SE"},
-            {id: 3, name: "Android", description: "Description for Android"}
-        ];
-    }
+
+    this.getCourseSubscribers = function (courseId) {
+        return Restangular.one(restBase, courseId).all('subscriber').getList();
+    };
+
+    this.updateCourseSubscribers = function (courseId, subscribers) {
+        return Restangular.one(restBase, courseId).all('subscriber').customPUT(subscribers);
+    };
+
+    this.getActionMsgByStatus = function (status, isTeacher) {
+        var msg = 'Подписаться';
+        if (isTeacher) {
+            msg = 'Редактировать';
+        } else {
+            switch (status) {
+                case "REQUESTED":
+                    msg = 'Перейти к курсу';
+                    break;
+                case "SIGNED":
+                    msg = 'Перейти к курсу';
+                    break;
+                case "UNSIGNED":
+                    msg = 'Подписаться';
+                    break;
+            }
+        }
+        return msg;
+    };
+
+    var statusLabelPair = {};
+    statusLabelPair['REQUESTED'] = 'не подтвержден';
+    statusLabelPair['SIGNED'] = 'зачислен';
+    statusLabelPair['UNSIGNED'] = 'не зачислен';
+
+    this.convertStatusToLabel = function (status) {
+        return statusLabelPair[status];
+    };
+
+    this.getAvailableStatuses = function () {
+        return Object.keys(statusLabelPair);
+    };
+
+    this.isStatusNotProcessed = function(personWithStatus) {
+        return personWithStatus.courseStatus == 'REQUESTED';
+    };
 }
