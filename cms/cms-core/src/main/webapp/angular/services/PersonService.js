@@ -7,7 +7,7 @@ function PersonService(Restangular, PersonPersistenceService) {
         return Restangular.one(REST_BASE, userId).customGET('description', {'field': 'phone'});
     };
     this.setPersonPhone = function (userId, phoneNumber) {
-        phoneNumber = phoneNumber.replace(/[^\/\d]/g,'');
+        phoneNumber = phoneNumber.replace(/[^\/\d]/g, '');
         return Restangular.one(REST_BASE, userId).all('phone').customPUT({'phoneNumber': phoneNumber});
     };
     this.getPersonDescription = function (userId) {

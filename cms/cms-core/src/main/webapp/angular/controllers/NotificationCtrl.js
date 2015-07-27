@@ -1,4 +1,4 @@
-function NotificationCtrl(Restangular, $scope){
+function NotificationCtrl(Restangular, $scope) {
     var restBase = '';//FIXME write ws
     var Notification = Restangular.all(restBase);
 
@@ -17,7 +17,7 @@ function NotificationCtrl(Restangular, $scope){
     //    if(!mailModel.email) mailModel.sms = true;
     //};
 
-    $scope.doNotifying = function(){
+    $scope.doNotifying = function () {
         //if($scope.mailModel.email){
         //    Notification.post({
         //        mailtype: "MAIL",

@@ -10,9 +10,9 @@ function CourseContentCtrl($scope, lectures, course, CourseContentService) {
         CourseContentService.removeLecture(course.id, lectureOrderNum).then(function (success) {
             if (success.responseStatus == 200) {
                 CourseContentService.getLectures(course.id).then(function (lectures) {
-                   if(lectures.responseStatus == 200) {
-                       $scope.lectures = lectures;
-                   }
+                    if (lectures.responseStatus == 200) {
+                        $scope.lectures = lectures;
+                    }
                 });
             }
         });

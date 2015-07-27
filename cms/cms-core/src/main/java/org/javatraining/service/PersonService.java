@@ -21,6 +21,7 @@ public interface PersonService {
     PersonDescriptionVO getPersonDescription(@NotNull Long id);
 
     PersonDescriptionVO getPersonPhone(@NotNull Long personId);
+
     @Nullable
     PersonDescriptionVO updatePersonPhone(@NotNull PersonDescriptionVO personDescriptionVO);
 

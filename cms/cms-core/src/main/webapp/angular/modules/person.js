@@ -200,7 +200,7 @@ angular.module('myApp.person', ['ui.router'])
                 }
             })
             .state('person.course.newsContent', {
-                url: '/news-content',
+                url: '/newsContent',
                 templateUrl: 'angular/views/person-course/newsContent.html',
                 controller: 'NewsCtrl',
                 resolve: {

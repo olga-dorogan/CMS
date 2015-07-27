@@ -9,6 +9,7 @@ public class Mail {
     private MailType mailtype;
     private String message;
     private String subject;
+
     public Mail() {
 
     }

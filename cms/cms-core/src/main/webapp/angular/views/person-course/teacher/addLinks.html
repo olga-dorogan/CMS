@@ -12,7 +12,7 @@
             <tbody>
             <tr ng-repeat="lectLink in lecture.links" class="vert-align-middle">
                 <td class="vert-align-middle"><input type="text" ng-model="lecture.links[$index].orderNum"
-                           class="person-add-files-input text-center"></td>
+                                                     class="person-add-files-input text-center"></td>
                 <td><input type="text" ng-model="lecture.links[$index].description" class="person-add-files-input"></td>
                 <td class="text-left"><a target="_blank" href="{{ lectLink.link }}">перейти</a></td>
                 <td nowrap class="text-right">

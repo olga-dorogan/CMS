@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 
 public class SMSNotificationServiceTest {
     @Test
-    public void testSendMessageToTestPhoneNumber(){
+    public void testSendMessageToTestPhoneNumber() {
         SMSNotificationService service = new SMSNotificationService();
         assertTrue(service.connectAndAuthToService());
         PersonDescriptionVO person = new PersonDescriptionVO();
