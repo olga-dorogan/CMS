@@ -1,6 +1,7 @@
 // Declare app level module which depends on views, and components
 var myApp = angular.module('myApp', [
     'ui.router',
+    'ui.router.tabs',
     'restangular',
     'angular-google-gapi',
     'ui.bootstrap',
