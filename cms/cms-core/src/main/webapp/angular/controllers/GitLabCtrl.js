@@ -23,4 +23,4 @@ var GitLabCtrl = ['$rootScope', '$state', '$scope', '$stateParams', function ($r
     $scope.initialise();
 }];
 
-myApp.module('myApp.person').controller('GitLabCtrl', GitLabCtrl);
+//myApp.module('myApp.person').controller('GitLabCtrl', GitLabCtrl);
