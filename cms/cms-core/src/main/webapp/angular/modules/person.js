@@ -36,6 +36,14 @@ angular.module('myApp.person', ['ui.router'])
                                         }
                                     }
                                 }
+                                for (var i = 0; i < personCourses.length; i++) {
+                                    personCourses[i].isCourseStarted =
+                                        courseService.isCourseStarted(new Date(personCourses[i].startDate), new Date());
+                                    if (courseService.isCourseDisabledForPerson(personCourses[i].courseStatus)) {
+                                        personCourses.splice(i, 1);
+                                        i--;
+                                    }
+                                }
                                 return {
                                     'coursesEnrolled': personCourses,
                                     'coursesToSubscribe': newCourses

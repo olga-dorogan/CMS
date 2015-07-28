@@ -32,17 +32,29 @@
                         <div class="panel-body">
                             <div class="description">{{course.description}}</div>
                             <hr ng-show="isTeacher()">
-                            <div class="course-action course-teacher-footer">
-                                <div class="date" ng-show="isTeacher()">
+                            <div ng-show="isTeacher()" class="course-action course-teacher-footer">
+                                <div class="date">
                                     Период проведения: с {{course.startDate}} по {{course.endDate}}
                                 </div>
                                 <div class="action">
-                                    <a ng-show="isTeacher()" class="remove-course" ng-click="removeCourse(course.id)">
+                                    <a class="remove-course" ng-click="removeCourse(course.id)">
                                         <span class="enroll-into-course">Удалить</span>
                                     </a>
                                     <a ui-sref="person.course.content({courseId:course.id, courseName:course.name})"
                                        class="go-into-course">{{getActionMsg(course.courseStatus, isTeacher())}}
                                     </a>
+                                </div>
+                            </div>
+                            <div ng-hide="isTeacher()" class="course-action course-teacher-footer">
+                                <div class="action">
+                                    <div ng-if="!course.isCourseStarted">
+                                        <span class="go-into-course">{{getActionMsg(course.courseStatus, isTeacher())}}</span>
+                                    </div>
+                                    <div ng-if="course.isCourseStarted">
+                                        <a ui-sref="person.course.content({courseId:course.id, courseName:course.name})"
+                                           class="go-into-course">{{getActionMsg(course.courseStatus, isTeacher())}}
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

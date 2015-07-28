@@ -82,17 +82,28 @@ function CourseService(Restangular) {
         } else {
             switch (status) {
                 case "REQUESTED":
-                    msg = 'Перейти к курсу';
+                    msg = 'Ваша заявка обрабатывается';
                     break;
                 case "SIGNED":
                     msg = 'Перейти к курсу';
                     break;
                 case "UNSIGNED":
+                    msg = 'К сожалению, курс недоступен';
+                    break;
+                default:
                     msg = 'Подписаться';
                     break;
             }
         }
         return msg;
+    };
+
+    this.isCourseDisabledForPerson = function (status) {
+        return status == 'UNSIGNED';
+    };
+
+    this.isCourseStarted = function(courseStartDate, nowDate) {
+        return nowDate >= courseStartDate;
     };
 
     var statusLabelPair = {};
@@ -108,7 +119,7 @@ function CourseService(Restangular) {
         return Object.keys(statusLabelPair);
     };
 
-    this.isStatusNotProcessed = function(personWithStatus) {
+    this.isStatusNotProcessed = function (personWithStatus) {
         return personWithStatus.courseStatus == 'REQUESTED';
     };
 }
