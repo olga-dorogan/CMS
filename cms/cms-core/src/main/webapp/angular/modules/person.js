@@ -113,11 +113,7 @@ angular.module('myApp.person', ['ui.router'])
                         controller: function ($scope, isCourseStarted, personPersistenceService) {
                             if (personPersistenceService.isTeacher()) {
                                 $scope.progressLabel = 'Студенты';
-                                if (isCourseStarted) {
-                                    $scope.progressState = 'person.course.students';
-                                } else {
-                                    $scope.progressState = 'person.course.subscribers';
-                                }
+                                $scope.progressState = 'person.course.students';
                             } else {
                                 $scope.progressLabel = 'Успеваемость';
                                 $scope.progressState = 'person.course.progress';

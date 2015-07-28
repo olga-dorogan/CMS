@@ -24,6 +24,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +38,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     private static final Long NONE_COURSE_PROTOTYPE = -1L;
     private static final String COURSES_STARTED_AFTER_DATE = "start_after";
     private static final String COURSES_ENDED_BEFORE_DATE = "end_before";
+    private static final int monthBetweenCourseStartAndRequestsApplied = 1;
     @EJB
     private CourseService courseService;
     @EJB
@@ -56,7 +59,10 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
         } else {
             switch (period) {
                 case COURSES_STARTED_AFTER_DATE:
-                    courses = courseService.getAllStartedAfterDate(new Date());
+                    Date dateWithOffset = Date.from(LocalDateTime.now()
+                            .minusMonths(monthBetweenCourseStartAndRequestsApplied)
+                            .atZone(ZoneId.systemDefault()).toInstant());
+                    courses = courseService.getAllStartedAfterDate(dateWithOffset);
                     break;
                 case COURSES_ENDED_BEFORE_DATE:
                     courses = courseService.getAllEndedBeforeDate(new Date());
