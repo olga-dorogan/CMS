@@ -67,6 +67,14 @@ function CourseService(Restangular) {
         return Restangular.one(restBase, courseId).all('subscriber').customPUT(subscribers);
     };
 
+    this.getCourseStudents = function (courseId) {
+        return Restangular.one(restBase, courseId).all('student').getList();
+    };
+
+    this.getCoursePractices = function (courseId) {
+        return Restangular.one(restBase, courseId).all('practice').getList();
+    };
+
     this.getActionMsgByStatus = function (status, isTeacher) {
         var msg = 'Подписаться';
         if (isTeacher) {

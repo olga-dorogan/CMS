@@ -102,6 +102,12 @@ public class LessonServiceImpl implements LessonService {
 
     @Nullable
     @Override
+    public List<PracticeLessonVO> getPracticesByCourseId(@NotNull Long courseId) {
+        return PracticeLessonConverter.convertEntitiesToVOs(practiceLessonDAO.getPracticesForCourse(courseId));
+    }
+
+    @Nullable
+    @Override
     public Set<LessonWithDetailsVO> getWithPracticesByCourseId(@NotNull Long courseId) {
         List<Pair<LessonEntity, List<PracticeLessonEntity>>> lessonsWithPractices = lessonDAO.getWithPracticesByCourseId(courseId);
         return lessonsWithPractices.stream()

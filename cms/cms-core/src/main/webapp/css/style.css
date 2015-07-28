@@ -497,3 +497,8 @@ li ol > li:before {
 .students > .table > tbody > tr > td {
     vertical-align: middle;
 }
+
+.students > .table >  tbody > tr > td > input[type="number"] {
+    padding: 0;
+    height: auto;
+}

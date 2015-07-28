@@ -189,6 +189,21 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public List<PersonVO> getAllStudentsWithMarksFromCourse(@NotNull CourseVO courseVO) {
+        CourseEntity courseEntity = courseDAO.getById(courseVO.getId());
+        Set<CoursePersonStatusEntity> coursePersonEntities = courseEntity.getCoursePersonEntities();
+        List<PersonEntity> personEntities = coursePersonEntities.stream()
+                .filter(status -> status.getCourseStatus() == CourseStatus.SIGNED)
+                .map(CoursePersonStatusEntity::getPerson)
+                .filter(personEntity -> personEntity.getPersonRole() == PersonRole.STUDENT)
+                .collect(Collectors.toList());
+        personEntities.forEach(personEntity -> personEntity.getMarks().size());
+        return personEntities.stream()
+                .map(PersonConverter::convertEntityToVOWithMarks)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<CoursePersonStatusVO> getSubscribersWithStatusesForCourse(@NotNull CourseVO courseVO) {
         List<Pair<PersonEntity, CoursePersonStatusEntity>> studentsWithStatusesForCourse = courseDAO.getAllStudentsWithStatusesForCourse(courseVO.getId());
         return studentsWithStatusesForCourse

@@ -19,7 +19,6 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.*;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -501,15 +500,16 @@ public class PersonServiceTest {
     @Test
     @UsingDataSet(value = {DS_PERSON, DS_COURSE, DS_COURSE_PERSON, DS_PRACTICE, DS_MARK})
     public void testGetMarks() throws Exception {
-        List<MarkVO> marks = personService.getMarks(predefinedPerson);
+        List<MarkVO> marks = personService.getMarks(predefinedPerson, predefinedCourse);
         assertThat(marks.size(), is(predefinedMarksCnt));
         assertThat(marks, hasItem(predefinedMark));
     }
 
     @Test
+    @UsingDataSet(value = {DS_PERSON, DS_COURSE, DS_COURSE_PERSON, DS_PRACTICE, DS_MARK})
     public void testGetMarksForNotExistingPersonShouldThrowException() throws Exception {
         try {
-            personService.getMarks(createNotExistingPerson());
+            personService.getMarks(createNotExistingPerson(), predefinedCourse);
             fail("Must throw exception");
         } catch (EJBException e) {
             return;

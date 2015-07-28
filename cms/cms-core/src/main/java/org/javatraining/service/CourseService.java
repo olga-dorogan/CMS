@@ -55,6 +55,10 @@ public interface CourseService {
     List<PersonVO> getAllPersonsFromCourseByRole(@NotNull CourseVO courseVO, @NotNull PersonRole role);
 
     @NotNull
+    @Valid
+    List<PersonVO> getAllStudentsWithMarksFromCourse(@NotNull CourseVO courseVO);
+
+    @NotNull
     List<CoursePersonStatusVO> getSubscribersWithStatusesForCourse(@NotNull CourseVO courseVO);
 
     //  Course --- News methods; News methods

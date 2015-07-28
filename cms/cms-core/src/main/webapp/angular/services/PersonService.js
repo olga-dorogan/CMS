@@ -7,7 +7,7 @@ function PersonService(Restangular, PersonPersistenceService) {
         return Restangular.one(REST_BASE, userId).customGET('description', {'field': 'phone'});
     };
     this.setPersonPhone = function (userId, phoneNumber) {
-        phoneNumber = phoneNumber.replace(/[^\/\d]/g,'');
+        phoneNumber = phoneNumber.replace(/[^\/\d]/g, '');
         return Restangular.one(REST_BASE, userId).all('phone').customPUT({'phoneNumber': phoneNumber});
     };
     this.getPersonDescription = function (userId) {
@@ -65,6 +65,22 @@ function PersonService(Restangular, PersonPersistenceService) {
             return [];
         }
         return Restangular.one("resources/person", personId).all("course").getList();
+    };
+
+    this.setMarksForPerson = function (personId, marks) {
+        return Restangular.one(REST_BASE, personId).all('marks').post(marks);
+    };
+
+    this.getMarksForPerson = function (personId, courseId) {
+        return Restangular.one(REST_BASE, personId).one('course', courseId).all('marks').getList();
+    };
+
+    this.personsCompare = function (v1, v2) {
+        var res = v1.lastName.localeCompare(v2.lastName);
+        if (res == 0) {
+            res = v1.name.localeCompare(v2.name);
+        }
+        return res;
     };
 
     this.getCoursesForPersonCap = function () {

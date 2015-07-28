@@ -167,6 +167,16 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
         return Response.accepted().build();
     }
 
+    @GET
+    @Path("{course_id}/student")
+    @Auth(roles = {AuthRole.TEACHER})
+    public Response getStudentsWithMarks(@PathParam("course_id") long courseId) {
+        CourseVO course = new CourseVO();
+        course.setId(courseId);
+        List<PersonVO> persons = courseService.getAllStudentsWithMarksFromCourse(course);
+        return Response.ok(serialize(persons)).build();
+    }
+
     @PUT
     @Path("{course_id}/subscribe")
     @Auth(roles = {AuthRole.STUDENT})
