@@ -15,7 +15,6 @@ var myApp = angular.module('myApp', [
     'myApp.about'
 ]);
 
-myApp.service('sessionService', ['$window', '$rootScope', SessionService]);
 myApp.service('sessionService', ['PersonPersistenceService', SessionService]);
 myApp.service('PersonService', ['Restangular', PersonService]);
 myApp.service('AuthService', ['PersonService', 'Restangular', AuthService]);
@@ -38,8 +37,8 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider',
         $httpProvider.interceptors.push('sessionInjector');
     }]);
 
-myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', 'AuthService', 'PersonPersistenceService',
-    function (GAuth, GApi, GData, $state, $rootScope, $window, AuthService, PersonPersistenceService) {
+myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$timeout', 'AuthService', 'PersonPersistenceService',
+    function (GAuth, GApi, GData, $state, $rootScope, $window, $timeout, AuthService, PersonPersistenceService, SessionReqProcessingService) {
 
         // ----------------  Google API lib initialization -------------------------
         var CLIENT = '895405022160-pi238d0pi57fsmsov8khtpr4415hj5j5.apps.googleusercontent.com';
@@ -76,6 +75,9 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', 'AuthSer
             return !(($rootScope.getUserId() == undefined) || ($rootScope.getUserId() == null));
         };
 
+        // -----  Info for inputs and hrefs blocking while server processed the request ------
+        $rootScope.blockUntilServerAnswered = false;
+
         // --------------------  Main person info -------------------------
         $rootScope.getEmail = function () {
             return PersonPersistenceService.getEmail();
@@ -97,6 +99,11 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', 'AuthSer
             $rootScope.doLogOut();
             $state.go("home");
             console.log('attempt to get secure data');
+        });
+        $rootScope.$on('app.serverProcessing', function (event, args) {
+            $timeout(function () {
+                $rootScope.blockUntilServerAnswered = args.processed;
+            }, 0);
         });
         $rootScope.$on('$stateChangeStart', function (event, toState) {
             if ((toState.name == 'home') && $rootScope.isLogin()) {
