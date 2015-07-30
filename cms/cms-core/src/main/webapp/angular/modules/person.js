@@ -14,6 +14,9 @@ angular.module('myApp.person', ['ui.router'])
                         controller: 'PersonCtrl'
                     }
                 },
+                data: {
+                    authRequired: true
+                },
                 resolve: {
                     courseService: 'CourseService',
                     personService: 'PersonService',
