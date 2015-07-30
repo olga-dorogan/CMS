@@ -44,10 +44,11 @@ public class AdditionWebService {
         }
         return null;
     }
-    private class EmailHash{
+
+    private class EmailHash {
         private String hash;
 
-        public EmailHash(String hash){
+        public EmailHash(String hash) {
             this.hash = hash;
         }
 

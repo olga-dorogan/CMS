@@ -11,18 +11,18 @@ angular.module('myApp.news', ['ui.router'])
                     }
                 },
                 resolve: {
-                        newsService: 'NewsService',
+                    newsService: 'NewsService',
                     news: function ($rootScope, newsService) {
                         var promise;
 
-                        if ($rootScope.getUserId() == null||$rootScope.getUserId() == undefined) {
+                        if ($rootScope.getUserId() == null || $rootScope.getUserId() == undefined) {
                             promise = newsService.getNews();
 
                         } else {
-                           promise = newsService.getPersonNews($rootScope.getUserId());
+                            promise = newsService.getPersonNews($rootScope.getUserId());
 
                         }
-                      return promise.then(function (news) {
+                        return promise.then(function (news) {
                             return news;
                         });
                     }

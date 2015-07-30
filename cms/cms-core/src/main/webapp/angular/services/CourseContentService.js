@@ -32,7 +32,7 @@ function CourseContentService(Restangular) {
         return Restangular.one(restBase, courseId).one('lesson', lectureOrderNum).get();
     };
 
-    this.normalizeLecture = function(lecture) {
+    this.normalizeLecture = function (lecture) {
         return {
             'id': lecture.id,
             'orderNum': lecture.orderNum,

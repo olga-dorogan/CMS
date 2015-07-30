@@ -261,7 +261,6 @@ public class CourseServiceTest {
     }
 
 
-
     private NewsVO predefinedNewsVOInitialization() {
         Long predefinedNewsId = 1L;
         NewsVO newsVO = new NewsVO();

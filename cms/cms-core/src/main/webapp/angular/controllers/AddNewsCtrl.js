@@ -1,14 +1,14 @@
-function AddNewsCtrl($scope, $stateParams, NewsService ,$modal,$state) {
+function AddNewsCtrl($scope, $stateParams, NewsService, $modal, $state) {
     $scope.news = {};
 
     $scope.createNews = function () {
         $scope.news.date = new Date();
-        $scope.news.courseId =  $stateParams.courseId;
-         NewsService.createNews($scope.news, $stateParams.courseId)
+        $scope.news.courseId = $stateParams.courseId;
+        NewsService.createNews($scope.news, $stateParams.courseId)
             .then(
             function (createdNews) {
                 if (NewsService.isNewsSuccessfullyCreated(createdNews)) {
-                     $state.go('news', {}, {reload: true});
+                    $state.go('news', {}, {reload: true});
                 } else {
                     alertData.textAlert = createdNews;
                     showAlertWithError(alertData);
@@ -32,7 +32,7 @@ function AddNewsCtrl($scope, $stateParams, NewsService ,$modal,$state) {
                             textAlert: success,
                             mode: 'danger'
                         });
-                }else{
+                } else {
                     $state.go('news', {}, {reload: true});
                 }
             });
@@ -63,7 +63,6 @@ function AddNewsCtrl($scope, $stateParams, NewsService ,$modal,$state) {
     };
 
 
-
     var alertData = {
         boldTextTitle: "Ошибка",
         mode: 'danger'
@@ -86,4 +85,7 @@ function AddNewsCtrl($scope, $stateParams, NewsService ,$modal,$state) {
             }
         );
     };
+
+
 }
+

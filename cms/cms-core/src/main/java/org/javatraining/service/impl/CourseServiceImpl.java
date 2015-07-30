@@ -121,16 +121,15 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public NewsVO removeNewsById(@NotNull Long newsId) {
-     return NewsConverter.convertEntityToVO(newsDAO.removeById(newsId));
+        return NewsConverter.convertEntityToVO(newsDAO.removeById(newsId));
     }
 
 
     @Override
     public NewsVO removeNews(@NotNull NewsVO newsVO) {
-       NewsEntity newsEntity= newsDAO.getById(newsVO.getId());
+        NewsEntity newsEntity = newsDAO.getById(newsVO.getId());
         return NewsConverter.convertEntityToVO(newsDAO.remove(newsEntity));
     }
-
 
 
     @Override

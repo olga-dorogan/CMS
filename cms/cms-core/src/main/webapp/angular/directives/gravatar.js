@@ -1,4 +1,4 @@
-myApp.directive('gravatar', function() {
+myApp.directive('gravatar', function () {
     return {
         restrict: 'AE',
         replace: true,
@@ -7,7 +7,7 @@ myApp.directive('gravatar', function() {
             width: '@',
             hash: '@'
         },
-        link: function(scope, el, attr) {
+        link: function (scope, el, attr) {
             scope.defaultImage = 'https://cdn4.iconfinder.com/data/icons/e-commerce-icon-set/48/Username_2-32.png';
         },
         template: '<img class="circular" alt="{{name}}" ng-src="https://secure.gravatar.com/avatar/{{hash}}.jpg?s={{width}}&d={{defaultImage}}">'

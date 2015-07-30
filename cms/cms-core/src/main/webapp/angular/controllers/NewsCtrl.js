@@ -1,4 +1,4 @@
-function NewsCtrl($scope, news, newsService,$modal) {
+function NewsCtrl($scope, news, newsService, $modal) {
     for (var i = 0; i < news.length; i++) {
         var timestamp = news[i].date;
         news[i].date = timestampConvector(timestamp);
@@ -16,7 +16,7 @@ function NewsCtrl($scope, news, newsService,$modal) {
                             textAlert: success,
                             mode: 'danger'
                         });
-                }else{
+                } else {
                     $state.go('news', {}, {reload: true});
                 }
             });
@@ -25,29 +25,28 @@ function NewsCtrl($scope, news, newsService,$modal) {
     $scope.news = news;
 
 
+    var alertData = {
+        boldTextTitle: "Ошибка",
+        mode: 'danger'
+    };
 
-var alertData = {
-    boldTextTitle: "Ошибка",
-    mode: 'danger'
-};
-
-var showAlertWithError = function (alertData) {
-    var modalInstance = $modal.open(
-        {
-            templateUrl: 'angular/templates/alertModal.html',
-            controller: function ($scope, $modalInstance) {
-                $scope.data = alertData;
-                $scope.close = function () {
-                    $modalInstance.close();
-                }
-            },
-            backdrop: true,
-            keyboard: true,
-            backdropClick: true,
-            size: 'lg'
-        }
-    );
-};
+    var showAlertWithError = function (alertData) {
+        var modalInstance = $modal.open(
+            {
+                templateUrl: 'angular/templates/alertModal.html',
+                controller: function ($scope, $modalInstance) {
+                    $scope.data = alertData;
+                    $scope.close = function () {
+                        $modalInstance.close();
+                    }
+                },
+                backdrop: true,
+                keyboard: true,
+                backdropClick: true,
+                size: 'lg'
+            }
+        );
+    };
 
 }
 var timestampConvector = function (timestamp) {

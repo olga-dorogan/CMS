@@ -88,12 +88,6 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
     }
 
 
-
-
-
-
-
-
 //    @PUT
 //    @Path("{news_id}/news")
 //    @Consumes(MediaType.APPLICATION_JSON)
@@ -108,7 +102,7 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
     public Response deleteNews(@PathParam("news_id") Long newsId) {
-      courseService.removeNewsById(newsId);
+        courseService.removeNewsById(newsId);
         return Response.ok().build();
     }
 
