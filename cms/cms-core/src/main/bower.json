@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "angular": "1.2.x",
+    "angular": "1.2.9",
     "angular-loader": "1.2.x",
     "bootstrap": "3.3.4",
     "jquery": "~2.1.4",
@@ -16,7 +16,7 @@
     "blueimp-file-upload-node": "~9.10.1",
     "angular-ui-bootstrap-bower": "0.11.0",
     "angular-file-upload": "1.1.5",
-    "angular-redactor": "1.1.4",
+    "angular-redactor": "9.2.6",
     "angular-local-storage": "0.2.2"
   }
 }

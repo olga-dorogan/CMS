@@ -11,8 +11,10 @@ var myApp = angular.module('myApp', [
     'myApp.home',
     'myApp.person',
     'myApp.news',
-    'myApp.about'
+    'myApp.about',
+
 ]);
+
 
 myApp.service('sessionService', ['$window', '$rootScope', SessionService]);
 myApp.service('sessionService', ['PersonPersistenceService', SessionService]);
