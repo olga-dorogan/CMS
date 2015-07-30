@@ -32,5 +32,10 @@ public class PracticeLessonDAO extends GenericDAO<PracticeLessonEntity> {
         query.setParameter("lesson", lessonEntity);
         return query.getResultList();
     }
-
+    public List<PracticeLessonEntity> getPracticesForCourse(@NotNull Long courseId) {
+        TypedQuery<PracticeLessonEntity> query = getEntityManager().createQuery(
+                "SELECT pr FROM PracticeLessonEntity pr WHERE pr.lesson.course.id = :courseId", PracticeLessonEntity.class);
+        query.setParameter("courseId", courseId);
+        return query.getResultList();
+    }
 }

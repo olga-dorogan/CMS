@@ -11,6 +11,7 @@ public class PracticeLessonVO {
     private String task;
     @NotNull
     private Long orderNum;
+    private Long lessonOrderNum;
 
     public PracticeLessonVO() {
     }
@@ -75,5 +76,13 @@ public class PracticeLessonVO {
 
     public void setOrderNum(Long orderNum) {
         this.orderNum = orderNum;
+    }
+
+    public Long getLessonOrderNum() {
+        return lessonOrderNum;
+    }
+
+    public void setLessonOrderNum(Long lessonOrderNum) {
+        this.lessonOrderNum = lessonOrderNum;
     }
 }

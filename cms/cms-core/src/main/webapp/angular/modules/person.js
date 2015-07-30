@@ -14,6 +14,9 @@ angular.module('myApp.person', ['ui.router'])
                         controller: 'PersonCtrl'
                     }
                 },
+                data: {
+                    authRequired: true
+                },
                 resolve: {
                     courseService: 'CourseService',
                     personService: 'PersonService',
@@ -34,6 +37,14 @@ angular.module('myApp.person', ['ui.router'])
                                             newCourses.splice(j, 1);
                                             break;
                                         }
+                                    }
+                                }
+                                for (var i = 0; i < personCourses.length; i++) {
+                                    personCourses[i].isCourseStarted =
+                                        courseService.isCourseStarted(new Date(personCourses[i].startDate), new Date());
+                                    if (courseService.isCourseDisabledForPerson(personCourses[i].courseStatus)) {
+                                        personCourses.splice(i, 1);
+                                        i--;
                                     }
                                 }
                                 return {
@@ -110,8 +121,17 @@ angular.module('myApp.person', ['ui.router'])
                     },
                     "menubar@person.course": {
                         templateUrl: 'angular/views/person-course/menu.html',
-                        controller: function ($scope, isCourseStarted) {
-                            $scope.progressState = 'person.course.subscribers';
+                        controller: function ($scope, isCourseStarted, personPersistenceService) {
+                            if (personPersistenceService.isTeacher()) {
+                                $scope.progressLabel = 'Студенты';
+                                $scope.progressState = 'person.course.students';
+                            } else {
+                                $scope.progressLabel = 'Успеваемость';
+                                $scope.progressState = 'person.course.progress';
+                            }
+                        },
+                        resolve: {
+                            personPersistenceService: 'PersonPersistenceService'
                         }
                     },
                     "content@person.course": {
@@ -275,11 +295,7 @@ angular.module('myApp.person', ['ui.router'])
                 templateUrl: 'angular/views/person-course/progress/subscribers.html',
                 controller: 'CourseSubscribersCtrl',
                 resolve: {
-                    personPersistenceService: 'PersonPersistenceService',
-                    subscribers: function ($stateParams, courseService, personPersistenceService) {
-                        if (!personPersistenceService.isTeacher()) {
-                            return [];
-                        }
+                    subscribers: function ($stateParams, courseService) {
                         var promise = courseService.getCourseSubscribers($stateParams.courseId);
                         promise = promise.then(function (subscribers) {
                             return subscribers;
@@ -288,6 +304,99 @@ angular.module('myApp.person', ['ui.router'])
                     },
                     courseId: function ($stateParams) {
                         return $stateParams.courseId;
+                    }
+                }
+            })
+            .state('person.course.students', {
+                url: '/students',
+                templateUrl: 'angular/views/person-course/progress/students.html',
+                controller: 'CourseStudentsCtrl',
+                resolve: {
+                    personService: 'PersonService',
+                    students: function (courseService, courseId, practices) {
+                        var promise = courseService.getCourseStudents(courseId);
+                        promise = promise.then(function (students) {
+                            var getMark = function (marks, practiceId) {
+                                for (var i = 0; i < marks.length; i++) {
+                                    if (marks[i].lessonId == practiceId) {
+                                        return {
+                                            'value': marks[i].mark,
+                                            'id': marks[i].id
+                                        };
+                                    }
+                                }
+                                return {
+                                    'value': -1,
+                                    'id': null
+                                };
+                            };
+                            for (var i = 0; i < students.length; i++) {
+                                students[i].viewPracticeMarks = [];
+                                for (var j = 0; j < practices.length; j++) {
+                                    students[i].viewPracticeMarks[j] = {
+                                        'updated': false,
+                                        'mark': getMark(students[i].marks, practices[j].id),
+                                        'lessonId': practices[j].id,
+                                        'virtOrderNum': practices[j].virtOrderNum
+                                    };
+                                }
+                            }
+                            return students;
+                        });
+                        return promise;
+                    },
+                    practices: function (courseService, courseId) {
+                        var promise = courseService.getCoursePractices(courseId);
+                        promise = promise.then(function (practices) {
+                            for (var i = 0; i < practices.length; i++) {
+                                practices[i].virtOrderNum = practices[i].lessonOrderNum * 100 + practices[i].orderNum;
+                            }
+                            practices = practices.sort(function (v1, v2) {
+                                return v1.virtOrderNum - v2.virtOrderNum;
+                            });
+                            return practices;
+                        });
+                        return promise;
+                    },
+                    courseId: function ($stateParams) {
+                        return $stateParams.courseId;
+                    }
+                }
+            })
+            .state('person.course.progress', {
+                url: '/progress',
+                templateUrl: 'angular/views/person-course/progress/progress.html',
+                controller: function ($scope, practices) {
+                    $scope.practices = practices;
+                },
+                resolve: {
+                    personPersistenceService: 'PersonPersistenceService',
+                    personService: 'PersonService',
+                    courseId: function ($stateParams) {
+                        return $stateParams.courseId;
+                    },
+                    practices: function (personPersistenceService, personService, courseService, courseId) {
+                        var promise = courseService.getCoursePractices(courseId);
+                        promise = promise.then(function (practices) {
+                            promise = personService.getMarksForPerson(personPersistenceService.getId(), courseId);
+                            promise = promise.then(function (marks) {
+                                for (var i = 0; i < practices.length; i++) {
+                                    practices[i].virtOrderNum = practices[i].lessonOrderNum * 100 + practices[i].orderNum;
+                                    for (var j = 0; j < marks.length; j++) {
+                                        if (marks[j].lessonId == practices[i].id) {
+                                            practices[i].mark = marks[j].mark;
+                                            break;
+                                        }
+                                    }
+                                }
+                                practices = practices.sort(function (v1, v2) {
+                                    return v1.virtOrderNum - v2.virtOrderNum;
+                                });
+                                return practices;
+                            });
+                            return promise;
+                        });
+                        return promise;
                     }
                 }
             })
@@ -331,7 +440,8 @@ angular.module('myApp.person', ['ui.router'])
     .controller("AddLectureCtrl", AddLectureCtrl)
     .controller("LectureContentCtrl", LectureContentCtrl)
     .controller("SettingCtrl", SettingCtrl)
-    .controller("CourseSubscribersCtrl", CourseSubscribersCtrl);
+    .controller("CourseSubscribersCtrl", CourseSubscribersCtrl)
+    .controller("CourseStudentsCtrl", CourseStudentsCtrl);
 
 
 

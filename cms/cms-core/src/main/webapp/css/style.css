@@ -36,6 +36,10 @@ body {
     font-size: 16px;
 }
 
+.info-list .panel {
+    width: 1000px;
+}
+
 .description {
     margin-left: 25px;
     font-size: 16px;
@@ -119,6 +123,11 @@ h1 {
     text-align: right;
 }
 
+fieldset[disabled] .course-teacher-footer > .action a {
+    pointer-events: none;
+    cursor: default;
+}
+
 .person-course-hide-practices {
     margin: 0;
 }
@@ -168,6 +177,7 @@ h1 {
 
 .info-list .enroll-into-course {
     color: #cd0200; /*warn-col*/
+    cursor: pointer;
 }
 
 .info-list .remove-course {
@@ -205,6 +215,13 @@ h1 {
 .img-wait {
     width: 64px;
     height: 64px;
+}
+
+.img-wait-server-resp {
+    margin-top: -5px;
+    margin-right: 45px;
+    width: 35px;
+    height: 35px;
 }
 
 .img-wait-file {
@@ -502,4 +519,9 @@ li ol > li:before {
 
 .students > .table > tbody > tr > td {
     vertical-align: middle;
+}
+
+.students > .table > tbody > tr > td > input[type="number"] {
+    padding: 0;
+    height: auto;
 }

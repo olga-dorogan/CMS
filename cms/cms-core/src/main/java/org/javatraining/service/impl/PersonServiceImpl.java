@@ -206,14 +206,33 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public void setMarks(@NotNull PersonVO personVO, @NotNull @Valid List<MarkVO> marksVO) {
+        PersonEntity personEntity = personDAO.getById(personVO.getId());
+        List<MarkVO> marksVOAfterSet = marksVO.stream()
+                .map(markVO -> {
+                    MarkEntity markEntity = MarkConverter.convertVOToEntity(markVO);
+                    markEntity.setPersons(personEntity);
+                    markEntity.setPracticeLesson(practiceLessonDAO.getById(markVO.getLessonId()));
+                    return markEntity;
+                })
+                .map(markEntity -> markEntity.getId() == null ? markDAO.save(markEntity) : markDAO.update(markEntity))
+                .map(MarkConverter::convertEntityToVO)
+                .collect(Collectors.toList());
+        marksVO.clear();
+        marksVO.addAll(marksVOAfterSet);
+    }
+
+    @Override
     public void removeMark(@NotNull MarkVO markVO) {
         markDAO.removeById(markVO.getId());
     }
 
     @Override
-    public List<MarkVO> getMarks(@NotNull PersonVO personVO) {
+    public List<MarkVO> getMarks(@NotNull PersonVO personVO, @NotNull CourseVO courseVO) {
         PersonEntity personEntity = personDAO.getById(personVO.getId());
-        Set<MarkEntity> marks = personEntity.getMarks();
+        Set<MarkEntity> marks = personEntity.getMarks().stream()
+                .filter(markEntity -> markEntity.getLessons().getLesson().getCourse().getId() == courseVO.getId())
+                .collect(Collectors.toSet());
         return MarkConverter.convertEntitiesToVOs(marks);
     }
 

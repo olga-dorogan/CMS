@@ -67,6 +67,22 @@ function PersonService(Restangular, PersonPersistenceService) {
         return Restangular.one("resources/person", personId).all("course").getList();
     };
 
+    this.setMarksForPerson = function (personId, marks) {
+        return Restangular.one(REST_BASE, personId).all('marks').post(marks);
+    };
+
+    this.getMarksForPerson = function (personId, courseId) {
+        return Restangular.one(REST_BASE, personId).one('course', courseId).all('marks').getList();
+    };
+
+    this.personsCompare = function (v1, v2) {
+        var res = v1.lastName.localeCompare(v2.lastName);
+        if (res == 0) {
+            res = v1.name.localeCompare(v2.name);
+        }
+        return res;
+    };
+
     this.getCoursesForPersonCap = function () {
         return [
             {id: 2, name: "Java SE", description: "Description for Java SE"}

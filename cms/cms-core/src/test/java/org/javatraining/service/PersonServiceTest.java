@@ -500,15 +500,16 @@ public class PersonServiceTest {
     @Test
     @UsingDataSet(value = {DS_PERSON, DS_COURSE, DS_COURSE_PERSON, DS_PRACTICE, DS_MARK})
     public void testGetMarks() throws Exception {
-        List<MarkVO> marks = personService.getMarks(predefinedPerson);
+        List<MarkVO> marks = personService.getMarks(predefinedPerson, predefinedCourse);
         assertThat(marks.size(), is(predefinedMarksCnt));
         assertThat(marks, hasItem(predefinedMark));
     }
 
     @Test
+    @UsingDataSet(value = {DS_PERSON, DS_COURSE, DS_COURSE_PERSON, DS_PRACTICE, DS_MARK})
     public void testGetMarksForNotExistingPersonShouldThrowException() throws Exception {
         try {
-            personService.getMarks(createNotExistingPerson());
+            personService.getMarks(createNotExistingPerson(), predefinedCourse);
             fail("Must throw exception");
         } catch (EJBException e) {
             return;

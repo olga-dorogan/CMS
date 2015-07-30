@@ -1,6 +1,7 @@
 // Declare app level module which depends on views, and components
 var myApp = angular.module('myApp', [
     'ui.router',
+    //'ui.router.tabs',
     'restangular',
     'angular-google-gapi',
     'ui.bootstrap',
@@ -14,8 +15,6 @@ var myApp = angular.module('myApp', [
     'myApp.about',
 
 ]);
-
-
 myApp.service('sessionService', ['$window', '$rootScope', SessionService]);
 myApp.service('sessionService', ['PersonPersistenceService', SessionService]);
 myApp.service('PersonService', ['Restangular', PersonService]);
@@ -39,8 +38,8 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider',
         $httpProvider.interceptors.push('sessionInjector');
     }]);
 
-myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', 'AuthService', 'PersonPersistenceService',
-    function (GAuth, GApi, GData, $state, $rootScope, $window, AuthService, PersonPersistenceService) {
+myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$timeout', 'AuthService', 'PersonPersistenceService',
+    function (GAuth, GApi, GData, $state, $rootScope, $window, $timeout, AuthService, PersonPersistenceService) {
 
         // ----------------  Google API lib initialization -------------------------
         var CLIENT = '895405022160-pi238d0pi57fsmsov8khtpr4415hj5j5.apps.googleusercontent.com';
@@ -48,34 +47,51 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', 'AuthSer
         GAuth.setScope('https://www.googleapis.com/auth/userinfo.email');
 
         // ---------------------  Login / Logout  -------------------------
-        $rootScope.doLogin = function () {
-            GAuth.login().then(function () {
-                AuthService.goAuth(GData.getUser()).then(function (data) {
-                    PersonPersistenceService.saveInfo(
-                        data.id,
-                        data.personRole.toLowerCase(),
-                        data.name + " " + data.lastName,
-                        data.email.toLowerCase(),
-                        $window.gapi.auth.getToken().access_token);
-                    AuthService.getEmailHash($rootScope.getEmail()).then(function (hash) {
-                        PersonPersistenceService.saveHash(hash.hash);
-                    });
-                    $state.go("person");
+        $rootScope.doLogin = function (fromUrl) {
+            GAuth.login().then(
+                function (success) {
+                    AuthService.goAuth(GData.getUser()).then(
+                        function (data) {
+                            PersonPersistenceService.saveInfo(
+                                data.id,
+                                data.personRole.toLowerCase(),
+                                data.name + " " + data.lastName,
+                                data.email.toLowerCase(),
+                                $window.gapi.auth.getToken().access_token);
+                            AuthService.getEmailHash($rootScope.getEmail()).then(function (hash) {
+                                PersonPersistenceService.saveHash(hash.hash);
+                            });
+                            if (!fromUrl) {
+                                $rootScope.toState = 'person';
+                                $rootScope.toStateParams = '';
+                            }
+                            console.log("login success");
+                            $state.go($rootScope.toState, $rootScope.toStateParams);
+                        });
+                },
+                function () {
+                    console.log('login fail');
+                    $rootScope.goHome();
                 });
-            }, function () {
-                $state.go("home");
-                console.log('login fail');
-            });
         };
         $rootScope.doLogOut = function () {
             PersonPersistenceService.clearInfo();
             GAuth.logout().then(function () {
-                $state.go("home");
+                $rootScope.goHome();
             });
         };
         $rootScope.isLogin = function () {
             return !(($rootScope.getUserId() == undefined) || ($rootScope.getUserId() == null));
         };
+
+        $rootScope.goHome = function () {
+            $rootScope.toState = 'home';
+            $rootScope.toStateParams = '';
+            $state.go($rootScope.toState, $rootScope.toStateParams);
+        };
+
+        // -----  Info for inputs and hrefs blocking while server processed the request ------
+        $rootScope.blockUntilServerAnswered = false;
 
         // --------------------  Main person info -------------------------
         $rootScope.getEmail = function () {
@@ -96,10 +112,20 @@ myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', 'AuthSer
         // ------------------  Broadcast receivers -------------------------
         $rootScope.$on('app.unauthorized', function () {
             $rootScope.doLogOut();
-            $state.go("home");
-            console.log('attempt to get secure data');
         });
-        $rootScope.$on('$stateChangeStart', function (event, toState) {
+        $rootScope.$on('app.serverProcessing', function (event, args) {
+            $timeout(function () {
+                $rootScope.blockUntilServerAnswered = args.processed;
+            }, 0);
+        });
+        $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
+            $rootScope.toState = toState;
+            $rootScope.toStateParams = toStateParams;
+
+            if (toState.data && toState.data.authRequired && !$rootScope.isLogin()) {
+                event.preventDefault();
+                $rootScope.doLogin(true);
+            }
             if ((toState.name == 'home') && $rootScope.isLogin()) {
                 event.preventDefault();
                 $state.go('person');
