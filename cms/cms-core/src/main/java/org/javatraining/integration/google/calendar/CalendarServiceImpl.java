@@ -9,8 +9,6 @@ import com.google.api.services.calendar.model.Calendar;
 import com.google.api.services.calendar.model.CalendarList;
 import com.google.api.services.calendar.model.CalendarListEntry;
 import org.javatraining.integration.google.calendar.exception.CalendarException;
-import org.javatraining.integration.google.calendar.exception.CalendarRoleAlreadyExistsException;
-import org.javatraining.integration.google.calendar.exception.CalendarRoleNotExistsException;
 import org.javatraining.model.PersonVO;
 import org.javatraining.service.PersonService;
 
@@ -96,7 +94,7 @@ public class CalendarServiceImpl implements CalendarService {
     }
 
     @Override
-    public void removeCalendar(@Valid CalendarVO calendarVO) {
+    public void removeCalendar(@NotNull CalendarVO calendarVO) {
         try {
             calendarService.calendars().delete(calendarVO.getId()).execute();
         } catch (IOException e) {
@@ -132,22 +130,22 @@ public class CalendarServiceImpl implements CalendarService {
     }
 
     @Override
-    public void addTeacherToCalendar(@Valid CalendarVO calendarVO, @Valid PersonVO teacher) {
+    public void addTeacherToCalendar(@NotNull CalendarVO calendarVO, @Valid PersonVO teacher) {
         addPersonToCalendar(calendarVO.getId(), teacher.getEmail(), CALENDAR_ROLE_TEACHER);
     }
 
     @Override
-    public void removeTeacherFromCalendar(@Valid CalendarVO calendarVO, @Valid PersonVO teacher) {
+    public void removeTeacherFromCalendar(@NotNull CalendarVO calendarVO, @Valid PersonVO teacher) {
         removePersonFromCalendar(calendarVO.getId(), teacher.getEmail(), CALENDAR_ROLE_TEACHER);
     }
 
     @Override
-    public void addStudentToCalendar(@Valid CalendarVO calendarVO, @Valid PersonVO student) {
+    public void addStudentToCalendar(@NotNull CalendarVO calendarVO, @Valid PersonVO student) {
         addPersonToCalendar(calendarVO.getId(), student.getEmail(), CALENDAR_ROLE_STUDENT);
     }
 
     @Override
-    public void removeStudentFromCalendar(@Valid CalendarVO calendarVO, @Valid PersonVO student) {
+    public void removeStudentFromCalendar(@NotNull CalendarVO calendarVO, @Valid PersonVO student) {
         removePersonFromCalendar(calendarVO.getId(), student.getEmail(), CALENDAR_ROLE_STUDENT);
     }
 
@@ -202,7 +200,8 @@ public class CalendarServiceImpl implements CalendarService {
         try {
             String deletedRuleId = getRuleIdForPerson(calendarId, email, role);
             if (deletedRuleId == null) {
-                throw new CalendarRoleNotExistsException(String.format("%s with email %s is not exist.", role, email));
+//                throw new CalendarRoleNotExistsException(String.format("%s with email %s is not exist.", role, email));
+                return;
             }
             calendarService.acl().delete(calendarId, deletedRuleId).execute();
         } catch (IOException e) {
@@ -214,7 +213,8 @@ public class CalendarServiceImpl implements CalendarService {
         try {
             String ruleId = getRuleIdForPerson(calendarId, email, role);
             if (ruleId != null) {
-                throw new CalendarRoleAlreadyExistsException(String.format("%s with email %s is already exist.", role, email));
+//                throw new CalendarRoleAlreadyExistsException(String.format("%s with email %s is already exist.", role, email));
+                return;
             }
 
             AclRule rule = new AclRule();

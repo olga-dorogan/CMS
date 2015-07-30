@@ -4,6 +4,7 @@ import flexjson.JSONException;
 import org.javatraining.auth.Auth;
 import org.javatraining.config.AuthRole;
 import org.javatraining.config.Config;
+import org.javatraining.entity.enums.CourseStatus;
 import org.javatraining.integration.google.calendar.CalendarService;
 import org.javatraining.integration.google.calendar.CalendarVO;
 import org.javatraining.integration.google.calendar.exception.CalendarException;
@@ -140,9 +141,9 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     @Auth(roles = {AuthRole.TEACHER})
     public Response deleteCourse(@PathParam("course_id") long courseId) {
         Response.ResponseBuilder r;
-        CourseVO course = new CourseVO();
-        course.setId(courseId);
+        CourseVO course = courseService.getCourseById(courseId);
         try {
+            calendarService.removeCalendar(new CalendarVO(course.getCalendarId()));
             courseService.removeCourse(course);
             r = Response.ok();
         } catch (Exception e) {
@@ -170,6 +171,16 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     public Response updateSubscribers(@PathParam("course_id") long courseId, List<CoursePersonStatusVO> statusVOs) {
         statusVOs.forEach(coursePersonStatusVO -> coursePersonStatusVO.setCourseId(courseId));
         statusVOs.forEach(personService::updatePersonStatusOnCourse);
+        String calendarId = courseService.getCourseById(courseId).getCalendarId();
+        CalendarVO calendarVO = calendarService.getCalendarById(calendarId);
+        statusVOs.stream()
+                .filter(statusVO -> statusVO.getCourseStatus() == CourseStatus.SIGNED)
+                .map(statusVO -> personService.getById(statusVO.getPersonId()))
+                .forEach(student -> calendarService.addStudentToCalendar(calendarVO, student));
+        statusVOs.stream()
+                .filter(statusVO -> statusVO.getCourseStatus() != CourseStatus.SIGNED)
+                .map(statusVO -> personService.getById(statusVO.getPersonId()))
+                .forEach(student -> calendarService.removeStudentFromCalendar(calendarVO, student));
         return Response.accepted().build();
     }
 

@@ -23,6 +23,10 @@ public class CalendarVO {
 
     }
 
+    public CalendarVO(String id) {
+        this.id = id;
+    }
+
     public CalendarVO(String title, List<PersonVO> teachers) {
         this.title = title;
         this.teachers = teachers;

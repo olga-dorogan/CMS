@@ -12,17 +12,17 @@ public interface CalendarService {
 
     CalendarVO addCalendar(@Valid CalendarVO calendarVO);
 
-    void removeCalendar(@Valid CalendarVO calendarVO);
+    void removeCalendar(@NotNull CalendarVO calendarVO);
 
     @NotNull
     @Valid
     CalendarVO getCalendarById(@NotNull String calendarId);
 
-    void addTeacherToCalendar(@Valid CalendarVO calendarVO, @Valid PersonVO teacher);
+    void addTeacherToCalendar(@NotNull CalendarVO calendarVO, @Valid PersonVO teacher);
 
-    void removeTeacherFromCalendar(@Valid CalendarVO calendarVO, @Valid PersonVO teacher);
+    void removeTeacherFromCalendar(@NotNull CalendarVO calendarVO, @Valid PersonVO teacher);
 
-    void addStudentToCalendar(@Valid CalendarVO calendarVO, @Valid PersonVO student);
+    void addStudentToCalendar(@NotNull CalendarVO calendarVO, @Valid PersonVO student);
 
-    void removeStudentFromCalendar(@Valid CalendarVO calendarVO, @Valid PersonVO student);
+    void removeStudentFromCalendar(@NotNull CalendarVO calendarVO, @Valid PersonVO student);
 }
