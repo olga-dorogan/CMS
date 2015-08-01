@@ -13,6 +13,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class GitLabProjectMember extends GitLabUser {
     @JsonProperty("access_level")
     private int accessLevel;
+    @JsonProperty("user_id")
+    private long memberId;
 
     public GitLabAccessLevel getAccessLevel() {
         return GitLabAccessLevel.fromAccessValue(accessLevel);
@@ -20,5 +22,13 @@ public class GitLabProjectMember extends GitLabUser {
 
     public void setAccessLevel(GitLabAccessLevel accessLevel) {
         this.accessLevel = accessLevel.accessValue;
+    }
+
+    public long getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(long memberId) {
+        this.memberId = memberId;
     }
 }

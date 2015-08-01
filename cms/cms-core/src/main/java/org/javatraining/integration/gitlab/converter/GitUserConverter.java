@@ -4,8 +4,9 @@ import org.javatraining.integration.gitlab.api.model.GitLabUser;
 import org.javatraining.integration.gitlab.exception.UserRequiredPropertiesIsNotComparable;
 import org.javatraining.integration.gitlab.impl.GitLabNotificationServiceImpl;
 import org.javatraining.model.PersonVO;
-import org.javatraining.service.impl.PersonServiceImpl;
+import org.javatraining.service.PersonService;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -18,18 +19,15 @@ import java.util.stream.Collectors;
  * Created by sergey on 12.06.15 at 21:21.
  * For more information you should send mail to codedealerb@gmail.com
  */
+@Dependent
 public class GitUserConverter {
     @Inject
-    private PersonServiceImpl personService;
+    private PersonService personService;
+
     private String rootMail;
     private GitLabNotificationServiceImpl gitLabNotification;
 
     public GitUserConverter() {
-    }
-
-    public GitUserConverter(String rootMail) {
-        this.rootMail = rootMail;
-        gitLabNotification = new GitLabNotificationServiceImpl();
     }
 
     public GitLabUser convertPerson(PersonVO personVO) {
@@ -46,6 +44,7 @@ public class GitUserConverter {
             e.printStackTrace();
         }
         String text = ""; //FIXME destroy template
+        gitLabNotification = new GitLabNotificationServiceImpl();
         gitLabNotification.sendNotificationToEndPoint(rootMail, text, entity);
 
         return entity;
@@ -74,6 +73,10 @@ public class GitUserConverter {
         ).collect(
                 Collectors.toCollection(TreeSet::new)
         );
+    }
+
+    public void setRootMail(String rootMail) {
+        this.rootMail = rootMail;
     }
 
     private String generatePassword(String userName) throws NoSuchAlgorithmException {

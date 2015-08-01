@@ -11,7 +11,8 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -27,8 +28,8 @@ public class GitLabNotificationServiceImpl implements NotificationService<GitLab
         Properties props = new Properties();
         JSONParser parser = new JSONParser();
         try {
-            JSONObject propertiesMarshaler = (JSONObject) parser.parse(new FileReader(
-                    "mail/mail_properties"));
+            InputStream is = getClass().getClassLoader().getResourceAsStream("mail/mail_properties");
+            JSONObject propertiesMarshaler = (JSONObject) parser.parse(new InputStreamReader(is));
 
             props.put("mail.transport.protocol", propertiesMarshaler.get("mail.transport.protocol"));
             props.put("mail.host", propertiesMarshaler.get("mail.host"));
@@ -39,8 +40,8 @@ public class GitLabNotificationServiceImpl implements NotificationService<GitLab
             props.put("mail.smtp.socketFactory.class", propertiesMarshaler.get("mail.smtp.socketFactory.class"));
             props.put("mail.smtp.socketFactory.fallback", propertiesMarshaler.get("mail.smtp.socketFactory.fallback"));
 
-            propertiesMarshaler = (JSONObject) parser.parse(new FileReader(
-                    "../resources/mail/account_properties.json"));
+            InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("mail/account_properties");
+            propertiesMarshaler = (JSONObject) parser.parse(new InputStreamReader(resourceAsStream));
 
             String from = (String) propertiesMarshaler.get("email_for_gitlab_notification");
             String password = (String) propertiesMarshaler.get("password_for_gitlab_notification");
@@ -61,13 +62,13 @@ public class GitLabNotificationServiceImpl implements NotificationService<GitLab
             mMessage.setSender(addressFrom);
             mMessage.setSubject(subject);
 
-            Map model = new HashMap<>();
-            model.put("person.Properties", user);
-            model.put("text", message);
-
-            mMessage.setContent(VelocityEngineUtils.mergeTemplateIntoString(
-                            velocityEngine, "../resources/velocity/gitlab-mail-template.html", "UTF-8", model),
+            Map<String, String> model = new HashMap<>();
+            model.put("username", user.getName());
+            model.put("password", user.getPassword());
+            mMessage.setContent(VelocityEngineUtils
+                    .mergeTemplateIntoString(velocityEngine, "velocity/gitlab-mail-template.vm", "UTF-8", model),
                     "text/html; charset=UTF-8");
+
             mMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
 
             transport.connect();

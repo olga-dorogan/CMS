@@ -4,11 +4,15 @@ import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.integration.gitlab.api.model.GitLabProject;
 import org.javatraining.integration.gitlab.exception.ResourceNotFoundException;
 import org.javatraining.integration.gitlab.impl.GitLabService;
+import org.javatraining.model.CourseVO;
 import org.javatraining.model.PersonVO;
+import org.json.simple.parser.ParseException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 
@@ -22,12 +26,14 @@ import static org.junit.Assert.*;
 public class GitLabServiceTest {
     private GitLabService service;
     private PersonVO testPerson, testPerson2;
+    private CourseVO courseVO;
 
     @Before
-    public void setUpGitlabClient() {
-        service = new GitLabService("http://localhost", "root", "12345678", "admin@example.com");
+    public void setUpGitlabClient() throws IOException, ParseException {
+        service = new GitLabService();
         testPerson = new PersonVO((long) 2, "testName", "testSurname", "testUserMail@mail.ru", PersonRole.STUDENT);
         testPerson2 = new PersonVO((long) 3, "testName2", "testSurname2", "testUserMail2@mail.ru", PersonRole.TEACHER);
+        courseVO = new CourseVO(1L, "Test course", "Test course description");
     }
 
     @After
@@ -66,7 +72,7 @@ public class GitLabServiceTest {
         if (service.getPerson(testPerson.getEmail()) == null) {
             service.addPerson(testPerson);
         }
-        assertTrue(service.createProject(testPerson));
+        assertTrue(service.createProject(testPerson, courseVO));
     }
 
     @Test

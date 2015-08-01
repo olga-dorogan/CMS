@@ -23,6 +23,7 @@ public class GitLabProject implements Serializable {
     private String name;
     private String description;
     private GitLabUser owner;
+    @JsonProperty("public")
     private boolean publicProject;
     private String path;
 
