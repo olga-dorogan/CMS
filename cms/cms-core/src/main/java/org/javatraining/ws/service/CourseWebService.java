@@ -5,8 +5,6 @@ import org.javatraining.auth.Auth;
 import org.javatraining.config.AuthRole;
 import org.javatraining.config.Config;
 import org.javatraining.entity.enums.CourseStatus;
-import org.javatraining.entity.enums.PersonRole;
-import org.javatraining.integration.gitlab.impl.GitLabService;
 import org.javatraining.integration.google.calendar.CalendarService;
 import org.javatraining.integration.google.calendar.CalendarVO;
 import org.javatraining.integration.google.calendar.exception.CalendarException;
@@ -48,8 +46,8 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     private PersonService personService;
     @Inject
     private CalendarService calendarService;
-    @Inject
-    private GitLabService gitLabService;
+//    @Inject
+//    private GitLabService gitLabService;
 
     CourseWebService() {
         super(CourseVO.class);
@@ -186,15 +184,15 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
                 .filter(statusVO -> statusVO.getCourseStatus() != CourseStatus.SIGNED)
                 .map(statusVO -> personService.getById(statusVO.getPersonId()))
                 .forEach(student -> calendarService.removeStudentFromCalendar(calendarVO, student));
-        statusVOs.stream()
-                .filter(statusVO -> statusVO.getCourseStatus() == CourseStatus.SIGNED)
-                .map(statusVO -> personService.getById(statusVO.getPersonId()))
-                .forEach(student -> {
-                    if (gitLabService.addPerson(student)) {
-                        gitLabService.createProjectAndAddTeachers(student, courseVO,
-                                courseService.getAllPersonsFromCourseByRole(courseVO, PersonRole.TEACHER));
-                    }
-                });
+//        statusVOs.stream()
+//                .filter(statusVO -> statusVO.getCourseStatus() == CourseStatus.SIGNED)
+//                .map(statusVO -> personService.getById(statusVO.getPersonId()))
+//                .forEach(student -> {
+//                    if (gitLabService.addPerson(student)) {
+//                        gitLabService.createProjectAndAddTeachers(student, courseVO,
+//                                courseService.getAllPersonsFromCourseByRole(courseVO, PersonRole.TEACHER));
+//                    }
+//                });
         return Response.accepted().build();
     }
 
