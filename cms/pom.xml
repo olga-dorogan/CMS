@@ -71,7 +71,6 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>${plugin.war.version}</version>
                 <configuration>
-                    <outputDirectory>deployments</outputDirectory>
                     <webappDirectory>${project.build.directory}/exploded/${project.build.finalName}.war
                     </webappDirectory>
                     <failOnMissingWebXml>false</failOnMissingWebXml>

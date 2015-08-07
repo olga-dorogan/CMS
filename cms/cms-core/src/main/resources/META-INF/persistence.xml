@@ -6,11 +6,8 @@
         <jta-data-source>${datasource}</jta-data-source>
         <properties>
             <property name="hibernate.dialect" value="${hibernate.dialect}"/>
-            <property name="wildfly.jpa.twophasebootstrap" value="false"/>
-            <property name="javax.persistence.schema-generation.database.action"
-                      value="${persistence-schema-generation}"/>
-            <property name="javax.persistence.sql-load-script-source" value="${sql-load-script}"/>
-
+            <property name="hibernate.hbm2ddl.auto" value="${persistence-schema-generation}"/>
+            <property name="hibernate.hbm2ddl.import_files" value="${sql-load-script}"/>
             <!--<property name="hibernate.show_sql" value="true"></property>-->
             <!--<property name="hibernate.format_sql" value="true"></property>-->
             <!--<property name="hibernate.use_sql_comments" value="true"></property>-->
