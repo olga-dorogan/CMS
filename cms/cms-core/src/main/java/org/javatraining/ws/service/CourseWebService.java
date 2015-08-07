@@ -3,8 +3,10 @@ package org.javatraining.ws.service;
 import flexjson.JSONException;
 import org.javatraining.auth.Auth;
 import org.javatraining.config.AuthRole;
-import org.javatraining.config.Config;
+import org.javatraining.config.AuthConfig;
 import org.javatraining.entity.enums.CourseStatus;
+import org.javatraining.entity.enums.PersonRole;
+import org.javatraining.integration.gitlab.impl.GitLabService;
 import org.javatraining.integration.google.calendar.CalendarService;
 import org.javatraining.integration.google.calendar.CalendarVO;
 import org.javatraining.integration.google.calendar.exception.CalendarException;
@@ -17,6 +19,8 @@ import org.javatraining.service.PersonService;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.enterprise.inject.Instance;
+import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -46,8 +50,6 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     private PersonService personService;
     @Inject
     private CalendarService calendarService;
-//    @Inject
-//    private GitLabService gitLabService;
 
     CourseWebService() {
         super(CourseVO.class);
@@ -171,6 +173,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     @Path("{course_id}/subscriber")
     @Auth(roles = {AuthRole.TEACHER})
     public Response updateSubscribers(@PathParam("course_id") long courseId, List<CoursePersonStatusVO> statusVOs) {
+        Instance<GitLabService> gitLabServiceInstance = CDI.current().select(GitLabService.class);
         statusVOs.forEach(coursePersonStatusVO -> coursePersonStatusVO.setCourseId(courseId));
         statusVOs.forEach(personService::updatePersonStatusOnCourse);
         CourseVO courseVO = courseService.getCourseById(courseId);
@@ -184,15 +187,16 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
                 .filter(statusVO -> statusVO.getCourseStatus() != CourseStatus.SIGNED)
                 .map(statusVO -> personService.getById(statusVO.getPersonId()))
                 .forEach(student -> calendarService.removeStudentFromCalendar(calendarVO, student));
-//        statusVOs.stream()
-//                .filter(statusVO -> statusVO.getCourseStatus() == CourseStatus.SIGNED)
-//                .map(statusVO -> personService.getById(statusVO.getPersonId()))
-//                .forEach(student -> {
-//                    if (gitLabService.addPerson(student)) {
-//                        gitLabService.createProjectAndAddTeachers(student, courseVO,
-//                                courseService.getAllPersonsFromCourseByRole(courseVO, PersonRole.TEACHER));
-//                    }
-//                });
+        statusVOs.stream()
+                .filter(statusVO -> statusVO.getCourseStatus() == CourseStatus.SIGNED)
+                .map(statusVO -> personService.getById(statusVO.getPersonId()))
+                .forEach(student -> {
+                    if (gitLabServiceInstance.get().addPerson(student)) {
+                        gitLabServiceInstance.get().createProjectAndAddTeachers(student, courseVO,
+                                courseService.getAllPersonsFromCourseByRole(courseVO, PersonRole.TEACHER));
+                    }
+                });
+        CDI.current().destroy(gitLabServiceInstance);
         return Response.accepted().build();
     }
 
@@ -219,7 +223,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     @PUT
     @Path("{course_id}/unsubscribe")
     @Auth(roles = {AuthRole.STUDENT})
-    public Response unsubscribeCourse(@PathParam("course_id") long courseId, @HeaderParam(Config.REQUEST_HEADER_ID) long userId) {
+    public Response unsubscribeCourse(@PathParam("course_id") long courseId, @HeaderParam(AuthConfig.REQUEST_HEADER_ID) long userId) {
         PersonVO person = new PersonVO();
         person.setId(userId);
         CourseVO course = new CourseVO();
