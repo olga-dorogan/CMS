@@ -173,30 +173,36 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
     @Path("{course_id}/subscriber")
     @Auth(roles = {AuthRole.TEACHER})
     public Response updateSubscribers(@PathParam("course_id") long courseId, List<CoursePersonStatusVO> statusVOs) {
-        Instance<GitLabService> gitLabServiceInstance = CDI.current().select(GitLabService.class);
-        statusVOs.forEach(coursePersonStatusVO -> coursePersonStatusVO.setCourseId(courseId));
-        statusVOs.forEach(personService::updatePersonStatusOnCourse);
-        CourseVO courseVO = courseService.getCourseById(courseId);
-        String calendarId = courseVO.getCalendarId();
-        CalendarVO calendarVO = calendarService.getCalendarById(calendarId);
-        statusVOs.stream()
-                .filter(statusVO -> statusVO.getCourseStatus() == CourseStatus.SIGNED)
-                .map(statusVO -> personService.getById(statusVO.getPersonId()))
-                .forEach(student -> calendarService.addStudentToCalendar(calendarVO, student));
-        statusVOs.stream()
-                .filter(statusVO -> statusVO.getCourseStatus() != CourseStatus.SIGNED)
-                .map(statusVO -> personService.getById(statusVO.getPersonId()))
-                .forEach(student -> calendarService.removeStudentFromCalendar(calendarVO, student));
-        statusVOs.stream()
-                .filter(statusVO -> statusVO.getCourseStatus() == CourseStatus.SIGNED)
-                .map(statusVO -> personService.getById(statusVO.getPersonId()))
-                .forEach(student -> {
-                    if (gitLabServiceInstance.get().addPerson(student)) {
-                        gitLabServiceInstance.get().createProjectAndAddTeachers(student, courseVO,
-                                courseService.getAllPersonsFromCourseByRole(courseVO, PersonRole.TEACHER));
-                    }
-                });
-        CDI.current().destroy(gitLabServiceInstance);
+        try {
+            Instance<GitLabService> gitLabServiceInstance = CDI.current().select(GitLabService.class);
+            statusVOs.forEach(coursePersonStatusVO -> coursePersonStatusVO.setCourseId(courseId));
+            statusVOs.forEach(personService::updatePersonStatusOnCourse);
+            CourseVO courseVO = courseService.getCourseById(courseId);
+            String calendarId = courseVO.getCalendarId();
+            CalendarVO calendarVO = calendarService.getCalendarById(calendarId);
+            statusVOs.stream()
+                    .filter(statusVO -> statusVO.getCourseStatus() == CourseStatus.SIGNED)
+                    .map(statusVO -> personService.getById(statusVO.getPersonId()))
+                    .forEach(student -> calendarService.addStudentToCalendar(calendarVO, student));
+            statusVOs.stream()
+                    .filter(statusVO -> statusVO.getCourseStatus() != CourseStatus.SIGNED)
+                    .map(statusVO -> personService.getById(statusVO.getPersonId()))
+                    .forEach(student -> calendarService.removeStudentFromCalendar(calendarVO, student));
+            statusVOs.stream()
+                    .filter(statusVO -> statusVO.getCourseStatus() == CourseStatus.SIGNED)
+                    .map(statusVO -> personService.getById(statusVO.getPersonId()))
+                    .forEach(student -> {
+                        if (gitLabServiceInstance.get().addPerson(student)) {
+                            gitLabServiceInstance.get().createProjectAndAddTeachers(student, courseVO,
+                                    courseService.getAllPersonsFromCourseByRole(courseVO, PersonRole.TEACHER));
+                        }
+                    });
+            CDI.current().destroy(gitLabServiceInstance);
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(String.format("%s \n caused by %s", e.getMessage(), e.getCause().getMessage()))
+                    .build();
+        }
         return Response.accepted().build();
     }
 
