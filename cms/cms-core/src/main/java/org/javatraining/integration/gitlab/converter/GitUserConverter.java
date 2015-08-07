@@ -23,9 +23,10 @@ import java.util.stream.Collectors;
 public class GitUserConverter {
     @Inject
     private PersonService personService;
+    @Inject
+    private GitLabNotificationServiceImpl gitLabNotification;
 
     private String rootMail;
-    private GitLabNotificationServiceImpl gitLabNotification;
 
     public GitUserConverter() {
     }
@@ -44,7 +45,6 @@ public class GitUserConverter {
             e.printStackTrace();
         }
         String text = ""; //FIXME destroy template
-        gitLabNotification = new GitLabNotificationServiceImpl();
         gitLabNotification.sendNotificationToEndPoint(rootMail, text, entity);
 
         return entity;

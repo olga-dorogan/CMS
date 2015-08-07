@@ -3,7 +3,7 @@ package org.javatraining.ws.service;
 import flexjson.JSONException;
 import org.javatraining.auth.Auth;
 import org.javatraining.config.AuthRole;
-import org.javatraining.config.Config;
+import org.javatraining.config.AuthConfig;
 import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.model.CourseWithStatusVO;
 import org.javatraining.model.PersonDescriptionVO;
@@ -42,7 +42,7 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{person_id}")
     @Auth(roles = {AuthRole.TEACHER, AuthRole.STUDENT})
-    public Response getPerson(@HeaderParam(Config.REQUEST_HEADER_ID) long clientId, @PathParam("person_id") long personId) {
+    public Response getPerson(@HeaderParam(AuthConfig.REQUEST_HEADER_ID) long clientId, @PathParam("person_id") long personId) {
         Response.ResponseBuilder r = null;
         PersonVO client = personService.getById(clientId);
 
@@ -140,7 +140,7 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
     @Path("{person_id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER, AuthRole.STUDENT})
-    public Response updatePerson(@HeaderParam(Config.REQUEST_HEADER_ID) long clientId, @PathParam("person_id") long personId, @QueryParam("person_json") String personJson) {
+    public Response updatePerson(@HeaderParam(AuthConfig.REQUEST_HEADER_ID) long clientId, @PathParam("person_id") long personId, @QueryParam("person_json") String personJson) {
         Response.ResponseBuilder r = null;
         PersonVO client = personService.getById(clientId);
 
@@ -191,7 +191,7 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
     @DELETE
     @Path("{person_id}")
     @Auth(roles = {AuthRole.TEACHER, AuthRole.STUDENT})
-    public Response deletePerson(@HeaderParam(Config.REQUEST_HEADER_ID) long clientId, @PathParam("person_id") long personId) {
+    public Response deletePerson(@HeaderParam(AuthConfig.REQUEST_HEADER_ID) long clientId, @PathParam("person_id") long personId) {
         Response.ResponseBuilder r = null;
         PersonVO client = personService.getById(clientId);
 

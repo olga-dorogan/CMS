@@ -1,5 +1,7 @@
 package org.javatraining.integration.gitlab.impl;
 
+import org.javatraining.config.system.props.ApplicationProperty;
+import org.javatraining.config.system.GitLabPropKeys;
 import org.javatraining.integration.gitlab.api.interfaces.GitLabAPIClient;
 import org.javatraining.integration.gitlab.api.model.*;
 import org.javatraining.integration.gitlab.converter.GitUserConverter;
@@ -10,16 +12,11 @@ import org.javatraining.model.PersonVO;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.List;
 
@@ -33,10 +30,18 @@ public class GitLabService {
     private static final String ROOT = "root";
     private static final int PROJECTS_LIMIT_FOR_STUDENT = 10;
 
-    private static final String PROP_HOST = "host";
-    private static final String PROP_PSWRD = "root_password";
-    private static final String PROP_EMAIL = "root_email";
-    private static final String PROP_LOGIN = "root_login";
+    @Inject
+    @ApplicationProperty(name = GitLabPropKeys.PROP_HOST)
+    private String gitLabHost;
+    @Inject
+    @ApplicationProperty(name = GitLabPropKeys.PROP_LOGIN)
+    private String gitLabLogin;
+    @Inject
+    @ApplicationProperty(name = GitLabPropKeys.PROP_PSWRD)
+    private String gitLabPswrd;
+    @Inject
+    @ApplicationProperty(name = GitLabPropKeys.PROP_EMAIL)
+    private String gitLabEmail;
 
     @Inject
     private GitUserConverter gitUserConverter;
@@ -44,18 +49,14 @@ public class GitLabService {
     private GitLabAPIClient gitLabClient;
     private String pToken;
 
-    public GitLabService() throws IOException, ParseException {
-        JSONParser parser = new JSONParser();
-        InputStream is = getClass().getClassLoader().getResourceAsStream("gitlab/gitlab_server_props");
-        JSONObject propertiesMarshaler = (JSONObject) parser.parse(new InputStreamReader(is));
+    public GitLabService() {
+    }
 
+    @PostConstruct
+    public void init() {
         ResteasyClient client = new ResteasyClientBuilder().build();
-        ResteasyWebTarget target = client.target((String) propertiesMarshaler.get(PROP_HOST));
-
-        setParams(new GitLabSessionParameters(
-                (String) propertiesMarshaler.get(PROP_LOGIN),
-                (String) propertiesMarshaler.get(PROP_PSWRD),
-                (String) propertiesMarshaler.get(PROP_EMAIL)));
+        ResteasyWebTarget target = client.target(gitLabHost);
+        setParams(new GitLabSessionParameters(gitLabLogin, gitLabPswrd, gitLabEmail));
         this.gitLabClient = target.proxy(GitLabAPIClient.class);
         this.pToken = getPrivateToken();
     }

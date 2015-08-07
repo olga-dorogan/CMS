@@ -2,7 +2,7 @@ package org.javatraining.ws.service;
 
 import flexjson.JSONSerializer;
 import org.javatraining.auth.Auth;
-import org.javatraining.config.Config;
+import org.javatraining.config.AuthConfig;
 import org.javatraining.dao.PersonDAO;
 import org.javatraining.dao.exception.EntityNotExistException;
 import org.javatraining.entity.PersonEntity;
@@ -113,8 +113,8 @@ public class PersonWebServiceTest {
         PersonVO predefinedPersonFromService = target.path("{id}")
                 .resolveTemplate("id", teacherPerson.getId())
                 .request(MediaType.APPLICATION_JSON)
-                .header(Config.REQUEST_HEADER_ID, teacherPerson.getId())
-                .header(Config.REQUEST_HEADER_TOKEN, TEACHER_TOKEN)
+                .header(AuthConfig.REQUEST_HEADER_ID, teacherPerson.getId())
+                .header(AuthConfig.REQUEST_HEADER_TOKEN, TEACHER_TOKEN)
                 .get(PersonVO.class);
         System.out.println(new JSONSerializer().prettyPrint(true).serialize(predefinedPersonFromService));
         System.out.println(new JSONSerializer().prettyPrint(true).serialize(teacherPerson));
@@ -128,8 +128,8 @@ public class PersonWebServiceTest {
         PersonVO predefinedPersonFromService = target.path("{id}")
                 .resolveTemplate("id", studentPerson.getId())
                 .request(MediaType.APPLICATION_JSON)
-                .header(Config.REQUEST_HEADER_ID, teacherPerson.getId())
-                .header(Config.REQUEST_HEADER_TOKEN, TEACHER_TOKEN)
+                .header(AuthConfig.REQUEST_HEADER_ID, teacherPerson.getId())
+                .header(AuthConfig.REQUEST_HEADER_TOKEN, TEACHER_TOKEN)
                 .get(PersonVO.class);
         assertEquals(predefinedPersonFromService, studentPerson);
     }
@@ -141,8 +141,8 @@ public class PersonWebServiceTest {
         PersonVO predefinedPersonFromService = target.path("{id}")
                 .resolveTemplate("id", studentPerson.getId())
                 .request(MediaType.APPLICATION_JSON)
-                .header(Config.REQUEST_HEADER_ID, studentPerson.getId())
-                .header(Config.REQUEST_HEADER_TOKEN, STUDENT_TOKEN)
+                .header(AuthConfig.REQUEST_HEADER_ID, studentPerson.getId())
+                .header(AuthConfig.REQUEST_HEADER_TOKEN, STUDENT_TOKEN)
                 .get(PersonVO.class);
         assertEquals(predefinedPersonFromService, studentPerson);
     }
@@ -154,8 +154,8 @@ public class PersonWebServiceTest {
         Response response = target.path("{id}")
                 .resolveTemplate("id", teacherPerson.getId())
                 .request(MediaType.APPLICATION_JSON)
-                .header(Config.REQUEST_HEADER_ID, studentPerson.getId())
-                .header(Config.REQUEST_HEADER_TOKEN, STUDENT_TOKEN)
+                .header(AuthConfig.REQUEST_HEADER_ID, studentPerson.getId())
+                .header(AuthConfig.REQUEST_HEADER_TOKEN, STUDENT_TOKEN)
                 .get();
         assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
@@ -189,8 +189,8 @@ public class PersonWebServiceTest {
     public void getPersonsByRoleAsStudent() {
         Response response = target.queryParam("role", "student")
                 .request(MediaType.APPLICATION_JSON)
-                .header(Config.REQUEST_HEADER_ID, studentPerson.getId())
-                .header(Config.REQUEST_HEADER_TOKEN, STUDENT_TOKEN)
+                .header(AuthConfig.REQUEST_HEADER_ID, studentPerson.getId())
+                .header(AuthConfig.REQUEST_HEADER_TOKEN, STUDENT_TOKEN)
                 .get();
         assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
@@ -201,8 +201,8 @@ public class PersonWebServiceTest {
     public void getPersonsByRoleAsTeacher() {
         Response response = target.queryParam("role", "student")
                 .request(MediaType.APPLICATION_JSON)
-                .header(Config.REQUEST_HEADER_ID, teacherPerson.getId())
-                .header(Config.REQUEST_HEADER_TOKEN, TEACHER_TOKEN)
+                .header(AuthConfig.REQUEST_HEADER_ID, teacherPerson.getId())
+                .header(AuthConfig.REQUEST_HEADER_TOKEN, TEACHER_TOKEN)
                 .get();
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
     }
@@ -213,8 +213,8 @@ public class PersonWebServiceTest {
     public void getPersonsByNonExistingRoleAsTeacher() {
         Response response = target.queryParam("role", "adventurer")
                 .request(MediaType.APPLICATION_JSON)
-                .header(Config.REQUEST_HEADER_ID, teacherPerson.getId())
-                .header(Config.REQUEST_HEADER_TOKEN, TEACHER_TOKEN)
+                .header(AuthConfig.REQUEST_HEADER_ID, teacherPerson.getId())
+                .header(AuthConfig.REQUEST_HEADER_TOKEN, TEACHER_TOKEN)
                 .get();
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }

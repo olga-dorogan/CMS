@@ -1,6 +1,6 @@
 package org.javatraining.auth;
 
-import org.javatraining.config.Config;
+import org.javatraining.config.AuthConfig;
 import org.javatraining.integration.google.oauth.TokenVerifierService;
 import org.javatraining.integration.google.oauth.exception.AuthException;
 import org.javatraining.service.AuthService;
@@ -76,11 +76,11 @@ public class AuthInterceptor implements Serializable {
     }
 
     private String getToken() {
-        return request.getHeader(Config.REQUEST_HEADER_TOKEN);
+        return request.getHeader(AuthConfig.REQUEST_HEADER_TOKEN);
     }
 
     private String getId() {
-        return request.getHeader(Config.REQUEST_HEADER_ID);
+        return request.getHeader(AuthConfig.REQUEST_HEADER_ID);
     }
 
     private boolean isUserRoleAllowedForMethod(String role, String[] allowedRoles) {
