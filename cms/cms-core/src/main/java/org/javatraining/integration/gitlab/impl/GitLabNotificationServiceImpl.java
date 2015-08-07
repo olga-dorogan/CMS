@@ -26,8 +26,9 @@ import java.util.Properties;
 public class GitLabNotificationServiceImpl implements NotificationService<GitLabUser> {
     private static final String MAIL_TRANSPORT_PROTOCOL = "smtp";
     private static final String MAIL_SMTP_AUTH = "true";
-    private static final String MAIL_SOCKET_FACTORY_PORT = "465";
-    private static final String MAIL_SOCKET_FACTORY_CLASS = "javax.net.ssl.SSLSocketFactory";
+    private static final String MAIL_SSL_PORT = "465";
+    private static final String MAIL_TLS_PORT = "587";
+    private static final String MAIL_SSL_SOCKET_FACTORY_CLASS = "javax.net.ssl.SSLSocketFactory";
     private static final String MAIL_SOCKET_FACTORY_FALLBACK = "false";
     private static final String MAIL_DEBUG_ENABLE = "false";
 
@@ -53,9 +54,14 @@ public class GitLabNotificationServiceImpl implements NotificationService<GitLab
             props.put("mail.smtp.auth", MAIL_SMTP_AUTH);
             props.put("mail.smtp.port", mailPort);
             props.put("mail.debug", MAIL_DEBUG_ENABLE);
-            props.put("mail.smtp.socketFactory.port", MAIL_SOCKET_FACTORY_PORT);
-            props.put("mail.smtp.socketFactory.class", MAIL_SOCKET_FACTORY_CLASS);
-            props.put("mail.smtp.socketFactory.fallback", MAIL_SOCKET_FACTORY_FALLBACK);
+
+            if (mailPort.equals(MAIL_SSL_PORT)) {
+                props.put("mail.smtp.socketFactory.class", MAIL_SSL_SOCKET_FACTORY_CLASS);
+                props.put("mail.smtp.socketFactory.port", mailPort);
+                props.put("mail.smtp.socketFactory.fallback", MAIL_SOCKET_FACTORY_FALLBACK);
+            } else if (mailPort.equals(MAIL_TLS_PORT)) {
+                props.put("mail.smtp.starttls.enable", "true");
+            }
 
             String from = mailEmail;
             String password = mailPswrd;
