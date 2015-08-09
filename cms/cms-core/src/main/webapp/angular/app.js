@@ -12,20 +12,16 @@ var myApp = angular.module('myApp', [
     'myApp.home',
     'myApp.person',
     'myApp.news',
-    'myApp.about',
-
+    'myApp.about'
 ]);
 myApp.service('sessionService', ['$window', '$rootScope', SessionService]);
 myApp.service('sessionService', ['PersonPersistenceService', SessionService]);
 myApp.service('PersonService', ['Restangular', PersonService]);
 myApp.service('AuthService', ['PersonService', 'Restangular', AuthService]);
 myApp.service('PersonPersistenceService', ['localStorageService', PersonPersistenceService]);
+myApp.service('InitService', ['$window', 'Restangular', InitService]);
 myApp.factory('sessionInjector', ['$rootScope', 'sessionService', SessionInjector]);
 
-myApp.config(function (RestangularProvider) {
-    //Изменяем базовый Url для REST
-    RestangularProvider.setBaseUrl('http://localhost:8080/cms-core-1.0/');
-});
 myApp.config(function (localStorageServiceProvider) {
     localStorageServiceProvider
         .setPrefix('cms')
@@ -38,41 +34,43 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider',
         $httpProvider.interceptors.push('sessionInjector');
     }]);
 
-myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$timeout', 'AuthService', 'PersonPersistenceService',
-    function (GAuth, GApi, GData, $state, $rootScope, $window, $timeout, AuthService, PersonPersistenceService) {
+myApp.run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window', '$timeout', 'AuthService', 'PersonPersistenceService', 'InitService',
+    function (GAuth, GApi, GData, $state, $rootScope, $window, $timeout, AuthService, PersonPersistenceService, InitService) {
 
-        // ----------------  Google API lib initialization -------------------------
-        var CLIENT = '895405022160-pi238d0pi57fsmsov8khtpr4415hj5j5.apps.googleusercontent.com';
-        GAuth.setClient(CLIENT);
-        GAuth.setScope('https://www.googleapis.com/auth/userinfo.email');
+        // ----------------  Restangular initialization -------------------------
+        InitService.initRestangular();
 
         // ---------------------  Login / Logout  -------------------------
         $rootScope.doLogin = function (fromUrl) {
-            GAuth.login().then(
-                function (success) {
-                    AuthService.goAuth(GData.getUser()).then(
-                        function (data) {
-                            PersonPersistenceService.saveInfo(
-                                data.id,
-                                data.personRole.toLowerCase(),
-                                data.name + " " + data.lastName,
-                                data.email.toLowerCase(),
-                                $window.gapi.auth.getToken().access_token);
-                            AuthService.getEmailHash($rootScope.getEmail()).then(function (hash) {
-                                PersonPersistenceService.saveHash(hash.hash);
+            InitService.getGoogleClientId().then(function (clientId) {
+                GAuth.setClient(clientId);
+                GAuth.setScope('https://www.googleapis.com/auth/userinfo.email');
+                GAuth.login().then(
+                    function (success) {
+                        AuthService.goAuth(GData.getUser()).then(
+                            function (data) {
+                                PersonPersistenceService.saveInfo(
+                                    data.id,
+                                    data.personRole.toLowerCase(),
+                                    data.name + " " + data.lastName,
+                                    data.email.toLowerCase(),
+                                    $window.gapi.auth.getToken().access_token);
+                                AuthService.getEmailHash($rootScope.getEmail()).then(function (hash) {
+                                    PersonPersistenceService.saveHash(hash.hash);
+                                });
+                                if (!fromUrl) {
+                                    $rootScope.toState = 'person';
+                                    $rootScope.toStateParams = '';
+                                }
+                                console.log("login success");
+                                $state.go($rootScope.toState, $rootScope.toStateParams);
                             });
-                            if (!fromUrl) {
-                                $rootScope.toState = 'person';
-                                $rootScope.toStateParams = '';
-                            }
-                            console.log("login success");
-                            $state.go($rootScope.toState, $rootScope.toStateParams);
-                        });
-                },
-                function () {
-                    console.log('login fail');
-                    $rootScope.goHome();
-                });
+                    },
+                    function () {
+                        console.log('login fail');
+                        $rootScope.goHome();
+                    });
+            });
         };
         $rootScope.doLogOut = function () {
             PersonPersistenceService.clearInfo();
