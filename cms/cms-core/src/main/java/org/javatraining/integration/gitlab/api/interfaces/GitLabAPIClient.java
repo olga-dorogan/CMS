@@ -65,6 +65,7 @@ public interface GitLabAPIClient {
     @POST
     @Path("/projects/user/{id}")
     @Consumes("application/json")
+    @Produces("application/json")
     GitLabProject createProjectReturnsProject(@QueryParam("private_token") String privateToken,
                                               @QueryParam("sudo") String sudo,
                                               @PathParam("id") Long id,

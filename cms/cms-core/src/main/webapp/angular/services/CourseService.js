@@ -51,6 +51,15 @@ function CourseService(Restangular) {
             'calendarId': course.calendarId
         };
     };
+    this.normalizeSubscriber = function (subscriber) {
+        return {
+            'id': subscriber.id,
+            'courseStatus': subscriber.courseStatus,
+            'personId': subscriber.personId,
+            'personFirstName': subscriber.personFirstName,
+            'personLastName': subscriber.personLastName
+        };
+    };
 
     this.subscribePersonToCourse = function (courseId, personId) {
         if (courseId === undefined || personId === undefined) {

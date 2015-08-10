@@ -42,14 +42,14 @@ public class InitAngularWebService {
         try {
             InetAddress host = InetAddress.getLocalHost();
             String inetAddr = host.getHostAddress();
-//            if (inetAddr.equals(LOCALHOST_INET_ADDR)) {
-//                return LOCALHOST_GOOGLE_CLIENT_ID;
-//            } else {
+            if (inetAddr.equals(LOCALHOST_INET_ADDR)) {
+                return LOCALHOST_GOOGLE_CLIENT_ID;
+            } else {
                 Instance<GoogleClientIdWrapper> clientIdWrapperInstance = CDI.current().select(GoogleClientIdWrapper.class);
                 String clientId = clientIdWrapperInstance.get().getClientId();
                 CDI.current().destroy(clientIdWrapperInstance);
                 return clientId;
-//            }
+            }
         } catch (UnknownHostException ignore) {
         }
         return null;

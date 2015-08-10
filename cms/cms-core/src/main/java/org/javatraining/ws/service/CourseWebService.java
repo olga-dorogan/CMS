@@ -2,10 +2,9 @@ package org.javatraining.ws.service;
 
 import flexjson.JSONException;
 import org.javatraining.auth.Auth;
-import org.javatraining.config.AuthRole;
 import org.javatraining.config.AuthConfig;
+import org.javatraining.config.AuthRole;
 import org.javatraining.entity.enums.CourseStatus;
-import org.javatraining.entity.enums.PersonRole;
 import org.javatraining.integration.gitlab.impl.GitLabService;
 import org.javatraining.integration.google.calendar.CalendarService;
 import org.javatraining.integration.google.calendar.CalendarVO;
@@ -193,14 +192,14 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
                     .map(statusVO -> personService.getById(statusVO.getPersonId()))
                     .forEach(student -> {
                         if (gitLabServiceInstance.get().addPerson(student)) {
-                            gitLabServiceInstance.get().createProjectAndAddTeachers(student, courseVO,
-                                    courseService.getAllPersonsFromCourseByRole(courseVO, PersonRole.TEACHER));
+                            gitLabServiceInstance.get().createProject(student, courseVO);
                         }
                     });
             CDI.current().destroy(gitLabServiceInstance);
         } catch (Exception e) {
+            e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(String.format("%s \n caused by %s", e.getMessage(), e.getCause().getMessage()))
+                    .entity(String.format("%s", e.getMessage()))
                     .build();
         }
         return Response.accepted().build();
