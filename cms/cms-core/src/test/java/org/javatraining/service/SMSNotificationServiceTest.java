@@ -1,5 +1,6 @@
 package org.javatraining.service;
 
+import org.junit.Ignore;
 import org.javatraining.model.PersonDescriptionVO;
 import org.javatraining.notification.sms.SMSNotificationService;
 import org.junit.Test;
@@ -11,7 +12,7 @@ import static org.junit.Assert.assertTrue;
  * Created by sergey on 02.07.15 at 23:42.
  * For more information you should send mail to codedealerb@gmail.com
  */
-
+@Ignore
 public class SMSNotificationServiceTest {
     @Test
     public void testSendMessageToTestPhoneNumber() {

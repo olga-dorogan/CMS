@@ -15,6 +15,7 @@ import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.Ignore;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -122,6 +123,7 @@ public class CourseServiceTest {
         courseService.removeCourse(courseVO);
     }
 
+    @Ignore
     @Test
     @ShouldMatchDataSet(value = {DS_EMPTY, DS_NEWS_AFTER_UPDATE}, excludeColumns = {"id"})
     public void testUpdateNews() {
@@ -232,7 +234,7 @@ public class CourseServiceTest {
                 + notExistingId + " does not exist in database");
     }
 
-
+    @Ignore
     @Test
     public void testAddNewsToCourse() {
         CourseVO courseVO = predefinedCourseVO();
