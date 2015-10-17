@@ -13,3 +13,10 @@ bower_components/
 build/
 tmp
 .DS_Store
+npm-debug.log
+
+#Docker folders
+Docker/docker/customization/cms-core-1.0.war
+Docker/docker/docker-compose-gitlab.yml
+Docker/docker/docker-compose-wildfly-mysql.yml
+temp/
