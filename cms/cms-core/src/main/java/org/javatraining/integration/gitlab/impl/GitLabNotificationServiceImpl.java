@@ -90,6 +90,7 @@ public class GitLabNotificationServiceImpl implements NotificationService<GitLab
                     "text/html; charset=UTF-8");
 
             mMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
+            mMessage.setSubject("Регистрация в GitLab");
 
             transport.connect();
             Transport.send(mMessage);

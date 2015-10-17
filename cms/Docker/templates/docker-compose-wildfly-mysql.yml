@@ -7,6 +7,8 @@ mysqldb:
     MYSQL_ROOT_PASSWORD: supersecret
   volumes:
     - /srv/docker/mysql/data/db:/var/lib/mysql
+    - /srv/docker/mysql/conf/my.cnf:/etc/mysql/my.cnf
+    - /srv/docker/mysql/conf/locale:/etc/default/locale
   labels:
     org.javatraining.cms.version: "test"
 mywildfly:

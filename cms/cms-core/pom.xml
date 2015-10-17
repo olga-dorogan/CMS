@@ -22,10 +22,12 @@
     </pluginRepositories>
 
     <properties>
-        <datasource>java:/MySqlDS</datasource>
-        <hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
+        <!--<datasource>java:/MySqlDS</datasource>-->
+        <!--<hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>-->
+        <datasource>java:jboss/datasources/ExampleDS</datasource>
+        <hibernate.dialect>org.hibernate.dialect.H2Dialect</hibernate.dialect>
         <sql-load-script>META-INF/sql/data-mysql.sql</sql-load-script>
-        <persistence-schema-generation>update</persistence-schema-generation>
+        <persistence-schema-generation>create-drop</persistence-schema-generation>
         <org.springframework.version>3.0.5.RELEASE</org.springframework.version>
     </properties>
     <profiles>

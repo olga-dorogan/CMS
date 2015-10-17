@@ -45,6 +45,9 @@ public class CourseServiceImpl implements CourseService {
     @EJB
     private LessonDAO lessonDAO;
 
+    @EJB
+    private PracticeLessonDAO practiceLessonDAO;
+
     @Override
     public CourseVO saveCourse(@NotNull @Valid CourseVO courseVO) {
         CourseEntity courseEntity = CourseConverter.convertVOToEntity(courseVO);
@@ -95,6 +98,10 @@ public class CourseServiceImpl implements CourseService {
             lessonEntity.setCourse(courseEntity);
             lessonDAO.save(lessonEntity);
             // TODO: for every lesson do practices saving
+            for (PracticeLessonEntity practice : lesson.getPracticeLesson()) {
+                PracticeLessonEntity newPractice = new PracticeLessonEntity(practice.getTask(), lessonEntity);
+                practiceLessonDAO.save(newPractice);
+            }
         }
     }
 
