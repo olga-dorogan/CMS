@@ -21,14 +21,10 @@ import java.util.List;
  * Created by vika on 02.07.15.
  */
 @Stateless
-@Path("courses")
-public class NewsWebService extends AbstractWebService<NewsVO> {
+@Path("course/news")
+public class NewsWebService {
     @EJB
     private CourseService courseService;
-
-    public NewsWebService() {
-        super(NewsVO.class);
-    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -38,7 +34,7 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
     }
 
     @GET
-    @Path("{person_id}/news")
+    @Path("{person_id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.STUDENT, AuthRole.TEACHER})
     public Response getPersonNews(@PathParam("person_id") Long personId) {
@@ -46,7 +42,7 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
     }
 
     @GET
-    @Path("{course_id}/{news_id}")
+    @Path("{news_id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.STUDENT, AuthRole.TEACHER})
     public Response getNewsById(@PathParam("course_id") Long courseId, @PathParam("news_id") Long news_id) {
@@ -54,7 +50,7 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
     }
 
     @GET
-    @Path("{course_id}/news")
+    @Path("{course_id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.STUDENT, AuthRole.TEACHER})
     public Response getNewsByCourseId(@PathParam("course_id") Long courseId) {
@@ -63,39 +59,23 @@ public class NewsWebService extends AbstractWebService<NewsVO> {
 
 
     @POST
-    @Path("{course_id}/saveNews")
+    @Path("{course_id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Auth(roles = {AuthRole.TEACHER})
     public Response saveNews(@Context UriInfo uriInfo, @PathParam("course_id") Long courseId, NewsVO newsVO) {
         Response.ResponseBuilder r;
         try {
-            newsVO.setId(null); //make sure that there no id set.
+            newsVO.setId(null);
             newsVO.setCourseId(courseId);
             CourseVO courseVO = courseService.getCourseById(courseId);
-
             courseService.addNewsToCourse(courseVO, newsVO);
-
-            String lessonUri = uriInfo.getRequestUri().toString() + "/" + newsVO.getId();
-            r = Response.created(new URI(lessonUri));
-        } catch (NullPointerException e) {
-            //news wasn't saved
-            r = Response.serverError();
+            String newsUri = uriInfo.getRequestUri().toString() + "/" + newsVO.getId();
+            r = Response.created(new URI(newsUri));
         } catch (URISyntaxException e) {
-            //this shouldn't happen
             r = Response.serverError();
         }
         return r.build();
     }
-
-
-//    @PUT
-//    @Path("{news_id}/news")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Auth(roles = {AuthRole.TEACHER})
-//    public Response updateNews(@PathParam("news_id") NewsVO newsVO) {
-//        courseService.updateNews(newsVO);
-//        return Response.ok().build();
-//    }
 
     @DELETE
     @Path("{news_id}")

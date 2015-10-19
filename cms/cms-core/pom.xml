@@ -78,23 +78,6 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
-                        <groupId>com.qmino</groupId>
-                        <artifactId>miredot-plugin</artifactId>
-                        <version>1.6.1</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>restdoc</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <licence>
-                                UHJvamVjdHxqYXZhdHJhaW5pbmcuY21zLWNvcmV8MjAxNi0wNy0yMnx0cnVlI01DMENGUUNEREtiV3NhT05HdFd2b1VpeGVWNW94bUZlTXdJVUthVHZTbkdDU0gvMTlCNDJ4aTNsVHBFeG9Taz0=
-                            </licence>
-                        </configuration>
-                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -461,6 +444,23 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.qmino</groupId>
+                <artifactId>miredot-plugin</artifactId>
+                <version>1.6.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>restdoc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <licence>
+                        UHJvamVjdHxqYXZhdHJhaW5pbmcuY21zLWNvcmV8MjAxNi0xMC0xOHx0cnVlI01Dd0NGR290alZheG9nOGpJdUtHNVRvNWNTZkNjbVM5QWhRYlRtbEozZXVBNjFFTlZnSGx6OXVLc2FSeUR3PT0=
+                    </licence>
+                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -2,7 +2,6 @@ package org.javatraining.ws.service;
 
 import flexjson.JSONException;
 import org.javatraining.auth.Auth;
-import org.javatraining.config.AuthConfig;
 import org.javatraining.config.AuthRole;
 import org.javatraining.entity.enums.CourseStatus;
 import org.javatraining.integration.gitlab.impl.GitLabService;
@@ -38,21 +37,17 @@ import java.util.List;
  */
 @Stateless
 @Path("course")
-public class CourseWebService extends AbstractWebService<CourseVO> {
+public class CourseWebService {
     private static final Long NONE_COURSE_PROTOTYPE = -1L;
     private static final String COURSES_STARTED_AFTER_DATE = "start_after";
     private static final String COURSES_ENDED_BEFORE_DATE = "end_before";
-    private static final int monthBetweenCourseStartAndRequestsApplied = 1;
+    private static final int MONTH_BETWEEN_COURSE_START_AND_REQUESTS_APPLIED = 1;
     @EJB
     private CourseService courseService;
     @EJB
     private PersonService personService;
     @Inject
     private CalendarService calendarService;
-
-    CourseWebService() {
-        super(CourseVO.class);
-    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -64,7 +59,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
             switch (period) {
                 case COURSES_STARTED_AFTER_DATE:
                     Date dateWithOffset = Date.from(LocalDateTime.now()
-                            .minusMonths(monthBetweenCourseStartAndRequestsApplied)
+                            .minusMonths(MONTH_BETWEEN_COURSE_START_AND_REQUESTS_APPLIED)
                             .atZone(ZoneId.systemDefault()).toInstant());
                     courses = courseService.getAllStartedAfterDate(dateWithOffset);
                     break;
@@ -87,7 +82,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
         if (course == null)
             r = Response.noContent();
         else
-            r = Response.ok(serialize(course));
+            r = Response.ok(course);
         return r.build();
     }
 
@@ -116,10 +111,8 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
         } catch (JSONException e) {
             r = Response.status(Response.Status.NOT_ACCEPTABLE);
         } catch (URISyntaxException | CalendarException e) {
-            //this shouldn't happen
             r = Response.serverError();
         }
-
         return r.build();
     }
 
@@ -165,7 +158,7 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
         CourseVO course = new CourseVO();
         course.setId(courseId);
         List<CoursePersonStatusVO> persons = courseService.getSubscribersWithStatusesForCourse(course);
-        return Response.ok(serialize(persons)).build();
+        return Response.ok(persons).build();
     }
 
     @PUT
@@ -212,28 +205,6 @@ public class CourseWebService extends AbstractWebService<CourseVO> {
         CourseVO course = new CourseVO();
         course.setId(courseId);
         List<PersonVO> persons = courseService.getAllStudentsWithMarksFromCourse(course);
-        return Response.ok(serialize(persons)).build();
-    }
-
-    @PUT
-    @Path("{course_id}/subscribe")
-    @Auth(roles = {AuthRole.STUDENT})
-    public Response subscribeCourse(@PathParam("course_id") long courseId, PersonVO person) {
-        CourseVO course = new CourseVO();
-        course.setId(courseId);
-        personService.addPersonRequestForCourse(person, course);
-        return Response.accepted().build();
-    }
-
-    @PUT
-    @Path("{course_id}/unsubscribe")
-    @Auth(roles = {AuthRole.STUDENT})
-    public Response unsubscribeCourse(@PathParam("course_id") long courseId, @HeaderParam(AuthConfig.REQUEST_HEADER_ID) long userId) {
-        PersonVO person = new PersonVO();
-        person.setId(userId);
-        CourseVO course = new CourseVO();
-        course.setId(courseId);
-        personService.removePersonRequestForCourse(person, course);
-        return Response.accepted().build();
+        return Response.ok(persons).build();
     }
 }

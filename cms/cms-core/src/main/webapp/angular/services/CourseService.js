@@ -65,7 +65,7 @@ function CourseService(Restangular) {
         if (courseId === undefined || personId === undefined) {
             return {};
         }
-        return Restangular.one(restBase, courseId).all('subscribe').customPUT({"id": personId});
+        return Restangular.one('resources/person/' + personId + '/course', courseId).customPUT({"courseStatus": 'SIGNED'});
     };
 
     this.getCourseSubscribers = function (courseId) {
@@ -111,7 +111,7 @@ function CourseService(Restangular) {
         return status == 'UNSIGNED';
     };
 
-    this.isCourseStarted = function(courseStartDate, nowDate) {
+    this.isCourseStarted = function (courseStartDate, nowDate) {
         return nowDate >= courseStartDate;
     };
 

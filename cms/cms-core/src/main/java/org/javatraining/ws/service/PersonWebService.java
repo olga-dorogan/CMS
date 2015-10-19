@@ -2,9 +2,11 @@ package org.javatraining.ws.service;
 
 import flexjson.JSONException;
 import org.javatraining.auth.Auth;
-import org.javatraining.config.AuthRole;
 import org.javatraining.config.AuthConfig;
+import org.javatraining.config.AuthRole;
+import org.javatraining.entity.enums.CourseStatus;
 import org.javatraining.entity.enums.PersonRole;
+import org.javatraining.model.CourseVO;
 import org.javatraining.model.CourseWithStatusVO;
 import org.javatraining.model.PersonDescriptionVO;
 import org.javatraining.model.PersonVO;
@@ -27,16 +29,12 @@ import java.util.List;
  */
 @Stateless
 @Path("person")
-public class PersonWebService extends AbstractWebService<PersonVO> {
+public class PersonWebService {
     private static final String PARAM_DESCRIPTION = "field";
     private static final String PARAM_DESCRIPTION_ALL = "all";
     private static final String PARAM_DESCRIPTION_PHONE = "phone";
     @EJB
     private PersonService personService;
-
-    public PersonWebService() {
-        super(PersonVO.class);
-    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -58,9 +56,8 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
             if (person == null)
                 r = Response.noContent();
             else
-                r = Response.ok(serialize(person));
+                r = Response.ok(person);
         }
-
         return r.build();
     }
 
@@ -137,30 +134,6 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
     }
 
     @PUT
-    @Path("{person_id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Auth(roles = {AuthRole.TEACHER, AuthRole.STUDENT})
-    public Response updatePerson(@HeaderParam(AuthConfig.REQUEST_HEADER_ID) long clientId, @PathParam("person_id") long personId, @QueryParam("person_json") String personJson) {
-        Response.ResponseBuilder r = null;
-        PersonVO client = personService.getById(clientId);
-
-        if (client == null)
-            return Response.status(Response.Status.FORBIDDEN).build();
-
-        if (client.getPersonRole() != PersonRole.TEACHER)
-            if (client.getId() != personId)
-                r = Response.status(Response.Status.FORBIDDEN);
-
-        if (r == null) {
-            PersonVO person = deserialize(personJson);
-            personService.update(person);
-            r = Response.ok();
-        }
-
-        return r.build();
-    }
-
-    @PUT
     @Path("{person_id}/description")
     @Consumes("application/json")
     public Response updatePersonDescription(@PathParam("person_id") long personId, PersonDescriptionVO personDescriptionVO) {
@@ -213,7 +186,6 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
                 r = Response.noContent();
             }
         }
-
         return r.build();
     }
 
@@ -237,5 +209,22 @@ public class PersonWebService extends AbstractWebService<PersonVO> {
     public Response getCoursesForPerson(@PathParam("person_id") long personId) {
         List<CourseWithStatusVO> courses = personService.getPersonCoursesWithStatuses(new PersonVO(personId));
         return Response.ok(courses).build();
+    }
+
+
+    @PUT
+    @Path("{person_id}/course/{course_id}")
+    @Auth(roles = {AuthRole.STUDENT})
+    public Response subscribeCourse(@PathParam("course_id") long courseId, @PathParam("person_id") long personId,
+                                    CourseWithStatusVO courseWithStatusVO) {
+        CourseVO course = new CourseVO();
+        course.setId(courseId);
+        PersonVO person = new PersonVO(personId);
+        if (courseWithStatusVO.getCourseStatus() == CourseStatus.SIGNED) {
+            personService.addPersonRequestForCourse(person, course);
+        } else {
+            personService.removePersonRequestForCourse(person, course);
+        }
+        return Response.accepted().build();
     }
 }
